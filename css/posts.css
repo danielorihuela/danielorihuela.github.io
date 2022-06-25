@@ -1,0 +1,18 @@
+.posts-all-list-elements {
+    list-style-type: none;
+}
+
+.posts-list-element {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.posts-list-element-date {
+    width: 10%;
+}
+
+.posts-list-element-title {
+    width: 90%;
+    font-size: x-large;
+}
