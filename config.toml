@@ -1,0 +1,4 @@
+baseURL = "danielorihuela.github.io"
+languageCode = "en-us"
+title = "danielorihuela"
+theme = "do-minimalistic-theme"

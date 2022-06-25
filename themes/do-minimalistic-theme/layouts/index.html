@@ -1,0 +1,18 @@
+{{ partial "header.html" . }}
+
+{{ .Scratch.Set "command" "ls" }}
+{{ .Scratch.Set "arg" "posts" }}
+{{ partial "logo.html" . }}
+
+<ul class="posts-all-list-elements">
+    {{ range ( where .Site.RegularPages "Type" "posts" ).ByPublishDate.Reverse }}
+    <li class="posts-list-element">
+        <div class="posts-list-element-date ">
+            {{ .PublishDate.Format "January 2, 2006" }}
+        </div>
+        <a href="{{ .RelPermalink }}" class="posts-list-element-title">{{ .Title }}</a>
+    </li>
+    {{ end }}
+</ul>
+
+{{ partial "footer.html" . }}
