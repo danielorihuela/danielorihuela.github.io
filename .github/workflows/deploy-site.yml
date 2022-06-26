@@ -14,8 +14,10 @@ jobs:
         with:
           version: '27.1'
 
+      - uses: actions/checkout@v3
       - name: Convert org files to hugo
         run: ./org2hugo.sh
+        shell: bash
       
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
