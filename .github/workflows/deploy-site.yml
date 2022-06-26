@@ -9,12 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v3
+
       - name: Install emacs
         uses: purcell/setup-emacs@master
         with:
           version: '27.1'
 
-      - uses: actions/checkout@v3
       - name: Convert org files to hugo
         run: ./org2hugo.sh
         shell: bash
