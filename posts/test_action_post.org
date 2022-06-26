@@ -1,0 +1,5 @@
+#+title: Test github action build hugo webpage
+#+hugo_publishdate: 2022-06-25
+
+
+Test github action build hugo webpage
