@@ -2,7 +2,7 @@
 
 export HUGO_BASE_DIR=`pwd`
 export POSTS_ORG_SRC=`pwd`/posts
-HOME=/tmp/emacs-build/
+HOME=/tmp/emacs-build
 
 mkdir -p $HOME
 cp -r `pwd`/init.el $HOME
