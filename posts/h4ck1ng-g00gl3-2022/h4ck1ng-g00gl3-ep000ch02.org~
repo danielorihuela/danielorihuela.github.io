@@ -1,0 +1,77 @@
+#+title: H4ck1ng G00gl3 ep000 challenge 01
+#+hugo_publishdate: 2022-10-10
+#+options: tags:nil
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post I explain how I solved *ep000 challenge 01*.
+This challenge is about *Web Exploitation*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/intro.png]]
+
+After opening the challenge, we see the following screen.
+
+#+attr_html: :width 900px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/chess-main-page.png]]
+
+Winning the game at this point is not the intended way to solve the challenge. Nevertheless, I tried it :D. The problem is that the AI will cheat. After some movements, all the AI pawns will become queens.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/cheat.png]]
+
+Out of curiosity, I decided to see the difficulty dropdown even though the hint said: "Don't make this game harder than it needs to be.". As I expected, I did not find anything interesting there.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/difficulty.png]]
+
+
+It was time to access the "Master Login" area. There, we find a simple interface asking for the user and the password.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/admin-login.png]]
+
+I was on a webpage with a login prompt. The first thing that came to mind was a *SQL Injection*. I did not know if a SQL database was in use. It was a guess. As an initial step, I tried to log in with a random username and password to check how a "normal" response would look. In that case, the website renders a message saying "Invalid Login!" and the server returns the HTTP status 200.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/login-response.png]]
+
+Now, I needed to check if the website was vulnerable to a *SQL Injection* attack. In SQL, the *single quote character* indicates the beginning and end of strings. Usually, that is one of the first used characters to check if a website is vulnerable. If not correctly filtered, the built query will be incorrect. After entering the *single quote character* as the username, the server returns the HTTP error 500. Jackpot! We found the vulnerability.
+
+Probably, the SQL query used in the backend is similar to the following:
+
+#+begin_src sql
+SELECT * FROM Users WHERE username = 'provided username' AND password='provided password';
+#+end_src
+
+In our case, we have to exploit the username field. The goal is to make that query return a user. That way, we will log in. Commonly, an admin user with the username "admin" exists. I tried with a couple of possible payloads. The one that worked was *admin' OR '1'='1*. I did not fill in the password login field. Replacing the username and password in the query gives us:
+
+#+begin_src sql
+SELECT * FROM Users WHERE username = 'admin' OR '1'='1' AND password='';
+#+end_src
+
+That query returns any user with "admin" username or empty password. We were lucky because all the assumptions held, and we could log in as the admin user.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/admin-panel.png]]
+
+Here, we see a couple of options. The first one is used to change the *thinking time* of the AI. The second one is to *enable/disable the AI Queen Cheats*. Immediately, I disabled the AI Queen Cheats and tried to play a new game. It worked as expected. I could play a full game without the AI pawns becoming queens. Anyway, I am not a good chess player. I was still getting wrecked. For that reason, I returned to the panel and started increasing and decreasing the thinking time of the AI. In the beginning, I was only using positive numbers. I did not see any significant difference. I was still losing. At some point, I tried to decrease the thinking time below zero. The AI was playing worse. It was moving the pieces in order. First, the AI moved all the pawns until no pawn could move. Then the knights and so on.
+
+1. Pawns
+2. Knights
+3. Bishops
+4. Rooks
+5. Queen
+6. King
+
+That made the game much more predictable. There were only a couple of exceptions to the previous order. If the King is in check, the AI will put the King in a safe place or kill your piece. Now, winning the game was easy. Once you win, the webpage should print the flag on the screen. With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep000ch01/intro.png]]
