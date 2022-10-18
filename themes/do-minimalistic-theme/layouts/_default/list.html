@@ -4,7 +4,7 @@
 {{ .Scratch.Set "arg" .Type }}
 {{ partial "logo.html" . }}
 
-<ul class="posts-all-list-elements">
+<ul>
     {{ range .Site.RegularPages.ByPublishDate.Reverse }}
     <li class="posts-list-element">
         <div class="posts-list-element-date ">
