@@ -1,0 +1,66 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep000 challenge 01 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep000 challenge 01</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post I explain how I solved <strong>ep000 challenge 01</strong>.
+This challenge is about <strong>Web Exploitation</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/intro.png>
+</figure>
+<p>After opening the challenge, we see the following screen.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/chess-main-page.png width=900px>
+</figure>
+<p>Winning the game at this point is not the intended way to solve the challenge. Nevertheless, I tried it :D. The problem is that the AI will cheat. After some movements, all the AI pawns will become queens.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/cheat.png>
+</figure>
+<p>Out of curiosity, I decided to see the difficulty dropdown even though the hint said: <code>Don't make this game harder than it needs to be.</code> As I expected, I did not find anything interesting there.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/difficulty.png>
+</figure>
+<p>It was time to access the <strong>Master Login</strong> area. There, we find a simple interface asking for the user and the password.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/admin-login.png>
+</figure>
+<p>I was on a webpage with a login prompt. The first thing that came to mind was a <strong>SQL Injection</strong>. I did not know if a SQL database was in use. It was a guess. As an initial step, I tried to log in with a random username and password to check how a &ldquo;normal&rdquo; response would look. In that case, the website renders a message saying &ldquo;Invalid Login!&rdquo; and the server returns the HTTP status 200.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/login-response.png>
+</figure>
+<p>Now, I needed to check if the website was vulnerable to a <strong>SQL Injection</strong> attack. In SQL, the <strong>single quote character</strong> indicates the beginning and end of strings. Usually, that is one of the first used characters to check if a website is vulnerable. If not correctly filtered, the built query will be incorrect. After entering the <strong>single quote character</strong> as the username, the server returns the HTTP error 500. Jackpot! We found the vulnerability.</p>
+<p>Probably, the SQL query used in the backend is similar to the following:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>SELECT</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>FROM</span> Users <span style=color:#66d9ef>WHERE</span> username <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;provided username&#39;</span> <span style=color:#66d9ef>AND</span> password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;provided password&#39;</span>;
+</code></pre></div><p>In our case, we have to exploit the username field. The goal is to make that query return a user. That way, we will log in. Commonly, an admin user with the username &ldquo;admin&rdquo; exists. I tried with a couple of possible payloads. The one that worked was <strong>admin' OR &lsquo;1&rsquo;=&lsquo;1</strong>. I did not fill in the password login field. Replacing the username and password in the query gives us:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>SELECT</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>FROM</span> Users <span style=color:#66d9ef>WHERE</span> username <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;admin&#39;</span> <span style=color:#66d9ef>OR</span> <span style=color:#e6db74>&#39;1&#39;</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#39;1&#39;</span> <span style=color:#66d9ef>AND</span> password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>;
+</code></pre></div><p>That query returns any user with &ldquo;admin&rdquo; username or empty password. We were lucky because all the assumptions held, and we could log in as the admin user.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/admin-panel.png>
+</figure>
+<p>Here, we see a couple of options. The first one is used to change the <strong>thinking time</strong> of the AI. The second one is to <strong>enable/disable the AI Queen Cheats</strong>. Immediately, I disabled the AI Queen Cheats and tried to play a new game. It worked as expected. I could play a full game without the AI pawns becoming queens. Anyway, I am not a good chess player. I was still getting wrecked. For that reason, I returned to the panel and started increasing and decreasing the thinking time of the AI. In the beginning, I was only using positive numbers. I did not see any significant difference. I was still losing. At some point, I tried to decrease the thinking time below zero. The AI was playing worse. It was moving the pieces in order. First, the AI moved all the pawns until no pawn could move. Then the knights and so on.</p>
+<ol>
+<li>Pawns</li>
+<li>Knights</li>
+<li>Bishops</li>
+<li>Rooks</li>
+<li>Queen</li>
+<li>King</li>
+</ol>
+<p>That made the game much more predictable. There were only a couple of exceptions to the previous order. If the King is in check, the AI will put the King in a safe place or kill your piece. Now, winning the game was easy. Once you win, the webpage should print the flag on the screen. With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep000ch01/intro.png>
+</figure>
+</main>
+</body>
+</html>

@@ -5,3 +5,13 @@ body {
   padding: 1rem;
   margin: 0 auto;
 }
+
+.centered-image {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 100ch;
+}
