@@ -1,0 +1,46 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep001 challenge 02 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep001 challenge 02</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep001 challenge 02</strong>.
+This challenge is about <strong>Reverse Engineering</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch02/intro.png>
+</figure>
+<p>After opening the challenge, we get a zip file containing an executable with the name <code>wannacry</code>.</p>
+<p>As a first step, I extracted the strings from the executable with <code>strings wannacry</code>. After analyzing the output, I saw the URL <code>https://wannacry-killswitch-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com//</code>. If you visit this page, you will see the following sentence: &ldquo;Our princess is in another castle.&rdquo;. At that point, I recalled that the real wannacry had a kill switch in the binary. To stop the attack, you only needed to register a domain with the hardcoded name. For some reason, I thought that disconnecting from the internet or creating a local website for that domain could modify the binary execution result. That was not the case. I was going down the rabbit hole. I was stuck there thinking for a while until I asked the community.</p>
+<p>The community told me to look at the executable code and try to execute the interesting part. With that in mind, I searched for how to disassemble a binary in Linux. I found <code>objdump</code>, a command that allows printing the assembly code of the binary. The following image shows a fragment of the assembly code.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch02/objdump-function-example.png>
+</figure>
+<p>With the assembly code in my power, I wrote down the functions and how they are related. Interestingly enough, the <code>main</code> function does not call any other function. Besides, the only function not being called anywhere in the code is one called <code>print</code>. Probably, that is what the community was referring to with the second part of the hint.</p>
+<p>I found gdb, a tool designed to debug C/C++ programs. Moreover, it can execute functions present in the binary. It is simple.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch02/gdb-execution.png width=900px>
+</figure>
+<p>As you can see, executing the <code>print</code> function gives us a new URL. Visiting the URL shows the following website.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch02/button-flag.png>
+</figure>
+<p>After clicking the button, the flag will appear. With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch02/intro.png>
+</figure>
+</main>
+</body>
+</html>
