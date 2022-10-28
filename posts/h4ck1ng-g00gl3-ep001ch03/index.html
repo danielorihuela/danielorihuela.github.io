@@ -1,0 +1,78 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep001 challenge 03 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep001 challenge 03</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep001 challenge 03</strong>.
+This challenge is about <strong>Reverse Engineering</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/intro.png>
+</figure>
+<p>After opening the challenge, we see a chess website similar to the one in the ep000 ch01.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/chess.png width=900px>
+</figure>
+<p>Notice that now there is no link to the admin panel. We have to find another vulnerability. I checked the website source code and found the <strong>load_baseboard</strong> function.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/load_board_code.png>
+</figure>
+<p>This function returns the contents of the &ldquo;baseboard.fen&rdquo; file after a POST request to <strong>load_board.php</strong>. I tried a couple of things at this point. Firstly, I tried to load a custom fen file with a winning state for me. Secondly, I tried to get the output of a file in the system with a <strong>directory traversal attack</strong>. I was not lucky. After thinking some time, I tried to get the source code of the <strong>index.php</strong> file with a POST to the <strong>load_board.php</strong>. It worked!</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/index_code.png>
+</figure>
+<p>I have been looking at the <strong>index.php</strong> code for hours. The only interesting thing I saw was the following hint: <code>"Winning against me won't help anymore. You need to get the flag from my envs."</code>. Other than that, I could not find where the vulnerability was. I asked the community for a hint. They told me that <strong>unserialize</strong> is the vulnerable function. With that information, I decided to first learn about PHP serialization. This <a href=https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a>page</a> explains how it works and how to exploit it. In our case, we need a vulnerable PHP class with the magic method <strong>__wakeup</strong> which gets executed after calling <strong>unserialize</strong>. The class named <strong>Stockfish</strong> of <strong>index.php</strong> has it.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Stockfish</span>
+{
+    <span style=color:#66d9ef>public</span> $cwd <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;./&#34;</span>;
+    <span style=color:#66d9ef>public</span> $binary <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;/usr/games/stockfish&#34;</span>;
+    <span style=color:#66d9ef>public</span> $other_options <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#39;bypass_shell&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;true&#39;</span>);
+    <span style=color:#66d9ef>public</span> $descriptorspec <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(
+	<span style=color:#ae81ff>0</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#34;pipe&#34;</span>,<span style=color:#e6db74>&#34;r&#34;</span>),
+	<span style=color:#ae81ff>1</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#34;pipe&#34;</span>,<span style=color:#e6db74>&#34;w&#34;</span>),
+    );
+    <span style=color:#66d9ef>private</span> $process;
+    <span style=color:#66d9ef>private</span> $pipes;
+    <span style=color:#66d9ef>private</span> $thinking_time;
+
+    <span style=color:#f92672>...</span>
+
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> __wakeup()
+    {
+	$this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>process</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>proc_open</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>binary</span>, $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>descriptorspec</span>, $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>pipes</span>,
+				   $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>cwd</span>, <span style=color:#66d9ef>null</span>, $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>other_options</span>) ;
+	<span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#39;&lt;!--&#39;</span><span style=color:#f92672>.</span><span style=color:#e6db74>&#39;wakeupcalled&#39;</span><span style=color:#f92672>.</span><span style=color:#a6e22e>fgets</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>pipes</span>[<span style=color:#ae81ff>1</span>], <span style=color:#ae81ff>4096</span>)<span style=color:#f92672>.</span><span style=color:#e6db74>&#39;--&gt;&#39;</span>;
+    }
+}
+</code></pre></div><p>In the snippet above, we can see the code that will get executed once <strong>unserialize</strong> is called. It will execute a binary. We could exploit it by passing a serialized <strong>Stockfish</strong> object with a different binary that showed us the environment variables. That is the place where the flag is supposed to be. <code>"Winning against me won't help anymore. You need to get the flag from my envs."</code>.</p>
+<p>Where is the <strong>unserialize</strong> called? How should we pass the data? In the
+<strong>index.php</strong>, we can see that the <strong>unserialize</strong> method is called when a GET HTTP call is done to <strong>move_end</strong>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>} <span style=color:#66d9ef>elseif</span> (<span style=color:#a6e22e>isset</span>($_GET[<span style=color:#e6db74>&#39;move_end&#39;</span>])) {
+    $movei <span style=color:#f92672>=</span> <span style=color:#a6e22e>unserialize</span>(<span style=color:#a6e22e>base64_decode</span>($_GET[<span style=color:#e6db74>&#39;move_end&#39;</span>]));
+</code></pre></div><p>We have to send the payload to <a href="https://hackerchess2-web.h4ck.ctfcompetition.com?move_end=payload">https://hackerchess2-web.h4ck.ctfcompetition.com?move_end=payload</a>.</p>
+<p>The last step is generating the payload. We can copy the Stockfish code in our computer and change the <strong>binary</strong> variable to have the value <strong>&ldquo;cat /proc/self/environ&rdquo;</strong>. That will print the environment variables. Finally, we have to serialize and encode it in base64.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>$stockf <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Stockfish</span>();
+<span style=color:#66d9ef>echo</span> <span style=color:#a6e22e>base64_encode</span>(<span style=color:#a6e22e>serialize</span>($stockf));
+</code></pre></div><p>Finally, we only need to launch the HTTP request and search for the flag in the output.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/unserialize_exploit.png width=900px>
+</figure>
+<p>With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch03/intro.png>
+</figure>
+</main>
+</body>
+</html>
