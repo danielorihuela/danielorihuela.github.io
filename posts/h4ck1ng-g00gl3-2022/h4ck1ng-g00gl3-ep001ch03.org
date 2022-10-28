@@ -1,0 +1,91 @@
+#+title: H4ck1ng G00gl3 ep001 challenge 03
+#+hugo_publishdate: 2022-10-28
+#+options: tags:nil
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep001 challenge 03*.
+This challenge is about *Reverse Engineering*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/intro.png]]
+
+After opening the challenge, we see a chess website similar to the one in the ep000 ch01.
+
+#+attr_html: :width 900px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/chess.png]]
+
+Notice that now there is no link to the admin panel. We have to find another vulnerability. I checked the website source code and found the *load_baseboard* function.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/load_board_code.png]]
+
+This function returns the contents of the "baseboard.fen" file after a POST request to *load_board.php*. I tried a couple of things at this point. Firstly, I tried to load a custom fen file with a winning state for me. Secondly, I tried to get the output of a file in the system with a *directory traversal attack*. I was not lucky. After thinking some time, I tried to get the source code of the *index.php* file with a POST to the *load_board.php*. It worked!
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/index_code.png]]
+
+I have been looking at the *index.php* code for hours. The only interesting thing I saw was the following hint: ="Winning against me won't help anymore. You need to get the flag from my envs."=. Other than that, I could not find where the vulnerability was. I asked the community for a hint. They told me that *unserialize* is the vulnerable function. With that information, I decided to first learn about PHP serialization. This [[https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a][page]] explains how it works and how to exploit it. In our case, we need a vulnerable PHP class with the magic method *__wakeup* which gets executed after calling *unserialize*. The class named *Stockfish* of *index.php* has it.
+
+#+begin_src php
+class Stockfish
+{
+    public $cwd = "./";
+    public $binary = "/usr/games/stockfish";
+    public $other_options = array('bypass_shell' => 'true');
+    public $descriptorspec = array(
+        0 => array("pipe","r"),
+        1 => array("pipe","w"),
+    );
+    private $process;
+    private $pipes;
+    private $thinking_time;
+
+    ...
+
+    public function __wakeup()
+    {
+        $this->process = proc_open($this->binary, $this->descriptorspec, $this->pipes,
+                                   $this->cwd, null, $this->other_options) ;
+        echo '<!--'.'wakeupcalled'.fgets($this->pipes[1], 4096).'-->';
+    }
+}
+#+end_src
+
+In the snippet above, we can see the code that will get executed once *unserialize* is called. It will execute a binary. We could exploit it by passing a serialized *Stockfish* object with a different binary that showed us the environment variables. That is the place where the flag is supposed to be. ="Winning against me won't help anymore. You need to get the flag from my envs."=.
+
+Where is the *unserialize* called? How should we pass the data? In the
+*index.php*, we can see that the *unserialize* method is called when a GET HTTP call is done to *move_end*.
+
+#+begin_src php
+} elseif (isset($_GET['move_end'])) {
+    $movei = unserialize(base64_decode($_GET['move_end']));
+#+end_src
+
+We have to send the payload to https://hackerchess2-web.h4ck.ctfcompetition.com?move_end=payload.
+
+The last step is generating the payload. We can copy the Stockfish code in our computer and change the *binary* variable to have the value *"cat /proc/self/environ"*. That will print the environment variables. Finally, we have to serialize and encode it in base64.
+
+#+begin_src php
+  $stockf = new Stockfish();
+  echo base64_encode(serialize($stockf));
+#+end_src
+
+Finally, we only need to launch the HTTP request and search for the flag in the output.
+
+#+attr_html: :width 900px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/unserialize_exploit.png]]
+
+
+With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch03/intro.png]]
