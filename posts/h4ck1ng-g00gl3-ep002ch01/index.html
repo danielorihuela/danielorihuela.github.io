@@ -1,0 +1,68 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep002 challenge 01 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep002 challenge 01</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep002 challenge 01</strong>.
+This challenge is about <strong>Steganography</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/intro.png>
+</figure>
+<p>The challenge gives us the following image.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/challenge.png width=900px>
+</figure>
+<p>It&rsquo;s an RGBA file.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/challenge-info.png width=900px>
+</figure>
+<p>The first thing that came to mind with my basic knowledge of image steganography was the <strong>LSB</strong> (i.e. Least-Significant Bit) technique. I tried tens of different already built scripts and online tools. But I couldn&rsquo;t find anything interesting. After a couple of hours, I started to doubt if I was going down the rabbit hole. I reread the hint but got no clue on how to proceed. It was time to ask the community for help.</p>
+<p>The community pointed me to the hint: <code>Sometimes the answers are hidden in plain site</code>. Also, they told me to take a look at the main webpage background. We can see the same image. I downloaded it and extracted the strings, which got me the following.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/website-strings.png>
+</figure>
+<p>Here, we have some information.</p>
+<ol>
+<li>The information is hidden inside an <strong>SSL certificate</strong></li>
+<li><strong>LSB</strong> steganography technique is used</li>
+<li>The attackers used an online tool</li>
+</ol>
+<p>After all, I was right about the <strong>LSB</strong> technique. Why couldn&rsquo;t I get anything with the myriad of tools I used? I don&rsquo;t know. I decided to write my own script.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> sys
+<span style=color:#f92672>import</span> numpy <span style=color:#66d9ef>as</span> np
+<span style=color:#f92672>from</span> PIL <span style=color:#f92672>import</span> Image
+
+img <span style=color:#f92672>=</span> Image<span style=color:#f92672>.</span>open(<span style=color:#e6db74>&#39;challenge.png&#39;</span>, <span style=color:#e6db74>&#39;r&#39;</span>)
+pixels <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(list(img<span style=color:#f92672>.</span>getdata()))
+rgba_values <span style=color:#f92672>=</span> [values <span style=color:#66d9ef>for</span> pixel <span style=color:#f92672>in</span> pixels <span style=color:#66d9ef>for</span> values <span style=color:#f92672>in</span> pixel]
+least_significant_bits <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join([bin(value)[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>] <span style=color:#66d9ef>for</span> value <span style=color:#f92672>in</span> rgba_values])
+hidden_bytes <span style=color:#f92672>=</span> [least_significant_bits[i:i<span style=color:#f92672>+</span><span style=color:#ae81ff>8</span>] <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>0</span>, len(least_significant_bits), <span style=color:#ae81ff>8</span>)]
+hidden_message <span style=color:#f92672>=</span> [chr(int(byte, <span style=color:#ae81ff>2</span>)) <span style=color:#66d9ef>for</span> byte <span style=color:#f92672>in</span> hidden_bytes]
+
+print(<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(hidden_message))
+</code></pre></div><p>I was finally able to get something.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/certificate.png>
+</figure>
+<p>The next step was getting the flag from the certificate. I saved the result from the script into a file called &ldquo;certificate.ssl&rdquo; and executed the following.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>openssl x509 -text -noout -in certificate.ssl
+</code></pre></div><p>After getting the output, we can see the flag in the <strong>issuer</strong> field. With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/intro.png>
+</figure>
+</main>
+</body>
+</html>
