@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep002 challenge 01
-#+hugo_publishdate: 2022-10-28
+#+hugo_publishdate: 2022-11-3
 #+options: tags:nil
 
 * Table of Contents                                               :TOC_5_org:
