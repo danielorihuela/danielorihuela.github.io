@@ -1,0 +1,50 @@
+#+title: H4ck1ng G00gl3 ep002 challenge 03
+#+hugo_publishdate: 2022-11-05
+#+options: tags:nil
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep002 challenge 03*.
+This challenge is about *Escaping Restricted Shell*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep002ch03/intro.png]]
+
+The description tells us how to connect to a remote shell.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep002ch03/quarantineshell.png]]
+
+Once connected, we get access to a shell. It has a peculiarity, though. We cannot execute any commands because they are blocked. However, it tells us to check the completions to see the available ones. Therefore, I pressed the *tab* key a few times to see them.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep002ch03/available-commands.png]]
+
+The flag, as in other challenges, can be found in the root folder. We can check it by writing "ls /" and then pressing the *tab* a couple of times to see the available files and directories.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep002ch03/ls-flag.png]]
+
+I was stuck. I did not know what to do. I had to ask the community for a hint. The trick is overriding a builtin function. The [[https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html][bash documentation]] says:
+
+#+begin_quote
+Bash allows a function to override a builtin with the same name, and provides access to that builtin’s functionality within the function via the builtin and command builtins (see Bash Builtin Commands). 
+#+end_quote
+
+That means we can *overwrite one of the builtin functions* available to try and read the flag. I tried with a couple of functions but did not manage to override them. I asked for another hint. We have to use the "*echo*" function. Executing the following commands will change its behaviour and return the flag.
+
+#+begin_src bash
+echo () { /bin/cat /flag; }
+echo
+#+end_src
+
+With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep002ch03/intro.png]]
