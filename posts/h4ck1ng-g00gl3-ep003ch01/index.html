@@ -1,0 +1,88 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep003 challenge 01 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep003 challenge 01</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep003 challenge 01</strong>. Category <strong>Misc</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/intro.png>
+</figure>
+<p>The description tell us how to connect to the machine with socat. However, it requires a password. I tried to guess it with no luck. I watched the episode video again but didn&rsquo;t find anything interesting. I even tried searching for vulnerabilities or brute force scripts targeting socat. Nothing of that worked. I asked the community for a hint. They told me to check the <strong>intro</strong> tab of the episode.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/password-hint.png>
+</figure>
+<p>I believe I never read the introductions to the different challenges, but it was necessary this time. There, we can see two times at which the episode video might show something interesting. If we <strong>stop the episode at 15:09</strong> we will see the password.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/video-password2.png width=1000px>
+</figure>
+<p>We can access the machine now.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/developer-shell.png width=1000px>
+</figure>
+<p>In the home directory, we find three files: backup.py, login.sh and todo.txt. The login.sh contains the code executed when connecting with socat, nothing of interest. However, the other two files contain relevant information. I decided to check the <strong>backup.py</strong> first.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/backup-code.png>
+</figure>
+<p>It&rsquo;s a simple unfinished script. The script creates the backup of a document, probably the one we need to get. The problem is that <strong>we need an access token to get the file</strong>. Unlucky for us, the function that gets the token hasn&rsquo;t been implemented. In any case, we can see framed in red the base URL and the document id. Hence, we know the document is at <a href=https://docs.googleapis.com/v1/documents/1Z7CQDJhCj1G5ehvM3zB3FyxsCfdvierd1fs0UBlzFFM>https://docs.googleapis.com/v1/documents/1Z7CQDJhCj1G5ehvM3zB3FyxsCfdvierd1fs0UBlzFFM</a>. Besides, we have to use <strong>RFC 6749: The OAuth 2.0 Authorization framework</strong>. We know it from the challenge hint, <code>Hint: Find the key, and put RFC 6749 to use</code>. That means we need to get the <strong>access token</strong> using the <strong>OAuth 2.0 framework</strong>. I wrote this down and kept collecting information.</p>
+<p>I opened the <strong>todo.txt</strong> file and saw the following:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>Today
+[x] Added backup-tool@project-multivision.iam.gserviceaccount.com with viewer-access to super sensitive design doc
+[x] Tried activating service account with gcloud, but didn&#39;t give me a documents.readonly scope
+[x] Cleaned up service account key from disk before signing off
+
+Tomorrow
+[] Finish writing Google Drive backup script
+</code></pre></div><p>We can read that the developer used a <strong>service account with gcloud</strong>. He also mentions something about a <strong>&ldquo;documents.readonly&rdquo; scope</strong> and that he removed the key from the disk. That is unfortunate because we need it to get the access token.</p>
+<p>At this point, I did not know what to do or how to proceed. I read diagonally the RFC 6749 and searched for information about OAuth2.0 on internet but did not find anything that could help me. For no reason, I thought it was worth returning to the developer machine to navigate the directories and see if I could find anything. After some time, I found something that caught my attention. A <strong>hidden folder named &ldquo;.config</strong>&rdquo;.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/ls-hidden.png>
+</figure>
+<p>This folder contains a <strong>gcloud folder with promising files</strong>.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/gcloud-config-files.png>
+</figure>
+<p>Remember that we needed an access token? Well&mldr;, there we have a <strong>access_tokens.db</strong>, which includes <strong>an old access token and a JWT</strong>.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/old-access-token.png width=1000px>
+</figure>
+<p>We can paste the token into the <a href=https://jwt.io/>https://jwt.io/</a> webpage and see which information is inside.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/decoded-access-token.png>
+</figure>
+<p>We are progressing. Still, we don&rsquo;t know the information we have to include in the JWT to get a new access token, and we don&rsquo;t have the private key to sign it. I returned to the <strong>.config/gcloud</strong> folder to search for the private key. There, we see a file called <strong>credentials.db</strong>, which contains the <strong>private key</strong> and the <strong>token URI</strong>, among other information we don&rsquo;t need.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/private-key.png width=1000px>
+</figure>
+<p>Now we have all the required information.</p>
+<ul>
+<li>JWT with some information</li>
+<li>Private key to sign the token</li>
+<li>document URL</li>
+<li>Token URI to get the access token</li>
+<li>The backup is done with a service account</li>
+<li>The scope is related to documents.readonly</li>
+</ul>
+<p>We only need to find the correct steps we have to follow to get a valid access token and eventually get the document. After wandering through several blogs, tutorials, videos and documentation, I found some Google documentation explaining <a href=https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests>how to use OAuth 2.0 for Server to Server Application</a>. There, we can see the information the access token must contain and how to send the POST request. First, we have to build a valid access token.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/new-jwt.png width=1000px>
+</figure>
+<p>The header stays the same. However, we needed to modify the payload. The <strong>iat field timestamp is the current timestamp</strong>, and the <strong>exp field timestamp is one hour from now in the future</strong>. Moreover, we initially <strong>set the scope field to &ldquo;<a href=https://www.googleapis.com/auth/documents.readonly>https://www.googleapis.com/auth/documents.readonly</a>"</strong>. We can see the different authorization scopes available for a document GET request at <a href=https://developers.google.com/docs/api/reference/rest/v1/documents/get>https://developers.google.com/docs/api/reference/rest/v1/documents/get</a>. We are now in good shape to <strong>send a POST request to get a valid access_token</strong>.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/post-token.png width=1000px>
+</figure>
+<p>Great, we got a new access token! The last step is <strong>sending a GET request to the document URL</strong> with the <strong>access token in the Authorization header</strong>.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/get-blueprints.png width=1000px>
+</figure>
+<p>Perfect! We received the response with the blueprints! Finally, we need to search for the flag in the response. With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch01/intro.png>
+</figure>
+</main>
+</body>
+</html>
