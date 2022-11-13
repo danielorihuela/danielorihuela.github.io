@@ -1,0 +1,53 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep003 challenge 02 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep003 challenge 02</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep003 challenge 02</strong>. Category <strong>Escape Restricted Shell</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/intro.png>
+</figure>
+<p>The description gives us the command to connect to a remote machine.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/greeting.png>
+</figure>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/game.png width=1000px>
+</figure>
+<p>At this point, we can try winning the game or cheating, as the hint suggests. At first, I tried to play the game for a while, searching for clues on how to cheat it. I could not find a way. I was recovering a lot of coordinates and images that didn&rsquo;t make sense and didn&rsquo;t help me. Later I learned that they are related to the bonus challenge for this episode. After dying a couple of times, the game became tedious, and I didn&rsquo;t find a way to cheat. I asked the community for help. The hint is related to the <a href="https://www.digitaltrends.com/gaming/famous-cheat-codes-in-video-games/#:~:text=In%20its%20most%20famous%20form,a%20cakewalk%20with%20the%20code">famous Konami cheat code</a>. After introducing it, we get to another screen where we can input text.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/cd-home.png>
+</figure>
+<p>Notice that it won&rsquo;t execute any command. We need to do some research. First, I <strong>copied the error output of the command &ldquo;cd ~"</strong> into the Google search engine.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/shell-may-be-python.png>
+</figure>
+<p>We can try to execute a python function to check if it&rsquo;s a python shell and its version. In that case, I decided to call:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>print <span style=color:#e6db74>&#34;asd&#34;</span>
+</code></pre></div><figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/shell-is-python3.png>
+</figure>
+<p>By the given output, we can see that the <strong>shell is running python version 3</strong>. Lucky me, I found a <a href=https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3>webpage with tricks to scape from restricted python3 shells</a>. That page shows how to access the <strong>builtins</strong> module, for example.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/print-len-self.png>
+</figure>
+<p>The <a href=https://docs.python.org/3/library/builtins.html>builtins</a> module gives access to several functions, one of them being the <strong>open</strong> function. That means that we can open a file and read it. We know from past challenges that the flag file is at the root directory, and therefore, we can get the flag with</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>print(len<span style=color:#f92672>.</span>__self__<span style=color:#f92672>.</span>open(<span style=color:#e6db74>&#39;flag&#39;</span>)<span style=color:#f92672>.</span>read())
+</code></pre></div><p>With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/intro.png>
+</figure>
+</main>
+</body>
+</html>
