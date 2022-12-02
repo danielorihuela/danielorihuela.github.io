@@ -22,6 +22,9 @@
 (use-package ox-hugo
   :straight (:type git :host github :repo "kaushalmodi/ox-hugo"))
 
+;; Preserve indentation
+(setq org-src-preserve-indentation t)
+
 ;;; Public functions
 (defun build/export-all ()
   "Export all org-files (including nested) under posts-org-files."
