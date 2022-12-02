@@ -36,16 +36,16 @@ This challenge is about <strong>Reverse Engineering</strong>.</p>
 </figure>
 <p>I visited this domain and saw a list of private keys with long alphanumeric names. I did not have any hint about which of these private keys could be the one that I needed. Anyway, there were only around two hundred private keys. Therefore, we should be able to decrypt the flag file with every single private key in a small amount of time. With that strategy in mind, I downloaded all the private keys.</p>
 <p>First, we need to obtain a list with the filenames of every private key. We can do that with the following bash line.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/ <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>    | awk <span style=color:#e6db74>&#39;{split($0,a,&#34;\&#34;&#34;); print a[2]}&#39;</span> &gt; pemfilenames
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  curl https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/ <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>      | awk <span style=color:#e6db74>&#39;{split($0,a,&#34;\&#34;&#34;); print a[2]}&#39;</span> &gt; pemfilenames
 </code></pre></div><p>Now that we have a list of all the filenames. We can download all the private keys.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#66d9ef>for</span> pemfile in <span style=color:#66d9ef>$(</span>cat pemfilenames<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
-    wget https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/$pemfile -P pemkeys
-<span style=color:#66d9ef>done</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>    <span style=color:#66d9ef>for</span> pemfile in <span style=color:#66d9ef>$(</span>cat pemfilenames<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
+        wget https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/$pemfile -P pemkeys
+    <span style=color:#66d9ef>done</span>
 </code></pre></div><p>Finally, we can decrypt the flag with every private key file.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#66d9ef>for</span> pem in <span style=color:#66d9ef>$(</span>ls pemkeys<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
-    ./wannacry -encrypted_file flag -key_file pemkeys/$pem
-<span style=color:#66d9ef>done</span> &gt; result
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>    <span style=color:#66d9ef>for</span> pem in <span style=color:#66d9ef>$(</span>ls pemkeys<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
+        ./wannacry -encrypted_file flag -key_file pemkeys/$pem
+    <span style=color:#66d9ef>done</span> &gt; result
 </code></pre></div><p>Now, we can obtain the flag. We only need to get the strings from the &ldquo;result&rdquo; file and find the flag. We can do that with the following bash command.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>strings result| grep solve
 </code></pre></div><p>With that, we completed the challenge.</p>
