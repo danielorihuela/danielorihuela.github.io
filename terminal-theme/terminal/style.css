@@ -1,0 +1,8 @@
+body .shell {
+    width: 400px;
+    height: 200px;
+}
+
+body .shell .terminal {
+    --size: 1.4;
+}
