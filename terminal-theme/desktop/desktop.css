@@ -22,6 +22,11 @@ body {
     display: flex;
     font-size: 100%;
     background-color: white;
+    background-image: url('./wallpaper.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 .glitched-background-text {
