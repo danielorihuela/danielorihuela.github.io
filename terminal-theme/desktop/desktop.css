@@ -30,6 +30,17 @@ body {
     overflow: hidden;
 }
 
+.icons {
+    display: flex;
+    flex-direction: row;
+    gap: 2.3em;
+    width: 30%;
+}
+
+.icons > * {
+    width: 6em;
+}
+
 .glitched-background-text {
     position: absolute;
     z-index: -1;
