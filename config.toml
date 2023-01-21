@@ -1,4 +1,11 @@
 baseURL = "https://danielorihuela.github.io/"
 languageCode = "en-us"
 title = "danielorihuela"
-theme = "do-minimalistic-theme"
+theme = "do-cyberpunk-theme"
+
+[menu]
+[[menu.main]]
+  title = 'posts'
+  url = 'posts'
+  [menu.main.params]
+    icon = 'file-manager.svg'
