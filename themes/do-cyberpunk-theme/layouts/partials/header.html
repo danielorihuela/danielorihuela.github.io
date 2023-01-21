@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8" />
+	
+	<title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
+
+	{{ if .IsHome }}
+		<link rel="stylesheet" href="/css/desktop.css" />
+		<link rel="stylesheet" href="/css/icon.css" />
+	{{ else if (eq .Type "posts") }}
+		<link rel="stylesheet" href="/css/logo.css" />
+		<link rel="stylesheet" href="/css/posts.css" />
+	{{ end }}
+
+	{{ with .OutputFormats.Get "rss" -}}
+		{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+	{{ end -}}
+
+</head>
+
+<body>

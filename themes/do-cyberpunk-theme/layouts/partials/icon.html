@@ -1,0 +1,8 @@
+<a href="{{ .URL }}">
+  <div class="icon">
+    {{ $imagePath := printf "%s/%s" "icons" .Params.icon }}
+    {{ $image := resources.Get $imagePath }}
+    <img class="icon-image" src="{{ $image.RelPermalink }}" />
+    <span class="icon-caption">{{ .Title }}</span>
+  </div>
+</a>

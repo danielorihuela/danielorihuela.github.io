@@ -1,0 +1,11 @@
+{{ partial "header.html" . }}
+
+<div class="glitched-background-text" data-text="DANIEL ORIHUELA">DANIEL ORIHUELA</div>
+
+<div class="icons">
+    {{ range .Site.Menus.main }}
+        {{ partial "icon.html" . }}
+    {{ end }}
+</div>
+
+{{ partial "footer.html" . }}
