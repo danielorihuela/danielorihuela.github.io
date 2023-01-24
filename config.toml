@@ -5,6 +5,13 @@ theme = "do-cyberpunk-theme"
 
 [menu]
 [[menu.main]]
+  identifier = 'about'
+  title = 'about'
+  url = 'about'
+  [menu.main.params]
+    icon = 'file-manager.svg'
+[[menu.main]]
+  identifier = 'posts'
   title = 'posts'
   url = 'posts'
   [menu.main.params]
