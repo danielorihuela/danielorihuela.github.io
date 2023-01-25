@@ -25,8 +25,7 @@ body {
 .icons {
     display: flex;
     flex-direction: row;
-    gap: 2.3em;
-    margin-left: 2.3em;
+    margin-left: 2em;
     width: 30%;
 }
 
