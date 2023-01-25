@@ -20,16 +20,5 @@
     color: white;
     font-size: 1.2em;
     padding: 0.2em 1em;
+    z-index: -1;
 }
-
-a:link { text-decoration: none; }
-
-
-a:visited { text-decoration: none; }
-
-
-a:hover { text-decoration: none; }
-
-
-a:active { text-decoration: none; }
-
