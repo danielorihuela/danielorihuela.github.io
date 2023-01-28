@@ -9,7 +9,8 @@ theme = "do-cyberpunk-theme"
   title = 'about'
   url = 'about'
   [menu.main.params]
-    icon = 'file-manager.svg'
+    icon = 'about.jpg'
+    borderRadius = '50%'
 [[menu.main]]
   identifier = 'posts'
   title = 'posts'
