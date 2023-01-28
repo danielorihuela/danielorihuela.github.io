@@ -2,7 +2,7 @@
 
 {{ .Scratch.Set "command" "ls" }}
 {{ .Scratch.Set "arg" .Type }}
-{{ partial "logo.html" . }}
+{{ partial "section-title.html" . }}
 
 <ul class="posts-all-list-elements">
     {{ range ( where .Site.RegularPages "Type" "posts" ).ByPublishDate.Reverse }}
