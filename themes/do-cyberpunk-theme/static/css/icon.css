@@ -7,7 +7,7 @@
 }
 
 .icon:hover {
-    background-color: rgb(213, 240, 251);
+    background-color: rgb(132, 220, 255);
 }
 
 .icon-image {
@@ -20,5 +20,5 @@
     color: white;
     font-size: 1.2em;
     padding: 0.2em 1em;
-    z-index: -1;
+    cursor: default;
 }
