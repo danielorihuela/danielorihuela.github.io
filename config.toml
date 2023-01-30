@@ -17,3 +17,7 @@ theme = "do-cyberpunk-theme"
   url = 'posts'
   [menu.main.params]
     icon = 'file-manager.svg'
+
+[Params]
+  github = 'https://github.com/danielorihuela'
+  email = 'danielorihuelarodriguez@gmail.com'
