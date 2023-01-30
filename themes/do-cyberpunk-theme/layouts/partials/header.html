@@ -12,9 +12,13 @@
 		<link rel="stylesheet" href="/css/desktop.css" />
 		<link rel="stylesheet" href="/css/icon.css" />
 		<link rel="stylesheet" href="/css/frame.css" />
-	{{ else }}
+	{{ else if (eq .Kind "section") }}
 		<link rel="stylesheet" href="/css/section.css" />
-		<link rel="stylesheet" href="/css/posts.css" />
+	{{ else if (eq .Kind "page") }}
+		<link rel="stylesheet" href="/css/page.css" />
+	{{ end }}
+
+	{{ if (eq .Type "about") }}
 		<link rel="stylesheet" href="/css/about.css" />
 	{{ end }}
 

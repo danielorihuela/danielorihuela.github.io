@@ -1,5 +1,4 @@
 body {
-    color: #333;
     font-size: 125%;
     line-height: 1.5;
     padding: 1rem;
@@ -15,18 +14,7 @@ body {
     text-transform: capitalize;
 }
 
-.list-element {
+.centered-image {
     display: flex;
-    align-items: center;
-    height: 100%;
-}
-
-.list-element-date {
-    margin-left: 8%;
-    width: 20%;
-}
-
-.list-element-title {
-    width: 90%;
-    font-size: x-large;
+    justify-content: center;
 }
