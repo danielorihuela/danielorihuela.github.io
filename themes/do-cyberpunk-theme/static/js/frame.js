@@ -1,18 +1,21 @@
+const frameInnerContent = document.getElementById('frame-inner');
+const frameWrapper = document.getElementById('frame-wrapper');
+
 function openFrame(url) {
-    $('#frame-inner').attr('src', url);
-    $('#frame-wrapper').css('visibility', 'visible');
+    frameInnerContent.setAttribute('src', url);
+    frameWrapper.style.setProperty('visibility', 'visible');
 }
 
 function minimize() {
-    $('#frame-wrapper').css('width', '50rem');
-    $('#frame-wrapper').css('height', '40rem');
+    frameWrapper.style.setProperty('height', '40rem');
+    frameWrapper.style.setProperty('width', '50rem');
 }
 
 function maximize() {
-    $('#frame-wrapper').css('width', '100%');
-    $('#frame-wrapper').css('height', '100%');
+    frameWrapper.style.setProperty('height', '100%');
+    frameWrapper.style.setProperty('width', '100%');
 }
 
 function collapse() {
-    $('#frame-wrapper').css('visibility', 'collapse');
+    frameWrapper.style.setProperty('visibility', 'collapse');
 }
