@@ -8,6 +8,7 @@ theme = "do-cyberpunk-theme"
   identifier = 'about'
   title = 'about'
   url = 'about'
+  weight = 1
   [menu.main.params]
     icon = 'about.jpg'
     borderRadius = '50%'
@@ -15,8 +16,16 @@ theme = "do-cyberpunk-theme"
   identifier = 'posts'
   title = 'posts'
   url = 'posts'
+  weight = 2
   [menu.main.params]
     icon = 'file-manager.svg'
+[[menu.main]]
+  identifier = 'open-source'
+  title = 'open source contributions'
+  url = 'open-source'
+  weight = 3
+  [menu.main.params]
+    icon = 'open-source.png'
 
 [Params]
   github = 'https://github.com/danielorihuela'
