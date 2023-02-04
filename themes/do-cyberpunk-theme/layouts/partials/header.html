@@ -26,6 +26,7 @@
 		{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 	{{ end -}}
 
+	<script defer src="/js/interact.min.js"></script>
 	<script defer src="/js/frame.js"></script>
 </head>
 
