@@ -1,6 +1,8 @@
 (setq make-backup-files nil) ;; Disable "<file>~" backups.
 
 (defconst posts-org-files (getenv "POSTS_ORG_SRC"))
+(defconst about-org-files (getenv "ABOUT_ORG_SRC"))
+(defconst open-source-org-files (getenv "OPEN_SOURCE_ORG_SRC"))
 
 ;; Setup packages using straight.el: https://github.com/raxod502/straight.el
 (defvar bootstrap-version)
@@ -30,9 +32,19 @@
   "Export all org-files (including nested) under posts-org-files."
 
   (setq org-hugo-base-dir (getenv "HUGO_BASE_DIR"))
-  (setq org-hugo-section "posts")
 
+  (setq org-hugo-section "posts")
   (dolist (org-file (directory-files-recursively posts-org-files "\.org$"))
+    (with-current-buffer (find-file org-file)
+      (org-hugo-export-wim-to-md :all-subtrees nil nil nil)))
+  
+  (setq org-hugo-section "about")
+  (dolist (org-file (directory-files-recursively about-org-files "\.org$"))
+    (with-current-buffer (find-file org-file)
+      (org-hugo-export-wim-to-md :all-subtrees nil nil nil)))
+  
+  (setq org-hugo-section "open-source")
+  (dolist (org-file (directory-files-recursively open-source-org-files "\.org$"))
     (with-current-buffer (find-file org-file)
       (org-hugo-export-wim-to-md :all-subtrees nil nil nil)))
 
