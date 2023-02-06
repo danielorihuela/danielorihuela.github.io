@@ -104,7 +104,7 @@ function _storePreviousWrapperBoundingBox() {
     _previousDataY = _getDataYFrom(WRAPPER);
 }
 
-function close() {
+function closeFrame() {
     WRAPPER.style.setProperty('visibility', 'collapse');
 }
 
