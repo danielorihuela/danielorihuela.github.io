@@ -1,0 +1,6 @@
+<div class="icon" id="{{ .Identifier }}" onclick="openFrame('{{ .URL }}')">
+  {{ $imagePath := printf "%s/%s" "icons" .Params.icon }}
+  {{ $image := resources.Get $imagePath }}
+  <img class="icon-image" style="border-radius: {{ .Params.borderRadius }};" src="{{ $image.RelPermalink }}" />
+  <span class="icon-caption">{{ .Title }}</span>
+</div>

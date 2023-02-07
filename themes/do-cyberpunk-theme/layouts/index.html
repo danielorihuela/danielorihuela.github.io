@@ -1,0 +1,21 @@
+{{ partial "header.html" . }}
+
+<div id="frame-wrapper" class="frame-wrapper" onmousedown="moveSafeguardToFront()">
+    <div class="buttons">
+        <i id="minimize" class="fa fa-chevron-down" onclick="minimize()"></i>
+        <i id="maximize" class="fa fa-chevron-up" onclick="maximize()"></i>
+        <i id="close" class="close fa fa-times" onclick="closeFrame()"></i>
+    </div>
+    <iframe id="frame-inner" class="frame-inner"></iframe>
+    <div id="safeguard" class="safeguard"></div>
+</div>
+
+<div class="glitched-background-text" data-text="DANIEL ORIHUELA">DANIEL ORIHUELA</div>
+
+<div class="icons">
+    {{ range .Site.Menus.main }}
+        {{ partial "icon.html" . }}
+    {{ end }}
+</div>
+
+{{ partial "footer.html" . }}

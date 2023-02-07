@@ -1,0 +1,15 @@
+{{ partial "header.html" . }}
+
+{{ .Scratch.Set "arg" .Title }}
+{{ partial "section-title.html" . }}
+
+{{ .Content }}
+
+<div class="about-links">
+    {{ $githubIcon := resources.Get "/icons/github.svg" }}
+    <a href="{{ .Site.Params.github }}" target="_blank"><img src="{{ $githubIcon.RelPermalink }}"/></a>
+    {{ $gmailIcon := resources.Get "/icons/email.svg" }}
+    <a href="mailto:{{ .Site.Params.email }}"><img src="{{ $gmailIcon.RelPermalink }}"/></a>
+</div>
+
+{{ partial "footer.html" . }}

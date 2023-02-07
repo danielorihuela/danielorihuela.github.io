@@ -1,4 +1,32 @@
 baseURL = "https://danielorihuela.github.io/"
 languageCode = "en-us"
 title = "danielorihuela"
-theme = "do-minimalistic-theme"
+theme = "do-cyberpunk-theme"
+
+[menu]
+[[menu.main]]
+  identifier = 'about'
+  title = 'about'
+  url = 'about'
+  weight = 1
+  [menu.main.params]
+    icon = 'about.jpg'
+    borderRadius = '50%'
+[[menu.main]]
+  identifier = 'posts'
+  title = 'posts'
+  url = 'posts'
+  weight = 2
+  [menu.main.params]
+    icon = 'file-manager.svg'
+[[menu.main]]
+  identifier = 'open-source'
+  title = 'open source contributions'
+  url = 'open-source'
+  weight = 3
+  [menu.main.params]
+    icon = 'open-source.png'
+
+[Params]
+  github = 'https://github.com/danielorihuela'
+  email = 'danielorihuelarodriguez@gmail.com'
