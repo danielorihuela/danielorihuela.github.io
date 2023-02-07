@@ -1,5 +1,5 @@
 #+title: About
-#+type: about
+#+hugo_type: about
 
 
 Hi! I'm Daniel Orihuela, a Software Engineer interested in Cybersecurity, Cryptography, Algorithms, Distributed Systems and AI.

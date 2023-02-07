@@ -1,9 +1,0 @@
-#+title: Open Source Contributions
-#+type: open-source
-
-* [[https://external.ink?to=/github.com/zricethezav/gitleaks][Gitleaks]]
-* [[https://external.ink?to=/github.com/CISOfy/lynis][Lynis]]
-* [[https://external.ink?to=/www.openmined.org/][OpenMined]]
-  * [[https://external.ink?to=/github.com/OpenMined/PySyft][PySyft]]
-  * [[https://external.ink?to=/github.com/OpenMined/sycret][sycret]]
-  * [[https://external.ink?to=/github.com/OpenMined/SyMPC][SyMPC]]
