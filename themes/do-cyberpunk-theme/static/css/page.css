@@ -14,6 +14,10 @@ body {
     text-transform: capitalize;
 }
 
+.back {
+    margin-left: 2rem;
+}
+
 .centered-image {
     display: flex;
     justify-content: center;

@@ -1,0 +1,15 @@
+{{ partial "header.html" . }}
+
+{{ .Scratch.Set "arg" .Title }}
+{{ partial "section-title.html" . }}
+
+
+<div class="back">
+    <a href="/posts">
+        Back
+    </a>
+</div>
+
+{{ .Content }}
+
+{{ partial "footer.html" . }}
