@@ -1,0 +1,32 @@
+body {
+    color: #333;
+    font-size: 125%;
+    line-height: 1.5;
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: 100ch;
+}
+
+.title {
+    font-weight: bold;
+    color: black;
+    font-size: 2.5rem;
+    margin-left: 2rem;
+    text-transform: capitalize;
+}
+
+.list-element {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.list-element-date {
+    margin-left: 8%;
+    width: 20%;
+}
+
+.list-element-title {
+    width: 90%;
+    font-size: x-large;
+}

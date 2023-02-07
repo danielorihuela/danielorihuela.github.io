@@ -3,136 +3,38 @@
 <meta name=generator content="Hugo 0.91.2">
 <meta charset=utf-8>
 <title>danielorihuela</title>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=/css/logo.css>
-<link rel=stylesheet href=/css/posts.css>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin=anonymous referrerpolicy=no-referrer>
+<link rel=stylesheet href=/css/desktop.css>
+<link rel=stylesheet href=/css/icon.css>
+<link rel=stylesheet href=/css/frame.css>
 <link rel=alternate type=application/rss+xml href=https://danielorihuela.github.io/index.xml title=danielorihuela>
+<script defer src=/js/interact.min.js></script>
+<script defer src=/js/frame.js></script>
 </head>
 <body>
-<main class=content>
-<div class=logo>
-<a href=https://danielorihuela.github.io/>
-<img href=https://danielorihuela.github.io/ class="logo-image w3-circle" src=/images/cyberpunk_programmer_reading_a_book.jpg>
-</a>
-<span class=logo-text>daniel orihuela:~$ ls <font color=#2e86c1>posts</font>
-</span>
+<div id=frame-wrapper class=frame-wrapper onmousedown=moveSafeguardToFront()>
+<div class=buttons>
+<i id=minimize class="fa fa-chevron-down" onclick=minimize()></i>
+<i id=maximize class="fa fa-chevron-up" onclick=maximize()></i>
+<i id=close class="close fa fa-times" onclick=closeFrame()></i>
 </div>
-<ul class=posts-all-list-elements>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-December 2, 2022
+<iframe id=frame-inner class=frame-inner></iframe>
+<div id=safeguard class=safeguard></div>
 </div>
-<a href=/posts/h4ck1ng-g00gl3-ep005ch03/ class=posts-list-element-title>H4ck1ng G00gl3 ep005 challenge 03</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-December 2, 2022
+<div class=glitched-background-text data-text="DANIEL ORIHUELA">DANIEL ORIHUELA</div>
+<div class=icons>
+<div class=icon id=about onclick="openFrame('about')">
+<img class=icon-image style=border-radius:50% src=/icons/about.jpg>
+<span class=icon-caption>about</span>
 </div>
-<a href=/posts/h4ck1ng-g00gl3-ep005ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep005 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 28, 2022
+<div class=icon id=posts onclick="openFrame('posts')">
+<img class=icon-image style=border-radius: src=/icons/file-manager.svg>
+<span class=icon-caption>posts</span>
 </div>
-<a href=/posts/h4ck1ng-g00gl3-ep005ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep005 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 21, 2022
+<div class=icon id=open-source onclick="openFrame('open-source')">
+<img class=icon-image style=border-radius: src=/icons/open-source.png>
+<span class=icon-caption>open source contributions</span>
 </div>
-<a href=/posts/h4ck1ng-g00gl3-ep004ch03/ class=posts-list-element-title>H4ck1ng G00gl3 ep004 challenge 03</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 20, 2022
 </div>
-<a href=/posts/h4ck1ng-g00gl3-ep004ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep004 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 20, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep004ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep004 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 13, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep003ch03/ class=posts-list-element-title>H4ck1ng G00gl3 ep003 challenge 03</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 13, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep003ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep003 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 9, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep003ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep003 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 5, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep002ch03/ class=posts-list-element-title>H4ck1ng G00gl3 ep002 challenge 03</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 4, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep002ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep002 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-November 3, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep002ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep002 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-October 28, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep001ch03/ class=posts-list-element-title>H4ck1ng G00gl3 ep001 challenge 03</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-October 20, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep001ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep001 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-October 18, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep001ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep001 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-October 18, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep000ch02/ class=posts-list-element-title>H4ck1ng G00gl3 ep000 challenge 02</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-October 18, 2022
-</div>
-<a href=/posts/h4ck1ng-g00gl3-ep000ch01/ class=posts-list-element-title>H4ck1ng G00gl3 ep000 challenge 01</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-July 3, 2022
-</div>
-<a href=/posts/deploy-blog-written-with-org-mode-on-github-pages/ class=posts-list-element-title>Deploy blog written with org-mode on GitHub Pages</a>
-</li>
-<li class=posts-list-element>
-<div class=posts-list-element-date>
-June 25, 2022
-</div>
-<a href=/posts/test_action_post/ class=posts-list-element-title>Test github action build hugo webpage</a>
-</li>
-</ul>
-</main>
 </body>
 </html>
