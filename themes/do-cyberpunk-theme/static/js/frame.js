@@ -125,7 +125,7 @@ function closeFrame() {
  * Put an element in front of the iframe whenever we start
  * dragging it, and send it to the back when we finish.
  */
-WRAPPER.onmousedown = function () {
+function moveSafeguardToFront() {
     SAFEGUARD.style.setProperty('z-index', '100');
 }
 
