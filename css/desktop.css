@@ -14,7 +14,7 @@ body {
     display: flex;
     font-size: 100%;
     background-color: white;
-    background-image: url('../main_screen_wallpaper.jpg');
+    background-image: url('../main_screen_wallpaper.avif');
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
