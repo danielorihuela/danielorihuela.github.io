@@ -10,7 +10,7 @@ theme = "do-cyberpunk-theme"
   url = 'about'
   weight = 1
   [menu.main.params]
-    icon = 'about.avif'
+    icon = 'about.svg'
     borderRadius = '50%'
 [[menu.main]]
   identifier = 'posts'
