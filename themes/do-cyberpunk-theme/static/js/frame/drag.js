@@ -7,6 +7,8 @@ export function makeDraggable(elementId, fromId, safeguardId) {
   from.ontouchstart = startDrag;
 
   function startDrag(e) {
+    element.style.willChange = 'transform';
+
     e = e || window.event;
     e.preventDefault();
 
@@ -31,8 +33,11 @@ export function makeDraggable(elementId, fromId, safeguardId) {
     currentX = eventX;
     currentY = eventY;
 
-    element.style.marginTop = (element.offsetTop - yPosDiff) + "px";
-    element.style.marginLeft = (element.offsetLeft - xPosDiff) + "px";
+    let dataX = parseFloat(element.getAttribute('data-x')) || 0;
+    let dataY = parseFloat(element.getAttribute('data-y')) || 0;
+    element.style.transform = `translate(${dataX - xPosDiff}px, ${dataY - yPosDiff}px)`;
+    element.setAttribute('data-x', dataX - xPosDiff);
+    element.setAttribute('data-y', dataY - yPosDiff);
   }
 
   function endDrag() {
@@ -41,6 +46,8 @@ export function makeDraggable(elementId, fromId, safeguardId) {
     document.ontouchmove = null;
     document.onmouseup = null;
     document.ontouchend = null;
+    
+    element.style.willChange = 'auto';
   }
 }
 
