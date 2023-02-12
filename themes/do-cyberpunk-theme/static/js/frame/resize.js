@@ -1,89 +1,32 @@
+import { getClientX, getClientY } from "./utils.js";
+
+const MIN_HEIGHT = 400;
+const MIN_WIDTH = 400;
+
+let initialX = 0;
+let initialY = 0;
+let safeguard = null;
+let element = null;
+
 export function makeResizable(elementId, rightResizerId, leftResizerId, bottomResizerId, bottomRightResizerId, bottomLeftResizerId, safeguardId) {
-    let element = document.getElementById(elementId);
+    element = document.getElementById(elementId);
+    safeguard = document.getElementById(safeguardId);
+
     let rightResizer = document.getElementById(rightResizerId);
+    setupListeners(rightResizer, resizeRight);
+
     let leftResizer = document.getElementById(leftResizerId);
+    setupListeners(leftResizer, resizeLeft);
+
     let bottomResizer = document.getElementById(bottomResizerId);
+    setupListeners(bottomResizer, resizeBottom);
+
     let bottomRightResizer = document.getElementById(bottomRightResizerId);
+    setupListeners(bottomRightResizer, resizeBottomRight);
+
     let bottomLeftResizer = document.getElementById(bottomLeftResizerId);
+    setupListeners(bottomLeftResizer, resizeBottomLeft);
 
-    let safeguard = document.getElementById(safeguardId);
-
-    let initialX = 0;
-    let initialY = 0;
-    rightResizer.onmousedown = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.onmousemove = resizeRight;
-    }
-    rightResizer.ontouchstart = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.ontouchmove = resizeRight;
-    }
-    leftResizer.onmousedown = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.onmousemove = resizeLeft;
-    }
-    leftResizer.ontouchstart = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.ontouchmove = resizeLeft;
-    }
-    bottomResizer.onmousedown = (e) => {
-        e = e || window.event;
-
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.onmousemove = resizeBottom;
-    }
-    bottomResizer.ontouchstart = (e) => {
-        e = e || window.event;
-
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.ontouchmove = resizeBottom;
-    }
-    bottomRightResizer.onmousedown = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.onmousemove = resizeBottomRight;
-    }
-    bottomRightResizer.ontouchstart = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.ontouchmove = resizeBottomRight;
-    }
-    bottomLeftResizer.onmousedown = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.onmousemove = resizeBottomLeft;
-    }
-    bottomLeftResizer.ontouchstart = (e) => {
-        e = e || window.event;
-
-        initialX = getClientX(e, "touchstart");
-        initialY = getClientY(e, "touchstart");
-        safeguard.style.setProperty('z-index', '100');
-        document.ontouchmove = resizeBottomLeft;
-    }
     document.onmouseup = () => {
         document.onmousemove = null;
         safeguard.style.setProperty('z-index', '-100');
@@ -92,92 +35,61 @@ export function makeResizable(elementId, rightResizerId, leftResizerId, bottomRe
         document.ontouchmove = null;
         safeguard.style.setProperty('z-index', '-100');
     }
+}
 
-    function resizeRight(e) {
+function setupListeners(element, callback) {
+    element.onmousedown = (e) => {
+        e = e || window.event;
         e.preventDefault();
 
-        let newWidth = element.getBoundingClientRect().width + getClientX(e, "touchmove") - initialX;
-        if(newWidth < 400) {
-            return;
-        }
+        initialX = getClientX(e, "touchstart");
+        initialY = getClientY(e, "touchstart");
+        safeguard.style.setProperty('z-index', '100');
+        document.onmousemove = callback;
+    }
+    element.ontouchstart = (e) => {
+        e = e || window.event;
+        e.preventDefault();
 
+        initialX = getClientX(e, "touchstart");
+        initialY = getClientY(e, "touchstart");
+        safeguard.style.setProperty('z-index', '100');
+        document.ontouchmove = callback;
+    }
+}
+
+function resizeRight(e) {
+    let newWidth = element.getBoundingClientRect().width + getClientX(e, "touchmove") - initialX;
+    if (newWidth >= MIN_WIDTH) {
         element.style.width = `${newWidth}px`;
         initialX = getClientX(e, "touchmove");
     }
+}
 
-    function resizeLeft(e) {
-        e.preventDefault();
-        
-        let diffX = getClientX(e, "touchmove") - initialX;
-        let newWidth = element.getBoundingClientRect().width - diffX;
-        if(newWidth < 400) {
-            return;
-        }
-
+function resizeLeft(e) {
+    let diffX = getClientX(e, "touchmove") - initialX;
+    let newWidth = element.getBoundingClientRect().width - diffX;
+    if (newWidth >= MIN_WIDTH) {
         element.style.marginLeft = `${parseFloat(element.style.marginLeft) + diffX}px`;
         element.style.width = `${newWidth}px`;
         initialX = getClientX(e, "touchmove");
     }
+}
 
-    function resizeBottom(e) {
-        e.preventDefault();
-
-        let newHeight = element.getBoundingClientRect().height + getClientY(e, "touchmove") - initialY;
-        if(newHeight < 400) {
-            return;
-        }
-
+function resizeBottom(e) {
+    let newHeight = element.getBoundingClientRect().height + getClientY(e, "touchmove") - initialY;
+    if (newHeight >= MIN_HEIGHT) {
         element.style.height = `${newHeight}px`;
         initialY = getClientY(e, "touchmove");
     }
-
-    function resizeBottomRight(e) {
-        e.preventDefault();
-
-        let newHeight = element.getBoundingClientRect().height + getClientY(e, "touchmove") - initialY;
-        if(newHeight >= 400) {
-            element.style.height = `${newHeight}px`;
-            initialY = getClientY(e, "touchmove");
-        }
-        
-        let newWidth = element.getBoundingClientRect().width + getClientX(e, "touchmove") - initialX;
-        if(newWidth >= 400) {
-            element.style.width = `${newWidth}px`;
-            initialX = getClientX(e, "touchmove");
-        }
-    }
-
-    function resizeBottomLeft(e) {
-        e.preventDefault();
-
-        let newHeight = element.getBoundingClientRect().height + getClientY(e, "touchmove") - initialY;
-        if(newHeight >= 400) {
-            element.style.height = `${newHeight}px`;
-            initialY = getClientY(e, "touchmove");
-        }
-        
-        let diffX = getClientX(e, "touchmove") - initialX;
-        let newWidth = element.getBoundingClientRect().width - diffX;
-        if(newWidth >= 400) {
-            element.style.marginLeft = `${parseFloat(element.style.marginLeft) + diffX}px`;
-            element.style.width = `${newWidth}px`;
-            initialX = getClientX(e, "touchmove");
-        }
-    }
 }
 
-function getClientX(e, type) {
-    if (e.type === type) {
-      return e.touches[0].clientX;
-    } else {
-      return e.clientX;
-    }
-  }
-  
-  function getClientY(e, type) {
-    if (e.type === type) {
-      return e.touches[0].clientY;
-    } else {
-      return e.clientY;
-    }
-  }
+function resizeBottomRight(e) {
+    resizeBottom(e);
+    resizeRight(e);
+}
+
+function resizeBottomLeft(e) {
+    resizeBottom(e);
+    resizeLeft(e);
+}
