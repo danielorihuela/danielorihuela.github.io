@@ -95,21 +95,3 @@ function storePreviousWrapperBoundingBox() {
 export function close() {
     WRAPPER.style.setProperty('visibility', 'collapse');
 }
-
-
-
-/**
- * Those two events are needed to fix a bug.
- * 
- * Bug explanation:
- * When dragging an element, its position gets updated based on
- * the cursor position. If you start dragging an element which
- * contains an iframe inside, and you move the cursor to the iframe,
- * the animation will stop. An iframe has its own navigation
- * context. Therefore, the parent no longer detects that we are
- * dragging the element.
- * 
- * Solution:
- * Put an element in front of the iframe whenever we start
- * dragging it, and send it to the back when we finish.
- */
