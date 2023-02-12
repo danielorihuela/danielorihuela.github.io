@@ -1,3 +1,5 @@
+import { getClientX, getClientY } from "./utils.js";
+
 export function makeDraggable(elementId, fromId, safeguardId) {
   let currentX, currentY = (0, 0);
   let element = document.getElementById(elementId);
@@ -46,23 +48,7 @@ export function makeDraggable(elementId, fromId, safeguardId) {
     document.ontouchmove = null;
     document.onmouseup = null;
     document.ontouchend = null;
-    
+
     element.style.willChange = 'auto';
-  }
-}
-
-function getClientX(e, type) {
-  if (e.type === type) {
-    return e.touches[0].clientX;
-  } else {
-    return e.clientX;
-  }
-}
-
-function getClientY(e, type) {
-  if (e.type === type) {
-    return e.touches[0].clientY;
-  } else {
-    return e.clientY;
   }
 }
