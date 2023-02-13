@@ -26,15 +26,6 @@ export function makeResizable(elementId, rightResizerId, leftResizerId, bottomRe
 
     let bottomLeftResizer = document.getElementById(bottomLeftResizerId);
     setupListeners(bottomLeftResizer, resizeBottomLeft);
-
-    document.onmouseup = () => {
-        document.onmousemove = null;
-        safeguard.style.setProperty('z-index', '-100');
-    }
-    document.ontouchend = () => {
-        document.ontouchmove = null;
-        safeguard.style.setProperty('z-index', '-100');
-    }
 }
 
 function setupListeners(element, callback) {
@@ -46,6 +37,7 @@ function setupListeners(element, callback) {
         initialY = getClientY(e, "touchstart");
         safeguard.style.setProperty('z-index', '100');
         document.onmousemove = callback;
+        document.onmouseup = endResize;
     }
     element.ontouchstart = (e) => {
         e = e || window.event;
@@ -55,6 +47,7 @@ function setupListeners(element, callback) {
         initialY = getClientY(e, "touchstart");
         safeguard.style.setProperty('z-index', '100');
         document.ontouchmove = callback;
+        document.ontouchend = endResize;
     }
 }
 
@@ -92,4 +85,9 @@ function resizeBottomRight(e) {
 function resizeBottomLeft(e) {
     resizeBottom(e);
     resizeLeft(e);
+}
+
+function endResize() {
+    document.onmousemove = document.ontouchmove = null;
+    safeguard.style.setProperty('z-index', '-100');
 }
