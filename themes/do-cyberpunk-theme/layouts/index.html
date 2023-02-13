@@ -1,6 +1,13 @@
 {{ partial "header.html" . }}
 
-<div id="frame-wrapper" class="frame-wrapper" onmousedown="moveSafeguardToFront()">
+<div id="frame-wrapper" class="frame-wrapper">
+    <div id="right-resizer" class="right-resizer"></div>
+    <div id="left-resizer" class="left-resizer"></div>
+    <div id="bottom-resizer" class="bottom-resizer"></div>
+    <div id="bottom-right-resizer" class="bottom-right-resizer"></div>
+    <div id="bottom-left-resizer" class="bottom-left-resizer"></div>
+
+    <div id="head-bar" class="head-bar"></div>
     <div class="buttons">
         <i id="minimize" class="fa fa-chevron-down" onclick="minimize()"></i>
         <i id="maximize" class="fa fa-chevron-up" onclick="maximize()"></i>
