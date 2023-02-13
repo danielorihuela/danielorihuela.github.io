@@ -13,3 +13,7 @@ export function getClientY(e, type) {
         return e.clientY;
     }
 }
+
+export function getAttributeFloat(element, attributeName) {
+    return parseFloat(element.getAttribute(attributeName)) || 0;
+}

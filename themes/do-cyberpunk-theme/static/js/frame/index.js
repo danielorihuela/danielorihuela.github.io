@@ -1,11 +1,14 @@
 import { makeDraggable } from "./drag.js";
-import { openFrame, minimize, maximize, close } from "./frame.js";
+import { openFrame, minimize, maximize, close } from "./buttons.js";
 import { makeResizable } from "./resize.js";
 
-window.openFrame = openFrame;
-window.minimize = minimize;
-window.maximize = maximize;
-window.closeFrame = close;
+const WRAPPER = document.getElementById('frame-wrapper');
+const CONTENT = document.getElementById('frame-inner');
+
+window.openFrame = (url) => openFrame(url, WRAPPER, CONTENT);
+window.minimize = () => minimize(WRAPPER);
+window.maximize = () => maximize(WRAPPER);
+window.closeFrame = () => close(WRAPPER);
 
 makeDraggable('frame-wrapper',
     'head-bar',

@@ -1,54 +1,46 @@
-import { getClientX, getClientY } from "./utils.js";
+import { getClientX, getClientY, getAttributeFloat } from "./utils.js";
+
+let currentX, currentY = (0, 0);
 
 export function makeDraggable(elementId, fromId, safeguardId) {
-  let currentX, currentY = (0, 0);
   let element = document.getElementById(elementId);
   let from = document.getElementById(fromId);
   let safeguard = document.getElementById(safeguardId);
-  from.onmousedown = startDrag;
-  from.ontouchstart = startDrag;
+  from.onmousedown = from.ontouchstart = (e) => startDrag(e, element, safeguard);
+}
 
-  function startDrag(e) {
-    element.style.willChange = 'transform';
+function startDrag(e, element, safeguard) {
+  element.style.willChange = 'transform';
 
-    e = e || window.event;
-    e.preventDefault();
+  e = e || window.event;
+  e.preventDefault();
 
-    currentX = getClientX(e, "touchstart");
-    currentY = getClientY(e, "touchstart");
+  currentX = getClientX(e, "touchstart");
+  currentY = getClientY(e, "touchstart");
 
-    safeguard.style.setProperty('z-index', '100');
-    document.onmousemove = drag;
-    document.ontouchmove = drag;
-    document.onmouseup = endDrag;
-    document.ontouchend = endDrag;
-  }
+  safeguard.style.setProperty('z-index', '100');
+  document.onmousemove = document.ontouchmove = (e) => drag(e, element);
+  document.onmouseup = document.ontouchend = () => endDrag(element, safeguard);
+}
 
-  function drag(e) {
-    e = e || window.event;
-    e.preventDefault();
+function drag(e, element) {
+  e = e || window.event;
 
-    let eventX = getClientX(e, "touchmove");
-    let eventY = getClientY(e, "touchmove");
-    let xPosDiff = currentX - eventX;
-    let yPosDiff = currentY - eventY;
-    currentX = eventX;
-    currentY = eventY;
+  let eventX = getClientX(e, "touchmove");
+  let newX = getAttributeFloat(element, 'data-x') - (currentX - eventX);
+  let eventY = getClientY(e, "touchmove");
+  let newY = getAttributeFloat(element, 'data-y') - (currentY - eventY);
+  element.style.transform = `translate(${newX}px, ${newY}px)`;
+  element.setAttribute('data-x', newX);
+  currentX = eventX;
+  element.setAttribute('data-y', newY);
+  currentY = eventY;
+}
 
-    let dataX = parseFloat(element.getAttribute('data-x')) || 0;
-    let dataY = parseFloat(element.getAttribute('data-y')) || 0;
-    element.style.transform = `translate(${dataX - xPosDiff}px, ${dataY - yPosDiff}px)`;
-    element.setAttribute('data-x', dataX - xPosDiff);
-    element.setAttribute('data-y', dataY - yPosDiff);
-  }
+function endDrag(element, safeguard) {
+  safeguard.style.setProperty('z-index', '-100');
+  document.onmousemove = document.ontouchmove = null;
+  document.onmouseup = document.ontouchend = null;
 
-  function endDrag() {
-    safeguard.style.setProperty('z-index', '-100');
-    document.onmousemove = null;
-    document.ontouchmove = null;
-    document.onmouseup = null;
-    document.ontouchend = null;
-
-    element.style.willChange = 'auto';
-  }
+  element.style.willChange = 'auto';
 }
