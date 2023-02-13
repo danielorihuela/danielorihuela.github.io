@@ -5,16 +5,21 @@
 <meta name=description content="Daniel Orihuela blog and personal website">
 <meta name=viewport>
 <title>danielorihuela</title>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin=anonymous referrerpolicy=no-referrer>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css>
 <link rel=stylesheet href=/css/desktop.css>
 <link rel=stylesheet href=/css/icon.css>
 <link rel=stylesheet href=/css/frame.css>
 <link rel=alternate type=application/rss+xml href=https://danielorihuela.github.io/index.xml title=danielorihuela>
-<script defer src=/js/interact.min.js></script>
-<script defer src=/js/frame.js></script>
+<script type=module src=/js/frame/index.js></script>
 </head>
 <body>
-<div id=frame-wrapper class=frame-wrapper onmousedown=moveSafeguardToFront()>
+<div id=frame-wrapper class=frame-wrapper>
+<div id=right-resizer class=right-resizer></div>
+<div id=left-resizer class=left-resizer></div>
+<div id=bottom-resizer class=bottom-resizer></div>
+<div id=bottom-right-resizer class=bottom-right-resizer></div>
+<div id=bottom-left-resizer class=bottom-left-resizer></div>
+<div id=head-bar class=head-bar></div>
 <div class=buttons>
 <i id=minimize class="fa fa-chevron-down" onclick=minimize()></i>
 <i id=maximize class="fa fa-chevron-up" onclick=maximize()></i>
@@ -26,7 +31,7 @@
 <div class=glitched-background-text data-text="DANIEL ORIHUELA">DANIEL ORIHUELA</div>
 <div class=icons>
 <div class=icon id=about onclick="openFrame('about')">
-<img class=icon-image style=border-radius:50% src=/icons/about.avif alt>
+<img class=icon-image style=border-radius:50% src=/icons/about.svg alt>
 <span class=icon-caption>about</span>
 </div>
 <div class=icon id=posts onclick="openFrame('posts')">
