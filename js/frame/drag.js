@@ -10,8 +10,6 @@ export function makeDraggable(elementId, fromId, safeguardId) {
 }
 
 function startDrag(e, element, safeguard) {
-  element.style.willChange = 'transform';
-
   e = e || window.event;
   e.preventDefault();
 
@@ -20,7 +18,7 @@ function startDrag(e, element, safeguard) {
 
   safeguard.style.setProperty('z-index', '100');
   document.onmousemove = document.ontouchmove = (e) => drag(e, element);
-  document.onmouseup = document.ontouchend = () => endDrag(element, safeguard);
+  document.onmouseup = document.ontouchend = () => endDrag(safeguard);
 }
 
 function drag(e, element) {
@@ -37,10 +35,8 @@ function drag(e, element) {
   currentY = eventY;
 }
 
-function endDrag(element, safeguard) {
+function endDrag(safeguard) {
   safeguard.style.setProperty('z-index', '-100');
   document.onmousemove = document.ontouchmove = null;
   document.onmouseup = document.ontouchend = null;
-
-  element.style.willChange = 'auto';
 }
