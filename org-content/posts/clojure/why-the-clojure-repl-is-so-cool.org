@@ -1,0 +1,38 @@
+#+title: Why the Clojure REPL is so cool
+#+hugo_publishdate: 2023-05-28
+#+options: tags:nil
+
+A couple of weeks ago, I started a side project. The idea is to create a simple book reading tracker website, and I decided to go with Clojure. Why? You may wonder. Well. I wanted to play with and experience a couple of things: building an application using a functional programming approach and working with a LISP REPL.
+
+At first, I had a hard time developing some frontend with ClojureScript. I was using a new language with new tools and frameworks and not taking full advantage of one of [[https://www.youtube.com/watch?v=gIoadGfm5T8][Clojure's superpowers]], the REPL. I was working the same way I used to work with other languages. I write some code, write some tests (if necessary), compile it, run it, check if anything is wrong, fix it and repeat. However, lispy languages allow you to use the REPL to interact with your running code in real time without building it again. Other languages, like Java, also offer a REPL. However, [[https://news.ycombinator.com/item?id=23811382][lispy languages are built with the REPL in mind]]. The language is designed with the assumption that the users will modify the code while it's running. That has huge implications for how we can interact with the system. Besides, you won't lose the state of your application. As far as I know, we cannot accomplish this when building backends with languages like Java, Python or Ruby. Neither building frontends with Angular or React, for example.
+
+Let's say that we are building a frontend with Angular. The normal flow is to write the code and then run it on development mode with hot code reload. That way, when you change something in the code, the browser will get updated with the new code. However, you will lose the state of the application. Depending on which language and framework you use, you may have access to tools that allow you to do some of what the Clojure REPL does. For example, [[https://github.com/PatrickJS/angular-hmr][Angular Hot Module Reload]]. But still, all those tools are outside the language. They lack capabilities, can be slower, buggy, difficult to configure or have compatibility problems in the future.
+
+Clojure, on the other hand, is a lispy language. It was designed with the REPL in mind. We can modify our code while it is running. It may be hard to understand how powerful this is until you try it yourself. Anyway, I will try to show it to you. I have developed a simple ClojureScript frontend with two pages. You can check it out at [[https://github.com/danielorihuela/bookworm-hut/tree/e51f8d2a52aa76f5b975e187cd8bff023a3ab255][e51f8d2]] of my [[https://github.com/danielorihuela/bookworm-hut][bookworm-hut]] repository. In the following image, we can see the home page, the code and the REPL session.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/why-the-clojure-repl-is-so-cool/home-panel-clean-repl.png]]
+
+From the REPL session, I can dispatch an event that triggers the redirection into the register page.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/why-the-clojure-repl-is-so-cool/register-panel-dispatch-repl.png]]
+
+That is something that we cannot do in other languages. In Java, you would need to debug a Java program while running it. Set breakpoints in those places where you want to perform some operation. Wait for the code to reach the breakpoints. Then, execute whatever you want on the console. The Clojure REPL instead allows us to execute code at any time. That is pretty cool. We can also add new code while the program is running. Clojure will reload the new code without restarting the application or losing the state. In the following image, we can see that I modified the navigation event to display an alert box. Notice how the running application acknowledges that, reloads it, and lets me execute it with the same application state.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/why-the-clojure-repl-is-so-cool/new-feature-in-runtime.png]]
+
+Again, we cannot do this in other languages and systems. That is the power of the REPL Driven Development. It can be hard to understand just with images, so let me show you a gif.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/why-the-clojure-repl-is-so-cool/clojure-repl.gif]]
+
+
+If you still have doubts about the REPL Driven Development and how it works, please, look into [[https://clojureverse.org/t/misconceptions-about-repl-driven-development/6988][Misconceptions about REPL-driven development]], some [[https://www.youtube.com/watch?v=3HxVMGaiZbc][demonstrations]] and [[https://www.youtube.com/watch?v=3HxVMGaiZbc][REPL Driven Development, Clojure's Superpower - Sean Corfield]].
+
+Summary. Lispy languages are designed and built with the REPL in mind. They assume the user will write and execute new code on a running application (REPL Driven Development). That gives us capabilities not present in other languages, frameworks and systems. From my experience, they make the development faster and more pleasant.
