@@ -1,0 +1,34 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=description content="Daniel Orihuela blog and personal website">
+<meta name=viewport>
+<title>How to patch a git dependency in rust with same location but different branch | danielorihuela</title>
+<link rel=stylesheet href=/css/page.css>
+<script type=module src=/js/frame/index.js></script>
+</head>
+<body>
+<span class=title><font color=#2e86c1>How to patch a git dependency in rust with same location but different branch</font>
+</span>
+<div class=back>
+<a href=/posts>
+Back
+</a>
+</div>
+<p>At my current employer, we are developing multiple internal libraries in Rust. They are hosted in a git based code hosting. <a href=https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories>Here</a> is how we can specify them from a different repository.</p>
+<p>Sometimes we want to modify a repository (we will call it &ldquo;Start&rdquo;) that happens to be one of the lowest dependencies in the tree. And we want to test that a specific repository (we will call it &ldquo;End&rdquo;) that uses the &ldquo;Start&rdquo; dependency indirectly still works. For instance, we could have the following chain of dependencies: &ldquo;End&rdquo; -> &ldquo;A&rdquo; -> &ldquo;B&rdquo; -> &ldquo;C&rdquo; -> &ldquo;Start&rdquo;, where &ldquo;->&rdquo; represents a dependency.</p>
+<p>Rust allows to <a href=https://github.com/rust-lang/cargo/issues/5478>override dependencies</a>, but it does not work in all situations. For instance, it <a href=https://github.com/rust-lang/cargo/issues/5478>does not allow patching a git repository using a different branch of the same repository</a>. The <a href=https://github.com/rust-lang/cargo/issues/5478#issuecomment-1506056467>fix</a> is simple but easy to misconfigure. I have problems configuring it every time I need to do it.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml>  [<span style=color:#a6e22e>patch</span>.<span style=color:#e6db74>&#39;https://github.com/company/Start&#39;</span>]
+  <span style=color:#a6e22e>start</span> = { <span style=color:#a6e22e>git</span> = <span style=color:#e6db74>&#34;https://www.github.com/company//Start.git&#34;</span>, <span style=color:#a6e22e>branch</span> = <span style=color:#e6db74>&#34;new-feature&#34;</span> }
+</code></pre></div><p>There are two important details there.</p>
+<ul>
+<li>The patch url does not include the trailing &ldquo;.git&rdquo;</li>
+<li>The url in the second line contains &ldquo;//&rdquo; before &ldquo;Start.git&rdquo;</li>
+</ul>
+<p>Without these two things, you will end with the following error:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>Caused by:
+  patch for `start` in `https://github.com/company/Start` points to the same source, but patches must point
+  to different sources
+</code></pre></div>
+</body>
+</html>
