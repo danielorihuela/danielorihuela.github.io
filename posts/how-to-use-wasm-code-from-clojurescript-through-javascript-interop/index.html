@@ -1,0 +1,63 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=description content="Daniel Orihuela blog and personal website">
+<meta name=viewport>
+<title>How to use WASM code from ClojureScript through JavaScript interop | danielorihuela</title>
+<link rel=stylesheet href=/css/page.css>
+<script type=module src=/js/frame/index.js></script>
+</head>
+<body>
+<span class=title><font color=#2e86c1>How to use WASM code from ClojureScript through JavaScript interop</font>
+</span>
+<div class=back>
+<a href=/posts>
+Back
+</a>
+</div>
+<p>Clojure is a great programming language. I have been working with it lately, and it&rsquo;s been a blast. Another language that I love is Rust. One day I was thinking about both languages, their advantages and disadvantages, and under which circumstances I should use each. That made me wonder if it would be hard to use WASM from Clojurescript.</p>
+<p>My idea was to:</p>
+<ol>
+<li>Create a simple function in Rust</li>
+<li>Use <a href=https://github.com/rustwasm/wasm-bindgen>wasm-bindgen</a> crate to generate the WASM code and JavaScript bindings.</li>
+<li>Load the code into JavaScript</li>
+<li>Call WASM code from ClojureScript through the JavaScript interops</li>
+</ol>
+<p>You can check the final code at <a href=https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop>https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop</a>.</p>
+<p>The first two steps were easy. I created a simple Rust function.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust>  <span style=color:#66d9ef>use</span> wasm_bindgen::prelude::<span style=color:#f92672>*</span>;
+
+  <span style=color:#75715e>#[wasm_bindgen]</span>
+  <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>add</span>(a: <span style=color:#66d9ef>u8</span>, b: <span style=color:#66d9ef>u8</span>) -&gt; <span style=color:#66d9ef>u8</span> {
+      a <span style=color:#f92672>+</span> b
+  }
+</code></pre></div><p>Then, I built the WASM code and JavaScript bindings with the following command:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>wasm-pack build --target web
+</code></pre></div><p>Now is when the interesting part starts. We want to use the generated JavaScript bindings to call the WASM code. First, we need to <a href=https://clojurescript.org/guides/quick-start>create a simple website</a> and <a href="https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html?highlight=wasm-pack%20build%20--target%20web#without-a-bundler">load the code in the browser</a>. In our case, we want to access the WASM functions from the &ldquo;windows&rdquo; object. So I ended up with the following piece of code.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>  &lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;module&#34;</span>&gt;
+    <span style=color:#66d9ef>import</span> <span style=color:#a6e22e>init</span>, { <span style=color:#a6e22e>add</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;./wasm/addition.js&#39;</span>
+
+    <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>run</span>() {
+      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>init</span>();
+      window.<span style=color:#a6e22e>addWasm</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>add</span>;
+    }
+
+    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>run</span>();
+  &lt;/<span style=color:#f92672>script</span>&gt;
+</code></pre></div><p>The WASM is now loaded. We are ready to execute the &ldquo;hello world&rdquo; website.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>clj -M --main cljs.main --compile hello-world.core --repl
+</code></pre></div><p>But there&rsquo;s one problem.</p>
+<figure class=centered-image><img src=/images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/browser-error.png width=1000px>
+</figure>
+<p>The wasm file cannot be validated. I suspect it is related to Will Cohen&rsquo;s comment on <a href=https://clojure.atlassian.net/browse/CLJS-3387>https://clojure.atlassian.net/browse/CLJS-3387</a>. So I tried to serve it with <a href=https://github.com/svenstaro/miniserve>miniserve</a>. It worked!</p>
+<figure class=centered-image><img src=/images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/no-error.png width=1000px>
+</figure>
+<p>We can call WASM code with with the following approach:
+The <a href=https://cljs.info/cheatsheet/>cheatsheet</a> tells us how to access the function we jsut exported.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure>(<span style=color:#66d9ef>. </span>js/window (<span style=color:#a6e22e>addWasm</span> <span style=color:#ae81ff>5</span> <span style=color:#ae81ff>10</span>))
+</code></pre></div><figure class=centered-image><img src=/images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/result.png width=600px>
+</figure>
+<p>You can check the final code at <a href=https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop>https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop</a>.</p>
+<p>And this is how we can call WASM from ClojureScript from a basic project. The problem with that approach is that we lost the REPL since we cannot use the ClojureScript browser. However, you will probably use a build tool like <a href=https://github.com/thheller/shadow-cljs>shadow-cljs</a>. An approach exists for shadow-cljs to use WASM with the REPL. You can check it <a href=https://github.com/thheller/wasm-pack-cljs>https://github.com/thheller/wasm-pack-cljs</a>.</p>
+</body>
+</html>
