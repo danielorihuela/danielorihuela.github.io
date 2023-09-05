@@ -5,6 +5,8 @@ let previousTransform = null;
 
 export function openFrame(url, wrapper, content) {
     resetFrameWrapperStyle(wrapper);
+    wrapper.setAttribute('data-x', 0);
+    wrapper.setAttribute('data-y', 0);
     transformMarginUnitsToPixels(wrapper);
     showFrame(url, wrapper, content)
 }
