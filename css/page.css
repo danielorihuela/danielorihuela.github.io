@@ -23,3 +23,9 @@ body {
     display: flex;
     justify-content: center;
 }
+
+code {
+    background-color: #c2c5cb;
+    border-radius: 4px;
+    padding: 2px;
+}
