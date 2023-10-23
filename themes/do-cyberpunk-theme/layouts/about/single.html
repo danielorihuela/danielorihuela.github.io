@@ -10,6 +10,8 @@
     <a href="{{ .Site.Params.github }}" target="_blank"><img src="{{ $githubIcon.RelPermalink }}"/></a>
     {{ $gmailIcon := resources.Get "/icons/email.svg" }}
     <a href="mailto:{{ .Site.Params.email }}"><img src="{{ $gmailIcon.RelPermalink }}"/></a>
+    {{ $twitterIcon := resources.Get "/icons/twitter.svg" }}
+    <a href="{{ .Site.Params.twitter }}" target="_blank"><img src="{{ $twitterIcon.RelPermalink }}"/></a>
 </div>
 
 {{ partial "footer.html" . }}
