@@ -1,11 +1,11 @@
 @font-face {
-    font-family: 'Raskhal';
-    src: url('../fonts/raskhal/RaskhalRegular.eot');
-    src: url('../fonts/raskhal/RaskhalRegular.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/raskhal/RaskhalRegular.woff2') format('woff2'),
-        url('../fonts/raskhal/RaskhalRegular.woff') format('woff'),
-        url('../fonts/raskhal/RaskhalRegular.ttf') format('truetype'),
-        url('../fonts/raskhal/RaskhalRegular.svg#RaskhalRegular') format('svg');
+    font-family: 'Moondance';
+    src: url('../fonts/moondance/Moondance.eot');
+    src: url('../fonts/moondance/Moondance.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/moondance/Moondance.woff2') format('woff2'),
+        url('../fonts/moondance/Moondance.woff') format('woff'),
+        url('../fonts/moondance/Moondance.ttf') format('truetype'),
+        url('../fonts/moondance/Moondance.svg#RemeeqtrialRegular') format('svg');
 }
 
 body {
@@ -45,7 +45,7 @@ body {
     animation: glitch-skew 10s infinite step-end forwards;
     font-size: 6em;
     white-space: nowrap;
-    font-family: Raskhal;
+    font-family: Moondance;
     color: #ffffff;
 }
 
