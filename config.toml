@@ -6,7 +6,7 @@ theme = "do-cyberpunk-theme"
 [menu]
 [[menu.main]]
   identifier = 'about'
-  title = 'about'
+  title = 'About'
   url = 'about'
   weight = 1
   [menu.main.params]
@@ -14,14 +14,14 @@ theme = "do-cyberpunk-theme"
     borderRadius = '50%'
 [[menu.main]]
   identifier = 'posts'
-  title = 'posts'
+  title = 'Posts'
   url = 'posts'
   weight = 2
   [menu.main.params]
     icon = 'file-manager.svg'
 [[menu.main]]
   identifier = 'open-source'
-  title = 'open source contributions'
+  title = 'OSS Contributions'
   url = 'open-source'
   weight = 3
   [menu.main.params]
