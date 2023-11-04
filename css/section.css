@@ -15,18 +15,23 @@ body {
     text-transform: capitalize;
 }
 
+.posts-all-list-elements {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8%;
+}
+
 .list-element {
     display: flex;
-    align-items: center;
     height: 100%;
 }
 
 .list-element-date {
-    margin-left: 8%;
-    width: 20%;
+    font-family: 'Times New Roman';
 }
 
 .list-element-title {
+    padding-left: 5%;
     width: 90%;
     font-size: x-large;
 }
