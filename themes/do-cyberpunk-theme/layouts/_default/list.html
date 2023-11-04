@@ -7,7 +7,7 @@
     {{ range ( where .Site.RegularPages "Type" "posts" ).ByPublishDate.Reverse }}
     <li class="list-element">
         <div class="list-element-date ">
-            {{ .PublishDate.Format "January 2, 2006" }}
+            {{ .PublishDate.Format "2006-01-02" }}
         </div>
         <a href="{{ .RelPermalink }}" class="list-element-title">{{ .Title }}</a>
     </li>
