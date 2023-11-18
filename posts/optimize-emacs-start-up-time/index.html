@@ -1,0 +1,102 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=description content="Daniel Orihuela blog and personal website">
+<meta name=viewport>
+<link rel=stylesheet href=/css/everywhere.css>
+<title>Optimize emacs start up time | danielorihuela</title>
+<link rel=stylesheet href=/css/page.css>
+<script type=module src=/js/frame/index.js></script>
+</head>
+<body>
+<span class=title><font color=#2e86c1>Optimize emacs start up time</font>
+</span>
+<div class=back>
+<a href=/posts>
+Back
+</a>
+</div>
+<h2 id=table-of-contents>Table of Contents</h2>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#optimization-steps>Optimization steps</a>
+<ul>
+<li><a href=#base-configuration>Base configuration</a></li>
+<li><a href=#don-t-manipulate-ui-in-init-dot-el>Don&rsquo;t manipulate UI in init.el</a></li>
+<li><a href=#garbage-collector>Garbage collector</a></li>
+<li><a href=#disable-ui>Disable UI</a></li>
+<li><a href=#autoload-packages>Autoload packages</a></li>
+<li><a href=#tangle-org-file>Tangle org file</a></li>
+<li><a href=#conclusion>Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<h2 id=introduction>Introduction</h2>
+<p>Emacs is a great tool. However, its loading time can grow huge. In this post, I&rsquo;ll show you some configurations that helped me reduce the start up time from <strong>~2.45s</strong> to <strong>~0.81s</strong>.</p>
+<h2 id=optimization-steps>Optimization steps</h2>
+<p>To make it more interesting, I&rsquo;m going to add a section for each optimization along with the time it saved me. That way, you can decide which optimizations you would like to apply.</p>
+<h3 id=base-configuration>Base configuration</h3>
+<p>The <a href=https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org>base configuration</a> requires ~2.45s to initialize Emacs. If you check it, be aware that I&rsquo;m not tangling the section <strong>Writing Research in LaTeX</strong>. If you tangle it, it needs even more time to load. That&rsquo;s the starting point.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/base.png width=300px>
+</figure>
+<h3 id=don-t-manipulate-ui-in-init-dot-el>Don&rsquo;t manipulate UI in init.el</h3>
+<p>Manipulating the UI is expensive: disabling UI elements, modifying the font, the theme, etc. I changed a couple of things related to the UI.</p>
+<ol>
+<li>Remove the code that hides some of the default UI elements from Emacs.</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (scroll-bar-mode <span style=color:#ae81ff>-1</span>)
+  (tool-bar-mode <span style=color:#ae81ff>-1</span>)
+  (tooltip-mode <span style=color:#ae81ff>-1</span>)
+  (menu-bar-mode <span style=color:#ae81ff>-1</span>)
+  (column-number-mode)
+  (set-face-attribute <span style=color:#e6db74>&#39;default</span> <span style=color:#66d9ef>nil</span> :height <span style=color:#ae81ff>180</span>)
+  (toggle-frame-maximized)
+</code></pre></div><ol>
+<li>Remove the code that loads the theme.</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (use-package flatland-theme
+    :config
+    (load-theme <span style=color:#e6db74>&#39;flatland</span> <span style=color:#66d9ef>t</span>))
+</code></pre></div><p>With that, we go down to ~2s.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/no-ui.png width=300px>
+</figure>
+<h3 id=garbage-collector>Garbage collector</h3>
+<p>Emacs uses 8MB as the default value for the garbage collector. As a result, Emacs will call the garbage collector too many times during the start up. Doom emacs has a trick to improve that. We need to add the following code to <code>early-init.el</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>(setq gc-cons-threshold <span style=color:#ae81ff>63000000</span>
+      gc-cons-percentage <span style=color:#ae81ff>0.6</span>)
+</code></pre></div><p>With that, we go down to ~1.021s. Half the time from the previous step.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/early-init-gc.png width=200px>
+</figure>
+<h3 id=disable-ui>Disable UI</h3>
+<p>We can hide some UI elements in the <code>early-init.el</code> to gain some performance.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (push <span style=color:#f92672>&#39;</span>(menu-bar-lines <span style=color:#f92672>.</span> <span style=color:#ae81ff>0</span>) default-frame-alist)
+  (push <span style=color:#f92672>&#39;</span>(tool-bar-lines <span style=color:#f92672>.</span> <span style=color:#ae81ff>0</span>) default-frame-alist)
+  (push <span style=color:#f92672>&#39;</span>(vertical-scroll-bars) default-frame-alist)
+</code></pre></div><p>With that, we go down to ~0.92s.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/early-init-disable-ui.png width=200px>
+</figure>
+<h3 id=autoload-packages>Autoload packages</h3>
+<p>Never <code>require</code> packages. Use <code>use-package</code> to autoload them. For example, we can load the <code>magit</code> the first time we call <code>magit-status</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (use-package magit
+    :bind (<span style=color:#e6db74>&#34;C-x g&#34;</span> <span style=color:#f92672>.</span> magit-status))
+</code></pre></div><p>With that, we go down to ~0.91s. It&rsquo;s anecdotal in my case, but it can save you a lot of time if you are using dozens or hundreds of packages.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/config-org-autoload.png width=200px>
+</figure>
+<h3 id=tangle-org-file>Tangle org file</h3>
+<p>Normally, Emacs reads the configuration from the <code>init.el</code> file. However, we can use org mode to include comments with the code. Personally, I had my configuration in a file called <code>config.org</code>. I loaded it from my <code>init.el</code> with the following line of code:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (org-babel-load-file <span style=color:#e6db74>&#34;~/dotfiles/emacs/config.org&#34;</span>)
+</code></pre></div><p>It&rsquo;s pretty convenient, but slow. We can make it faster by tangling the file directly into the <code>init.el</code>. In other words, we can extract the source code blocks from the <code>org</code> file and create the <code>init.el</code> with them.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  <span style=color:#960050;background-color:#1e0010>#</span> -*- after-save-hook: (org-babel-tangle) -*-
+  <span style=color:#960050;background-color:#1e0010>#</span>+property: header-args:emacs-lisp :exports code :results none :tangle init.el
+</code></pre></div><p>With that, we go down to ~0.82s and get the <a href=https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org>final config</a>.</p>
+<figure class=centered-image><img src=/images/speed-up-emacs-init/config-org-tangle.png width=200px>
+</figure>
+<h3 id=conclusion>Conclusion</h3>
+<p>Emacs is easy to configure, but hard to optimize. Try all the tricks above and check for some more on the internet.</p>
+<br><br><br>
+<hr style=width:100%;text-align:left;margin-left:0;margin-right:0>
+<div>
+You can send me an email to danielorihuelarodriguez@gmail.com or contact me through <a href=https://twitter.com/_DanielOrihuela>Twitter</a>
+</div>
+</body>
+</html>
