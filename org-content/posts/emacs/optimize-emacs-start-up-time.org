@@ -1,4 +1,4 @@
-: Optimize emacs start up time
+#+title: Optimize emacs start up time
 #+hugo_publishdate: 2023-11-18
 #+options: tags:nil
 
