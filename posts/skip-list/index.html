@@ -1,0 +1,164 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=description content="Daniel Orihuela blog and personal website">
+<meta name=viewport>
+<link rel=stylesheet href=/css/everywhere.css>
+<title>Skip List (in Rust) explained! | danielorihuela</title>
+<link rel=stylesheet href=/css/page.css>
+<script type=module src=/js/frame/index.js></script>
+</head>
+<body>
+<span class=title><font color=#2e86c1>Skip List (in Rust) explained!</font>
+</span>
+<div class=back>
+<a href=/posts>
+Back
+</a>
+</div>
+<h2 id=what-s-a-skip-list>What&rsquo;s a Skip List?</h2>
+<p>A Skip List is a probabilistic data structure that serves as an alternative to balanced trees. They are simpler to implement and provide logarithmic search, insertion and removal. However, they take up more memory.</p>
+<p>Regarding the structure, a Skip List is no more than &ldquo;n&rdquo; linked lists. Conceptually, they are stacked on top of each other. For example, the next image shows a Skip List with four layers.</p>
+<figure class=centered-image><img src=/images/skip-list/basic-structure.png>
+</figure>
+<p>Let&rsquo;s briefly explain how each of the operations works at a high level. To know all the details, please, read the <a href=https://15721.courses.cs.cmu.edu/spring2018/papers/08-oltpindexes1/pugh-skiplists-cacm1990.pdf>original whitepaper</a>. After that, we will see a Rust implementation.</p>
+<h3 id=search>Search</h3>
+<p>We start at the topmost layer of the first node. If the next node value is lower than the value we are searching for, we go forward. Otherwise, we go downwards. If we repeat this in a loop, we will end at a node in the bottommost layer. We just need to check if this node contains the value that we want.</p>
+<p>You can see on the next image, marked with a red line, the path the algorithm will follow to search for node 762.</p>
+<figure class=centered-image><img src=/images/skip-list/search.png>
+</figure>
+<p>If we search 700, the algorithm would follow the same path until node 641. Since the next node value is 762, which is bigger, it wouldn&rsquo;t find the value.</p>
+<h3 id=insert>Insert</h3>
+<p>As with searching, we go forward if the value is smaller and downwards if bigger. Now, every time we go downward we will store the pointer of that node. Once we have found the spot to insert our new node, we will visit the nodes where we went down in reverse order and update the successors if the algorithm decides that we need to insert the new node at that level. That is done randomly.</p>
+<p>For example, let&rsquo;s say we want to insert the value 700. First, the algorithm would follow the path marked with a red line in the following image. It would store nodes with values None, 446, and 641. The new node will be inserted between 641 and 762. Then, we proceed to visit node 641 and randomly choose if the new node should be a successor. We repeat that for 446 and None if required.</p>
+<figure class=centered-image><img src=/images/skip-list/insert.png>
+</figure>
+<h3 id=delete>Delete</h3>
+<p>This is similar to the insert algorithm. Now, instead of adding a new node, we will visit each node where we went downwards and update the successors to remove the node.</p>
+<h2 id=rust-implementation>Rust implementation</h2>
+<p>You can see the full implementation <a href=https://github.com/danielorihuela/algorithms-and-data-structures/blob/master/list/skip_list/src/main.rs>https://github.com/danielorihuela/algorithms-and-data-structures/blob/master/list/skip_list/src/main.rs</a>.</p>
+<p>Important details for those who want to implement it on Rust.</p>
+<ul>
+<li>You can see <a href=https://github.com/JP-Ellis/rust-skiplist>https://github.com/JP-Ellis/rust-skiplist</a> an advanced implementation.</li>
+<li>Building linked lists on Rust is unusually hard. Check <a href=https://rust-unofficial.github.io/too-many-lists/>https://rust-unofficial.github.io/too-many-lists/</a> first.</li>
+</ul>
+<h3 id=basic-structure>Basic structure</h3>
+<p>Take into account that we need to init all &ldquo;forward&rdquo; vectors to be of length &ldquo;max_level&rdquo; to identify the next node of the current layer. Otherwise, you might end up changing from the linked list on layer 3 to the linked list on layer 2 without your knowledge.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>SkipList</span><span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> {
+    head: <span style=color:#a6e22e>NonNull</span><span style=color:#f92672>&lt;</span>Node<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;&gt;</span>,
+    max_level: <span style=color:#66d9ef>usize</span>,
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Link</span><span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> <span style=color:#f92672>=</span> Option<span style=color:#f92672>&lt;</span>NonNull<span style=color:#f92672>&lt;</span>Node<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;&gt;&gt;</span>;
+
+<span style=color:#75715e>#[derive(Clone, Debug)]</span>
+<span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Node</span><span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> {
+    <span style=color:#75715e>// If the value is None, this is the sentinel value
+</span><span style=color:#75715e></span>    value: Option<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span>,
+    forward: Vec<span style=color:#f92672>&lt;</span>Link<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;&gt;</span>,
+}
+</code></pre></div><h3 id=search>Search</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>search</span>(<span style=color:#f92672>&amp;</span>self, v: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>T</span>) -&gt; <span style=color:#66d9ef>bool</span> {
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> node <span style=color:#f92672>=</span> self.head;
+
+    <span style=color:#75715e>// Go downwards
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> (<span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>self.max_level).rev() {
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> next <span style=color:#f92672>=</span> forward(node)[i];
+
+        <span style=color:#75715e>// If value is lower, go forward
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>while</span> next.and_then(value).is_some_and(<span style=color:#f92672>|</span>value<span style=color:#f92672>|</span> <span style=color:#f92672>&amp;</span>value <span style=color:#f92672>&lt;</span> v) {
+            node <span style=color:#f92672>=</span> next.unwrap();
+            next <span style=color:#f92672>=</span> forward(node)[i];
+        }
+    }
+
+    <span style=color:#66d9ef>let</span> node <span style=color:#f92672>=</span> forward(node)[<span style=color:#ae81ff>0</span>];
+    node.map(value).is_some_and(<span style=color:#f92672>|</span>n<span style=color:#f92672>|</span> n.as_ref() <span style=color:#f92672>==</span> Some(v))
+}
+</code></pre></div><h3 id=insert>Insert</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>insert</span>(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> self, v: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>T</span>) {
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> update <span style=color:#f92672>=</span> vec![None; self.max_level];
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> node <span style=color:#f92672>=</span> self.head;
+
+    <span style=color:#75715e>// Go downwards
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> (<span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>self.max_level).rev() {
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> next <span style=color:#f92672>=</span> forward(node)[i];
+
+        <span style=color:#75715e>// If value is lower, go forward
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>while</span> next.and_then(value).is_some_and(<span style=color:#f92672>|</span>value<span style=color:#f92672>|</span> <span style=color:#f92672>&amp;</span>value <span style=color:#f92672>&lt;</span> v) {
+            node <span style=color:#f92672>=</span> next.unwrap();
+            next <span style=color:#f92672>=</span> forward(node)[i];
+        }
+
+        <span style=color:#75715e>// Store nodes where we went downwards
+</span><span style=color:#75715e></span>        update[i] <span style=color:#f92672>=</span> Some(node);
+    }
+
+    <span style=color:#66d9ef>let</span> node <span style=color:#f92672>=</span> forward(node)[<span style=color:#ae81ff>0</span>];
+    <span style=color:#66d9ef>if</span> node.map(value).is_some_and(<span style=color:#f92672>|</span>n<span style=color:#f92672>|</span> n.as_ref() <span style=color:#f92672>==</span> Some(v)) {
+        println!(<span style=color:#e6db74>&#34;{} is already in the list&#34;</span>, v);
+    }
+
+    <span style=color:#66d9ef>let</span> level <span style=color:#f92672>=</span> rand::thread_rng().gen_range(<span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>self.max_level);
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> x <span style=color:#f92672>=</span> <span style=color:#66d9ef>unsafe</span> {
+        NonNull::new_unchecked(Box::into_raw(Box::new(Node {
+            value: Some(v.clone()),
+            forward: <span style=color:#a6e22e>vec</span><span style=color:#f92672>!</span>[None; self.max_level],
+        })))
+    };
+
+    <span style=color:#75715e>// For each node where we went downwards
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>..=</span>level {
+        <span style=color:#75715e>// Update the successors accordingly
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> update[i].is_none() {
+            forward_mut(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> x)[i] <span style=color:#f92672>=</span> forward(self.head)[i];
+            forward_mut(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> self.head)[i] <span style=color:#f92672>=</span> Some(x);
+        } <span style=color:#66d9ef>else</span> {
+            forward_mut(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> x)[i] <span style=color:#f92672>=</span> forward(update[i].unwrap())[i];
+            forward_mut(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> update[i].unwrap())[i] <span style=color:#f92672>=</span> Some(x);
+        }
+    }
+}
+</code></pre></div><h3 id=delete>Delete</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>delete</span>(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> self, v: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>T</span>) {
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> update <span style=color:#f92672>=</span> vec![None; self.max_level];
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> node <span style=color:#f92672>=</span> self.head;
+
+    <span style=color:#75715e>// Go downwards
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> (<span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>self.max_level).rev() {
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> next <span style=color:#f92672>=</span> forward(node)[i];
+
+        <span style=color:#75715e>// If value is lower, go forward
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>while</span> next.and_then(value).is_some_and(<span style=color:#f92672>|</span>value<span style=color:#f92672>|</span> <span style=color:#f92672>&amp;</span>value <span style=color:#f92672>&lt;</span> v) {
+            node <span style=color:#f92672>=</span> next.unwrap();
+            next <span style=color:#f92672>=</span> forward(node)[i];
+        }
+
+        <span style=color:#75715e>// Store nodes where we went downwards
+</span><span style=color:#75715e></span>        update[i] <span style=color:#f92672>=</span> Some(node);
+    }
+
+    <span style=color:#66d9ef>let</span> node <span style=color:#f92672>=</span> forward(node)[<span style=color:#ae81ff>0</span>];
+    <span style=color:#66d9ef>if</span> node.map(value).is_some_and(<span style=color:#f92672>|</span>n<span style=color:#f92672>|</span> n.as_ref() <span style=color:#f92672>==</span> Some(v)) {
+
+        <span style=color:#75715e>// For each node where we went downwards
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>self.max_level {
+            <span style=color:#66d9ef>if</span> <span style=color:#66d9ef>let</span> Some(<span style=color:#66d9ef>mut</span> update_i) <span style=color:#f92672>=</span> update[i] {
+                <span style=color:#66d9ef>if</span> forward(update_i)[i] <span style=color:#f92672>!=</span> node {
+                    <span style=color:#66d9ef>break</span>;
+                } <span style=color:#66d9ef>else</span> {
+                    <span style=color:#75715e>// Update the successors accordingly
+</span><span style=color:#75715e></span>                    forward_mut(<span style=color:#f92672>&amp;</span><span style=color:#66d9ef>mut</span> update_i)[i] <span style=color:#f92672>=</span> forward(node.unwrap())[i];
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<br><br><br>
+<hr style=width:100%;text-align:left;margin-left:0;margin-right:0>
+<div>
+You can send me an email to danielorihuelarodriguez@gmail.com or contact me through <a href=https://twitter.com/_DanielOrihuela>Twitter</a>
+</div>
+</body>
+</html>
