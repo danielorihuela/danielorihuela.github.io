@@ -13,6 +13,7 @@ body {
     margin-left: 2rem;
     text-transform: capitalize;
     display: flex;
+    font-family: Iceland;
 }
 
 .back {
@@ -28,4 +29,8 @@ p > code {
     background-color: #c2c5cb;
     border-radius: 4px;
     padding: 2px;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: Iceland;
 }
