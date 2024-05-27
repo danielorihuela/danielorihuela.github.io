@@ -13,6 +13,7 @@ body {
     font-size: 2.5rem;
     margin-left: 2rem;
     text-transform: capitalize;
+    font-family: Iceland;
 }
 
 .posts-all-list-elements {
@@ -24,10 +25,11 @@ body {
 .list-element {
     display: flex;
     height: 100%;
+    font-family: Iceland;
 }
 
 .list-element-date {
-    font-family: 'Times New Roman';
+    font-family: Iceland;
     width: 10%;
 }
 

@@ -8,6 +8,16 @@
         url('../fonts/georgia/georgia.svg#Georgia') format('svg');
 }
 
-* {
+@font-face {
+    font-family: 'Iceland';
+    src: url('../fonts/iceland/iceland.eot');
+    src: url('../fonts/iceland/iceland.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/iceland/iceland.woff2') format('woff2'),
+        url('../fonts/iceland/iceland.woff') format('woff'),
+        url('../fonts/iceland/iceland.ttf') format('truetype'),
+        url('../fonts/iceland/iceland.svg#Iceland-Regular') format('svg');
+}
+
+body, h1, h2, h3, h4, h5, h6 {
     font-family: Georgia;
 }
