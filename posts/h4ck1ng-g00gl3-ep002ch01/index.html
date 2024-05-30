@@ -7,6 +7,9 @@
 <title>H4ck1ng G00gl3 ep002 challenge 01 | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -45,23 +48,23 @@ This challenge is about <strong>Steganography</strong>.</p>
 <li>The attackers used an online tool</li>
 </ol>
 <p>After all, I was right about the <strong>LSB</strong> technique. Why couldn&rsquo;t I get anything with the myriad of tools I used? I don&rsquo;t know. I decided to write my own script.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>  <span style=color:#f92672>import</span> sys
-  <span style=color:#f92672>import</span> numpy <span style=color:#66d9ef>as</span> np
-  <span style=color:#f92672>from</span> PIL <span style=color:#f92672>import</span> Image
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python>  <span class=kn>import</span> <span class=nn>sys</span>
+  <span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+  <span class=kn>from</span> <span class=nn>PIL</span> <span class=kn>import</span> <span class=n>Image</span>
 
-  img <span style=color:#f92672>=</span> Image<span style=color:#f92672>.</span>open(<span style=color:#e6db74>&#39;challenge.png&#39;</span>, <span style=color:#e6db74>&#39;r&#39;</span>)
-  pixels <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(list(img<span style=color:#f92672>.</span>getdata()))
-  rgba_values <span style=color:#f92672>=</span> [values <span style=color:#66d9ef>for</span> pixel <span style=color:#f92672>in</span> pixels <span style=color:#66d9ef>for</span> values <span style=color:#f92672>in</span> pixel]
-  least_significant_bits <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join([bin(value)[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>] <span style=color:#66d9ef>for</span> value <span style=color:#f92672>in</span> rgba_values])
-  hidden_bytes <span style=color:#f92672>=</span> [least_significant_bits[i:i<span style=color:#f92672>+</span><span style=color:#ae81ff>8</span>] <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>0</span>, len(least_significant_bits), <span style=color:#ae81ff>8</span>)]
-  hidden_message <span style=color:#f92672>=</span> [chr(int(byte, <span style=color:#ae81ff>2</span>)) <span style=color:#66d9ef>for</span> byte <span style=color:#f92672>in</span> hidden_bytes]
+  <span class=n>img</span> <span class=o>=</span> <span class=n>Image</span><span class=o>.</span><span class=n>open</span><span class=p>(</span><span class=s1>&#39;challenge.png&#39;</span><span class=p>,</span> <span class=s1>&#39;r&#39;</span><span class=p>)</span>
+  <span class=n>pixels</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=nb>list</span><span class=p>(</span><span class=n>img</span><span class=o>.</span><span class=n>getdata</span><span class=p>()))</span>
+  <span class=n>rgba_values</span> <span class=o>=</span> <span class=p>[</span><span class=n>values</span> <span class=k>for</span> <span class=n>pixel</span> <span class=ow>in</span> <span class=n>pixels</span> <span class=k>for</span> <span class=n>values</span> <span class=ow>in</span> <span class=n>pixel</span><span class=p>]</span>
+  <span class=n>least_significant_bits</span> <span class=o>=</span> <span class=s1>&#39;&#39;</span><span class=o>.</span><span class=n>join</span><span class=p>([</span><span class=nb>bin</span><span class=p>(</span><span class=n>value</span><span class=p>)[</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span> <span class=k>for</span> <span class=n>value</span> <span class=ow>in</span> <span class=n>rgba_values</span><span class=p>])</span>
+  <span class=n>hidden_bytes</span> <span class=o>=</span> <span class=p>[</span><span class=n>least_significant_bits</span><span class=p>[</span><span class=n>i</span><span class=p>:</span><span class=n>i</span><span class=o>+</span><span class=mi>8</span><span class=p>]</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>least_significant_bits</span><span class=p>),</span> <span class=mi>8</span><span class=p>)]</span>
+  <span class=n>hidden_message</span> <span class=o>=</span> <span class=p>[</span><span class=nb>chr</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>byte</span><span class=p>,</span> <span class=mi>2</span><span class=p>))</span> <span class=k>for</span> <span class=n>byte</span> <span class=ow>in</span> <span class=n>hidden_bytes</span><span class=p>]</span>
 
-  print(<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(hidden_message))
+  <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;&#39;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>hidden_message</span><span class=p>))</span>
 </code></pre></div><p>I was finally able to get something.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/certificate.png>
 </figure>
 <p>The next step was getting the flag from the certificate. I saved the result from the script into a file called &ldquo;certificate.ssl&rdquo; and executed the following.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>openssl x509 -text -noout -in certificate.ssl
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>openssl x509 -text -noout -in certificate.ssl
 </code></pre></div><p>After getting the output, we can see the flag in the <strong>issuer</strong> field. With that, we completed the challenge.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep002ch01/intro.png>
 </figure>

@@ -7,6 +7,9 @@
 <title>H4ck1ng G00gl3 ep003 challenge 02 | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -39,14 +42,14 @@ Back
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/shell-may-be-python.png>
 </figure>
 <p>We can try to execute a python function to check if it&rsquo;s a python shell and its version. In that case, I decided to call:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>print <span style=color:#e6db74>&#34;asd&#34;</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=nb>print</span> <span class=s2>&#34;asd&#34;</span>
 </code></pre></div><figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/shell-is-python3.png>
 </figure>
 <p>By the given output, we can see that the <strong>shell is running python version 3</strong>. Lucky me, I found a <a href=https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3>webpage with tricks to scape from restricted python3 shells</a>. That page shows how to access the <strong>builtins</strong> module, for example.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/print-len-self.png>
 </figure>
 <p>The <a href=https://docs.python.org/3/library/builtins.html>builtins</a> module gives access to several functions, one of them being the <strong>open</strong> function. That means that we can open a file and read it. We know from past challenges that the flag file is at the root directory, and therefore, we can get the flag with</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>print(len<span style=color:#f92672>.</span>__self__<span style=color:#f92672>.</span>open(<span style=color:#e6db74>&#39;flag&#39;</span>)<span style=color:#f92672>.</span>read())
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=nb>print</span><span class=p>(</span><span class=nb>len</span><span class=o>.</span><span class=vm>__self__</span><span class=o>.</span><span class=n>open</span><span class=p>(</span><span class=s1>&#39;flag&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>read</span><span class=p>())</span>
 </code></pre></div><p>With that, we completed the challenge.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep003ch02/intro.png>
 </figure>

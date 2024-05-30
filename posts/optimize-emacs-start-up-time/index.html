@@ -7,6 +7,9 @@
 <title>Optimize emacs start up time | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -45,50 +48,50 @@ Back
 <ol>
 <li>Remove the code that hides some of the default UI elements from Emacs.</li>
 </ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (scroll-bar-mode <span style=color:#ae81ff>-1</span>)
-  (tool-bar-mode <span style=color:#ae81ff>-1</span>)
-  (tooltip-mode <span style=color:#ae81ff>-1</span>)
-  (menu-bar-mode <span style=color:#ae81ff>-1</span>)
-  (column-number-mode)
-  (set-face-attribute <span style=color:#e6db74>&#39;default</span> <span style=color:#66d9ef>nil</span> :height <span style=color:#ae81ff>180</span>)
-  (toggle-frame-maximized)
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=p>(</span><span class=nv>scroll-bar-mode</span> <span class=mi>-1</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>tool-bar-mode</span> <span class=mi>-1</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>tooltip-mode</span> <span class=mi>-1</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>menu-bar-mode</span> <span class=mi>-1</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>column-number-mode</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>set-face-attribute</span> <span class=ss>&#39;default</span> <span class=no>nil</span> <span class=nb>:height</span> <span class=mi>180</span><span class=p>)</span>
+  <span class=p>(</span><span class=nv>toggle-frame-maximized</span><span class=p>)</span>
 </code></pre></div><ol>
 <li>Remove the code that loads the theme.</li>
 </ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (use-package flatland-theme
-    :config
-    (load-theme <span style=color:#e6db74>&#39;flatland</span> <span style=color:#66d9ef>t</span>))
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=p>(</span><span class=nb>use-package</span> <span class=nv>flatland-theme</span>
+    <span class=nb>:config</span>
+    <span class=p>(</span><span class=nv>load-theme</span> <span class=ss>&#39;flatland</span> <span class=no>t</span><span class=p>))</span>
 </code></pre></div><p>With that, we go down to ~2s.</p>
 <figure class=centered-image><img src=/images/speed-up-emacs-init/no-ui.png width=300px>
 </figure>
 <h3 id=garbage-collector>Garbage collector</h3>
 <p>Emacs uses 8MB as the default value for the garbage collector. As a result, Emacs will call the garbage collector too many times during the start up. Doom emacs has a trick to improve that. We need to add the following code to <code>early-init.el</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>(setq gc-cons-threshold <span style=color:#ae81ff>63000000</span>
-      gc-cons-percentage <span style=color:#ae81ff>0.6</span>)
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp><span class=p>(</span><span class=nb>setq</span> <span class=nv>gc-cons-threshold</span> <span class=mi>63000000</span>
+      <span class=nv>gc-cons-percentage</span> <span class=mf>0.6</span><span class=p>)</span>
 </code></pre></div><p>With that, we go down to ~1.021s. Half the time from the previous step.</p>
 <figure class=centered-image><img src=/images/speed-up-emacs-init/early-init-gc.png width=200px>
 </figure>
 <h3 id=disable-ui>Disable UI</h3>
 <p>We can hide some UI elements in the <code>early-init.el</code> to gain some performance.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (push <span style=color:#f92672>&#39;</span>(menu-bar-lines <span style=color:#f92672>.</span> <span style=color:#ae81ff>0</span>) default-frame-alist)
-  (push <span style=color:#f92672>&#39;</span>(tool-bar-lines <span style=color:#f92672>.</span> <span style=color:#ae81ff>0</span>) default-frame-alist)
-  (push <span style=color:#f92672>&#39;</span>(vertical-scroll-bars) default-frame-alist)
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=p>(</span><span class=nb>push</span> <span class=o>&#39;</span><span class=p>(</span><span class=nv>menu-bar-lines</span> <span class=o>.</span> <span class=mi>0</span><span class=p>)</span> <span class=nv>default-frame-alist</span><span class=p>)</span>
+  <span class=p>(</span><span class=nb>push</span> <span class=o>&#39;</span><span class=p>(</span><span class=nv>tool-bar-lines</span> <span class=o>.</span> <span class=mi>0</span><span class=p>)</span> <span class=nv>default-frame-alist</span><span class=p>)</span>
+  <span class=p>(</span><span class=nb>push</span> <span class=o>&#39;</span><span class=p>(</span><span class=nv>vertical-scroll-bars</span><span class=p>)</span> <span class=nv>default-frame-alist</span><span class=p>)</span>
 </code></pre></div><p>With that, we go down to ~0.92s.</p>
 <figure class=centered-image><img src=/images/speed-up-emacs-init/early-init-disable-ui.png width=200px>
 </figure>
 <h3 id=autoload-packages>Autoload packages</h3>
 <p>Never <code>require</code> packages. Use <code>use-package</code> to autoload them. For example, we can load the <code>magit</code> the first time we call <code>magit-status</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (use-package magit
-    :bind (<span style=color:#e6db74>&#34;C-x g&#34;</span> <span style=color:#f92672>.</span> magit-status))
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=p>(</span><span class=nb>use-package</span> <span class=nv>magit</span>
+    <span class=nb>:bind</span> <span class=p>(</span><span class=s>&#34;C-x g&#34;</span> <span class=o>.</span> <span class=nv>magit-status</span><span class=p>))</span>
 </code></pre></div><p>With that, we go down to ~0.91s. It&rsquo;s anecdotal in my case, but it can save you a lot of time if you are using dozens or hundreds of packages.</p>
 <figure class=centered-image><img src=/images/speed-up-emacs-init/config-org-autoload.png width=200px>
 </figure>
 <h3 id=tangle-org-file>Tangle org file</h3>
 <p>Normally, Emacs reads the configuration from the <code>init.el</code> file. However, we can use org mode to include comments with the code. Personally, I had my configuration in a file called <code>config.org</code>. I loaded it from my <code>init.el</code> with the following line of code:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  (org-babel-load-file <span style=color:#e6db74>&#34;~/dotfiles/emacs/config.org&#34;</span>)
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=p>(</span><span class=nv>org-babel-load-file</span> <span class=s>&#34;~/dotfiles/emacs/config.org&#34;</span><span class=p>)</span>
 </code></pre></div><p>It&rsquo;s pretty convenient, but slow. We can make it faster by tangling the file directly into the <code>init.el</code>. In other words, we can extract the source code blocks from the <code>org</code> file and create the <code>init.el</code> with them.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-emacs-lisp data-lang=emacs-lisp>  <span style=color:#960050;background-color:#1e0010>#</span> -*- after-save-hook: (org-babel-tangle) -*-
-  <span style=color:#960050;background-color:#1e0010>#</span>+property: header-args:emacs-lisp :exports code :results none :tangle init.el
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp>  <span class=err>#</span> <span class=nv>-*-</span> <span class=nv>after-save-hook:</span> <span class=p>(</span><span class=nv>org-babel-tangle</span><span class=p>)</span> <span class=nv>-*-</span>
+  <span class=err>#</span><span class=nv>+property:</span> <span class=nv>header-args:emacs-lisp</span> <span class=nb>:exports</span> <span class=nv>code</span> <span class=nb>:results</span> <span class=nv>none</span> <span class=nb>:tangle</span> <span class=nv>init.el</span>
 </code></pre></div><p>With that, we go down to ~0.82s and get the <a href=https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org>final config</a>.</p>
 <figure class=centered-image><img src=/images/speed-up-emacs-init/config-org-tangle.png width=200px>
 </figure>

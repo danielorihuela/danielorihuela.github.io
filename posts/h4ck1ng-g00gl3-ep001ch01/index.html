@@ -7,6 +7,9 @@
 <title>H4ck1ng G00gl3 ep001 challenge 01 | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -32,24 +35,24 @@ This challenge is about <strong>Reverse Engineering</strong>.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch01/wannacry-manpage.png>
 </figure>
 <p>The wannacry executable takes an encrypted file and the encryption key as arguments. We already have the encrypted file, in other words, the flag file. However, we are missing the private key. The executable must have some information about that. For that reason, I decided to extract all the strings from the executable and see if there was something interesting. To do that, we can use the &ldquo;strings&rdquo; command in Linux.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>strings wannacry
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>strings wannacry
 </code></pre></div><p>At first, I was reading the output. It was huge, and most of the extracted strings were gibberish. This approach was not good. Then, I searched for some keywords: flag, private, public, solve, decrypt, encrypt, etc. The keyword &ldquo;key&rdquo; lead me to a domain.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch01/http-with-pems.png>
 </figure>
 <p>I visited this domain and saw a list of private keys with long alphanumeric names. I did not have any hint about which of these private keys could be the one that I needed. Anyway, there were only around two hundred private keys. Therefore, we should be able to decrypt the flag file with every single private key in a small amount of time. With that strategy in mind, I downloaded all the private keys.</p>
 <p>First, we need to obtain a list with the filenames of every private key. We can do that with the following bash line.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  curl https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/ <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>      | awk <span style=color:#e6db74>&#39;{split($0,a,&#34;\&#34;&#34;); print a[2]}&#39;</span> &gt; pemfilenames
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  curl https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/ <span class=se>\
+</span><span class=se></span>      <span class=p>|</span> awk <span class=s1>&#39;{split($0,a,&#34;\&#34;&#34;); print a[2]}&#39;</span> &gt; pemfilenames
 </code></pre></div><p>Now that we have a list of all the filenames. We can download all the private keys.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>    <span style=color:#66d9ef>for</span> pemfile in <span style=color:#66d9ef>$(</span>cat pemfilenames<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
-        wget https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/$pemfile -P pemkeys
-    <span style=color:#66d9ef>done</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>    <span class=k>for</span> pemfile in <span class=k>$(</span>cat pemfilenames<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+        wget https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/<span class=nv>$pemfile</span> -P pemkeys
+    <span class=k>done</span>
 </code></pre></div><p>Finally, we can decrypt the flag with every private key file.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>    <span style=color:#66d9ef>for</span> pem in <span style=color:#66d9ef>$(</span>ls pemkeys<span style=color:#66d9ef>)</span>; <span style=color:#66d9ef>do</span>
-        ./wannacry -encrypted_file flag -key_file pemkeys/$pem
-    <span style=color:#66d9ef>done</span> &gt; result
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>    <span class=k>for</span> pem in <span class=k>$(</span>ls pemkeys<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+        ./wannacry -encrypted_file flag -key_file pemkeys/<span class=nv>$pem</span>
+    <span class=k>done</span> &gt; result
 </code></pre></div><p>Now, we can obtain the flag. We only need to get the strings from the &ldquo;result&rdquo; file and find the flag. We can do that with the following bash command.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>strings result| grep solve
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>strings result<span class=p>|</span> grep solve
 </code></pre></div><p>With that, we completed the challenge.</p>
 <figure class=centered-image><img src=/images/h4ck1ng00gl3/ep001ch01/intro.png>
 </figure>

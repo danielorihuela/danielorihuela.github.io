@@ -7,6 +7,9 @@
 <title>H4ck1ng G00gl3 ep003 challenge 01 | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -41,7 +44,7 @@ Back
 </figure>
 <p>It&rsquo;s a simple unfinished script. The script creates the backup of a document, probably the one we need to get. The problem is that <strong>we need an access token to get the file</strong>. Unlucky for us, the function that gets the token hasn&rsquo;t been implemented. In any case, we can see framed in red the base URL and the document id. Hence, we know the document is at <a href=https://docs.googleapis.com/v1/documents/1Z7CQDJhCj1G5ehvM3zB3FyxsCfdvierd1fs0UBlzFFM>https://docs.googleapis.com/v1/documents/1Z7CQDJhCj1G5ehvM3zB3FyxsCfdvierd1fs0UBlzFFM</a>. Besides, we have to use <strong>RFC 6749: The OAuth 2.0 Authorization framework</strong>. We know it from the challenge hint, <code>Hint: Find the key, and put RFC 6749 to use</code>. That means we need to get the <strong>access token</strong> using the <strong>OAuth 2.0 framework</strong>. I wrote this down and kept collecting information.</p>
 <p>I opened the <strong>todo.txt</strong> file and saw the following:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>Today
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt>Today
 [x] Added backup-tool@project-multivision.iam.gserviceaccount.com with viewer-access to super sensitive design doc
 [x] Tried activating service account with gcloud, but didn&#39;t give me a documents.readonly scope
 [x] Cleaned up service account key from disk before signing off

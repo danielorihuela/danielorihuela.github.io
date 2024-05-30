@@ -7,6 +7,9 @@
 <title>How to use WASM code from ClojureScript through JavaScript interop | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -27,27 +30,27 @@ Back
 </ol>
 <p>You can check the final code at <a href=https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop>https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop</a>.</p>
 <p>The first two steps were easy. I created a simple Rust function.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust>  <span style=color:#66d9ef>use</span> wasm_bindgen::prelude::<span style=color:#f92672>*</span>;
-
-  <span style=color:#75715e>#[wasm_bindgen]</span>
-  <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>add</span>(a: <span style=color:#66d9ef>u8</span>, b: <span style=color:#66d9ef>u8</span>) -&gt; <span style=color:#66d9ef>u8</span> {
-      a <span style=color:#f92672>+</span> b
-  }
-</code></pre></div><p>Then, I built the WASM code and JavaScript bindings with the following command:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>wasm-pack build --target web
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=w>  </span><span class=k>use</span><span class=w> </span><span class=n>wasm_bindgen</span>::<span class=n>prelude</span>::<span class=o>*</span><span class=p>;</span><span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=cp>#[wasm_bindgen]</span><span class=w>
+</span><span class=w>  </span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>add</span><span class=p>(</span><span class=n>a</span>: <span class=kt>u8</span><span class=p>,</span><span class=w> </span><span class=n>b</span>: <span class=kt>u8</span><span class=p>)</span><span class=w> </span>-&gt; <span class=kt>u8</span> <span class=p>{</span><span class=w>
+</span><span class=w>      </span><span class=n>a</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>b</span><span class=w>
+</span><span class=w>  </span><span class=p>}</span><span class=w>
+</span></code></pre></div><p>Then, I built the WASM code and JavaScript bindings with the following command:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>wasm-pack build --target web
 </code></pre></div><p>Now is when the interesting part starts. We want to use the generated JavaScript bindings to call the WASM code. First, we need to <a href=https://clojurescript.org/guides/quick-start>create a simple website</a> and <a href="https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html?highlight=wasm-pack%20build%20--target%20web#without-a-bundler">load the code in the browser</a>. In our case, we want to access the WASM functions from the &ldquo;windows&rdquo; object. So I ended up with the following piece of code.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>  &lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;module&#34;</span>&gt;
-    <span style=color:#66d9ef>import</span> <span style=color:#a6e22e>init</span>, { <span style=color:#a6e22e>add</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;./wasm/addition.js&#39;</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-html data-lang=html>  <span class=p>&lt;</span><span class=nt>script</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;module&#34;</span><span class=p>&gt;</span>
+    <span class=kr>import</span> <span class=nx>init</span><span class=p>,</span> <span class=p>{</span> <span class=nx>add</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;./wasm/addition.js&#39;</span>
 
-    <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>run</span>() {
-      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>init</span>();
-      window.<span style=color:#a6e22e>addWasm</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>add</span>;
-    }
+    <span class=kr>async</span> <span class=kd>function</span> <span class=nx>run</span><span class=p>()</span> <span class=p>{</span>
+      <span class=kr>await</span> <span class=nx>init</span><span class=p>();</span>
+      <span class=nb>window</span><span class=p>.</span><span class=nx>addWasm</span> <span class=o>=</span> <span class=nx>add</span><span class=p>;</span>
+    <span class=p>}</span>
 
-    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>run</span>();
-  &lt;/<span style=color:#f92672>script</span>&gt;
+    <span class=kr>await</span> <span class=nx>run</span><span class=p>();</span>
+  <span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
 </code></pre></div><p>The WASM is now loaded. We are ready to execute the &ldquo;hello world&rdquo; website.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>clj -M --main cljs.main --compile hello-world.core --repl
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>clj -M --main cljs.main --compile hello-world.core --repl
 </code></pre></div><p>But there&rsquo;s one problem.</p>
 <figure class=centered-image><img src=/images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/browser-error.png width=1000px>
 </figure>
@@ -56,7 +59,7 @@ Back
 </figure>
 <p>We can call WASM code with with the following approach:
 The <a href=https://cljs.info/cheatsheet/>cheatsheet</a> tells us how to access the function we jsut exported.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure>(<span style=color:#66d9ef>. </span>js/window (<span style=color:#a6e22e>addWasm</span> <span style=color:#ae81ff>5</span> <span style=color:#ae81ff>10</span>))
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-clojure data-lang=clojure><span class=p>(</span><span class=k>. </span><span class=nv>js/window</span> <span class=p>(</span><span class=nf>addWasm</span> <span class=mi>5</span> <span class=mi>10</span><span class=p>))</span>
 </code></pre></div><figure class=centered-image><img src=/images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/result.png width=600px>
 </figure>
 <p>You can check the final code at <a href=https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop>https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop</a>.</p>

