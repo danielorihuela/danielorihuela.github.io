@@ -3,6 +3,10 @@ languageCode = "en-us"
 title = "danielorihuela"
 theme = "do-cyberpunk-theme"
 
+[markup]
+  [markup.highlight]
+    noClasses = false
+
 [menu]
 [[menu.main]]
   identifier = 'about'
