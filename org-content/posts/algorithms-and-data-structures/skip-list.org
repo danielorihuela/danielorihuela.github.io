@@ -75,16 +75,16 @@ fn search(&self, v: &T) -> bool {
 
     // Go downwards
     for i in (0..self.max_level).rev() {
-        let mut next = forward(node)[i];
+        let mut next = get_forward(node)[i];
 
         // If value is lower, go forward
         while next.and_then(value).is_some_and(|value| &value < v) {
             node = next.unwrap();
-            next = forward(node)[i];
+            next = get_forward(node)[i];
         }
     }
 
-    let node = forward(node)[0];
+    let node = get_forward(node)[0];
     node.map(value).is_some_and(|n| n.as_ref() == Some(v))
 }
 #+end_src
@@ -99,19 +99,19 @@ fn insert(&mut self, v: &T) {
 
     // Go downwards
     for i in (0..self.max_level).rev() {
-        let mut next = forward(node)[i];
+        let mut next = get_forward(node)[i];
 
         // If value is lower, go forward
         while next.and_then(value).is_some_and(|value| &value < v) {
             node = next.unwrap();
-            next = forward(node)[i];
+            next = get_forward(node)[i];
         }
 
         // Store nodes where we went downwards
         update[i] = Some(node);
     }
 
-    let node = forward(node)[0];
+    let node = get_forward(node)[0];
     if node.map(value).is_some_and(|n| n.as_ref() == Some(v)) {
         println!("{} is already in the list", v);
     }
@@ -128,11 +128,11 @@ fn insert(&mut self, v: &T) {
     for i in 0..=level {
         // Update the successors accordingly
         if update[i].is_none() {
-            forward_mut(&mut x)[i] = forward(self.head)[i];
-            forward_mut(&mut self.head)[i] = Some(x);
+            get_forward_mut(&mut x)[i] = get_forward(self.head)[i];
+            get_forward_mut(&mut self.head)[i] = Some(x);
         } else {
-            forward_mut(&mut x)[i] = forward(update[i].unwrap())[i];
-            forward_mut(&mut update[i].unwrap())[i] = Some(x);
+            get_forward_mut(&mut x)[i] = get_forward(update[i].unwrap())[i];
+            get_forward_mut(&mut update[i].unwrap())[i] = Some(x);
         }
     }
 }
@@ -148,29 +148,29 @@ fn delete(&mut self, v: &T) {
 
     // Go downwards
     for i in (0..self.max_level).rev() {
-        let mut next = forward(node)[i];
+        let mut next = get_forward(node)[i];
 
         // If value is lower, go forward
         while next.and_then(value).is_some_and(|value| &value < v) {
             node = next.unwrap();
-            next = forward(node)[i];
+            next = get_forward(node)[i];
         }
 
         // Store nodes where we went downwards
         update[i] = Some(node);
     }
 
-    let node = forward(node)[0];
+    let node = get_forward(node)[0];
     if node.map(value).is_some_and(|n| n.as_ref() == Some(v)) {
 
         // For each node where we went downwards
         for i in 0..self.max_level {
             if let Some(mut update_i) = update[i] {
-                if forward(update_i)[i] != node {
+                if get_forward(update_i)[i] != node {
                     break;
                 } else {
                     // Update the successors accordingly
-                    forward_mut(&mut update_i)[i] = forward(node.unwrap())[i];
+                    get_forward_mut(&mut update_i)[i] = get_forward(node.unwrap())[i];
                 }
             }
         }
