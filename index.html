@@ -6,15 +6,11 @@
 <meta name=viewport>
 <link rel=stylesheet href=/css/everywhere.css>
 <title>danielorihuela</title>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css>
 <link rel=stylesheet href=/css/desktop.css>
 <link rel=stylesheet href=/css/icon.css>
 <link rel=stylesheet href=/css/frame.css>
 <link rel=alternate type=application/rss+xml href=https://danielorihuela.github.io/index.xml title=danielorihuela>
 <script type=module src=/js/frame/index.js></script>
-<link rel=stylesheet href=/css/code.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script>
-<script>hljs.highlightAll()</script>
 </head>
 <body>
 <div id=frame-wrapper loading=lazy class=frame-wrapper>
@@ -25,9 +21,9 @@
 <div id=bottom-left-resizer class=bottom-left-resizer></div>
 <div id=head-bar class=head-bar></div>
 <div class=buttons>
-<i id=minimize class="fa fa-chevron-down" onclick=minimize()></i>
-<i id=maximize class="fa fa-chevron-up" onclick=maximize()></i>
-<i id=close class="close fa fa-times" onclick=closeFrame()></i>
+<i id=minimize class=icon-chevron-down onclick=minimize()></i>
+<i id=maximize class=icon-chevron-up onclick=maximize()></i>
+<i id=close class="close icon-close" onclick=closeFrame()></i>
 </div>
 <iframe id=frame-inner class=frame-inner title></iframe>
 <div id=safeguard class=safeguard></div>
