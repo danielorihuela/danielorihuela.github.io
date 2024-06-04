@@ -58,12 +58,12 @@
 
 @font-face {
     font-family: 'Rajdhani';
-    src: url('../fonts/rajdhani-bold/Rajdhani-Bold.eot');
-    src: url('../fonts/rajdhani-bold/Rajdhani-Bold.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/rajdhani-bold/Rajdhani-Bold.woff2') format('woff2'),
-        url('../fonts/rajdhani-bold/Rajdhani-Bold.woff') format('woff'),
-        url('../fonts/rajdhani-bold/Rajdhani-Bold.ttf') format('truetype'),
-        url('../fonts/rajdhani-bold/Rajdhani-Bold.svg#Rajdhani-Bold') format('svg');
+    src: url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.eot');
+    src: url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.woff2') format('woff2'),
+        url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.woff') format('woff'),
+        url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.ttf') format('truetype'),
+        url('../fonts/rajdhani/rajdhani-bold/Rajdhani-Bold.svg#Rajdhani-Bold') format('svg');
     font-weight: 700;
     font-style: normal;
 }
