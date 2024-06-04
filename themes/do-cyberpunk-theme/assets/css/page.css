@@ -4,6 +4,9 @@ body {
     padding: 1rem;
     margin: 0 auto;
     max-width: 100ch;
+
+    /* background-color: #18002f;
+    color: white; */
 }
 
 .title {
@@ -23,10 +26,4 @@ body {
 .centered-image {
     display: flex;
     justify-content: center;
-}
-
-p > code {
-    background-color: #c2c5cb;
-    border-radius: 4px;
-    padding: 2px;
 }
