@@ -39,6 +39,7 @@ body {
     cursor: default;
     text-align: center;
     min-width: 70%;
+    max-width: 90%;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
