@@ -42,7 +42,8 @@
 		{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 	{{ end -}}
 
-	{{ $index := resources.Get "js/frame/index.js" | resources.Minify }}
+	{{ $opts := dict "minify" true }}
+	{{ $index := resources.Get "js/frame/index.js" | js.Build $opts }}
 	<script type="module" src="{{ $index.RelPermalink }}"></script>
 </head>
 
