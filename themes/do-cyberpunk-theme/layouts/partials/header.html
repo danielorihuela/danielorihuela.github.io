@@ -7,34 +7,34 @@
 	<meta name="viewport" content="width=device-width, height=device-height">
 
 
-	{{ $everywhere := resources.Get "css/everywhere.css" }}
+	{{ $everywhere := resources.Get "css/everywhere.css" | resources.Minify }}
 	<link rel="stylesheet" href="{{ $everywhere.RelPermalink }}">
 
 	<title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
 
 	{{ if .IsHome }}
-		{{ $desktop := resources.Get "css/desktop.css" }}
+		{{ $desktop := resources.Get "css/desktop.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $desktop.RelPermalink }}">
-		{{ $icon := resources.Get "css/icon.css" }}
+		{{ $icon := resources.Get "css/icon.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $icon.RelPermalink }}">
-		{{ $frame := resources.Get "css/frame.css" }}
+		{{ $frame := resources.Get "css/frame.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $frame.RelPermalink }}">
 	{{ else if (eq .Kind "section") }}
-		{{ $section := resources.Get "css/section.css" }}
+		{{ $section := resources.Get "css/section.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $section.RelPermalink }}">
 	{{ else if (eq .Kind "page") }}
-		{{ $page := resources.Get "css/page.css" }}
+		{{ $page := resources.Get "css/page.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $page.RelPermalink }}">
 
 		<!-- Code syntax highlighting -->
-		{{ $code := resources.Get "css/code.css" }}
+		{{ $code := resources.Get "css/code.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $code.RelPermalink }}">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 		<script>hljs.highlightAll();</script>
 	{{ end }}
 
 	{{ if (eq .Type "about") }}
-		{{ $about := resources.Get "css/about.css" }}
+		{{ $about := resources.Get "css/about.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $about.RelPermalink }}">
 	{{ end }}
 
