@@ -1,25 +1,36 @@
 body {
-    color: #333;
     font-size: 125%;
     line-height: 1.5;
     padding: 1rem;
     margin: 0 auto;
-    max-width: 100ch;
+    max-width: 80ch;
+
+    background-color: #000000;
+    color: white;
 }
 
 .title {
     font-weight: bold;
-    color: black;
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-left: 2rem;
     text-transform: capitalize;
     font-family: Iceland;
+
+    color: white;
+    text-shadow:
+        0 0 2px #00f2ff99,
+        0 0 3px #00f2ff99,
+        0 0 5px #00f2ff99,
+        0 0 10px #00f2ff99,
+        0 0 20px #00f2ff99,
+        0 0 40px #00f2ff99,
+        0 0 50px #00f2ff,
+        0 0 60px #00f2ff;
 }
 
 .posts-all-list-elements {
     display: flex;
     flex-direction: column;
-    margin-left: 8%;
 }
 
 .list-element {
@@ -31,6 +42,7 @@ body {
 .list-element-date {
     font-family: Iceland;
     width: 10%;
+    white-space: nowrap;
 }
 
 .list-element-title {
