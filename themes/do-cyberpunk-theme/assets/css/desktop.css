@@ -14,8 +14,8 @@ body {
     display: flex;
     font-size: 100%;
     background-color: white;
-    background-image: url('../main_screen_wallpaper.avif');
-    background-position: center center;
+    background-image: url('../cyber-reaper-full.avif');
+    background-position: right center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -40,7 +40,7 @@ body {
     text-align: center;
     min-width: 70%;
     max-width: 90%;
-    left: 50%;
+    left: 28%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     animation: glitch-skew 10s infinite step-end forwards;
@@ -308,5 +308,16 @@ body {
 
     97% {
         transform: translateX(-50%) translateY(-50%);
+    }
+}
+
+@media (max-width: 850px) {
+    body {
+        background-image: url('../cyber-reaper.avif');
+        background-position: center center;
+    }
+
+    .glitched-background-text {
+        left: 50%;
     }
 }
