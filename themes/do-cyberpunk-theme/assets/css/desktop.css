@@ -1,3 +1,11 @@
+/*
+0-768px phone 
+769 - 1023px tablet
+1024 - infinite desktop or bigger screen
+*/
+
+/* General Style */
+
 @font-face {
     font-family: 'Moondance';
     src: url('../fonts/moondance/Moondance.eot');
@@ -8,20 +16,6 @@
         url('../fonts/moondance/Moondance.svg#Moondance') format('svg');
 }
 
-body {
-    width: 100%;
-    margin: 0;
-    display: flex;
-    font-size: 100%;
-    background-color: white;
-    background-image: url('../cyber-reaper-full.avif');
-    background-position: right center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    overflow: hidden;
-}
-
 .icons {
     display: flex;
     flex-direction: row;
@@ -30,45 +24,7 @@ body {
 }
 
 .icons > * {
-    max-width: 6em;
-}
-
-.glitched-background-text {
-    position: absolute;
-    z-index: -1;
-    cursor: default;
-    text-align: center;
-    min-width: 70%;
-    max-width: 90%;
-    left: 28%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    animation: glitch-skew 10s infinite step-end forwards;
-    font-size: 6em;
-    white-space: nowrap;
-    font-family: Moondance;
-    color: #ffffff;
-}
-
-.glitched-background-text::before {
-    content: attr(data-text);
-    position: absolute;
-    width: 100%;
-    left: 2px;
-    text-shadow: -2px 0 #ff0000;
-    clip: rect(44px, 450px, 56px, 0);
-    overflow: hidden;
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-}
-
-.glitched-background-text::after {
-    content: attr(data-text);
-    position: absolute;
-    width: 100%;
-    left: -2px;
-    text-shadow: -2px 0 #ff0000, 2px 2px #ff0000;
-    overflow: hidden;
-    animation: glitch-anim2 2s infinite linear alternate-reverse;
+    max-width: 6rem;
 }
 
 @keyframes glitch-anim {
@@ -285,39 +241,99 @@ body {
     }
 }
 
-@keyframes glitch-skew {
-    80% {
-        transform: translateX(-50%) translateY(-50%) skew(-70deg);
-    }
+/* Phone style */
 
-    81% {
-        transform: translateX(-50%) translateY(-50%);
-    }
+body {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
 
-    94% {
-        transform: translateX(-50%) translateY(-50%) skew(-70deg);
-    }
-
-    95% {
-        transform: translateX(-50%) translateY(-50%);
-    }
-
-    96% {
-        transform: translateX(-50%) translateY(-50%) skew(-85deg);
-    }
-
-    97% {
-        transform: translateX(-50%) translateY(-50%);
-    }
+    font-size: 100%;
+    
+    background-color: white;
+    background-image: url('../cyber-reaper.avif');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
-@media (max-width: 1080px) {
+.glitched-background-text {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    
+    cursor: default;
+
+    font-size: 6rem;
+    text-align: center;
+    white-space: nowrap;
+    font-family: Moondance;
+    color: #ffffff;
+    
+    animation: glitch-skew-phone 10s infinite step-end forwards;
+}
+
+.glitched-background-text::before {
+    content: attr(data-text);
+    
+    position: absolute;
+    width: 100%;
+    left: 2px;
+    
+    text-shadow: -2px 0 #ff0000;
+    clip-path: rect(44px, 450px, 56px, 0);
+    overflow: hidden;
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitched-background-text::after {
+    content: attr(data-text);
+
+    position: absolute;
+    width: 100%;
+    left: -2px;
+    
+    text-shadow: -2px 0 #ff0000, 2px 2px #ff0000;
+    overflow: hidden;
+    animation: glitch-anim2 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-skew-phone {
+    80% { transform: translateX(-50%) translateY(-50%) skew(-70deg); }
+    81% { transform: translateX(-50%) translateY(-50%); }
+    94% { transform: translateX(-50%) translateY(-50%) skew(-70deg); }
+    95% { transform: translateX(-50%) translateY(-50%); }
+    96% { transform: translateX(-50%) translateY(-50%) skew(-85deg); }
+    97% { transform: translateX(-50%) translateY(-50%); }
+}
+
+/* Desktop (or bigger screen) style */
+
+@media only screen and (min-width: 1024px) {
     body {
-        background-image: url('../cyber-reaper.avif');
-        background-position: center center;
+        background-image: url('../cyber-reaper-full.avif');
+        background-position: right center;
     }
 
     .glitched-background-text {
-        left: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+
+        animation: glitch-skew-desktop 10s infinite step-end forwards;
     }
+
+    
+}
+
+@keyframes glitch-skew-desktop {
+    80% { transform: translateY(-50%) skew(-70deg); }
+    81% { transform: translateY(-50%); }
+    94% { transform: translateY(-50%) skew(-70deg); }
+    95% { transform: translateY(-50%); }
+    96% { transform: translateY(-50%) skew(-85deg); }
+    97% { transform: translateY(-50%); }
 }
