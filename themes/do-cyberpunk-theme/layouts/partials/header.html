@@ -15,8 +15,6 @@
 	{{ if .IsHome }}
 		{{ $desktop := resources.Get "css/desktop.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $desktop.RelPermalink }}">
-		{{ $icon := resources.Get "css/icon.css" | resources.Minify }}
-		<link rel="stylesheet" href="{{ $icon.RelPermalink }}">
 		{{ $frame := resources.Get "css/frame.css" | resources.Minify }}
 		<link rel="stylesheet" href="{{ $frame.RelPermalink }}">
 	{{ else if (eq .Kind "section") }}

@@ -17,14 +17,34 @@
 }
 
 .icons {
-    display: flex;
-    flex-direction: row;
-    margin-left: 2em;
-    width: 30%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6em, 1fr));
+    width: 100%;
 }
 
-.icons > * {
-    max-width: 6rem;
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5em;
+}
+
+.icon:hover {
+    background-color: rgb(132, 220, 255);
+}
+
+.icon-image {
+    width: 3em;
+    height: 3em;
+}
+
+.icon-caption {
+    text-align: center;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.2em 1em;
+    cursor: default;
+    font-family: Iceland;
 }
 
 @keyframes glitch-anim {
@@ -245,7 +265,6 @@
 
 body {
     display: flex;
-    overflow: hidden;
     width: 100%;
     margin: 0;
 
