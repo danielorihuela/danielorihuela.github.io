@@ -8,8 +8,8 @@
     top: 0;
     bottom: 0;
     margin: auto;
-    width: 50rem;
-    height: 40rem;
+    width: 90vw;
+    height: 60vh;
     background: linear-gradient(60deg, red, yellow);
 }
 
@@ -26,24 +26,17 @@
 }
 
 @keyframes animatedgradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .frame-inner {
     background: white;
     z-index: 1;
     width: 100%;
-    margin: 1.8rem 0.5rem 0.5rem 0.5rem;
+    min-width: 0px;
+    margin: 30px 8px 8px 8px;
 }
 
 .buttons {
