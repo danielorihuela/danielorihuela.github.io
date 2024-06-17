@@ -15,6 +15,7 @@ pre:has(code) {
   background: #34294f;
   padding: 2%;
   border-radius: 10px;
+  white-space: pre-wrap;
 }
 
 .hljs-variable {
