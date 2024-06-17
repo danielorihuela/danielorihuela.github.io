@@ -1,3 +1,5 @@
+/* General Style */
+
 body {
     font-size: 125%;
     line-height: 1.5;
@@ -31,22 +33,28 @@ body {
 .posts-all-list-elements {
     display: flex;
     flex-direction: column;
-}
-
-.list-element {
-    display: flex;
-    height: 100%;
     font-family: Iceland;
 }
 
 .list-element-date {
-    font-family: Iceland;
-    width: 10%;
     white-space: nowrap;
 }
 
 .list-element-title {
     padding-left: 5%;
-    width: 90%;
     font-size: x-large;
+}
+
+/* Phone style */
+
+.list-element {
+    display: grid;
+}
+
+/* Tablet (or bigger screen) style */
+
+@media only screen and (min-width: 769px) {
+    .list-element {
+        grid-template-columns: 1fr 10fr;
+    }
 }

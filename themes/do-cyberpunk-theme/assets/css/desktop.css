@@ -177,9 +177,7 @@ body {
         font-size: 6rem;
 
         animation: glitch-skew-desktop 10s infinite step-end forwards;
-    }
-
-    
+    }   
 }
 
 @keyframes glitch-skew-desktop {
