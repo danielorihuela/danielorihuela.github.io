@@ -25,7 +25,7 @@ theme = "do-cyberpunk-theme"
     icon = 'file-manager.svg'
 [[menu.main]]
   identifier = 'open-source'
-  title = 'OSS Contributions'
+  title = 'OSS'
   url = 'open-source'
   weight = 3
   [menu.main.params]
