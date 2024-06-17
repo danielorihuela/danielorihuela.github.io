@@ -49,6 +49,7 @@ body {
 
 .list-element {
     display: grid;
+    align-items: baseline;
 }
 
 /* Tablet (or bigger screen) style */
