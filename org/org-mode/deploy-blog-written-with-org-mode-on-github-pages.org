@@ -1,0 +1,193 @@
+#+title: Deploy blog written with org-mode on GitHub Pages
+#+description: todo
+#+publishdate: 2022-07-03
+
+
+* Table of Contents                                               :TOC_5_org:
+- [[Context][Context]]
+- [[Goal (expected final workflow)][Goal (expected final workflow)]]
+- [[Steps][Steps]]
+  - [[Create GitHub repository][Create GitHub repository]]
+  - [[Upload Hugo configuration][Upload Hugo configuration]]
+  - [[Create GitHub Action workflow][Create GitHub Action workflow]]
+- [[Conclusion][Conclusion]]
+
+* Context
+
+I have been using emacs to write in org-mode for some time now. I love it. So, I decided to start writing a personal blog with it. However, I did not have the tool to create the blog and the means to publish it.
+I selected a static site generator (SSG) called Hugo for my first problem.
+It is well known for its simplicity and speed of building sites.
+For my second issue, I selected GitHub Pages + Github Actions.
+It seemed the easiest way to have a repository with my code and CI/CD pipelines to generate and deploy the site.
+
+* Goal (expected final workflow)
+
+The final workflow should eliminate the need to: manually generate the site and deploy it. We should only focus on the content.
+That is, writing the posts with org-mode.
+
+After following this guide, we will deploy our site with the following steps:
+
+1. Write a post in org-mode
+2. Push the new posts to the repository
+3. Nothing. Wait until GitHub Actions automagically generates and deploys your site
+
+* Steps
+
+** Create GitHub repository
+
+First, we need to [[https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site][create a GitHub repository for our site]]. In the following list, we can see the configuration.
+
+- The repository name must be =user.github.io=
+- The repository visibility must be public
+- Branch for the generated site, "main" in our case
+- Branch for the source code and org-mode files, "development" in our case
+
+** Upload Hugo configuration
+
+Once the repository is ready, we can upload our Hugo configuration to the development branch.
+The [[https://gohugo.io/getting-started/directory-structure/][Hugo directory structure]] looks like the tree below. However, we do not need the =content= folder.
+It will be auto-generated with *ox-hugo*. Instead, we will have a folder named =posts= with the org-mode files.
+
+#+begin_src
+.
++-- archetypes
++-- config.toml
++-- posts
++-- data
++-- layouts
++-- static
++-- themes
+#+end_src
+
+** Create GitHub Action workflow
+
+Now, with the Hugo configuration and org-mode posts in the repository, we only have left to create the deployment workflow.
+We need a GitHub Action that performs the steps below.
+The code you will find in this section is a modified version of the code at https://github.com/ayrat555/braindump.
+The creator of the repo wrote a post explaining how he [[https://www.badykov.com/emacs/generating-site-from-org-mode-files/#conclusion][deploys the notes he takes with org roam]].
+
+1. Checkout repository code
+
+   We need access to the code to execute a bash script later.
+
+   #+begin_src yaml
+     - uses: actions/checkout@v3
+   #+end_src
+
+2. Install emacs
+
+   #+begin_src yaml
+     - name: Install emacs
+       uses: purcell/setup-emacs@master
+             with:
+               version: '27.1'
+   #+end_src
+
+3. Transform org-mode files to markdown with *ox-hugo*
+
+   #+begin_src yaml
+     - name: Convert org files to hugo
+       run: ./org2hugo.sh
+       shell: bash
+   #+end_src
+
+   The bash script is a wrapper to call an elisp function.
+   We export some environment variables, copy the elisp file and execute the =build/export-all= function.
+
+   #+begin_src bash
+     #!/bin/bash
+
+     export HUGO_BASE_DIR=`pwd`
+     export POSTS_ORG_SRC=`pwd`/posts
+     HOME=/tmp/emacs-build
+
+     mkdir -p $HOME
+     cp -r `pwd`/init.el $HOME
+
+     emacs -Q --batch --load $HOME/init.el --execute "(build/export-all)" --kill
+   #+end_src
+
+   The elisp code is also simple. At a high level, we are just downloading the *ox-hugo* package and defining the =build/export-all= function. And what does that function? Well.
+   That function retrieves all the org-mode files from the =posts= folder and exports them to markdown.
+   The result will be in =contents/posts=.
+   
+   #+begin_src elisp
+     (setq make-backup-files nil) ;; Disable "<file>~" backups.
+
+     (defconst posts-org-files (getenv "POSTS_ORG_SRC"))
+
+     ;; Setup packages using straight.el: https://github.com/raxod502/straight.el
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+            (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+           (bootstrap-version 5))
+       (unless (file-exists-p bootstrap-file)
+         (with-current-buffer
+             (url-retrieve-synchronously
+              "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+              'silent 'inhibit-cookies)
+           (goto-char (point-max))
+           (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+
+     (setq straight-use-package-by-default t)
+     (straight-use-package 'use-package)
+
+     (use-package ox-hugo
+       :straight (:type git :host github :repo "kaushalmodi/ox-hugo"))
+
+     ;;; Public functions
+     (defun build/export-all ()
+       "Export all org-files (including nested) under posts-org-files."
+
+       (setq org-hugo-base-dir (getenv "HUGO_BASE_DIR"))
+       (setq org-hugo-section "posts")
+
+       (dolist (org-file (directory-files-recursively posts-org-files "\.org$"))
+         (with-current-buffer (find-file org-file)
+           (org-hugo-export-wim-to-md :all-subtrees nil nil nil)))
+
+       (message "Done!"))
+   #+end_src
+   
+4. Build site with *hugo*
+
+   By default, the result will be in a folder named =public=.
+   #+begin_src yaml
+     - name: Setup Hugo
+       uses: peaceiris/actions-hugo@v2
+       with:
+         hugo-version: '0.91.2'
+
+     - name: Build
+       run: hugo --minify
+   #+end_src
+   
+5. Publish the site to *GitHub Pages*
+
+   We publish the contents of the =public= folder in the main branch.
+   
+   #+begin_src yaml
+     - name: Deploy
+       uses: peaceiris/actions-gh-pages@v3
+       if: ${{ github.ref == 'refs/heads/development' }}
+       with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         publish_branch: main
+         publish_dir: ./public
+   #+end_src
+
+
+Once we have created the three files, we can upload them to the =development= branch.
+From now on, every time you push new org-mode files to the =posts= folder of the =development= branch.
+The GitHub Actions workflow will publish them.
+
+
+* Conclusion
+
+We presented an easier way to deploy your posts with *org-mode*, *hugo*, *GitHub Actions* and *GitHub Pages*.
+With that workflow, we only need to focus on writing org-mode files.
+Lastly, we know this workflow works because we used it to deploy this post!!!
+The code is at https://github.com/danielorihuela/danielorihuela.github.io/tree/development.
+
+I hope you liked it and that you have learned something!

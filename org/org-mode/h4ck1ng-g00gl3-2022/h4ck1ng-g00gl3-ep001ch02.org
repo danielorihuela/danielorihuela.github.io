@@ -1,0 +1,45 @@
+#+title: H4ck1ng G00gl3 ep001 challenge 02
+#+description: todo
+#+publishdate: 2022-10-20
+
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep001 challenge 02*.
+This challenge is about *Reverse Engineering*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch02/intro.png]]
+
+After opening the challenge, we get a zip file containing an executable with the name =wannacry=.
+
+As a first step, I extracted the strings from the executable with src_sh[:exports code]{strings wannacry}. After analyzing the output, I saw the URL =https://wannacry-killswitch-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com//=. If you visit this page, you will see the following sentence: "Our princess is in another castle.". At that point, I recalled that the real wannacry had a kill switch in the binary. To stop the attack, you only needed to register a domain with the hardcoded name. For some reason, I thought that disconnecting from the internet or creating a local website for that domain could modify the binary execution result. That was not the case. I was going down the rabbit hole. I was stuck there thinking for a while until I asked the community.
+
+The community told me to look at the executable code and try to execute the interesting part. With that in mind, I searched for how to disassemble a binary in Linux. I found =objdump=, a command that allows printing the assembly code of the binary. The following image shows a fragment of the assembly code.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch02/objdump-function-example.png]]
+
+With the assembly code in my power, I wrote down the functions and how they are related. Interestingly enough, the =main= function does not call any other function. Besides, the only function not being called anywhere in the code is one called =print=. Probably, that is what the community was referring to with the second part of the hint.
+
+I found gdb, a tool designed to debug C/C++ programs. Moreover, it can execute functions present in the binary. It is simple.
+
+#+attr_html: :width 900px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch02/gdb-execution.png]]
+
+As you can see, executing the =print= function gives us a new URL. Visiting the URL shows the following website.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch02/button-flag.png]]
+
+After clicking the button, the flag will appear. With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch02/intro.png]]
