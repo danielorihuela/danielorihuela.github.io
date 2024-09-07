@@ -1,0 +1,180 @@
+#+title: Skip List (in Rust) explained!
+#+description: todo
+#+publishdate: 2024-05-18
+
+
+* What's a Skip List?
+
+A Skip List is a probabilistic data structure that serves as an alternative to balanced trees. They are simpler to implement and provide logarithmic search, insertion and removal. However, they take up more memory.
+
+Regarding the structure, a Skip List is no more than "n" linked lists. Conceptually, they are stacked on top of each other. For example, the next image shows a Skip List with four layers.
+
+#+attr_html: :class centered-image
+[[/images/skip-list/basic-structure.png]]
+
+Let's briefly explain how each of the operations works at a high level. To know all the details, please, read the [[https://15721.courses.cs.cmu.edu/spring2018/papers/08-oltpindexes1/pugh-skiplists-cacm1990.pdf][original whitepaper]]. After that, we will see a Rust implementation.
+
+** Search
+
+We start at the topmost layer of the first node. If the next node value is lower than the value we are searching for, we go forward. Otherwise, we go downwards. If we repeat this in a loop, we will end at a node in the bottommost layer. We just need to check if this node contains the value that we want.
+
+You can see on the next image, marked with a red line, the path the algorithm will follow to search for node 762.
+
+#+attr_html: :class centered-image
+[[/images/skip-list/search.png]]
+
+If we search 700, the algorithm would follow the same path until node 641. Since the next node value is 762, which is bigger, it wouldn't find the value.
+
+** Insert
+
+As with searching, we go forward if the value is smaller and downwards if bigger. Now, every time we go downward we will store the pointer of that node. Once we have found the spot to insert our new node, we will visit the nodes where we went down in reverse order and update the successors if the algorithm decides that we need to insert the new node at that level. That is done randomly. 
+
+For example, let's say we want to insert the value 700. First, the algorithm would follow the path marked with a red line in the following image. It would store nodes with values None, 446, and 641. The new node will be inserted between 641 and 762. Then, we proceed to visit node 641 and randomly choose if the new node should be a successor. We repeat that for 446 and None if required.
+
+#+attr_html: :class centered-image
+[[/images/skip-list/insert.png]]
+
+** Delete
+
+This is similar to the insert algorithm. Now, instead of adding a new node, we will visit each node where we went downwards and update the successors to remove the node.
+
+* Rust implementation
+
+You can see the full implementation https://github.com/danielorihuela/algorithms-and-data-structures/blob/master/list/skip_list/src/main.rs. 
+
+Important details for those who want to implement it on Rust.
+
+- You can see https://github.com/JP-Ellis/rust-skiplist an advanced implementation.
+- Building linked lists on Rust is unusually hard. Check https://rust-unofficial.github.io/too-many-lists/ first.
+
+
+** Basic structure
+
+Take into account that we need to init all "forward" vectors to be of length "max_level" to identify the next node of the current layer. Otherwise, you might end up changing from the linked list on layer 3 to the linked list on layer 2 without your knowledge.
+
+#+begin_src rust
+struct SkipList<T> {
+    head: NonNull<Node<T>>,
+    max_level: usize,
+}
+
+type Link<T> = Option<NonNull<Node<T>>>;
+
+#[derive(Clone, Debug)]
+struct Node<T> {
+    // If the value is None, this is the sentinel value
+    value: Option<T>,
+    forward: Vec<Link<T>>,
+}
+#+end_src
+
+** Search
+
+#+begin_src rust
+fn search(&self, v: &T) -> bool {
+    let mut node = self.head;
+
+    // Go downwards
+    for i in (0..self.max_level).rev() {
+        let mut next = get_forward(node)[i];
+
+        // If value is lower, go forward
+        while next.and_then(value).is_some_and(|value| &value < v) {
+            node = next.unwrap();
+            next = get_forward(node)[i];
+        }
+    }
+
+    let node = get_forward(node)[0];
+    node.map(value).is_some_and(|n| n.as_ref() == Some(v))
+}
+#+end_src
+
+
+** Insert
+
+#+begin_src rust
+fn insert(&mut self, v: &T) {
+    let mut update = vec![None; self.max_level];
+    let mut node = self.head;
+
+    // Go downwards
+    for i in (0..self.max_level).rev() {
+        let mut next = get_forward(node)[i];
+
+        // If value is lower, go forward
+        while next.and_then(value).is_some_and(|value| &value < v) {
+            node = next.unwrap();
+            next = get_forward(node)[i];
+        }
+
+        // Store nodes where we went downwards
+        update[i] = Some(node);
+    }
+
+    let node = get_forward(node)[0];
+    if node.map(value).is_some_and(|n| n.as_ref() == Some(v)) {
+        println!("{} is already in the list", v);
+    }
+
+    let level = rand::thread_rng().gen_range(0..self.max_level);
+    let mut x = unsafe {
+        NonNull::new_unchecked(Box::into_raw(Box::new(Node {
+            value: Some(v.clone()),
+            forward: vec![None; self.max_level],
+        })))
+    };
+
+    // For each node where we went downwards
+    for i in 0..=level {
+        // Update the successors accordingly
+        if update[i].is_none() {
+            get_forward_mut(&mut x)[i] = get_forward(self.head)[i];
+            get_forward_mut(&mut self.head)[i] = Some(x);
+        } else {
+            get_forward_mut(&mut x)[i] = get_forward(update[i].unwrap())[i];
+            get_forward_mut(&mut update[i].unwrap())[i] = Some(x);
+        }
+    }
+}
+#+end_src
+
+
+** Delete
+
+#+begin_src rust
+fn delete(&mut self, v: &T) {
+    let mut update = vec![None; self.max_level];
+    let mut node = self.head;
+
+    // Go downwards
+    for i in (0..self.max_level).rev() {
+        let mut next = get_forward(node)[i];
+
+        // If value is lower, go forward
+        while next.and_then(value).is_some_and(|value| &value < v) {
+            node = next.unwrap();
+            next = get_forward(node)[i];
+        }
+
+        // Store nodes where we went downwards
+        update[i] = Some(node);
+    }
+
+    let node = get_forward(node)[0];
+    if node.map(value).is_some_and(|n| n.as_ref() == Some(v)) {
+
+        // For each node where we went downwards
+        for i in 0..self.max_level {
+            if let Some(mut update_i) = update[i] {
+                if get_forward(update_i)[i] != node {
+                    break;
+                } else {
+                    // Update the successors accordingly
+                    get_forward_mut(&mut update_i)[i] = get_forward(node.unwrap())[i];
+                }
+            }
+        }
+    }
+}
+#+end_src

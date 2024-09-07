@@ -1,0 +1,80 @@
+#+title: H4ck1ng G00gl3 ep005 challenge 01
+#+description: todo
+#+publishdate: 2022-11-28
+
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep005 challenge 01*. Category *Misc*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/intro.png]]
+
+This challenge gives us a zip containing a binary file. After reading the hint, I tried to convert the file into different image formats, but it didn't work. I also checked if the file contained headers from any known format, searched strings in the file and visualized the hexadecimal. Nothing of that worked. I tried things out for a couple more hours with no luck. Eventually, I had to ask the community for help.
+
+It turns out that the ones and zeros from the binary form the drawing. The first thing that I tried was printing the binary data. It was hard for me to check for patterns, so I coloured the ones.
+
+#+begin_src bash
+  # Extract a single line with all bits
+  xxd -b challenge.bin | cut -d\  -f2-7 | tr -d ' ' | tr -d '\n' > binary
+  # Change the color of the ones
+  cat binary | sed "s/1/\\\e[0;31m1\\\e[0m/g" > binary_color
+  # Print text with colors
+  echo -e $(cat binary_color)
+#+end_src
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/colored-binary-output.png]]
+
+They don't seem to follow a pattern, but an image has a height and width. We have to find it somehow. After some iterations modifying the width, I found a drawing with a width equal to 96.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/colored-binary-drawing.png]]
+
+The problem now is that it contains several images, from top to bottom. We can form a URL if we arrange them properly. I put them next to each other with a height equal to 25. I also took a moment to write a python script and only print the ones.
+
+#+begin_src python
+content = ""
+with open("binary", "r") as f:
+    content = f.read()
+
+width = 96
+chunks = [content[i:i+width] for i in range(0, len(content), width)]
+
+height = 25
+
+for i in range(0, height):
+    colored_chunk = ""
+    line = ""
+    for j in range(0, 10):
+        line += chunks[i + (height*j)]
+    for letter in line:
+        if letter == "1":
+            colored_chunk += "1"
+        else:
+            colored_chunk += " "
+    print(colored_chunk)
+#+end_src
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/wide-drawing.png]]
+
+Still, the URL was not readable. Therefore, I manually made screenshots of different parts of the binary and put them together like in a collage.
+
+#+attr_html: :width 1000px
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/images-together.png]]
+
+With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep005ch01/intro.png]]

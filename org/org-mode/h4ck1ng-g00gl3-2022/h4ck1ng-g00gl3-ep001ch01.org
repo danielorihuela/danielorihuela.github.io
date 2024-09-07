@@ -1,0 +1,70 @@
+#+title: H4ck1ng G00gl3 ep001 challenge 01
+#+description: todo
+#+publishdate: 2022-10-18
+
+
+* Table of Contents                                               :TOC_5_org:
+- [[Introduction][Introduction]]
+- [[Learning Journey][Learning Journey]]
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep001 challenge 01*.
+This challenge is about *Reverse Engineering*.
+
+* Learning Journey
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch01/intro.png]]
+
+After opening the challenge, we get a zip file. This zip file contains another compressed file that includes two files. We have the flag, even though we cannot read it yet. It is in binary. And an executable with the name wannacry.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch01/wannacry-manpage.png]]
+
+The wannacry executable takes an encrypted file and the encryption key as arguments. We already have the encrypted file, in other words, the flag file. However, we are missing the private key. The executable must have some information about that. For that reason, I decided to extract all the strings from the executable and see if there was something interesting. To do that, we can use the "strings" command in Linux.
+
+#+begin_src bash
+strings wannacry
+#+end_src
+
+At first, I was reading the output. It was huge, and most of the extracted strings were gibberish. This approach was not good. Then, I searched for some keywords: flag, private, public, solve, decrypt, encrypt, etc. The keyword "key" lead me to a domain.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch01/http-with-pems.png]]
+
+I visited this domain and saw a list of private keys with long alphanumeric names. I did not have any hint about which of these private keys could be the one that I needed. Anyway, there were only around two hundred private keys. Therefore, we should be able to decrypt the flag file with every single private key in a small amount of time. With that strategy in mind, I downloaded all the private keys.
+
+First, we need to obtain a list with the filenames of every private key. We can do that with the following bash line.
+
+#+begin_src bash
+  curl https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/ \
+      | awk '{split($0,a,"\""); print a[2]}' > pemfilenames
+#+end_src
+
+Now that we have a list of all the filenames. We can download all the private keys.
+
+#+begin_src bash
+    for pemfile in $(cat pemfilenames); do
+        wget https://wannacry-keys-dot-gweb-h4ck1ng-g00gl3.uc.r.appspot.com/$pemfile -P pemkeys
+    done
+#+end_src
+
+Finally, we can decrypt the flag with every private key file.
+
+#+begin_src bash
+    for pem in $(ls pemkeys); do
+        ./wannacry -encrypted_file flag -key_file pemkeys/$pem
+    done > result
+#+end_src
+
+Now, we can obtain the flag. We only need to get the strings from the "result" file and find the flag. We can do that with the following bash command.
+
+#+begin_src bash
+strings result| grep solve
+#+end_src
+
+With that, we completed the challenge.
+
+#+attr_html: :class centered-image
+[[/images/h4ck1ng00gl3/ep001ch01/intro.png]]
