@@ -1,0 +1,338 @@
+#+title: H4ck1ng G00gl3 ep005 challenge 02
+#+description: todo
+#+publishdate: 2022-12-02
+#+options: ^:nil
+
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep005 challenge 02*. Category *Cryptography*.
+
+* Learning Journey
+
+[[../../images/h4ck1ng00gl3ep005ch02/intro.png]]
+
+This challenge includes a website and its source code. My first thought is that we will have to find and exploit a vulnerability in the code. But first, let's see the website.
+
+[[../../images/h4ck1ng00gl3ep005ch02/website-game.png]]
+
+The website is a game similar to Google's Dinosaur Game. We can jump to dodge the enemies or use the nest to capture them. Once we die, we need to introduce a name. Then we will see the ranking.
+
+[[../../images/h4ck1ng00gl3ep005ch02/website-game-ranking.png]]
+
+Time to read the code. Fast enough, I see a comment telling us the goal. We have to get a negative score in the game to get the flag.
+
+#+begin_src python
+  @app.route("/api/highscores", methods=["post"])
+  def post_highscore():
+      ...
+      if score < 0:
+          # FIX(mystiz): I heard that some players are so strong that the score is overflown.
+          #              I'll send them the flag and hope the players are satisfied for now...
+          return {"message": f"You performed so well so that you triggered an integer overflow! "
+                  + "This is your flag: {FLAG}"}
+      ...
+#+end_src
+
+Now that we know what we have to accomplish, let's see which validations the backend does when it receives a new high score.
+
+#+begin_src python
+  @app.route("/api/highscores", methods=["post"])
+  def post_highscore():
+      global highscores
+
+      data = request.get_json()
+
+      try:
+          name = data.get('name')
+          score = data.get('score')
+          signature = bytes.fromhex(data.get('signature', ''))
+      except:
+          return json_response(400, text="invalid parameters")
+
+      if type(name) != str or len(name) != 3:
+          return json_response(400, text="invalid name")
+      if type(score) != int or not -2**16 <= score < 2**16:
+          return json_response(400, text="invalid score")
+
+      try:
+          verify(KEY_ID, name, score, signature)
+      except Exception as err:
+          return json_response(400, text=err)
+
+      player = {"name": name, "score": score}
+      highscores.append(player)
+      highscores = sorted(highscores, key=lambda row: row['score'], reverse=True)
+
+      if len(highscores) > 10:
+          highscores.pop(10)
+
+      if score < 0:
+          # FIX(mystiz): I heard that some players are so strong that the score is overflown.
+          #              I'll send them the flag and hope the players are satisfied for now...
+          return {"message": f"You performed so well so that you triggered an integer overflow! "
+                  + "This is your flag: {FLAG}"}
+      elif player in highscores:
+          rank = highscores.index(player) + 1
+          return {"message": f"Congratulations! You are currently at #{rank} on the scoreboard!"}
+      else:
+          return {"message": f"Better luck next time!"}
+
+#+end_src
+
+The endpoint needs to receive a name, a score and a signature. Then, it verifies that:
+
+- The name length is 3
+- The score is between -65536 and 65535, both included.
+- The signature is valid
+
+This endpoint is not a problem. As long as we provide: a name, a negative score and a signature for that data, we will obtain the flag. Let's see how the endpoint creates the signature now.
+
+#+begin_src python
+  @app.route("/api/sign", methods=["post"])
+  def sign():
+       data = request.get_json()
+
+       name = data.get('name')
+       score = data.get('score')
+
+       if type(name) != str or len(name) != 3:
+           return json_response(400, text="invalid name")
+       if type(score) != int or score < 0:
+           return json_response(400, text="invalid score")
+
+       return {"signature": _sign(KEY_ID, name, score).hex()}
+#+end_src
+
+Now, we have a problem. This endpoint only accepts positive values. Hence, we must find a flaw that allows us to forge a signature for a negative value. Lucky for us, the developers implemented their own "sign" and "verify" methods. Needless to say that rolling your own crypto is a bad idea. I decided to read them and see if I could find the vulnerability.
+
+First, we will look at the "sign" method.
+
+#+begin_src python
+  # https://datatracker.ietf.org/doc/html/rfc2313#section-10.1
+      def sign(self, m):
+          digest_algorithm_identifier = DerSequence([
+              DerObjectId('2.16.840.1.101.3.4.2.1').encode(),
+              DerNull().encode()
+          ])
+          digest = hashlib.sha256(m).digest()
+
+          digest_info = DerSequence(([
+              digest_algorithm_identifier,
+              DerOctetString(digest).encode()
+          ]))
+
+          encryption_block  = bytes.fromhex('00') 
+          encryption_block += bytes.fromhex('01') # block type for signature
+          encryption_block += b'\xff'*(self.bits//8 - 3 - len(digest_info.encode()))
+          encryption_block += bytes.fromhex('00')
+          encryption_block += digest_info.encode()
+
+          encryption_block = int.from_bytes(encryption_block, 'big')
+          s = pow(encryption_block, self.d, self.n)
+          s = int.to_bytes(s, self.bits//8, 'big')
+
+          return s
+#+end_src
+
+This method creates a byte array with the following specific structure.
+
+~00 01 ff ... ff 00 "digest information"~
+
+At first glance, the "sign" method doesn't seem vulnerable. Let's jump to the "verify" method.
+
+#+begin_src python
+  # https://datatracker.ietf.org/doc/html/rfc2313#section-10.2
+  # Note: The only hash algorithm we accept is SHA256.
+      def verify(self, m, s):
+          if len(s) != self.bits//8:
+              raise Exception('incorrect signature length')
+          s = int.from_bytes(s, 'big')
+
+          k = pow(s, self.e, self.n)
+          k = int.to_bytes(k, self.bits//8, 'big')
+          if k[0] != 0x00:
+              raise Exception('incorrect prefix')
+          if k[1] != 0x01:
+              raise Exception('incorrect prefix')
+
+          padding, digest_info = k[2:].split(b'\x00', 1)
+
+          if len(padding) < 8:
+              raise Exception('invalid padding length')
+          if padding != b'\xff'*len(padding):
+              raise Exception('invalid padding content')
+
+          sequence = DerSequence()
+          sequence.decode(digest_info)
+          _digest_algorithm_identifier, _digest = sequence
+
+          sequence = DerSequence()
+          sequence.decode(_digest_algorithm_identifier)
+          _digest_algorithm_identifier = sequence[0]
+
+          object_id = DerObjectId()
+          object_id.decode(_digest_algorithm_identifier)
+          digest_algorithm_identifier = object_id.value
+          if digest_algorithm_identifier != '2.16.840.1.101.3.4.2.1':
+              raise Exception('invalid digest algorithm identifier')
+
+          _null = sequence[1]
+          null = DerNull()
+          null.decode(_null)
+
+          octet_string = DerOctetString()
+          octet_string.decode(_digest)
+          digest = octet_string.payload
+
+          if hashlib.sha256(m).digest() != digest:
+              raise Exception('mismatch digest')
+          return True
+#+end_src
+
+This function is more complex. It verifies that the signature follows the correct structure we saw before ~00 01 ff ... ff 00 "digest information"~ and that the message we are passing matches the signature. However, the vulnerability must be here. For that reason, we have to take a closer look. There doesn't seem to be any flaw, but the devil is in the details. So I read and studied it more deeply. After a couple of hours, I couldn't see any problem by myself. I felt like I was maybe going down the rabbit hole. I came back to the api and checked the last endpoint.
+
+The last endpoint returns the public key. The public key isn't usually interesting, but we are doing a security challenge that requires forging a key. Therefore, I downloaded the key and extracted the modulus and the exponent.
+
+[[../../images/h4ck1ng00gl3ep005ch02/public-key-information.png]]
+
+Interesting. The public exponent is 3. I remember, from when I was in college doing cryptography, that using an exponent of 3 isn't insecure but can lead to security issues. For example, we could use the  [[https://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/][Chinese Theorem]] to attack RSA. With that information, I started researching how to forge keys when the public exponent is 3.
+
+I found an [[https://blog.trailofbits.com/2019/07/08/fuck-rsa/][awesome article explaining several RSA vulnerabilities]] at a high level. This post has a section dedicated to the public exponent, which introduces many vulnerabilities when it has the value 3. They mention an attack found in 2006 by Bleinchenbacher that allowed him to forge arbitrary signatures in different RSA implementations. They also add a link to another blog explaining [[https://www.imperialviolet.org/2014/09/26/pkcs1.html][how this attack was used against the RSA implementations used in Firefox and Chrome]]. Anyway, I want to understand the [[https://mailarchive.ietf.org/arch/msg/openpgp/5rnE9ZRN1AokBVj3VqblGlP63QE/][original attack]] now.
+
+The flaw that Daniel Bleichenbacher found was that the RSA implementation didn't check the hash+ASN.1 data was right-justified. The RSA signature follows the structure ~00 01 FF FF FF ... FF 00  ASN.1  HASH~. However, he could forge signatures with the structure ~00 01 FF FF ... FF 00  ASN.1  HASH  GARBAGE~. He creates the initial part with whatever hash of a message he wants ~00 01 FF ... FF 00 ASN.1 HASH~ and computes the garbage data that, when appended, results in a valid signature. In this case, computing the signature is easy. Since the public exponent is 3, we only need to calculate the cube root. In other words, cube root of ~00 01 FF ... FF 00  ASN.1  HASH  GARBAGE~. Nevertheless, the "verify" implementation of our challenge checks that the digest is at the right. We have to search for something else. I was stuck there for hours, reading the code until I asked the community for help.
+
+The community told me that I was on the right track. We have to use the Bleichenbacher attack, but instead of adding garbage to the end, we have to add it somewhere in the middle. There is some length that isn't verified. So, I did some more research on the internet and found a [[https://words.filippo.io/bleichenbacher-06-signature-forgery-in-python-rsa/][variant of the Bleichenbacher attack]] which does that. In that specific article, they build something with the format ~00 01 XX ... XX 00  ASN.1  HASH~ where XX are the random bytes. That could help us later. Now, we have to find the vulnerability in our code. For that, I also needed help from the community.
+
+#+begin_src python
+  def verify(self, m, s):
+      ...
+
+      sequence = DerSequence()
+      sequence.decode(digest_info)
+      _digest_algorithm_identifier, _digest = sequence
+
+      sequence = DerSequence()
+      sequence.decode(_digest_algorithm_identifier)
+      _digest_algorithm_identifier = sequence[0]
+
+      object_id = DerObjectId()
+      object_id.decode(_digest_algorithm_identifier)
+      digest_algorithm_identifier = object_id.value
+      if digest_algorithm_identifier != '2.16.840.1.101.3.4.2.1':
+          raise Exception('invalid digest algorithm identifier')
+
+      _null = sequence[1]
+      null = DerNull()
+      null.decode(_null)
+
+      octet_string = DerOctetString()
+      octet_string.decode(_digest)
+      ...
+#+end_src
+
+In the snippet above, we have the vulnerable code. The problem is that the function does not check that the "digest_info" has two items. It extracts the "_digest_algorithm_identifier" and the "_digest", but we could have garbage behind them. Therefore, a signature with the structure ~00 01 FF ... FF 00  ASN.1  XX  HASH~ is valid. With that and the article that we found earlier on the [[https://words.filippo.io/bleichenbacher-06-signature-forgery-in-python-rsa/][variant of the Bleichenbacher attack]], we are ready to exploit the webpage.
+
+I'm not going to explain in detail how the variant works, only the general idea.
+
+1. Create the suffix payload. In other words, the information the signature should contain at the end. Then, we compute how this information will look in the final signature.
+2. Create the prefix, that is the initial data the signature will contain plus random bytes. Then, we compute the cube root to get a valid fake signature.
+3. Overwrite the last prefix fake signatures with the suffix fake signature. So, if the fake signature prefix is 110000 and the fake signature suffix is 11, the resulting forged key is 110011.
+
+After modifying the code in the article, we end with the following script.
+
+#+begin_src python
+  import hashlib
+  import os
+  import json
+  import requests
+
+  from gmpy2 import mpz, iroot
+  from Crypto.Util.asn1 import DerSequence, DerObjectId, DerOctetString, DerNull
+
+
+  def to_bytes(n):
+      """Return a bytes representation of a int"""
+      return n.to_bytes((n.bit_length() // 8) + 1, byteorder="big")
+
+
+  def from_bytes(b):
+      """Makes a int from a bytestring"""
+      return int.from_bytes(b, byteorder="big")
+
+
+  def get_bit(n, b):
+      """Returns the b-th rightmost bit of n"""
+      return ((1 << b) & n) >> b
+
+
+  def set_bit(n, b, x):
+      """Returns n with the b-th rightmost bit set to x"""
+      if x == 0:
+          return ~(1 << b) & n
+      if x == 1:
+          return (1 << b) | n
+
+
+  def cube_root(n):
+      return int(iroot(mpz(n), 3)[0])
+
+
+  def suffix_sig_flip(suffix_bytes):
+      sig_suffix = 1
+      for b in range(len(suffix) * 8):
+          if get_bit(sig_suffix**3, b) != get_bit(from_bytes(suffix), b):
+              sig_suffix = set_bit(sig_suffix, b, 1)
+      return sig_suffix
+
+
+  KEY_ID = "pzero-adventures"
+  NAME = "aaa"
+  SCORE = -65535
+  KEY_SIZE_BITS = 2048
+  KEY_SIZE_BYTES = KEY_SIZE_BITS // 8
+
+  # Forge suffix signature
+  message = json.dumps([KEY_ID, NAME, SCORE]).encode()
+  message_digest = hashlib.sha256(message).digest()
+  suffix = DerOctetString(message_digest).encode()
+  sig_suffix = suffix_sig_flip(suffix)
+
+  # Compute prefix
+  prefix = ""
+  random_bytes = 0
+  # Prefix length must be equal to key size
+  # We need this loop to search for the number of garbage bytes
+  # that will eventually give us a prefix with size equal to the key size
+  while len(prefix) != KEY_SIZE_BYTES and len(prefix) < KEY_SIZE_BYTES:
+      digest_algorithm_identifier = DerSequence(
+          [
+              DerObjectId("2.16.840.1.101.3.4.2.1").encode(),
+              DerNull().encode(),
+              DerOctetString(os.urandom(random_bytes)).encode(),
+          ]
+      )
+      digest_info = DerSequence(([digest_algorithm_identifier, suffix]))
+      prefix = b"\x00\x01" + (b"\xff" * 8) + b"\x00" + digest_info.encode()
+      random_bytes += 1
+  if len(prefix) != KEY_SIZE_BYTES:
+      print("Something is wrong")
+      exit(0)
+
+  # Forge prefix signature
+  sig_prefix = to_bytes(cube_root(from_bytes(prefix)))[: -len(to_bytes(sig_suffix))]
+
+  # Compute forged signature and add padding
+  sig = sig_prefix + to_bytes(sig_suffix)
+  sig = b"\x00" * (KEY_SIZE_BYTES - len(sig)) + sig
+
+  r = requests.post(
+      "http://pzero-adventures-web.h4ck.ctfcompetition.com/api/highscores",
+      json={"name": NAME, "score": SCORE, "signature": sig.hex()},
+  )
+  print(f"Server response: {r.text}")
+#+end_src
+
+Executing the script prints the flag in the terminal. With that, we completed the challenge.
+
+[[../../images/h4ck1ng00gl3ep005ch02/intro.png]]

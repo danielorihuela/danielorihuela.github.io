@@ -1,16 +1,8 @@
 #+title: Deploy blog written with org-mode on GitHub Pages
 #+description: todo
 #+publishdate: 2022-07-03
+#+options: ^:nil
 
-
-* Table of Contents                                               :TOC_5_org:
-- [[Context][Context]]
-- [[Goal (expected final workflow)][Goal (expected final workflow)]]
-- [[Steps][Steps]]
-  - [[Create GitHub repository][Create GitHub repository]]
-  - [[Upload Hugo configuration][Upload Hugo configuration]]
-  - [[Create GitHub Action workflow][Create GitHub Action workflow]]
-- [[Conclusion][Conclusion]]
 
 * Context
 
