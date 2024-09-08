@@ -1,0 +1,53 @@
+#+title: H4ck1ng G00gl3 ep004 challenge 01
+#+description: todo
+#+publishdate: 2022-11-20
+#+options: ^:nil
+
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep004 challenge 01*. Category *Web Exploitation*.
+
+* Learning Journey
+
+[[../../images/h4ck1ng00gl3ep004ch01/intro.png]]
+
+When we open the challenge, it redirects us to a [[https://vrp-website-web.h4ck.ctfcompetition.com/][copy of Google Bug Hunter webpage]] of the [[https://bughunters.google.com/][original Google Bug Hunter webpage]]. The hint suggests searching for some new endpoints. After researching, I found the *difference in the FAQs section*.
+
+[[../../images/h4ck1ng00gl3ep004ch01/faqs.png]]
+
+We can start playing with the endpoints. First, I start sending a POST request to the import endpoint.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-missing-submission.png]]
+
+It is missing the submission parameter. Let's add it.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-dry-run-enabled.png]]
+
+Interesting. The import endpoint is disabled, but the *dry run is enabled*. I tried enabling it but couldn't find the correct query parameter. So, I decided to give the export endpoint a try.
+
+[[../../images/h4ck1ng00gl3ep004ch01/export-submission-does-not-exist.png]]
+
+[[../../images/h4ck1ng00gl3ep004ch01/export-attachment-does-not-exist.png]]
+
+The export endpoint shows us that a submission called "submission_sample" already exists and that each submission has different attachments. But I couldn't figure out how to proceed with the challenge.
+
+I asked the community for help, and they told me to *solve the other challenges first*. Therefore, I decided to solve challenges two and three. *Challenge two gives us some code. With this code, we can access some more code required to solve challenge number three*. It turns out this code contains the import and export functions. We can now see how to access the dry run feature.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-code-dry-run.png]]
+
+That isn't enough to solve the challenge. I kept reading the import code.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-attachment-already-exists.png]]
+
+I found a couple of interesting details. First, the *endpoint expects a .tar.gz file*. Second, *the endpoint will output the difference if the file already exists*. We want to get the flag, so we can probably *trick the endpoint into printing the content by uploading a .tar.gz containing a "flag" file*. We know the flag must be in the root path. Therefore, we will use "/" as the value for the submission field.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-tar-with-flag.png]]
+
+Okay, we have to turn on the debug to see the differences.
+
+[[../../images/h4ck1ng00gl3ep004ch01/import-tar-with-flag-debug.png]]
+
+Making this call will return us the flag! With that, we completed the challenge.
+
+[[../../images/h4ck1ng00gl3ep004ch01/intro.png]]

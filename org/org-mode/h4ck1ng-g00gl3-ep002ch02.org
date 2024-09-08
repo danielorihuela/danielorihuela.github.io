@@ -1,0 +1,17 @@
+#+title: H4ck1ng G00gl3 ep002 challenge 02
+#+description: todo
+#+publishdate: 2022-11-04
+#+options: ^:nil
+
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep002 challenge 02*.
+This challenge is about *Forensics*.
+
+* Learning Journey
+
+[[../../images/h4ck1ng00gl3ep002ch02/intro.png]]
+
+The challenge gives us a zip containing a readme file and the logs in a csv file. The readme explains how to install timesketch using docker. Once installed, we can import the logs and check the latest one. There, you will find the flag. With that, we completed the challenge.
+

