@@ -15,8 +15,10 @@
     "@astrojs/mdx": "^3.1.5",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
+    "@fontsource/iceland": "^5.0.21",
     "@fontsource/rajdhani": "^5.0.14",
     "astro": "^4.15.4",
+    "sass": "^1.78.0",
     "typescript": "^5.5.4"
   }
 }
