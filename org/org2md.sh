@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf markdown-mmd;
 mkdir -p markdown-mmd;
 
 for source_file in $(find org-mode -type f -name "*.org");
