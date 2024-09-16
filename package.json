@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "predev": "cd org; ./org2md.sh && cd .. && rm -rf src/content/blog/* && cp -r org/markdown-mmd/* src/content/blog",
+    "predev": "cd org && ./populate-astro.sh",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
