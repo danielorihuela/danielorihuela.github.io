@@ -25,4 +25,5 @@ pnpm-debug.log*
 
 .vscode
 src/content/blog/**
+src/images/**
 org/markdown-mmd
