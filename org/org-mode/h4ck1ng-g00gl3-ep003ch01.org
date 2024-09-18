@@ -1,6 +1,7 @@
 #+title: H4ck1ng G00gl3 ep003 challenge 01
 #+description: todo
 #+publishdate: 2022-11-09
+#+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil
 
 

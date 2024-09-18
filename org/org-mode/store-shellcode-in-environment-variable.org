@@ -1,6 +1,7 @@
 #+title: Store shellcode in environment variable
 #+description: todo
 #+publishdate: 2023-10-29
+#+cover: ../../images/covers/shellcode-env-var.jpg
 #+options: ^:nil
 
 

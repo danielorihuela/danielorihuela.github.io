@@ -1,6 +1,7 @@
 #+title: Stack-based buffer overflows
 #+description: todo
 #+publishdate: 2023-10-20
+#+cover: ../../images/covers/stack-overflow.png
 #+options: ^:nil
 
 
