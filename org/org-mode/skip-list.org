@@ -1,6 +1,7 @@
 #+title: Skip List (in Rust) explained!
 #+description: todo
 #+publishdate: 2024-05-18
+#+cover: ../../images/covers/skip-list.jpg
 #+options: ^:nil
 
 

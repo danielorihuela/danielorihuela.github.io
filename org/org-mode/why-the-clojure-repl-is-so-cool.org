@@ -1,6 +1,7 @@
 #+title: Why the Clojure REPL is so cool
 #+description: todo
 #+publishdate: 2023-05-28
+#+cover: ../../images/covers/cl-repl.jpg
 #+options: ^:nil
 
 

@@ -1,6 +1,7 @@
 #+title: How to patch a git dependency in rust with same location but different branch
 #+description: todo
 #+publishdate: 2023-05-29
+#+cover: ../../images/covers/patch-dependency.png
 #+options: ^:nil
 
 

@@ -1,6 +1,7 @@
 #+title: How to use WASM code from ClojureScript through JavaScript interop
 #+description: todo
 #+publishdate: 2023-06-10
+#+cover: ../../images/covers/cljs-wasm-js.png
 #+options: ^:nil
 
 

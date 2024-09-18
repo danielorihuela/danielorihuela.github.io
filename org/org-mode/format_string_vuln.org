@@ -1,6 +1,7 @@
 #+title: Format string vulnerability
 #+description: todo
 #+publishdate: 2024-01-29
+#+cover: ../../images/covers/format-string-vuln.jpg
 #+options: ^:nil
 
 

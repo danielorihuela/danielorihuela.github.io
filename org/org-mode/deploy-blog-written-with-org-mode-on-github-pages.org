@@ -1,6 +1,7 @@
 #+title: Deploy blog written with org-mode on GitHub Pages
 #+description: todo
 #+publishdate: 2022-07-03
+#+cover: ../../images/covers/deploy-blog.png
 #+options: ^:nil
 
 

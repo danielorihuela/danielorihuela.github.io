@@ -1,6 +1,7 @@
 #+title: How does Key Transparency work?
 #+description: todo
 #+publishdate: 2024-01-06
+#+cover: ../../images/covers/key-transparency.png
 #+options: ^:nil
 
 
