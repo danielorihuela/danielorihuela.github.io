@@ -1,0 +1,57 @@
+---
+interface Props {
+	href: string;
+    image: string;
+}
+
+const { href, image } = Astro.props;
+---
+
+<style>
+    .item {
+        display: grid
+    }
+    .item > * {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    .item:hover .loader {
+        opacity: 1;
+    }
+    
+    @property --a {
+        syntax: '<angle>';
+        inherits: false;
+        initial-value: 0deg;
+    }
+    @keyframes animate {
+        0% { --a: 0deg; }
+        100% { --a: 360deg; }
+    }
+    .loader {
+        opacity: 0;
+        width: 48px;
+        height: 48px;
+        position: relative;
+        background: repeating-conic-gradient(from var(--a), var(--accent) 0%, var(--accent) 5%, transparent 5%, transparent 40%, var(--accent) 50%);
+        animation: animate 2s infinite linear;
+    }
+    .loader::before {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        background-color: #222222;
+    }
+    
+    .icon {
+        width: 40px;
+        height: 40px;
+        padding: 4px;
+        z-index: 0;
+    }
+</style>
+
+<div class="item">
+    <div class="loader"></div>
+    <a class="icon" href={ href }><img src={ image }></a>
+</div>

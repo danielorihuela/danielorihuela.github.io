@@ -1,5 +1,6 @@
 :root {
-	--accent: #b638ff;
+	--accent: red;
+	--accent-light: crimson;
 	--accent-dark: #000d8a;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
