@@ -18,7 +18,6 @@ body {
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
-	line-height: 1.7;
 }
 main {
 	width: 720px;
