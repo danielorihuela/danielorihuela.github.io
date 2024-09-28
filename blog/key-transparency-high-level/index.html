@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/key-transparency-high-level/"><!-- Primary Meta Tags --><title>How does Key Transparency work?</title><meta name="title" content="How does Key Transparency work?"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/key-transparency-high-level/"><meta property="og:title" content="How does Key Transparency work?"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/key-transparency-high-level/"><meta property="twitter:title" content="How does Key Transparency work?"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/key-transparency.degZT15k_ZlmdlN.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2024-01-06T00:00:00.000Z"> Jan 6, 2024 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>How does Key Transparency work?</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#context">Context</a></li>
+<li><a href="#whats-key-transparency">What’s Key Transparency?</a></li>
+<li><a href="#how-does-it-work-coniks">How does it work (CONIKS)?</a>
+<ul>
+<li><a href="#data-structures">Data Structures</a>
+<ul>
+<li><a href="#merkle-tree">Merkle Tree</a></li>
+<li><a href="#user-identifier-to-public-key-map">User identifier to Public Key
+map</a></li>
+</ul>
+</li>
+<li><a href="#protocol-phases">Protocol phases</a>
+<ul>
+<li><a href="#registration-phase">Registration phase</a></li>
+<li><a href="#lookup-phase">Lookup phase</a></li>
+<li><a href="#monitoring-phase">Monitoring phase</a></li>
+<li><a href="#cross-verification-phase">Cross verification phase</a></li>
+</ul>
+</li>
+<li><a href="#some-thoughts">Some thoughts</a></li>
+</ul>
+</li>
+<li><a href="#how-does-it-work-whatsapp">How does it work (WhatsApp)?</a>
+<ul>
+<li><a href="#protocol-phases-1">Protocol phases</a>
+<ul>
+<li><a href="#registration-phase-1">Registration phase</a></li>
+<li><a href="#lookup-phase-1">Lookup phase</a></li>
+</ul>
+</li>
+<li><a href="#challenges">Challenges</a></li>
+<li><a href="#some-thoughts-1">Some thoughts</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="context">Context</h1>
+<p>Lately, I’ve been thinking about how current e2e messaging applications
+distribute public keys as part of my job. There are two ways. You trust
+the service or check that the person you are talking with has the public
+key in his possession. The latter is better, but users must use a side
+channel (e.g. meet in person, phone call) to check it. That’s known as
+Trust On First Use (TOFU). The first time you talk with someone over the
+service, you don’t know who they are, but you can use a side channel to
+check it. From that point, you know that this person controls that
+public key. Unfortunately, this has some disadvantages.</p>
+<p>The main reasons are that users won’t bother performing the flow and
+that doing it with every person is a burden. Besides, this doesn’t work
+for people who don’t know each other on real life.</p>
+<p>Key Transparency was born.</p>
+<h1 id="whats-key-transparency">What’s Key Transparency?</h1>
+<p>Key Transparency is a protocol based on append-only logs. The idea is
+that the server providing the public keys also gives proofs that it is
+behaving correctly. Hence, the public key is correct, and you can safely
+talk with the person controlling it.</p>
+<h1 id="how-does-it-work-coniks">How does it work (CONIKS)?</h1>
+<p>To get an idea, we are going to review the
+<a href="https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/melara">CONIKS</a>
+implementation.</p>
+<h2 id="data-structures">Data Structures</h2>
+<h3 id="merkle-tree">Merkle Tree</h3>
+<p>A <strong>Merkle Tree</strong> is a tree made of hashes that allows to verify that a
+node is in the tree. For example, to check that the tree includes the
+hash in red, we only need the hashes in green. Computing the hashes in a
+bottom up fashion with the read and green hashes should give us the same
+root hash.</p>
+<p><img  src="/_astro/merkle-tree.D2UYMsl-_Z17KHSs.webp" alt="" width="677" height="126" loading="lazy" decoding="async"></p>
+<p>That’s fast and easy to verify, can be done in the client’s device and
+allows any user to check that a specific public key is registered in the
+service. This Merkle Tree is computed from time to time, so we end with
+root hashes for different <strong>epochs</strong>. Each new Merkle Tree includes the
+previous epoch root hash. These chains prevent forking the history.
+Otherwise, the server could build Merkle Trees with malicious intentions
+without leaving any trace.</p>
+<h3 id="user-identifier-to-public-key-map">User identifier to Public Key map</h3>
+<p>We also need a map between public identifiers and public keys. The
+server hosting the information can be untrusted. If the information is
+wrong, the client will detect that when verifying the proofs.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Public Identifier</th><th>Public Key</th></tr></thead><tbody><tr><td>6384e2b2184bcbf58eccf10ca7a6563c (alice public id)</td><td>alice pk</td></tr><tr><td>9f9d51bc70ef21ca5c14f307980a29d8 (bob public id)</td><td>bob pk</td></tr></tbody></table>
+<h2 id="protocol-phases">Protocol phases</h2>
+<h3 id="registration-phase">Registration phase</h3>
+<ol>
+<li>User creates a new account their device create a new key pair</li>
+<li>Client device creates a new key pair</li>
+<li>Client device sends public key to the server</li>
+<li>Server adds it to the map</li>
+<li>Server computes new Merkle Tree</li>
+</ol>
+<p>That’s the simplified flow. However, the Merkle Tree isn’t computed for
+each new key due to scalability issues. It’s done after specific time
+intervals (e.g. every 5 minutes). When the time is right, the server
+creates a snapshot of that epoch. That includes all the new keys added
+in the last batch.</p>
+<p><img  src="/_astro/register-phase.BA37Xfes_Z8E4yU.webp" alt="" width="1144" height="565" loading="lazy" decoding="async"></p>
+<h3 id="lookup-phase">Lookup phase</h3>
+<ol>
+<li>Alice asks for the public key of Bob</li>
+<li>Server sends public key and inclusion proof</li>
+<li>Alice verifies the inclusion proof (the given public key is included
+in the Merkle Tree)</li>
+</ol>
+<p>Alice knows the given public key is inside the Merkle Tree and trusts
+that it’s Bob’s public key. If it wasn’t, Bob should have notice and
+raised an alarm somewhere.</p>
+<p><img  src="/_astro/lookup-phase.Car1dHXa_Z1HkMHn.webp" alt="" width="1076" height="585" loading="lazy" decoding="async"></p>
+<h3 id="monitoring-phase">Monitoring phase</h3>
+<p>It works the same as the lookup phase. Alice checks that the service
+gives her key when someone asks for her public key. Otherwise he can
+raise the alarm to her contacts.</p>
+<p><img  src="/_astro/monitoring-phase.BRIanno5_Z1uk6f9.webp" alt="" width="1048" height="705" loading="lazy" decoding="async"></p>
+<h3 id="cross-verification-phase">Cross verification phase</h3>
+<p>Client asks to different providers to verify the Merkle Tree chain.</p>
+<p><img  src="/_astro/cross-verification-phase.ChqlXoKZ_5jmLM.webp" alt="" width="1177" height="487" loading="lazy" decoding="async"></p>
+<h2 id="some-thoughts">Some thoughts</h2>
+<p>Pretty cool, right? It’s a good step forward to improve public key
+distribution. However, it has it’s
+<a href="https://freedom-to-tinker.com/2016/03/31/why-making-johnnys-key-management-transparent-is-so-challenging/">challenges</a>.
+What time interval should we use to compute epochs? What happens if a
+new user wants to send a message while the epoch is still building? What
+if clients can’t ask various providers?</p>
+<p>The biggest problem is that this protocol doesn’t work if the company
+owns the messaging channel and the public key distribution server and
+there aren’t other providers. We have no assurance that the company
+didn’t forge the history. Furthermore, they could add two public keys
+for each user. One controlled by the user and one by the server. That
+way, they can perform a MITM attack. The server would give the fake key
+to any user performing the lookup phase and the real key to any user
+performing the monitoring phase.</p>
+<h1 id="how-does-it-work-whatsapp">How does it work (WhatsApp)?</h1>
+<p><a href="https://www.usenix.org/conference/pepr23/presentation/lewi">WhatsApp started with their own implementation of Key
+Transparency</a>.
+It might be of more help than CONIKS implementation. The data structures
+are the same, but the phases change a bit.</p>
+<h2 id="protocol-phases-1">Protocol phases</h2>
+<h3 id="registration-phase-1">Registration phase</h3>
+<p>It works the same as in CONIKS.</p>
+<p><img  src="/_astro/whatsapp-register-phase.BJLIXFnW_21ipfi.webp" alt="" width="1172" height="545" loading="lazy" decoding="async"></p>
+<h3 id="lookup-phase-1">Lookup phase</h3>
+<p>Similar to CONIKS. However, the client first asks for the root hash of
+the last published epoch. Then, the client asks WhatsApp for the public
+key included in the Merklee Tree with that root hash.</p>
+<p><img  src="/_astro/whatsapp-lookup-phase.VzVSW3OY_1aT1uU.webp" alt="" width="1139" height="629" loading="lazy" decoding="async"></p>
+<h2 id="challenges">Challenges</h2>
+<p>We can learn a lot from WhatsApp implementation, especially from the
+challenges they had to face.</p>
+<p>First, how can they distribute root hashes consistently? How can the
+clients trust they are building Merkle Trees as expected and behaving
+honestly? Ideally, with a distributed ledger technology like blockchain.
+However, they are not doing it for now. They have locked down server
+that the client has to trust. It’s not the best, but a step in the right
+direction.</p>
+<p>Second, what happens if we always look up the latest key? The server
+could serve a malicious key to Bob, which he will automatically trust.
+Ideally, this could be detected with <strong>Key history checks</strong>. Each user
+would monitor that WhatsApp always represented their public key
+correctly. However, they didn’t find a way to implement it. Instead,
+they use <strong>dual lookup proofs</strong>. Whenever Alice requests a lookup proof
+for Bob, she will also ask one for her own key.</p>
+<h2 id="some-thoughts-1">Some thoughts</h2>
+<p>That’s a step in the right direction for e2e encryption. We still have
+to trust WhatsApp server but I hope this won’t happen in the future.
+More importantly, we can learn a lot from their implementation and
+challenges in the future.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Key Transparency protocol brings some solutions to current limitations
+on public key distributions along with some challenges. Google and
+WhatsApp seem to be doing some work on those areas. Keep a look on
+them!!!</p>  </div> </article> </main> <footer></footer> </body></html>

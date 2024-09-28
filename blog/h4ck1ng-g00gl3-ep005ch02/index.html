@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/h4ck1ng-g00gl3-ep005ch02/"><!-- Primary Meta Tags --><title>H4ck1ng G00gl3 ep005 challenge 02</title><meta name="title" content="H4ck1ng G00gl3 ep005 challenge 02"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/h4ck1ng-g00gl3-ep005ch02/"><meta property="og:title" content="H4ck1ng G00gl3 ep005 challenge 02"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/h4ck1ng-g00gl3-ep005ch02/"><meta property="twitter:title" content="H4ck1ng G00gl3 ep005 challenge 02"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/hacking-google-2022.Cm7LR77H_Z4aiM2.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2022-12-02T00:00:00.000Z"> Dec 2, 2022 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>H4ck1ng G00gl3 ep005 challenge 02</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#learning-journey">Learning Journey</a></li>
+</ul>
+<h1 id="introduction">Introduction</h1>
+<p><a href="https://h4ck1ng.google/">H4ck1ng G00gl3</a> is a series of security
+challenges published on <strong>October 2022</strong> where the only way to win is to
+think like a hacker. In this post, I explain how I solved <strong>ep005
+challenge 02</strong>. Category <strong>Cryptography</strong>.</p>
+<h1 id="learning-journey">Learning Journey</h1>
+<p><img  src="/_astro/intro.bi1EQC_R_1MK8Pb.webp" alt="" width="454" height="156" loading="lazy" decoding="async"></p>
+<p>This challenge includes a website and its source code. My first thought
+is that we will have to find and exploit a vulnerability in the code.
+But first, let’s see the website.</p>
+<p><img  src="/_astro/website-game.Bf-Boqv1_1GlTgU.webp" alt="" width="1381" height="666" loading="lazy" decoding="async"></p>
+<p>The website is a game similar to Google’s Dinosaur Game. We can jump to
+dodge the enemies or use the nest to capture them. Once we die, we need
+to introduce a name. Then we will see the ranking.</p>
+<p><img  src="/_astro/website-game-ranking.BkFdRYC1_Zabwhk.webp" alt="" width="1384" height="670" loading="lazy" decoding="async"></p>
+<p>Time to read the code. Fast enough, I see a comment telling us the goal.
+We have to get a negative score in the game to get the flag.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/api/highscores"</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"post"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">post_highscore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> score <span class="token operator">&#x3C;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token comment"># FIX(mystiz): I heard that some players are so strong that the score is overflown.</span>
+        <span class="token comment">#              I'll send them the flag and hope the players are satisfied for now...</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"message"</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"You performed so well so that you triggered an integer overflow! "</span></span>
+                <span class="token operator">+</span> <span class="token string">"This is your flag: {FLAG}"</span><span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre>
+<p>Now that we know what we have to accomplish, let’s see which validations
+the backend does when it receives a new high score.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/api/highscores"</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"post"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">post_highscore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> highscores
+
+    data <span class="token operator">=</span> request<span class="token punctuation">.</span>get_json<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        name <span class="token operator">=</span> data<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span>
+        score <span class="token operator">=</span> data<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'score'</span><span class="token punctuation">)</span>
+        signature <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span>data<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'signature'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">except</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">"invalid parameters"</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token builtin">str</span> <span class="token keyword">or</span> <span class="token builtin">len</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">3</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">"invalid name"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token builtin">int</span> <span class="token keyword">or</span> <span class="token keyword">not</span> <span class="token operator">-</span><span class="token number">2</span><span class="token operator">**</span><span class="token number">16</span> <span class="token operator">&#x3C;=</span> score <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">16</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">"invalid score"</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        verify<span class="token punctuation">(</span>KEY_ID<span class="token punctuation">,</span> name<span class="token punctuation">,</span> score<span class="token punctuation">,</span> signature<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> err<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span>err<span class="token punctuation">)</span>
+
+    player <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">:</span> name<span class="token punctuation">,</span> <span class="token string">"score"</span><span class="token punctuation">:</span> score<span class="token punctuation">}</span>
+    highscores<span class="token punctuation">.</span>append<span class="token punctuation">(</span>player<span class="token punctuation">)</span>
+    highscores <span class="token operator">=</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>highscores<span class="token punctuation">,</span> key<span class="token operator">=</span><span class="token keyword">lambda</span> row<span class="token punctuation">:</span> row<span class="token punctuation">[</span><span class="token string">'score'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> reverse<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>highscores<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">10</span><span class="token punctuation">:</span>
+        highscores<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> score <span class="token operator">&#x3C;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token comment"># FIX(mystiz): I heard that some players are so strong that the score is overflown.</span>
+        <span class="token comment">#              I'll send them the flag and hope the players are satisfied for now...</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"message"</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"You performed so well so that you triggered an integer overflow! "</span></span>
+                <span class="token operator">+</span> <span class="token string">"This is your flag: {FLAG}"</span><span class="token punctuation">}</span>
+    <span class="token keyword">elif</span> player <span class="token keyword">in</span> highscores<span class="token punctuation">:</span>
+        rank <span class="token operator">=</span> highscores<span class="token punctuation">.</span>index<span class="token punctuation">(</span>player<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"message"</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Congratulations! You are currently at #</span><span class="token interpolation"><span class="token punctuation">{</span>rank<span class="token punctuation">}</span></span><span class="token string"> on the scoreboard!"</span></span><span class="token punctuation">}</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"message"</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Better luck next time!"</span></span><span class="token punctuation">}</span>
+
+</code></pre>
+<p>The endpoint needs to receive a name, a score and a signature. Then, it
+verifies that:</p>
+<ul>
+<li>The name length is 3</li>
+<li>The score is between -65536 and 65535, both included.</li>
+<li>The signature is valid</li>
+</ul>
+<p>This endpoint is not a problem. As long as we provide: a name, a
+negative score and a signature for that data, we will obtain the flag.
+Let’s see how the endpoint creates the signature now.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/api/sign"</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"post"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">sign</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+     data <span class="token operator">=</span> request<span class="token punctuation">.</span>get_json<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+     name <span class="token operator">=</span> data<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span>
+     score <span class="token operator">=</span> data<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'score'</span><span class="token punctuation">)</span>
+
+     <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token builtin">str</span> <span class="token keyword">or</span> <span class="token builtin">len</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">3</span><span class="token punctuation">:</span>
+         <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">"invalid name"</span><span class="token punctuation">)</span>
+     <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token builtin">int</span> <span class="token keyword">or</span> score <span class="token operator">&#x3C;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+         <span class="token keyword">return</span> json_response<span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">"invalid score"</span><span class="token punctuation">)</span>
+
+     <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"signature"</span><span class="token punctuation">:</span> _sign<span class="token punctuation">(</span>KEY_ID<span class="token punctuation">,</span> name<span class="token punctuation">,</span> score<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+</code></pre>
+<p>Now, we have a problem. This endpoint only accepts positive values.
+Hence, we must find a flaw that allows us to forge a signature for a
+negative value. Lucky for us, the developers implemented their own
+“sign” and “verify” methods. Needless to say that rolling your own
+crypto is a bad idea. I decided to read them and see if I could find the
+vulnerability.</p>
+<p>First, we will look at the “sign” method.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token comment"># https://datatracker.ietf.org/doc/html/rfc2313#section-10.1</span>
+    <span class="token keyword">def</span> <span class="token function">sign</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        digest_algorithm_identifier <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">[</span>
+            DerObjectId<span class="token punctuation">(</span><span class="token string">'2.16.840.1.101.3.4.2.1'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            DerNull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">)</span>
+        digest <span class="token operator">=</span> hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">.</span>digest<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        digest_info <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+            digest_algorithm_identifier<span class="token punctuation">,</span>
+            DerOctetString<span class="token punctuation">(</span>digest<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+        encryption_block  <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span><span class="token string">'00'</span><span class="token punctuation">)</span> 
+        encryption_block <span class="token operator">+=</span> <span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span><span class="token string">'01'</span><span class="token punctuation">)</span> <span class="token comment"># block type for signature</span>
+        encryption_block <span class="token operator">+=</span> <span class="token string">b'\xff'</span><span class="token operator">*</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>bits<span class="token operator">//</span><span class="token number">8</span> <span class="token operator">-</span> <span class="token number">3</span> <span class="token operator">-</span> <span class="token builtin">len</span><span class="token punctuation">(</span>digest_info<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        encryption_block <span class="token operator">+=</span> <span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span><span class="token string">'00'</span><span class="token punctuation">)</span>
+        encryption_block <span class="token operator">+=</span> digest_info<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        encryption_block <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span>encryption_block<span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>
+        s <span class="token operator">=</span> <span class="token builtin">pow</span><span class="token punctuation">(</span>encryption_block<span class="token punctuation">,</span> self<span class="token punctuation">.</span>d<span class="token punctuation">,</span> self<span class="token punctuation">.</span>n<span class="token punctuation">)</span>
+        s <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span>s<span class="token punctuation">,</span> self<span class="token punctuation">.</span>bits<span class="token operator">//</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">return</span> s
+</code></pre>
+<p>This method creates a byte array with the following specific structure.</p>
+<p><code>00 01 ff ... ff 00 "digest information"</code></p>
+<p>At first glance, the “sign” method doesn’t seem vulnerable. Let’s jump
+to the “verify” method.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token comment"># https://datatracker.ietf.org/doc/html/rfc2313#section-10.2</span>
+<span class="token comment"># Note: The only hash algorithm we accept is SHA256.</span>
+    <span class="token keyword">def</span> <span class="token function">verify</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> m<span class="token punctuation">,</span> s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token operator">!=</span> self<span class="token punctuation">.</span>bits<span class="token operator">//</span><span class="token number">8</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'incorrect signature length'</span><span class="token punctuation">)</span>
+        s <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>
+
+        k <span class="token operator">=</span> <span class="token builtin">pow</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> self<span class="token punctuation">.</span>e<span class="token punctuation">,</span> self<span class="token punctuation">.</span>n<span class="token punctuation">)</span>
+        k <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span>k<span class="token punctuation">,</span> self<span class="token punctuation">.</span>bits<span class="token operator">//</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">'big'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> k<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">0x00</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'incorrect prefix'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> k<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">0x01</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'incorrect prefix'</span><span class="token punctuation">)</span>
+
+        padding<span class="token punctuation">,</span> digest_info <span class="token operator">=</span> k<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">b'\x00'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>padding<span class="token punctuation">)</span> <span class="token operator">&#x3C;</span> <span class="token number">8</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'invalid padding length'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> padding <span class="token operator">!=</span> <span class="token string">b'\xff'</span><span class="token operator">*</span><span class="token builtin">len</span><span class="token punctuation">(</span>padding<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'invalid padding content'</span><span class="token punctuation">)</span>
+
+        sequence <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        sequence<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>digest_info<span class="token punctuation">)</span>
+        _digest_algorithm_identifier<span class="token punctuation">,</span> _digest <span class="token operator">=</span> sequence
+
+        sequence <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        sequence<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest_algorithm_identifier<span class="token punctuation">)</span>
+        _digest_algorithm_identifier <span class="token operator">=</span> sequence<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+        object_id <span class="token operator">=</span> DerObjectId<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        object_id<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest_algorithm_identifier<span class="token punctuation">)</span>
+        digest_algorithm_identifier <span class="token operator">=</span> object_id<span class="token punctuation">.</span>value
+        <span class="token keyword">if</span> digest_algorithm_identifier <span class="token operator">!=</span> <span class="token string">'2.16.840.1.101.3.4.2.1'</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'invalid digest algorithm identifier'</span><span class="token punctuation">)</span>
+
+        _null <span class="token operator">=</span> sequence<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        null <span class="token operator">=</span> DerNull<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        null<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_null<span class="token punctuation">)</span>
+
+        octet_string <span class="token operator">=</span> DerOctetString<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        octet_string<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest<span class="token punctuation">)</span>
+        digest <span class="token operator">=</span> octet_string<span class="token punctuation">.</span>payload
+
+        <span class="token keyword">if</span> hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">.</span>digest<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> digest<span class="token punctuation">:</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'mismatch digest'</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+</code></pre>
+<p>This function is more complex. It verifies that the signature follows
+the correct structure we saw before
+<code>00 01 ff ... ff 00 "digest information"</code> and that the message we are
+passing matches the signature. However, the vulnerability must be here.
+For that reason, we have to take a closer look. There doesn’t seem to be
+any flaw, but the devil is in the details. So I read and studied it more
+deeply. After a couple of hours, I couldn’t see any problem by myself. I
+felt like I was maybe going down the rabbit hole. I came back to the api
+and checked the last endpoint.</p>
+<p>The last endpoint returns the public key. The public key isn’t usually
+interesting, but we are doing a security challenge that requires forging
+a key. Therefore, I downloaded the key and extracted the modulus and the
+exponent.</p>
+<p><img  src="/_astro/public-key-information.sFueHX4n_1lgjId.webp" alt="" width="727" height="641" loading="lazy" decoding="async"></p>
+<p>Interesting. The public exponent is 3. I remember, from when I was in
+college doing cryptography, that using an exponent of 3 isn’t insecure
+but can lead to security issues. For example, we could use the <a href="https://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/">Chinese
+Theorem</a>
+to attack RSA. With that information, I started researching how to forge
+keys when the public exponent is 3.</p>
+<p>I found an <a href="https://blog.trailofbits.com/2019/07/08/fuck-rsa/">awesome article explaining several RSA
+vulnerabilities</a> at a
+high level. This post has a section dedicated to the public exponent,
+which introduces many vulnerabilities when it has the value 3. They
+mention an attack found in 2006 by Bleinchenbacher that allowed him to
+forge arbitrary signatures in different RSA implementations. They also
+add a link to another blog explaining <a href="https://www.imperialviolet.org/2014/09/26/pkcs1.html">how this attack was used against
+the RSA implementations used in Firefox and
+Chrome</a>. Anyway, I
+want to understand the <a href="https://mailarchive.ietf.org/arch/msg/openpgp/5rnE9ZRN1AokBVj3VqblGlP63QE/">original
+attack</a>
+now.</p>
+<p>The flaw that Daniel Bleichenbacher found was that the RSA
+implementation didn’t check the hash+ASN.1 data was right-justified. The
+RSA signature follows the structure
+<code>00 01 FF FF FF ... FF 00  ASN.1  HASH</code>. However, he could forge
+signatures with the structure
+<code>00 01 FF FF ... FF 00  ASN.1  HASH  GARBAGE</code>. He creates the initial
+part with whatever hash of a message he wants
+<code>00 01 FF ... FF 00 ASN.1 HASH</code> and computes the garbage data that, when
+appended, results in a valid signature. In this case, computing the
+signature is easy. Since the public exponent is 3, we only need to
+calculate the cube root. In other words, cube root of
+<code>00 01 FF ... FF 00  ASN.1  HASH  GARBAGE</code>. Nevertheless, the “verify”
+implementation of our challenge checks that the digest is at the right.
+We have to search for something else. I was stuck there for hours,
+reading the code until I asked the community for help.</p>
+<p>The community told me that I was on the right track. We have to use the
+Bleichenbacher attack, but instead of adding garbage to the end, we have
+to add it somewhere in the middle. There is some length that isn’t
+verified. So, I did some more research on the internet and found a
+<a href="https://words.filippo.io/bleichenbacher-06-signature-forgery-in-python-rsa/">variant of the Bleichenbacher
+attack</a>
+which does that. In that specific article, they build something with the
+format <code>00 01 XX ... XX 00  ASN.1  HASH</code> where XX are the random bytes.
+That could help us later. Now, we have to find the vulnerability in our
+code. For that, I also needed help from the community.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">verify</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> m<span class="token punctuation">,</span> s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    sequence <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    sequence<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>digest_info<span class="token punctuation">)</span>
+    _digest_algorithm_identifier<span class="token punctuation">,</span> _digest <span class="token operator">=</span> sequence
+
+    sequence <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    sequence<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest_algorithm_identifier<span class="token punctuation">)</span>
+    _digest_algorithm_identifier <span class="token operator">=</span> sequence<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+    object_id <span class="token operator">=</span> DerObjectId<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    object_id<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest_algorithm_identifier<span class="token punctuation">)</span>
+    digest_algorithm_identifier <span class="token operator">=</span> object_id<span class="token punctuation">.</span>value
+    <span class="token keyword">if</span> digest_algorithm_identifier <span class="token operator">!=</span> <span class="token string">'2.16.840.1.101.3.4.2.1'</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'invalid digest algorithm identifier'</span><span class="token punctuation">)</span>
+
+    _null <span class="token operator">=</span> sequence<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    null <span class="token operator">=</span> DerNull<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    null<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_null<span class="token punctuation">)</span>
+
+    octet_string <span class="token operator">=</span> DerOctetString<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    octet_string<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>_digest<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre>
+<p>In the snippet above, we have the vulnerable code. The problem is that
+the function does not check that the “digest_info” has two items. It
+extracts the “_digest_algorithm_identifier” and the “_digest”, but
+we could have garbage behind them. Therefore, a signature with the
+structure <code>00 01 FF ... FF 00  ASN.1  XX  HASH</code> is valid. With that and
+the article that we found earlier on the <a href="https://words.filippo.io/bleichenbacher-06-signature-forgery-in-python-rsa/">variant of the Bleichenbacher
+attack</a>,
+we are ready to exploit the webpage.</p>
+<p>I’m not going to explain in detail how the variant works, only the
+general idea.</p>
+<ol>
+<li>Create the suffix payload. In other words, the information the
+signature should contain at the end. Then, we compute how this
+information will look in the final signature.</li>
+<li>Create the prefix, that is the initial data the signature will
+contain plus random bytes. Then, we compute the cube root to get a
+valid fake signature.</li>
+<li>Overwrite the last prefix fake signatures with the suffix fake
+signature. So, if the fake signature prefix is 110000 and the fake
+signature suffix is 11, the resulting forged key is 110011.</li>
+</ol>
+<p>After modifying the code in the article, we end with the following
+script.</p>
+<pre class="language-python" data-language="python"><code is:raw="" class="language-python"><span class="token keyword">import</span> hashlib
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> json
+<span class="token keyword">import</span> requests
+
+<span class="token keyword">from</span> gmpy2 <span class="token keyword">import</span> mpz<span class="token punctuation">,</span> iroot
+<span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>asn1 <span class="token keyword">import</span> DerSequence<span class="token punctuation">,</span> DerObjectId<span class="token punctuation">,</span> DerOctetString<span class="token punctuation">,</span> DerNull
+
+
+<span class="token keyword">def</span> <span class="token function">to_bytes</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Return a bytes representation of a int"""</span>
+    <span class="token keyword">return</span> n<span class="token punctuation">.</span>to_bytes<span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">.</span>bit_length<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">"big"</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">from_bytes</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Makes a int from a bytestring"""</span>
+    <span class="token keyword">return</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span>b<span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">"big"</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">get_bit</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Returns the b-th rightmost bit of n"""</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&#x3C;&#x3C;</span> b<span class="token punctuation">)</span> <span class="token operator">&#x26;</span> n<span class="token punctuation">)</span> <span class="token operator">>></span> b
+
+
+<span class="token keyword">def</span> <span class="token function">set_bit</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> b<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Returns n with the b-th rightmost bit set to x"""</span>
+    <span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&#x3C;&#x3C;</span> b<span class="token punctuation">)</span> <span class="token operator">&#x26;</span> n
+    <span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&#x3C;&#x3C;</span> b<span class="token punctuation">)</span> <span class="token operator">|</span> n
+
+
+<span class="token keyword">def</span> <span class="token function">cube_root</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token builtin">int</span><span class="token punctuation">(</span>iroot<span class="token punctuation">(</span>mpz<span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">suffix_sig_flip</span><span class="token punctuation">(</span>suffix_bytes<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sig_suffix <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">for</span> b <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>suffix<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> get_bit<span class="token punctuation">(</span>sig_suffix<span class="token operator">**</span><span class="token number">3</span><span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">!=</span> get_bit<span class="token punctuation">(</span>from_bytes<span class="token punctuation">(</span>suffix<span class="token punctuation">)</span><span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            sig_suffix <span class="token operator">=</span> set_bit<span class="token punctuation">(</span>sig_suffix<span class="token punctuation">,</span> b<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> sig_suffix
+
+
+KEY_ID <span class="token operator">=</span> <span class="token string">"pzero-adventures"</span>
+NAME <span class="token operator">=</span> <span class="token string">"aaa"</span>
+SCORE <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">65535</span>
+KEY_SIZE_BITS <span class="token operator">=</span> <span class="token number">2048</span>
+KEY_SIZE_BYTES <span class="token operator">=</span> KEY_SIZE_BITS <span class="token operator">//</span> <span class="token number">8</span>
+
+<span class="token comment"># Forge suffix signature</span>
+message <span class="token operator">=</span> json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token punctuation">[</span>KEY_ID<span class="token punctuation">,</span> NAME<span class="token punctuation">,</span> SCORE<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+message_digest <span class="token operator">=</span> hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">.</span>digest<span class="token punctuation">(</span><span class="token punctuation">)</span>
+suffix <span class="token operator">=</span> DerOctetString<span class="token punctuation">(</span>message_digest<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+sig_suffix <span class="token operator">=</span> suffix_sig_flip<span class="token punctuation">(</span>suffix<span class="token punctuation">)</span>
+
+<span class="token comment"># Compute prefix</span>
+prefix <span class="token operator">=</span> <span class="token string">""</span>
+random_bytes <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token comment"># Prefix length must be equal to key size</span>
+<span class="token comment"># We need this loop to search for the number of garbage bytes</span>
+<span class="token comment"># that will eventually give us a prefix with size equal to the key size</span>
+<span class="token keyword">while</span> <span class="token builtin">len</span><span class="token punctuation">(</span>prefix<span class="token punctuation">)</span> <span class="token operator">!=</span> KEY_SIZE_BYTES <span class="token keyword">and</span> <span class="token builtin">len</span><span class="token punctuation">(</span>prefix<span class="token punctuation">)</span> <span class="token operator">&#x3C;</span> KEY_SIZE_BYTES<span class="token punctuation">:</span>
+    digest_algorithm_identifier <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span>
+        <span class="token punctuation">[</span>
+            DerObjectId<span class="token punctuation">(</span><span class="token string">"2.16.840.1.101.3.4.2.1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            DerNull<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            DerOctetString<span class="token punctuation">(</span>os<span class="token punctuation">.</span>urandom<span class="token punctuation">(</span>random_bytes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+    digest_info <span class="token operator">=</span> DerSequence<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">[</span>digest_algorithm_identifier<span class="token punctuation">,</span> suffix<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    prefix <span class="token operator">=</span> <span class="token string">b"\x00\x01"</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token string">b"\xff"</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b"\x00"</span> <span class="token operator">+</span> digest_info<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    random_bytes <span class="token operator">+=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>prefix<span class="token punctuation">)</span> <span class="token operator">!=</span> KEY_SIZE_BYTES<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Something is wrong"</span><span class="token punctuation">)</span>
+    exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Forge prefix signature</span>
+sig_prefix <span class="token operator">=</span> to_bytes<span class="token punctuation">(</span>cube_root<span class="token punctuation">(</span>from_bytes<span class="token punctuation">(</span>prefix<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span> <span class="token operator">-</span><span class="token builtin">len</span><span class="token punctuation">(</span>to_bytes<span class="token punctuation">(</span>sig_suffix<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+<span class="token comment"># Compute forged signature and add padding</span>
+sig <span class="token operator">=</span> sig_prefix <span class="token operator">+</span> to_bytes<span class="token punctuation">(</span>sig_suffix<span class="token punctuation">)</span>
+sig <span class="token operator">=</span> <span class="token string">b"\x00"</span> <span class="token operator">*</span> <span class="token punctuation">(</span>KEY_SIZE_BYTES <span class="token operator">-</span> <span class="token builtin">len</span><span class="token punctuation">(</span>sig<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> sig
+
+r <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>
+    <span class="token string">"http://pzero-adventures-web.h4ck.ctfcompetition.com/api/highscores"</span><span class="token punctuation">,</span>
+    json<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">:</span> NAME<span class="token punctuation">,</span> <span class="token string">"score"</span><span class="token punctuation">:</span> SCORE<span class="token punctuation">,</span> <span class="token string">"signature"</span><span class="token punctuation">:</span> sig<span class="token punctuation">.</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Server response: </span><span class="token interpolation"><span class="token punctuation">{</span>r<span class="token punctuation">.</span>text<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+</code></pre>
+<p>Executing the script prints the flag in the terminal. With that, we
+completed the challenge.</p>
+<p><img  src="/_astro/intro.bi1EQC_R_1MK8Pb.webp" alt="" width="454" height="156" loading="lazy" decoding="async"></p>  </div> </article> </main> <footer></footer> </body></html>

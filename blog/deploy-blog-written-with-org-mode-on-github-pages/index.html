@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/deploy-blog-written-with-org-mode-on-github-pages/"><!-- Primary Meta Tags --><title>Deploy blog written with org-mode on GitHub Pages</title><meta name="title" content="Deploy blog written with org-mode on GitHub Pages"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/deploy-blog-written-with-org-mode-on-github-pages/"><meta property="og:title" content="Deploy blog written with org-mode on GitHub Pages"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/deploy-blog-written-with-org-mode-on-github-pages/"><meta property="twitter:title" content="Deploy blog written with org-mode on GitHub Pages"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/deploy-blog.BtZybPcF_Z18LuoX.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2022-07-03T00:00:00.000Z"> Jul 3, 2022 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Deploy blog written with org-mode on GitHub Pages</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#context">Context</a></li>
+<li><a href="#goal-expected-final-workflow">Goal (expected final workflow)</a></li>
+<li><a href="#steps">Steps</a>
+<ul>
+<li><a href="#create-github-repository">Create GitHub repository</a></li>
+<li><a href="#upload-hugo-configuration">Upload Hugo configuration</a></li>
+<li><a href="#create-github-action-workflow">Create GitHub Action workflow</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="context">Context</h1>
+<p>I have been using emacs to write in org-mode for some time now. I love
+it. So, I decided to start writing a personal blog with it. However, I
+did not have the tool to create the blog and the means to publish it. I
+selected a static site generator (SSG) called Hugo for my first problem.
+It is well known for its simplicity and speed of building sites. For my
+second issue, I selected GitHub Pages + Github Actions. It seemed the
+easiest way to have a repository with my code and CI/CD pipelines to
+generate and deploy the site.</p>
+<h1 id="goal-expected-final-workflow">Goal (expected final workflow)</h1>
+<p>The final workflow should eliminate the need to: manually generate the
+site and deploy it. We should only focus on the content. That is,
+writing the posts with org-mode.</p>
+<p>After following this guide, we will deploy our site with the following
+steps:</p>
+<ol>
+<li>Write a post in org-mode</li>
+<li>Push the new posts to the repository</li>
+<li>Nothing. Wait until GitHub Actions automagically generates and
+deploys your site</li>
+</ol>
+<h1 id="steps">Steps</h1>
+<h2 id="create-github-repository">Create GitHub repository</h2>
+<p>First, we need to <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">create a GitHub repository for our
+site</a>.
+In the following list, we can see the configuration.</p>
+<ul>
+<li>The repository name must be <code>user.github.io</code></li>
+<li>The repository visibility must be public</li>
+<li>Branch for the generated site, “main” in our case</li>
+<li>Branch for the source code and org-mode files, “development” in our
+case</li>
+</ul>
+<h2 id="upload-hugo-configuration">Upload Hugo configuration</h2>
+<p>Once the repository is ready, we can upload our Hugo configuration to
+the development branch. The <a href="https://gohugo.io/getting-started/directory-structure/">Hugo directory
+structure</a> looks
+like the tree below. However, we do not need the <code>content</code> folder. It
+will be auto-generated with <strong>ox-hugo</strong>. Instead, we will have a folder
+named <code>posts</code> with the org-mode files.</p>
+<pre class="language-plaintext" data-language="plaintext"><code is:raw="" class="language-plaintext">.
++-- archetypes
++-- config.toml
++-- posts
++-- data
++-- layouts
++-- static
++-- themes
+</code></pre>
+<h2 id="create-github-action-workflow">Create GitHub Action workflow</h2>
+<p>Now, with the Hugo configuration and org-mode posts in the repository,
+we only have left to create the deployment workflow. We need a GitHub
+Action that performs the steps below. The code you will find in this
+section is a modified version of the code at
+<a href="https://github.com/ayrat555/braindump">https://github.com/ayrat555/braindump</a>. The creator of the repo wrote a
+post explaining how he <a href="https://www.badykov.com/emacs/generating-site-from-org-mode-files/#conclusion">deploys the notes he takes with org
+roam</a>.</p>
+<ol>
+<li>
+<p>Checkout repository code</p>
+<p>We need access to the code to execute a bash script later.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v3
+</code></pre>
+</li>
+<li>
+<p>Install emacs</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install emacs
+  <span class="token key atrule">uses</span><span class="token punctuation">:</span> purcell/setup<span class="token punctuation">-</span>emacs@master
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'27.1'</span>
+</code></pre>
+</li>
+<li>
+<p>Transform org-mode files to markdown with <strong>ox-hugo</strong></p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Convert org files to hugo
+  <span class="token key atrule">run</span><span class="token punctuation">:</span> ./org2hugo.sh
+  <span class="token key atrule">shell</span><span class="token punctuation">:</span> bash
+</code></pre>
+<p>The bash script is a wrapper to call an elisp function. We export
+some environment variables, copy the elisp file and execute the
+<code>build/export-all</code> function.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">HUGO_BASE_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">pwd</span><span class="token variable">`</span></span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">POSTS_ORG_SRC</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">pwd</span><span class="token variable">`</span></span>/posts
+<span class="token assign-left variable"><span class="token environment constant">HOME</span></span><span class="token operator">=</span>/tmp/emacs-build
+
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> <span class="token environment constant">$HOME</span>
+<span class="token function">cp</span> <span class="token parameter variable">-r</span> <span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">pwd</span><span class="token variable">`</span></span>/init.el <span class="token environment constant">$HOME</span>
+
+emacs <span class="token parameter variable">-Q</span> <span class="token parameter variable">--batch</span> <span class="token parameter variable">--load</span> <span class="token environment constant">$HOME</span>/init.el <span class="token parameter variable">--execute</span> <span class="token string">"(build/export-all)"</span> <span class="token parameter variable">--kill</span>
+</code></pre>
+<p>The elisp code is also simple. At a high level, we are just
+downloading the <strong>ox-hugo</strong> package and defining the
+<code>build/export-all</code> function. And what does that function? Well. That
+function retrieves all the org-mode files from the <code>posts</code> folder
+and exports them to markdown. The result will be in
+<code>contents/posts</code>.</p>
+<pre class="language-elisp" data-language="elisp"><code is:raw="" class="language-elisp"><span class="token punctuation">(</span><span class="token keyword">setq</span> make-backup-files <span class="token boolean">nil</span><span class="token punctuation">)</span> <span class="token comment">;; Disable "&#x3C;file>~" backups.</span>
+
+<span class="token punctuation">(</span><span class="token defvar"><span class="token keyword">defconst</span> <span class="token variable">posts-org-files</span></span> <span class="token punctuation">(</span><span class="token car">getenv</span> <span class="token string">"POSTS_ORG_SRC"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">;; Setup packages using straight.el: https://github.com/raxod502/straight.el</span>
+<span class="token punctuation">(</span><span class="token defvar"><span class="token keyword">defvar</span> <span class="token variable">bootstrap-version</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token car">bootstrap-file</span>
+       <span class="token punctuation">(</span><span class="token car">expand-file-name</span> <span class="token string">"straight/repos/straight.el/bootstrap.el"</span> user-emacs-directory<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token car">bootstrap-version</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token keyword">unless</span> <span class="token punctuation">(</span><span class="token car">file-exists-p</span> bootstrap-file<span class="token punctuation">)</span>
+    <span class="token punctuation">(</span><span class="token car">with-current-buffer</span>
+        <span class="token punctuation">(</span><span class="token car">url-retrieve-synchronously</span>
+         <span class="token string">"https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"</span>
+         <span class="token quoted-symbol variable symbol">'silent</span> <span class="token quoted-symbol variable symbol">'inhibit-cookies</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token car">goto-char</span> <span class="token punctuation">(</span><span class="token car">point-max</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token car">eval-print-last-sexp</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token car">load</span> bootstrap-file <span class="token boolean">nil</span> <span class="token quoted-symbol variable symbol">'nomessage</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token keyword">setq</span> straight-use-package-by-default <span class="token boolean">t</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token car">straight-use-package</span> <span class="token quoted-symbol variable symbol">'use-package</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">(</span><span class="token keyword">use-package</span> ox-hugo
+  <span class="token lisp-property property">:straight</span> <span class="token punctuation">(</span><span class="token lisp-property property">:type</span> git <span class="token lisp-property property">:host</span> github <span class="token lisp-property property">:repo</span> <span class="token string">"kaushalmodi/ox-hugo"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token heading comment title">;;; Public functions</span>
+<span class="token punctuation">(</span><span class="token defun"><span class="token keyword">defun</span> <span class="token function">build/export-all</span> <span class="token punctuation">(</span><span class="token arguments"></span><span class="token punctuation">)</span></span>
+  <span class="token string">"Export all org-files (including nested) under posts-org-files."</span>
+
+  <span class="token punctuation">(</span><span class="token keyword">setq</span> org-hugo-base-dir <span class="token punctuation">(</span><span class="token car">getenv</span> <span class="token string">"HUGO_BASE_DIR"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token keyword">setq</span> org-hugo-section <span class="token string">"posts"</span><span class="token punctuation">)</span>
+
+  <span class="token punctuation">(</span><span class="token car">dolist</span> <span class="token punctuation">(</span><span class="token car">org-file</span> <span class="token punctuation">(</span><span class="token car">directory-files-recursively</span> posts-org-files <span class="token string">"\.org$"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span><span class="token car">with-current-buffer</span> <span class="token punctuation">(</span><span class="token car">find-file</span> org-file<span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token car">org-hugo-export-wim-to-md</span> <span class="token lisp-property property">:all-subtrees</span> <span class="token boolean">nil</span> <span class="token boolean">nil</span> <span class="token boolean">nil</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token punctuation">(</span><span class="token keyword">message</span> <span class="token string">"Done!"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li>
+<p>Build site with <strong>hugo</strong></p>
+<p>By default, the result will be in a folder named <code>public</code>.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Setup Hugo
+  <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>hugo@v2
+  <span class="token key atrule">with</span><span class="token punctuation">:</span>
+    <span class="token key atrule">hugo-version</span><span class="token punctuation">:</span> <span class="token string">'0.91.2'</span>
+
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build
+  <span class="token key atrule">run</span><span class="token punctuation">:</span> hugo <span class="token punctuation">-</span><span class="token punctuation">-</span>minify
+</code></pre>
+</li>
+<li>
+<p>Publish the site to <strong>GitHub Pages</strong></p>
+<p>We publish the contents of the <code>public</code> folder in the main branch.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
+  <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
+  <span class="token key atrule">if</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> github.ref == 'refs/heads/development' <span class="token punctuation">}</span><span class="token punctuation">}</span>
+  <span class="token key atrule">with</span><span class="token punctuation">:</span>
+    <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> main
+    <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./public
+</code></pre>
+</li>
+</ol>
+<p>Once we have created the three files, we can upload them to the
+<code>development</code> branch. From now on, every time you push new org-mode
+files to the <code>posts</code> folder of the <code>development</code> branch. The GitHub
+Actions workflow will publish them.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>We presented an easier way to deploy your posts with <strong>org-mode</strong>,
+<strong>hugo</strong>, <strong>GitHub Actions</strong> and <strong>GitHub Pages</strong>. With that workflow,
+we only need to focus on writing org-mode files. Lastly, we know this
+workflow works because we used it to deploy this post!!! The code is at
+<a href="https://github.com/danielorihuela/danielorihuela.github.io/tree/development">https://github.com/danielorihuela/danielorihuela.github.io/tree/development</a>.</p>
+<p>I hope you liked it and that you have learned something!</p>  </div> </article> </main> <footer></footer> </body></html>

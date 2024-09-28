@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/skip-list/"><!-- Primary Meta Tags --><title>Skip List (in Rust) explained!</title><meta name="title" content="Skip List (in Rust) explained!"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/skip-list/"><meta property="og:title" content="Skip List (in Rust) explained!"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/skip-list/"><meta property="twitter:title" content="Skip List (in Rust) explained!"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/skip-list.BnqtRHBJ_Z1C1fxk.webp" alt="" data-astro-cid-bvzihdzo width="888" height="888" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2024-05-18T00:00:00.000Z"> May 18, 2024 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Skip List (in Rust) explained!</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#whats-a-skip-list">What’s a Skip List?</a>
+<ul>
+<li><a href="#search">Search</a></li>
+<li><a href="#insert">Insert</a></li>
+<li><a href="#delete">Delete</a></li>
+</ul>
+</li>
+<li><a href="#rust-implementation">Rust implementation</a>
+<ul>
+<li><a href="#basic-structure">Basic structure</a></li>
+<li><a href="#search-1">Search</a></li>
+<li><a href="#insert-1">Insert</a></li>
+<li><a href="#delete-1">Delete</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="whats-a-skip-list">What’s a Skip List?</h1>
+<p>A Skip List is a probabilistic data structure that serves as an
+alternative to balanced trees. They are simpler to implement and provide
+logarithmic search, insertion and removal. However, they take up more
+memory.</p>
+<p>Regarding the structure, a Skip List is no more than “n” linked lists.
+Conceptually, they are stacked on top of each other. For example, the
+next image shows a Skip List with four layers.</p>
+<p><img  src="/_astro/basic-structure.D6g0sFul_ScfyE.webp" alt="" width="645" height="87" loading="lazy" decoding="async"></p>
+<p>Let’s briefly explain how each of the operations works at a high level.
+To know all the details, please, read the <a href="https://15721.courses.cs.cmu.edu/spring2018/papers/08-oltpindexes1/pugh-skiplists-cacm1990.pdf">original
+whitepaper</a>.
+After that, we will see a Rust implementation.</p>
+<h2 id="search">Search</h2>
+<p>We start at the topmost layer of the first node. If the next node value
+is lower than the value we are searching for, we go forward. Otherwise,
+we go downwards. If we repeat this in a loop, we will end at a node in
+the bottommost layer. We just need to check if this node contains the
+value that we want.</p>
+<p>You can see on the next image, marked with a red line, the path the
+algorithm will follow to search for node 762.</p>
+<p><img  src="/_astro/search.9ArXPcpO_Z2lWcMN.webp" alt="" width="648" height="82" loading="lazy" decoding="async"></p>
+<p>If we search 700, the algorithm would follow the same path until node
+641. Since the next node value is 762, which is bigger, it wouldn’t find
+the value.</p>
+<h2 id="insert">Insert</h2>
+<p>As with searching, we go forward if the value is smaller and downwards
+if bigger. Now, every time we go downward we will store the pointer of
+that node. Once we have found the spot to insert our new node, we will
+visit the nodes where we went down in reverse order and update the
+successors if the algorithm decides that we need to insert the new node
+at that level. That is done randomly.</p>
+<p>For example, let’s say we want to insert the value 700. First, the
+algorithm would follow the path marked with a red line in the following
+image. It would store nodes with values None, 446, and 641. The new node
+will be inserted between 641 and 762. Then, we proceed to visit node 641
+and randomly choose if the new node should be a successor. We repeat
+that for 446 and None if required.</p>
+<p><img  src="/_astro/insert.Bck7xgvq_S9siG.webp" alt="" width="648" height="89" loading="lazy" decoding="async"></p>
+<h2 id="delete">Delete</h2>
+<p>This is similar to the insert algorithm. Now, instead of adding a new
+node, we will visit each node where we went downwards and update the
+successors to remove the node.</p>
+<h1 id="rust-implementation">Rust implementation</h1>
+<p>You can see the full implementation
+<a href="https://github.com/danielorihuela/algorithms-and-data-structures/blob/master/list/skip_list/src/main.rs">https://github.com/danielorihuela/algorithms-and-data-structures/blob/master/list/skip_list/src/main.rs</a>.</p>
+<p>Important details for those who want to implement it on Rust.</p>
+<ul>
+<li>You can see <a href="https://github.com/JP-Ellis/rust-skiplist">https://github.com/JP-Ellis/rust-skiplist</a> an advanced
+implementation.</li>
+<li>Building linked lists on Rust is unusually hard. Check
+<a href="https://rust-unofficial.github.io/too-many-lists/">https://rust-unofficial.github.io/too-many-lists/</a> first.</li>
+</ul>
+<h2 id="basic-structure">Basic structure</h2>
+<p>Take into account that we need to init all “forward” vectors to be of
+length “max_level” to identify the next node of the current layer.
+Otherwise, you might end up changing from the linked list on layer 3 to
+the linked list on layer 2 without your knowledge.</p>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">struct</span> <span class="token type-definition class-name">SkipList</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    head<span class="token punctuation">:</span> <span class="token class-name">NonNull</span><span class="token operator">&#x3C;</span><span class="token class-name">Node</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">>></span><span class="token punctuation">,</span>
+    max_level<span class="token punctuation">:</span> <span class="token keyword">usize</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token type-definition class-name">Link</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token class-name">Option</span><span class="token operator">&#x3C;</span><span class="token class-name">NonNull</span><span class="token operator">&#x3C;</span><span class="token class-name">Node</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[derive(Clone, Debug)]</span>
+<span class="token keyword">struct</span> <span class="token type-definition class-name">Node</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token comment">// If the value is None, this is the sentinel value</span>
+    value<span class="token punctuation">:</span> <span class="token class-name">Option</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">></span><span class="token punctuation">,</span>
+    forward<span class="token punctuation">:</span> <span class="token class-name">Vec</span><span class="token operator">&#x3C;</span><span class="token class-name">Link</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">>></span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="search-1">Search</h2>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">search</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">self</span><span class="token punctuation">,</span> v<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">bool</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> node <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>head<span class="token punctuation">;</span>
+
+    <span class="token comment">// Go downwards</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">rev</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// If value is lower, go forward</span>
+        <span class="token keyword">while</span> next<span class="token punctuation">.</span><span class="token function">and_then</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>value<span class="token closure-punctuation punctuation">|</span></span> <span class="token operator">&#x26;</span>value <span class="token operator">&#x3C;</span> v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            node <span class="token operator">=</span> next<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    node<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>n<span class="token closure-punctuation punctuation">|</span></span> n<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="insert-1">Insert</h2>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">insert</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> v<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> update <span class="token operator">=</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token class-name">None</span><span class="token punctuation">;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> node <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>head<span class="token punctuation">;</span>
+
+    <span class="token comment">// Go downwards</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">rev</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// If value is lower, go forward</span>
+        <span class="token keyword">while</span> next<span class="token punctuation">.</span><span class="token function">and_then</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>value<span class="token closure-punctuation punctuation">|</span></span> <span class="token operator">&#x26;</span>value <span class="token operator">&#x3C;</span> v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            node <span class="token operator">=</span> next<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// Store nodes where we went downwards</span>
+        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> node<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>n<span class="token closure-punctuation punctuation">|</span></span> n<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"{} is already in the list"</span><span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> level <span class="token operator">=</span> <span class="token namespace">rand<span class="token punctuation">::</span></span><span class="token function">thread_rng</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">gen_range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> x <span class="token operator">=</span> <span class="token keyword">unsafe</span> <span class="token punctuation">{</span>
+        <span class="token class-name">NonNull</span><span class="token punctuation">::</span><span class="token function">new_unchecked</span><span class="token punctuation">(</span><span class="token class-name">Box</span><span class="token punctuation">::</span><span class="token function">into_raw</span><span class="token punctuation">(</span><span class="token class-name">Box</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token class-name">Node</span> <span class="token punctuation">{</span>
+            value<span class="token punctuation">:</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            forward<span class="token punctuation">:</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token class-name">None</span><span class="token punctuation">;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// For each node where we went downwards</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..=</span>level <span class="token punctuation">{</span>
+        <span class="token comment">// Update the successors accordingly</span>
+        <span class="token keyword">if</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">is_none</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">get_forward_mut</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> x<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>head<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token function">get_forward_mut</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">.</span>head<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token function">get_forward_mut</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> x<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token function">get_forward_mut</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="delete-1">Delete</h2>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">delete</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> v<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> update <span class="token operator">=</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token class-name">None</span><span class="token punctuation">;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> node <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>head<span class="token punctuation">;</span>
+
+    <span class="token comment">// Go downwards</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token keyword">self</span><span class="token punctuation">.</span>max_level<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">rev</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// If value is lower, go forward</span>
+        <span class="token keyword">while</span> next<span class="token punctuation">.</span><span class="token function">and_then</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>value<span class="token closure-punctuation punctuation">|</span></span> <span class="token operator">&#x26;</span>value <span class="token operator">&#x3C;</span> v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            node <span class="token operator">=</span> next<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            next <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// Store nodes where we went downwards</span>
+        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> node <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> node<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is_some_and</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>n<span class="token closure-punctuation punctuation">|</span></span> n<span class="token punctuation">.</span><span class="token function">as_ref</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// For each node where we went downwards</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token keyword">self</span><span class="token punctuation">.</span>max_level <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token class-name">Some</span><span class="token punctuation">(</span><span class="token keyword">mut</span> update_i<span class="token punctuation">)</span> <span class="token operator">=</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>update_i<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> node <span class="token punctuation">{</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// Update the successors accordingly</span>
+                    <span class="token function">get_forward_mut</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span><span class="token keyword">mut</span> update_i<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">get_forward</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>  </div> </article> </main> <footer></footer> </body></html>

