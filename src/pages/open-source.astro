@@ -1,0 +1,124 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SocialLink from "../components/SocialLink.astro";
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title="Open Source" description="description" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				background-color: #222222;
+			}
+
+			main {
+				width: 100%;
+			}
+
+			a {
+				width: fit-content;
+			}
+
+			.grid {
+				width: 100%;
+			}
+
+			.grid-item {				
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				padding: 2rem 0;
+				
+				border: 2px dashed red;
+			}
+
+			.grid-sizer {
+				width: 20%;
+			}
+
+			@media only screen and (min-width: 480px) {
+				.grid-item {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					width: auto;
+					padding: 2rem;
+					
+					border: 2px dashed red;
+				}
+			}
+		</style>
+
+		<script>
+			import Masonry from "masonry-layout";
+
+  			document.addEventListener('DOMContentLoaded', () => {
+				new Masonry('.grid', {
+					itemSelector: '.grid-item',
+					columnWidth: 1,
+					percentPosition: true
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<div class="grid">
+
+				<div class="grid-item">
+					<h2>Lynis</h2>
+					<SocialLink href="https://github.com/CISOfy/lynis" image="/lynis.png"></SocialLink>
+					<a href="https://github.com/CISOfy/lynis/pull/1009"> #1009 </a>
+				</div>
+
+				<div class="grid-item">
+					<h2>Gitleaks</h2>
+					<SocialLink href="https://github.com/gitleaks/gitleaks" image="/gitleaks.png"></SocialLink>
+					<a href="https://github.com/gitleaks/gitleaks/pull/661"> #661 </a>
+				</div>
+
+				<div class="grid-item">
+					<h2>PySyft</h2>
+					<SocialLink href="https://github.com/OpenMined/PySyft" image="/open-mined.png"></SocialLink>
+					<a href="https://github.com/OpenMined/PySyft/pull/5554"> #5554 </a>
+				</div>
+
+				<div class="grid-item">
+					<h2>sycret</h2>
+					<SocialLink href="https://github.com/OpenMined/sycret" image="/open-mined.png"></SocialLink>
+					<a href="https://github.com/OpenMined/sycret/pull/17"> #17 </a></br>
+					<a href="https://github.com/OpenMined/sycret/pull/18"> #18 </a></br>
+					<a href="https://github.com/OpenMined/sycret/pull/25"> #25 </a></br>
+					<a href="https://github.com/OpenMined/sycret/pull/36"> #36 </a></br>
+				</div>
+
+				<div class="grid-item">
+					<h2>SyMPC</h2>
+					<SocialLink href="https://github.com/OpenMined/SyMPC" image="/open-mined.png"></SocialLink>
+					<a href="https://github.com/OpenMined/SyMPC/pull/114"> #114 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/128"> #128 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/130"> #130 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/132"> #132 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/162"> #162 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/170"> #170 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/174"> #174 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/195"> #195 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/216"> #216 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/253"> #253 </a></br>
+					<a href="https://github.com/OpenMined/SyMPC/pull/281"> #281 </a></br>
+				</div>
+
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
