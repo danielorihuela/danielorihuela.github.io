@@ -1,9 +1,0 @@
-<div class="logo">
-  {{ $image := resources.Get "images/cyberpunk_programmer_reading_a_book.jpg" }}
-  <a href="{{ .Site.BaseURL }}">
-    <img href="{{ .Site.BaseURL }}" class="logo-image w3-circle" src="{{ $image.RelPermalink }}">
-  </a>
-  <span class="logo-text"
-    >daniel orihuela:~$ {{ .Scratch.Get "command" }} <font color="#2e86c1">{{ .Scratch.Get "arg" }}</font>
-  </span>
-</div>

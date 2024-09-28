@@ -1,5 +1,0 @@
-    {{ $opts := dict "minify" true }}
-	{{ $index := resources.Get "js/frame/index.js" | js.Build $opts }}
-	<script type="module" src="{{ $index.RelPermalink }}"></script>
-</body>
-</html>
