@@ -18,6 +18,8 @@ body {
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
+
+	background-color: #222222;
 }
 main {
 	width: 720px;
