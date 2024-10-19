@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://danielorihuela.github.io/',
+    site: 'https://danielorihuela.dev/',
     integrations: [mdx(), sitemap()],
     markdown: {
         syntaxHighlight: 'prism',
