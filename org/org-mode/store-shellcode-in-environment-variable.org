@@ -1,5 +1,5 @@
 #+title: Store shellcode in environment variable
-#+description: todo
+#+description: Learn how to store the shellcode in an environment variable and bypass size limitations in buffer overflows.
 #+publishdate: 2023-10-29
 #+cover: ../../images/covers/shellcode-env-var.jpg
 #+options: ^:nil

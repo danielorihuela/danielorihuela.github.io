@@ -1,5 +1,5 @@
 #+title: Why the Clojure REPL is so cool
-#+description: todo
+#+description: Discover why the Clojure REPL experience is superior, and how to harness its power for smoother coding.
 #+publishdate: 2023-05-28
 #+cover: ../../images/covers/cl-repl.jpg
 #+options: ^:nil

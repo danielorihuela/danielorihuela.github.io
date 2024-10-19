@@ -1,5 +1,5 @@
 #+title: Heap-based buffer overflows
-#+description: todo
+#+description: Learn how heap-based buffer overflows work and discover preventive measures to safeguard your code against them.
 #+publishdate: 2023-11-19
 #+cover: ../../images/covers/heap-overflow.png
 #+options: ^:nil

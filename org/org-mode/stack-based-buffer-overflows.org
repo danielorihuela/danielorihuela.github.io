@@ -1,5 +1,5 @@
 #+title: Stack-based buffer overflows
-#+description: todo
+#+description: Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them.
 #+publishdate: 2023-10-20
 #+cover: ../../images/covers/stack-overflow.png
 #+options: ^:nil

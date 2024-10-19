@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep002 challenge 03
-#+description: todo
+#+description: Escape a restricted shell in H4ck1ng G00gl3 ep002 challenge 03. Override builtin functions and use Bash tricks to find and reveal the flag.
 #+publishdate: 2022-11-05
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

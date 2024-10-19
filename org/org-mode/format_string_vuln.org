@@ -1,5 +1,5 @@
 #+title: Format string vulnerability
-#+description: todo
+#+description: Learn how format string exploits work and discover preventive measures to safeguard your code against them.
 #+publishdate: 2024-01-29
 #+cover: ../../images/covers/format-string-vuln.jpg
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: How does Key Transparency work?
-#+description: todo
+#+description: How does Key Transparency secure public key distribution? Discover how protocols like CONIKS and WhatsApp's implementation tackle these challenges.
 #+publishdate: 2024-01-06
 #+cover: ../../images/covers/key-transparency.png
 #+options: ^:nil

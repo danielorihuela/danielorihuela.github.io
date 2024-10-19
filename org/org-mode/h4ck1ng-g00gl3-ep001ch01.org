@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep001 challenge 01
-#+description: todo
+#+description: Reverse engineer your way to solving H4ck1ng G00gl3 ep001 challenge 01. Extract strings, find private keys, and decrypt the flag to crack this challenge.
 #+publishdate: 2022-10-18
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

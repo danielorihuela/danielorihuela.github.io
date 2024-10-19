@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep001 challenge 02
-#+description: todo
+#+description: Reverse engineer H4ck1ng G00gl3 ep001 challenge 02: analyze executable strings, disassemble code, and execute hidden functions to uncover the flag.
 #+publishdate: 2022-10-20
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

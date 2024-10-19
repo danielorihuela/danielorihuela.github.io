@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep000 challenge 01
-#+description: todo
+#+description: Think like a hacker to solve H4ck1ng G00gl3 ep000 challenge 01. Use SQL injection to outsmart the AI in this web exploitation adventure.
 #+publishdate: 2022-10-18
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

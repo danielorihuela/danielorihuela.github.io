@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep005 challenge 01
-#+description: todo
+#+description: Decode H4ck1ng G00gl3 ep005 challenge 01: manipulate binary data, discover hidden drawings, and stitch images together to reveal the final URL.
 #+publishdate: 2022-11-28
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: Write your own shellcode
-#+description: todo
+#+description: Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets.
 #+publishdate: 2024-10-19
 #+cover: ../../images/covers/write-shellcode.png
 #+options: ^:nil

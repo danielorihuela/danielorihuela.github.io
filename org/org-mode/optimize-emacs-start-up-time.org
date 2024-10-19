@@ -1,5 +1,5 @@
 #+title: Optimize emacs start up time
-#+description: todo
+#+description: Frustrated with Emacs start-up times? Discover simple hacks to speed things up and enhance your workflow in this guide.
 #+publishdate: 2023-11-18
 #+cover: ../../images/covers/emacs-logo.png
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep003 challenge 03
-#+description: todo
+#+description: Hack your way through H4ck1ng G00gl3 ep003 challenge 03. Decompile, modify the apk, and scan the QR code to reveal the hidden flag.
 #+publishdate: 2022-11-13
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep003 challenge 02
-#+description: todo
+#+description: Decode H4ck1ng G00gl3 ep003 challenge 02: use the Konami cheat code, escape a restricted Python shell, and reveal the hidden flag.
 #+publishdate: 2022-11-13
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep003 challenge 01
-#+description: todo
+#+description: Decode H4ck1ng G00gl3 ep003 challenge 01: navigate restricted shells, extract tokens, and uncover the flag using OAuth 2.0 and JWT.
 #+publishdate: 2022-11-09
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

@@ -1,5 +1,5 @@
 #+title: Skip List (in Rust) explained!
-#+description: todo
+#+description: Understand Skip Lists in Rust. Simpler than balanced trees, they offer logarithmic operations but use more memory. Learn their structure and how to implement them.
 #+publishdate: 2024-05-18
 #+cover: ../../images/covers/skip-list.jpg
 #+options: ^:nil

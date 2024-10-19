@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep004 challenge 02
-#+description: todo
+#+description: Exploit H4ck1ng G00gl3 ep004 challenge 02: find vulnerabilities, bypass string comparison, and reset passwords to log in as 'tin' and reveal the flag.
 #+publishdate: 2022-11-20
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

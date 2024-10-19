@@ -1,5 +1,5 @@
 #+title: Deploy blog written with org-mode on GitHub Pages
-#+description: todo
+#+description: Join me on my adventure to crafting a personal blog with Hugo, GitHub Pages, and GitHub Actions. Learn how to use these tools to create and deploy your own site effortlessly.
 #+publishdate: 2022-07-03
 #+cover: ../../images/covers/deploy-blog.png
 #+options: ^:nil

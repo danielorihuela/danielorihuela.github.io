@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep005 challenge 02
-#+description: todo
+#+description: Crack H4ck1ng G00gl3 ep005 challenge 02: exploit cryptographic vulnerabilities, manipulate scores and signatures to trigger an integer overflow, and reveal the flag.
 #+publishdate: 2022-12-02
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

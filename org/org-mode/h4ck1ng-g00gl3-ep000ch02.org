@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep000 challenge 02
-#+description: todo
+#+description: Hack your way through H4ck1ng G00gl3 ep000 challenge 02. Exploit web vulnerabilities, master path traversal and Perl code injection, and claim victory.
 #+publishdate: 2022-10-18
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

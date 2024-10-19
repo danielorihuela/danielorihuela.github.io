@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep002 challenge 01
-#+description: todo
+#+description: Crack H4ck1ng G00gl3 ep002 challenge 01: decode steganography in an image, use LSB technique and extract hidden messages from SSL certificates.
 #+publishdate: 2022-11-03
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

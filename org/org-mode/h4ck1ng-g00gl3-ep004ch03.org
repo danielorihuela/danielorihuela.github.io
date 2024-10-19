@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep004 challenge 03
-#+description: todo
+#+description: Complete H4ck1ng G00gl3 ep004 challenge 03: Explore hidden tabs, read server-side scripts, and use creative commits to reveal the flag.
 #+publishdate: 2022-11-21
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil

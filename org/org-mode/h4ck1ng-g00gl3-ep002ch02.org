@@ -1,5 +1,5 @@
 #+title: H4ck1ng G00gl3 ep002 challenge 02
-#+description: todo
+#+description: Explore H4ck1ng G00gl3 ep002 challenge 02: install Timesketch via Docker, analyze logs, and uncover the flag in this thrilling forensics journey.
 #+publishdate: 2022-11-04
 #+cover: ../../images/covers/hacking-google-2022.png
 #+options: ^:nil
