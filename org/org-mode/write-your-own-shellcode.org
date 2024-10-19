@@ -1,6 +1,6 @@
 #+title: Write your own shellcode
 #+description: todo
-#+publishdate: 2024-10-24
+#+publishdate: 2024-10-19
 #+cover: ../../images/covers/write-shellcode.png
 #+options: ^:nil
 
