@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://danielorihuela.dev/sitemap-index.xml
