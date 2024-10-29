@@ -5,7 +5,7 @@
 #+options: ^:nil
 
 
-In the [[https://danielorihuela.github.io/posts/stack-based-buffer-overflows/][previous post]] we explained how stack-based buffer overflows work. In the last exercise, we inserted the shellcode in the stack. However, this might be a problem. What happens if the shellcode doesn't fit in the stack? We can store it in an environment variable.
+In the [[https://danielorihuela.dev/blog/stack-based-buffer-overflows/][previous post]] we explained how stack-based buffer overflows work. In the last exercise, we inserted the shellcode in the stack. However, this might be a problem. What happens if the shellcode doesn't fit in the stack? We can store it in an environment variable.
 
 * Manually store shellcode in env var
 
