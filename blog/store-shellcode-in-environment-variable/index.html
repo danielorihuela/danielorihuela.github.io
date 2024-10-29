@@ -11,12 +11,11 @@ size limitations in buffer overflows.
 var</a></li>
 <li><a href="#automating-the-attack">Automating the attack</a></li>
 </ul>
-<p>In the <a href="https://danielorihuela.dev/blog/stack-based-buffer-overflows/">previous
-post</a> we
-explained how stack-based buffer overflows work. In the last exercise,
-we inserted the shellcode in the stack. However, this might be a
-problem. What happens if the shellcode doesn’t fit in the stack? We can
-store it in an environment variable.</p>
+<p>In the <a href="../stack-based-buffer-overflows">previous post</a> we explained how
+stack-based buffer overflows work. In the last exercise, we inserted the
+shellcode in the stack. However, this might be a problem. What happens
+if the shellcode doesn’t fit in the stack? We can store it in an
+environment variable.</p>
 <h1 id="manually-store-shellcode-in-env-var">Manually store shellcode in env var</h1>
 <p>We will export the shellcode manually and use it in our exploit.</p>
 <p>Let’s keep working with the <code>notesearch</code> program (the last exercise of
