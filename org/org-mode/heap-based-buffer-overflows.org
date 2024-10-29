@@ -7,7 +7,7 @@
 
 * Introduction
 
-In a previous post, I explained what a [[https://danielorihuela.dev/blog/stack-based-buffer-overflows/][stack-based buffer overflow]] is and how it works. Today, we are going to see the heap-based variant.
+In a previous post, I explained what a [[../stack-based-buffer-overflows][stack-based buffer overflow]] is and how it works. Today, we are going to see the heap-based variant.
 
 * Stack vs Heap-based buffer overflows?
 
