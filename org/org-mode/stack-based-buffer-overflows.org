@@ -59,7 +59,7 @@ Great! We understand the basis of how the stack works at a high level. However, 
 
 We should have a clear idea of how stack frames work and some lower details. We are ready to exploit some programs. 
 
-* Stack based buffer overflows
+* How to exploit stack based buffer overflows
 
 Relevant system information:
 
