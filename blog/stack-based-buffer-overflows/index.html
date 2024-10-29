@@ -9,7 +9,8 @@ measures to safeguard your code against them.
 </style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/stack-overflow.VznqiZXX_ZDz1Ma.webp" alt="" data-astro-cid-bvzihdzo width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2023-10-20T00:00:00.000Z"> Oct 20, 2023 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Stack-based buffer overflows</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
 <li><a href="#whats-a-buffer-overflow">What’s a buffer overflow?</a></li>
 <li><a href="#whats-the-stack">What’s the stack?</a></li>
-<li><a href="#stack-based-buffer-overflows-1">Stack based buffer overflows</a>
+<li><a href="#how-to-exploit-stack-based-buffer-overflows">How to exploit stack based buffer
+overflows</a>
 <ul>
 <li><a href="#overwrite-local-variable-in-stack-frame">Overwrite local variable in stack
 frame</a></li>
@@ -68,7 +69,7 @@ further research about the topic. I don’t think we need more for that
 post.</p>
 <p>We should have a clear idea of how stack frames work and some lower
 details. We are ready to exploit some programs.</p>
-<h1 id="stack-based-buffer-overflows-stack-based-buffer-overflows-1">Stack based buffer overflows [stack-based-buffer-overflows-1]</h1>
+<h1 id="how-to-exploit-stack-based-buffer-overflows">How to exploit stack based buffer overflows</h1>
 <p>Relevant system information:</p>
 <ul>
 <li>Linux 5.15.0-86-generic x86_64</li>
