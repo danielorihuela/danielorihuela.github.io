@@ -1,0 +1,195 @@
+#+title: Cryptopals: Break a repeating-key XOR message
+#+description: Learn to break a message encrypted with the XOR cipher and a repeating key.
+#+publishdate: 2024-11-11
+#+cover: ../../images/covers/cryptopals.jpg
+#+options: ^:nil
+
+I started working on the [[https://cryptopals.com][Cryptopals challenges]]. I'm learning a few things about how the different pieces used in cryptography work and how to break them, and I decided to document some of the learnings. Today, we will learn about the XOR cipher, how it works, and how to break it. This post is related to https://cryptopals.com/sets/1/challenges/3 and https://cryptopals.com/sets/1/challenges/6.
+
+* XOR Cipher
+
+The XOR cipher is an encryption method where each character of the plaintext is XORed with a character from the key. Let ~p~ be the plaintext, ~c~ the ciphertext, ~k~ the key, and ~^~ the XOR operator. Assume the key length is equal to the plaintext length. For each ~i~ from 0 to ~p~ length, we have that ~c[i] = p[i] ^ k[i]~. For example, the plaintext "abcd" will result in the ciphertext "PPPP" using key "1234".
+
+This cipher is theoretically unbreakable when using the [[https://www.ciphermachinesandcryptology.com/en/onetimepad.htm][OTP]] (One Time Pad) technique. For this, the key must be:
+
+- At least as long as the plaintext
+- Truly random
+- Never reused
+- Kept secret
+
+OTP is [[http://hawkgirl.net/documents/communication/One-time-pad.pdf][impracticable]] with the current internet. Hence, we have to use shorter keys and reuse them. For example, if we have the plaintext "abcdef" and the key "123", then the character "e" will get XORed with "1" and "f" with "2". XOR is not secure in that setup. Let's see how we can break it.
+
+* Break XOR cipher with frequency analysis
+
+Breaking the XOR cipher is very simple. Let's go step by step.
+
+** Find key length
+
+The first step is to find the key length. We can brute force it. Before moving on, we need to know the facts that make this attack possible:
+
+1. XOR operations cancel out equivalent values (i.e., a ^ a = 0)
+2. XOR operations return 0's 50% of the time and 1's 50% of the time.
+3. Plaintexts are not uniformly random
+4. The expected hamming distance for two letters is lower than for two random 8-bit bytes.
+
+How is this useful? Well... Let ~p1~ and ~p2~ be the first two blocks of key length bytes of the plaintext, ~c1~ and ~c2~ the first two blocks of key length bytes of the ciphertext, and ~k~ the key. We have that ~p1 ^ k = c1~ and ~p2 ^ k = c2~. We can then iterate over each potential key length. For the proper key length, and using the previous equivalences, it follows that  ~c1 ^ c2 = (p1 ^ k) ^ (p2 ^ k) = p1 ^ p2~ (fact 1). That will return a lower hamming distance (facts 3 and 4). Otherwise, for the incorrect key length, ~c1 ^ c2 = p1 ^ p2~ doesn't hold. Some bytes will follow the equivalence ~(p1[n] ^ k) ^ (p2[n] ^ k')~, resembling two random 8-bit bytes (facts 2 and 4). Hence, the hamming distance will be higher.
+
+The final implementation has a few more quirks. Computing the hamming distance between the first two blocks isn't always reliable. We can use more blocks and calculate the average. Besides, we need to normalize the hamming distance average to compare different key sizes.
+
+Let's see the pseudocode.
+
+#+begin_src text
+  for each possible key length
+      get some blocks whose length is equal to the key length
+      for each pair of blocks
+          compute the hamming distance
+      compute the average of hamming distances
+      normalize the average by dividing by the key length
+  the value with the minimum normalized value is the key length
+#+end_src
+
+A possible implementation would be:
+
+#+begin_src rust
+  let mut keysize = 0;
+  let mut norm_distance = f64::MAX;
+  for i in 2..41 {
+      if data.len() - 1 < 4 * i {
+          continue;
+      }
+
+      let current_norm_distance = avg_hamming_distance_bytes(data, i) as f64 / i as f64;
+      if current_norm_distance <= norm_distance {
+          norm_distance = current_norm_distance;
+          keysize = i;
+      }
+  }
+
+  fn avg_hamming_distance_bytes(data: &[u8], keysize: usize) -> u64 {
+      let n = 4;
+      let sum_distances = (0..n - 1)
+          .flat_map(|i| {
+              (i + 1..n).map(move |j| {
+                  (
+                      (i * keysize, (i + 1) * keysize),
+                      (j * keysize, (j + 1) * keysize),
+                  )
+              })
+          })
+          .map(|((a, b), (c, d))| hamming_distance_bytes(&data[a..b], &data[c..d]))
+          .sum::<u64>();
+
+      sum_distances / (6 * keysize) as u64
+  }
+
+  fn hamming_distance_bytes(a: &[u8], b: &[u8]) -> u64 {
+      debug_assert_eq!(a.len(), b.len());
+
+      xor_bytes(a, b)
+          .iter()
+          .flat_map(|byte| (0..8).map(move |i| (byte >> i) & 1))
+          .filter(|b| b == &1)
+          .count() as u64
+  }
+#+end_src
+
+
+** Group ciphertext bytes by key byte used to encrypt
+
+We will split the ciphertext into blocks of key length and group them based on their position. The first byte of each block will go into the first group, the second byte of each block will go into the second group, etc. The goal is to get as many groups as key characters and for each group to contain the ciphertext bytes encrypted with a particular key character.
+
+Each group will help us find one character of the key.
+
+#+begin_src text
+  break cipher into blocks of key length
+  transpose the blocks
+#+end_src
+
+A possible implementation would be:
+
+#+begin_src rust
+  let data_chunks = data.chunks(keysize).collect::<Vec<&[u8]>>();
+  let data_chunks = transpose(&data_chunks);
+
+  fn transpose<T: Copy>(data: &[&[T]]) -> Vec<Vec<T>> {
+      let mut transposed = vec![vec![]; data[0].len()];
+      for row in data {
+          for (j, &value) in row.iter().enumerate() {
+              transposed[j].push(value);
+          }
+      }
+
+      transposed
+  }
+#+end_src
+
+** Get the key character for each group
+
+With the ciphertext bytes grouped, we can brute force each key character. The idea is to decrypt each block for each possible ASCII value and check which one returns the text closest to English, Spanish, or the language used. We do that by checking the frequency of the letters.
+
+#+begin_src text
+  for each possible character
+      decrypt the message
+      compute how similar it is to english
+  the character that produces the most similar english data is the key character
+#+end_src
+
+A possible implementation would be: 
+
+#+begin_src rust
+  let password = data_chunks
+      .iter()
+      .map(|chunk| break_single_xor_bytes(chunk).key)
+      .collect::<String>();
+
+  pub struct DecryptMetadata {
+      pub key: char,
+      pub english_similarity: f64,
+      pub decrypted_data: String,
+  }
+
+  impl Default for DecryptMetadata {
+      fn default() -> Self {
+          Self {
+              key: '.',
+              english_similarity: f64::MAX,
+              decrypted_data: String::new(),
+          }
+      }
+  }
+
+  pub fn break_single_xor_bytes(data: &[u8]) -> DecryptMetadata {
+      let mut decrypt_metadata = DecryptMetadata::default();
+      for i in 0..256u16 {
+          let repeating_key = vec![i as u8; data.len()];
+          let xor_data = xor_bytes(data, &repeating_key);
+          let Some(decrypted_data) = String::from_utf8(xor_data).ok() else {
+              continue;
+          };
+
+          let characters_count = count_characters(&decrypted_data.to_ascii_lowercase());
+
+          let ascii_data_length = decrypted_data.chars().count() as f64;
+          let actual_frequencies = compute_frequencies(characters_count, ascii_data_length);
+
+          let similarity = similarity_to_english(actual_frequencies);
+          if similarity < decrypt_metadata.english_similarity {
+              decrypt_metadata = DecryptMetadata {
+                  key: i as u8 as char,
+                  english_similarity: similarity,
+                  decrypted_data,
+              };
+          }
+      }
+
+      decrypt_metadata
+  }
+#+end_src
+
+** Code
+
+You can check the whole implementation https://github.com/danielorihuela/cryptopals/blob/main/src/set1/challenge6.rs.
+
+** Conclusion 
+
+The XOR cipher is simple but easy to attack. Modern products should avoid it at all costs. Instead, use OTP (if you can manage the complexity) or AES.
