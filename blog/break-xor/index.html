@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/break-xor/"><!-- Primary Meta Tags --><title>Cryptopals: Break a repeating-key XOR message</title><meta name="title" content="Cryptopals: Break a repeating-key XOR message"><meta name="description" content="Learn to break a message encrypted with the XOR cipher and a repeating
+key.
+"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/break-xor/"><meta property="og:title" content="Cryptopals: Break a repeating-key XOR message"><meta property="og:description" content="Learn to break a message encrypted with the XOR cipher and a repeating
+key.
+"><meta property="og:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/break-xor/"><meta property="twitter:title" content="Cryptopals: Break a repeating-key XOR message"><meta property="twitter:description" content="Learn to break a message encrypted with the XOR cipher and a repeating
+key.
+"><meta property="twitter:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><link rel="stylesheet" href="/_astro/_slug_.BVZF4iwd.css">
+<style>code[class*=language-],pre[class*=language-]{color:#f5f5f5;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2);background:none;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:1em;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#34294f}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#969896}.token.punctuation{color:#ccc}.token.selector{color:#72f1b8;text-shadow:0 0 2px #100c0f,0 0 10px rgba(37,124,85,.4588235294),0 0 35px rgba(33,39,36,.4588235294)}.token.function-name{color:#6196cc}.token.constant,.token.symbol{color:#f92aad;text-shadow:0 0 2px #100c0f,0 0 5px rgba(220,7,142,.2),0 0 10px rgba(255,255,255,.2)}.token.attr-value,.token.char,.token.regex,.token.variable{color:#f87c32}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}.token.string{color:#90ee90}.token.class-name,.token.deleted,.token.directive.keyword+.token.string,.token.hexcode,.token.namespace,.token.tag,.token.unit{color:#fff;text-shadow:0 0 1px #ff4d4d,0 0 2px #ff4d4d,0 0 4px #ff4d4d,0 0 10px #ff4d4d,0 0 20px #ff4d4d}.token.macro{color:#fff;text-shadow:0 0 1px #f8d132,0 0 2px #f8d132,0 0 4px #f8d132,0 0 10px #f8d132,0 0 20px #f8d132}.token.attr-name,.token.boolean,.token.function,.token.selector .token.id{color:#fff;text-shadow:0 0 1px #00f2ff,0 0 2px #00f2ff,0 0 4px #00f2ff,0 0 10px #00f2ff,0 0 20px #00f2ff}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector .token.class,.token.token.directive-hash{color:#fff;text-shadow:0 0 1px #bd32f8,0 0 2px #bd32f8,0 0 4px #bd32f8,0 0 10px #bd32f8,0 0 20px #bd32f8}main[data-astro-cid-bvzihdzo]{width:100%;background-color:#222}.hero-image[data-astro-cid-bvzihdzo]{width:40ch;max-width:100%;margin:auto}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:80ch;max-width:100%;margin:auto;color:#d3d3d3}.title[data-astro-cid-bvzihdzo]{margin-bottom:1rem;padding:1rem 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5rem}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5rem;color:#fff}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}.title-name[data-astro-cid-bvzihdzo]{font-family:Iceland;color:#fff}.prose[data-astro-cid-bvzihdzo] img{display:flex;margin:0 auto 2em}.prose[data-astro-cid-bvzihdzo] p{margin-bottom:2em}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Home </a>  <a href="/about" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> About </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Blog </a>  <a href="/open-source" data-astro-cid-3ef6ksr2 data-astro-cid-eimmu3lg> Open Source </a>  </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="hero-image" data-astro-cid-bvzihdzo> <img src="/_astro/cryptopals.B5aQRihb_Z2vct6J.webp" alt="" data-astro-cid-bvzihdzo width="888" height="888" loading="lazy" decoding="async"> </div> <div class="prose" data-astro-cid-bvzihdzo> <div class="title" data-astro-cid-bvzihdzo> <div class="date" data-astro-cid-bvzihdzo> <time datetime="2024-11-11T00:00:00.000Z"> Nov 11, 2024 </time>  </div> <h1 class="title-name" data-astro-cid-bvzihdzo>Cryptopals: Break a repeating-key XOR message</h1> <hr data-astro-cid-bvzihdzo> </div>  <ul>
+<li><a href="#xor-cipher">XOR Cipher</a></li>
+<li><a href="#break-xor-cipher-with-frequency-analysis">Break XOR cipher with frequency
+analysis</a>
+<ul>
+<li><a href="#find-key-length">Find key length</a></li>
+<li><a href="#group-ciphertext-bytes-by-key-byte-used-to-encrypt">Group ciphertext bytes by key byte used to
+encrypt</a></li>
+<li><a href="#get-the-key-character-for-each-group">Get the key character for each
+group</a></li>
+<li><a href="#code">Code</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<p>I started working on the <a href="https://cryptopals.com">Cryptopals
+challenges</a>. I’m learning a few things about how
+the different pieces used in cryptography work and how to break them,
+and I decided to document some of the learnings. Today, we will learn
+about the XOR cipher, how it works, and how to break it. This post is
+related to <a href="https://cryptopals.com/sets/1/challenges/3">https://cryptopals.com/sets/1/challenges/3</a> and
+<a href="https://cryptopals.com/sets/1/challenges/6">https://cryptopals.com/sets/1/challenges/6</a>.</p>
+<h1 id="xor-cipher">XOR Cipher</h1>
+<p>The XOR cipher is an encryption method where each character of the
+plaintext is XORed with a character from the key. Let <code>p</code> be the
+plaintext, <code>c</code> the ciphertext, <code>k</code> the key, and <code>^</code> the XOR operator.
+Assume the key length is equal to the plaintext length. For each <code>i</code>
+from 0 to <code>p</code> length, we have that <code>c[i] = p[i] ^ k[i]</code>. For example,
+the plaintext “abcd” will result in the ciphertext “PPPP” using key
+“1234”.</p>
+<p>This cipher is theoretically unbreakable when using the
+<a href="https://www.ciphermachinesandcryptology.com/en/onetimepad.htm">OTP</a>
+(One Time Pad) technique. For this, the key must be:</p>
+<ul>
+<li>At least as long as the plaintext</li>
+<li>Truly random</li>
+<li>Never reused</li>
+<li>Kept secret</li>
+</ul>
+<p>OTP is
+<a href="http://hawkgirl.net/documents/communication/One-time-pad.pdf">impracticable</a>
+with the current internet. Hence, we have to use shorter keys and reuse
+them. For example, if we have the plaintext “abcdef” and the key “123”,
+then the character “e” will get XORed with “1” and “f” with “2”. XOR is
+not secure in that setup. Let’s see how we can break it.</p>
+<h1 id="break-xor-cipher-with-frequency-analysis">Break XOR cipher with frequency analysis</h1>
+<p>Breaking the XOR cipher is very simple. Let’s go step by step.</p>
+<h2 id="find-key-length">Find key length</h2>
+<p>The first step is to find the key length. We can brute force it. Before
+moving on, we need to know the facts that make this attack possible:</p>
+<ol>
+<li>XOR operations cancel out equivalent values (i.e., a ^ a = 0)</li>
+<li>XOR operations return 0’s 50% of the time and 1’s 50% of the time.</li>
+<li>Plaintexts are not uniformly random</li>
+<li>The expected hamming distance for two letters is lower than for two
+random 8-bit bytes.</li>
+</ol>
+<p>How is this useful? Well… Let <code>p1</code> and <code>p2</code> be the first two blocks of
+key length bytes of the plaintext, <code>c1</code> and <code>c2</code> the first two blocks of
+key length bytes of the ciphertext, and <code>k</code> the key. We have that
+<code>p1 ^ k = c1</code> and <code>p2 ^ k = c2</code>. We can then iterate over each potential
+key length. For the proper key length, and using the previous
+equivalences, it follows that <code>c1 ^ c2 = (p1 ^ k) ^ (p2 ^ k) = p1 ^ p2</code>
+(fact 1). That will return a lower hamming distance (facts 3 and 4).
+Otherwise, for the incorrect key length, <code>c1 ^ c2 = p1 ^ p2</code> doesn’t
+hold. Some bytes will follow the equivalence
+<code>(p1[n] ^ k) ^ (p2[n] ^ k')</code>, resembling two random 8-bit bytes (facts 2
+and 4). Hence, the hamming distance will be higher.</p>
+<p>The final implementation has a few more quirks. Computing the hamming
+distance between the first two blocks isn’t always reliable. We can use
+more blocks and calculate the average. Besides, we need to normalize the
+hamming distance average to compare different key sizes.</p>
+<p>Let’s see the pseudocode.</p>
+<pre class="language-text" data-language="text"><code is:raw="" class="language-text">for each possible key length
+    get some blocks whose length is equal to the key length
+    for each pair of blocks
+        compute the hamming distance
+    compute the average of hamming distances
+    normalize the average by dividing by the key length
+the value with the minimum normalized value is the key length
+</code></pre>
+<p>A possible implementation would be:</p>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">let</span> <span class="token keyword">mut</span> keysize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> <span class="token keyword">mut</span> norm_distance <span class="token operator">=</span> <span class="token keyword">f64</span><span class="token punctuation">::</span><span class="token constant">MAX</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">2</span><span class="token punctuation">..</span><span class="token number">41</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> data<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">&#x3C;</span> <span class="token number">4</span> <span class="token operator">*</span> i <span class="token punctuation">{</span>
+        <span class="token keyword">continue</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> current_norm_distance <span class="token operator">=</span> <span class="token function">avg_hamming_distance_bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token keyword">f64</span> <span class="token operator">/</span> i <span class="token keyword">as</span> <span class="token keyword">f64</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> current_norm_distance <span class="token operator">&#x3C;=</span> norm_distance <span class="token punctuation">{</span>
+        norm_distance <span class="token operator">=</span> current_norm_distance<span class="token punctuation">;</span>
+        keysize <span class="token operator">=</span> i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">avg_hamming_distance_bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token keyword">u8</span><span class="token punctuation">]</span><span class="token punctuation">,</span> keysize<span class="token punctuation">:</span> <span class="token keyword">usize</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">u64</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> n <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> sum_distances <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">flat_map</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>i<span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">{</span>
+            <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">..</span>n<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>j<span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">{</span>
+                <span class="token punctuation">(</span>
+                    <span class="token punctuation">(</span>i <span class="token operator">*</span> keysize<span class="token punctuation">,</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> keysize<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token punctuation">(</span>j <span class="token operator">*</span> keysize<span class="token punctuation">,</span> <span class="token punctuation">(</span>j <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> keysize<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>c<span class="token punctuation">,</span> d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token closure-punctuation punctuation">|</span></span> <span class="token function">hamming_distance_bytes</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span>data<span class="token punctuation">[</span>a<span class="token punctuation">..</span>b<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&#x26;</span>data<span class="token punctuation">[</span>c<span class="token punctuation">..</span>d<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">sum</span><span class="token punctuation">::</span><span class="token operator">&#x3C;</span><span class="token keyword">u64</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    sum_distances <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">6</span> <span class="token operator">*</span> keysize<span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token keyword">u64</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">hamming_distance_bytes</span><span class="token punctuation">(</span>a<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token keyword">u8</span><span class="token punctuation">]</span><span class="token punctuation">,</span> b<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token keyword">u8</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">u64</span> <span class="token punctuation">{</span>
+    <span class="token macro property">debug_assert_eq!</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> b<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">xor_bytes</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">flat_map</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>byte<span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">..</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>i<span class="token closure-punctuation punctuation">|</span></span> <span class="token punctuation">(</span>byte <span class="token operator">>></span> i<span class="token punctuation">)</span> <span class="token operator">&#x26;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>b<span class="token closure-punctuation punctuation">|</span></span> b <span class="token operator">==</span> <span class="token operator">&#x26;</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token keyword">u64</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="group-ciphertext-bytes-by-key-byte-used-to-encrypt">Group ciphertext bytes by key byte used to encrypt</h2>
+<p>We will split the ciphertext into blocks of key length and group them
+based on their position. The first byte of each block will go into the
+first group, the second byte of each block will go into the second
+group, etc. The goal is to get as many groups as key characters and for
+each group to contain the ciphertext bytes encrypted with a particular
+key character.</p>
+<p>Each group will help us find one character of the key.</p>
+<pre class="language-text" data-language="text"><code is:raw="" class="language-text">break cipher into blocks of key length
+transpose the blocks
+</code></pre>
+<p>A possible implementation would be:</p>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">let</span> data_chunks <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token function">chunks</span><span class="token punctuation">(</span>keysize<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">::</span><span class="token operator">&#x3C;</span><span class="token class-name">Vec</span><span class="token operator">&#x3C;</span><span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token keyword">u8</span><span class="token punctuation">]</span><span class="token operator">>></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> data_chunks <span class="token operator">=</span> <span class="token function">transpose</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span>data_chunks<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function-definition function">transpose</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token punctuation">:</span> <span class="token class-name">Copy</span><span class="token operator">></span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token class-name">T</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Vec</span><span class="token operator">&#x3C;</span><span class="token class-name">Vec</span><span class="token operator">&#x3C;</span><span class="token class-name">T</span><span class="token operator">>></span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> transposed <span class="token operator">=</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token macro property">vec!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> row <span class="token keyword">in</span> data <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>j<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>value<span class="token punctuation">)</span> <span class="token keyword">in</span> row<span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            transposed<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    transposed
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="get-the-key-character-for-each-group">Get the key character for each group</h2>
+<p>With the ciphertext bytes grouped, we can brute force each key
+character. The idea is to decrypt each block for each possible ASCII
+value and check which one returns the text closest to English, Spanish,
+or the language used. We do that by checking the frequency of the
+letters.</p>
+<pre class="language-text" data-language="text"><code is:raw="" class="language-text">for each possible character
+    decrypt the message
+    compute how similar it is to english
+the character that produces the most similar english data is the key character
+</code></pre>
+<p>A possible implementation would be:</p>
+<pre class="language-rust" data-language="rust"><code is:raw="" class="language-rust"><span class="token keyword">let</span> password <span class="token operator">=</span> data_chunks
+    <span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token closure-params"><span class="token closure-punctuation punctuation">|</span>chunk<span class="token closure-punctuation punctuation">|</span></span> <span class="token function">break_single_xor_bytes</span><span class="token punctuation">(</span>chunk<span class="token punctuation">)</span><span class="token punctuation">.</span>key<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">::</span><span class="token operator">&#x3C;</span><span class="token class-name">String</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token type-definition class-name">DecryptMetadata</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> key<span class="token punctuation">:</span> <span class="token keyword">char</span><span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> english_similarity<span class="token punctuation">:</span> <span class="token keyword">f64</span><span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> decrypted_data<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> <span class="token class-name">Default</span> <span class="token keyword">for</span> <span class="token class-name">DecryptMetadata</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+        <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+            key<span class="token punctuation">:</span> <span class="token char">'.'</span><span class="token punctuation">,</span>
+            english_similarity<span class="token punctuation">:</span> <span class="token keyword">f64</span><span class="token punctuation">::</span><span class="token constant">MAX</span><span class="token punctuation">,</span>
+            decrypted_data<span class="token punctuation">:</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">break_single_xor_bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> <span class="token operator">&#x26;</span><span class="token punctuation">[</span><span class="token keyword">u8</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">DecryptMetadata</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> decrypt_metadata <span class="token operator">=</span> <span class="token class-name">DecryptMetadata</span><span class="token punctuation">::</span><span class="token function">default</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">256u16</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> repeating_key <span class="token operator">=</span> <span class="token macro property">vec!</span><span class="token punctuation">[</span>i <span class="token keyword">as</span> <span class="token keyword">u8</span><span class="token punctuation">;</span> data<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> xor_data <span class="token operator">=</span> <span class="token function">xor_bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> <span class="token operator">&#x26;</span>repeating_key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>decrypted_data<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from_utf8</span><span class="token punctuation">(</span>xor_data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> characters_count <span class="token operator">=</span> <span class="token function">count_characters</span><span class="token punctuation">(</span><span class="token operator">&#x26;</span>decrypted_data<span class="token punctuation">.</span><span class="token function">to_ascii_lowercase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> ascii_data_length <span class="token operator">=</span> decrypted_data<span class="token punctuation">.</span><span class="token function">chars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token keyword">f64</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> actual_frequencies <span class="token operator">=</span> <span class="token function">compute_frequencies</span><span class="token punctuation">(</span>characters_count<span class="token punctuation">,</span> ascii_data_length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> similarity <span class="token operator">=</span> <span class="token function">similarity_to_english</span><span class="token punctuation">(</span>actual_frequencies<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> similarity <span class="token operator">&#x3C;</span> decrypt_metadata<span class="token punctuation">.</span>english_similarity <span class="token punctuation">{</span>
+            decrypt_metadata <span class="token operator">=</span> <span class="token class-name">DecryptMetadata</span> <span class="token punctuation">{</span>
+                key<span class="token punctuation">:</span> i <span class="token keyword">as</span> <span class="token keyword">u8</span> <span class="token keyword">as</span> <span class="token keyword">char</span><span class="token punctuation">,</span>
+                english_similarity<span class="token punctuation">:</span> similarity<span class="token punctuation">,</span>
+                decrypted_data<span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    decrypt_metadata
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="code">Code</h2>
+<p>You can check the whole implementation
+<a href="https://github.com/danielorihuela/cryptopals/blob/main/src/set1/challenge6.rs">https://github.com/danielorihuela/cryptopals/blob/main/src/set1/challenge6.rs</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The XOR cipher is simple but easy to attack. Modern products should
+avoid it at all costs. Instead, use OTP (if you can manage the
+complexity) or AES.</p>  </div> </article> </main> <footer></footer> </body></html>
