@@ -1,22 +1,71 @@
 ---
-import HeaderLink from './HeaderLink.astro';
+import HeaderLink from "./HeaderLink.astro";
+import {
+	Astronav,
+	MenuItems,
+	MenuIcon,
+	OpenIcon,
+	CloseIcon,
+} from "astro-navbar";
 ---
 
 <header>
-	<nav>
+	<div class="sm:hidden text-end">
+		<Astronav>
+			<MenuIcon>
+				<OpenIcon class="flex p-2">
+					<img src="/hamburger.svg" /></OpenIcon
+				>
+				<CloseIcon class="flex p-2">
+					<img src="/hamburger.svg" /></CloseIcon
+				>
+			</MenuIcon>
+
+			<MenuItems class="hidden">
+				<ul>
+					<li><HeaderLink href="/">Home</HeaderLink></li>
+					<li><HeaderLink href="/about">About</HeaderLink></li>
+					<li><HeaderLink href="/blog">Blog</HeaderLink></li>
+					<li>
+						<HeaderLink href="/open-source">Open Source</HeaderLink>
+					</li>
+					<li><div class="line-separator"></div></li>
+					<li>
+						<div class="flex justify-end">
+							<a class="" href="feed.xml"
+								><img src="/rss.svg" /></a
+							>
+						</div>
+					</li>
+				</ul>
+			</MenuItems>
+		</Astronav>
+	</div>
+
+	<nav class="hidden sm:flex">
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
 			<HeaderLink href="/open-source">Open Source</HeaderLink>
+			<div class="line-separator"></div>
+			<div class="flex items-center">
+				<a href="feed.xml"><img src="/rss.svg" /></a>
+			</div>
 		</div>
 	</nav>
 </header>
+
 <style>
 	header {
 		margin: 0;
 		padding: 0 1em;
 		background-color: #222222;
+	}
+
+	.line-separator {
+		border-left: 2px solid var(--accent);
+		margin: 1em 0;
 	}
 
 	.internal-links {
@@ -29,12 +78,12 @@ import HeaderLink from './HeaderLink.astro';
 		padding: 1em 0.5em;
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
-		
+
 		display: inline-block;
 		position: relative;
 	}
 	.internal-links a::after {
-		content: '';
+		content: "";
 		position: absolute;
 		width: 100%;
 		transform: scaleX(0);
