@@ -1,92 +1,62 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import SocialLink from '../components/SocialLink.astro';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import SocialLink from "../components/SocialLink.astro";
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title="About Me" description="description" />
-		<style>
-			body {
-				background-color: #222222;
-			}
-
-			main {
-				width: 100%;
-				background-color: #222222;
-			}
-
-			.prose {
-				width: 80ch;
-				max-width: 100%;
-				margin: auto;
-				color: #d3d3d3;
-			}
-
-			.title {
-				margin-bottom: 1rem;
-				padding: 1rem 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5rem 0;
-			}
-			.title-name {
-				font-family: 'Iceland';
-				color: white;
-			}
-
-			.social-links {
-				display: flex;
-				justify-content: center;
-				gap: 1em;
-			}
-			.social-links img {
-				height: 40px;
-			}
-		</style>
+		<BaseHead title="About Me" description="" />
 	</head>
 
 	<body>
 		<Header />
-		<main>
+		<main class="m-full">
 			<article>
-				<div class="prose">
-					<div class="title">
-						<h1 class="title-name">About Me</h1>
+				<div class="prose m-auto w-[80ch] max-w-full text-[#d3d3d3]">
+					<div class="mb-4 py-4 text-center leading-none">
+						<h1 class="font-[Iceland] text-white mb-2">About Me</h1>
 						<hr />
 					</div>
 					<p>
-						Hi! I'm Daniel Orihuela, a Software Engineer interested in Cybersecurity, Cryptography,
-						Algorithms, Distributed Systems and AI.
+						Hi! I'm Daniel Orihuela, a Software Engineer interested
+						in Cybersecurity, Cryptography, Algorithms, Distributed
+						Systems and AI.
 					</p>
-				
+
 					<p>
-						I have five years of professional experience in the fintech and security space.
-						Currently focused on building cryptographic libraries. Nonetheless, I am always
-						striving to improve my knowledge around making secure and privacy friendly products
-						with great user experiences.
+						I have five years of professional experience in the
+						fintech and security space. Currently focused on
+						building cryptographic libraries. Nonetheless, I am
+						always striving to improve my knowledge around making
+						secure and privacy friendly products with great user
+						experiences.
 					</p>
-				
+
 					<p>
-						On my free time I enjoy improving my craftmanship, learning martial arts, reading
-						books and playing video games.
+						On my free time I enjoy improving my craftmanship,
+						learning martial arts, reading books and playing video
+						games.
 					</p>
-				
-				
-					<p>
-						Aspiring hacker.
-					</p>
+
+					<p>Aspiring hacker.</p>
 				</div>
 			</article>
 		</main>
 		<footer>
-			<div class="social-links">
-				<SocialLink href="https://github.com/danielorihuela" image="/github.svg"></SocialLink>
-				<SocialLink href="mailto:danielorihuelarodriguez@gmail.com" image="/email.svg"></SocialLink>
-				<SocialLink href="https://twitter.com/_DanielOrihuela" image="/twitter.svg"></SocialLink>
+			<div class="flex justify-center gap-4">
+				<SocialLink
+					href="https://github.com/danielorihuela"
+					image="/github.svg"
+				/>
+				<SocialLink
+					href="mailto:danielorihuelarodriguez@gmail.com"
+					image="/email.svg"
+				/>
+				<SocialLink
+					href="https://twitter.com/_DanielOrihuela"
+					image="/twitter.svg"
+				/>
 			</div>
 		</footer>
 	</body>
