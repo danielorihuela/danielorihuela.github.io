@@ -2,6 +2,12 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import SocialLink from "../components/SocialLink.astro";
+
+const socialLinksInfo = [
+	["https://github.com/danielorihuela", "/github.svg"],
+	["mailto:danielorihuelarodriguez@gmail.com", "/email.svg"],
+	["https://twitter.com/_DanielOrihuela", "/twitter.svg"],
+];
 ---
 
 <html lang="en">
@@ -45,18 +51,15 @@ import SocialLink from "../components/SocialLink.astro";
 		</main>
 		<footer>
 			<div class="flex justify-center gap-4">
-				<SocialLink
-					href="https://github.com/danielorihuela"
-					image="/github.svg"
-				/>
-				<SocialLink
-					href="mailto:danielorihuelarodriguez@gmail.com"
-					image="/email.svg"
-				/>
-				<SocialLink
-					href="https://twitter.com/_DanielOrihuela"
-					image="/twitter.svg"
-				/>
+				{
+					socialLinksInfo.map((socialLinkInfo) => (
+						<SocialLink
+							class="w-12 h-12"
+							href={socialLinkInfo[0]}
+							image={socialLinkInfo[1]}
+						/>
+					))
+				}
 			</div>
 		</footer>
 	</body>

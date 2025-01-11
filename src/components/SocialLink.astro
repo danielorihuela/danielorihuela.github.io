@@ -2,9 +2,10 @@
 interface Props {
     href: string;
     image: string;
+    class?: string;
 }
 
-const { href, image } = Astro.props;
+const { href, image, class: className } = Astro.props;
 ---
 
 <style>
@@ -21,13 +22,11 @@ const { href, image } = Astro.props;
             --a: 360deg;
         }
     }
+
     .loader {
         grid-row-start: 1;
         grid-column-start: 1;
-
         opacity: 0;
-        width: 48px;
-        height: 48px;
         position: relative;
         background: repeating-conic-gradient(
             from var(--a),
@@ -39,6 +38,7 @@ const { href, image } = Astro.props;
         );
         animation: animate 2s infinite linear;
     }
+
     .loader::before {
         content: "";
         position: absolute;
@@ -47,9 +47,9 @@ const { href, image } = Astro.props;
     }
 </style>
 
-<div class="grid w-fit group">
+<div class:list={[ "grid group", className ]}>
     <div class="loader group-hover:opacity-100"></div>
-    <a class="row-span-full col-span-full w-10 h-10 p-1 m-auto z-0" href={href}
-        ><img src={image} /></a
-    >
+    <a class="row-span-full col-span-full z-0" href={href}>
+        <img src={image} />
+    </a>
 </div>
