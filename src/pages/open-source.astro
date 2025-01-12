@@ -48,53 +48,6 @@ const ossProjectsInfo: OssProjectInfo[] = [
 <html lang="en">
 	<head>
 		<BaseHead title="Open Source" description="description" />
-		<style>
-			html,
-			body {
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				background-color: #222222;
-			}
-
-			main {
-				width: 100%;
-			}
-
-			a {
-				width: fit-content;
-			}
-
-			.grid {
-				width: 100%;
-			}
-
-			.grid-item {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				width: 100%;
-				padding: 2rem 0;
-
-				border: 2px dashed var(--accent);
-			}
-
-			.grid-sizer {
-				width: 20%;
-			}
-
-			@media only screen and (min-width: 480px) {
-				.grid-item {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					width: auto;
-					padding: 2rem;
-
-					border: 2px dashed var(--accent);
-				}
-			}
-		</style>
 
 		<script>
 			import Masonry from "masonry-layout";
@@ -111,11 +64,11 @@ const ossProjectsInfo: OssProjectInfo[] = [
 
 	<body>
 		<Header />
-		<main>
+		<main class="w-full">
 			<div class="grid">
 				{
 					ossProjectsInfo.map((info) => (
-						<div class="grid-item">
+						<div class="grid-item flex flex-col items-center w-full px-8 border-2 border-dashed border-primary min-[480px]:w-auto min-[480px]:py-8">
 							<h2>{info.name}</h2>
 							<SocialLink
 								class="w-12 h-12"
