@@ -14,5 +14,5 @@ do
     file_name=$(basename $source_file)
     dest_file="$dest_dir/${file_name%.org}.md"
     echo "Exporting $source_file to $dest_file"
-    pandoc -s "$source_file" -o "$dest_file" -t markdown_mmd+yaml_metadata_block --toc
+    pandoc -s "$source_file" -o "$dest_file" -t markdown_mmd+yaml_metadata_block --toc --lua-filter=finish-frontmatter.lua
 done
