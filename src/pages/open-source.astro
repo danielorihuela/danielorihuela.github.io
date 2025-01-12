@@ -3,6 +3,46 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SocialLink from "../components/SocialLink.astro";
+
+interface OssProjectInfo {
+	name: string;
+	image: string;
+	url: string;
+	prs: number[];
+}
+
+const ossProjectsInfo: OssProjectInfo[] = [
+	{
+		name: "Lynis",
+		image: "/lynis.svg",
+		url: "https://github.com/CISOfy/lynis",
+		prs: [1009],
+	},
+	{
+		name: "Gitleaks",
+		image: "/gitleaks.svg",
+		url: "https://github.com/gitleaks/gitleaks",
+		prs: [661],
+	},
+	{
+		name: "Pysyft",
+		image: "/open-mined.svg",
+		url: "https://github.com/OpenMined/pysyft",
+		prs: [5554],
+	},
+	{
+		name: "sycret",
+		image: "/open-mined.svg",
+		url: "https://github.com/OpenMined/sycret",
+		prs: [17, 18, 25, 36],
+	},
+	{
+		name: "SyMPC",
+		image: "/open-mined.svg",
+		url: "https://github.com/OpenMined/SyMPC",
+		prs: [114, 128, 130, 132, 162, 170, 174, 195, 216, 253, 281],
+	},
+];
 ---
 
 <html lang="en">
@@ -29,13 +69,13 @@ import SocialLink from "../components/SocialLink.astro";
 				width: 100%;
 			}
 
-			.grid-item {				
+			.grid-item {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				width: 100%;
 				padding: 2rem 0;
-				
+
 				border: 2px dashed var(--accent);
 			}
 
@@ -50,7 +90,7 @@ import SocialLink from "../components/SocialLink.astro";
 					align-items: center;
 					width: auto;
 					padding: 2rem;
-					
+
 					border: 2px dashed var(--accent);
 				}
 			}
@@ -59,11 +99,11 @@ import SocialLink from "../components/SocialLink.astro";
 		<script>
 			import Masonry from "masonry-layout";
 
-  			document.addEventListener('DOMContentLoaded', () => {
-				new Masonry('.grid', {
-					itemSelector: '.grid-item',
+			document.addEventListener("DOMContentLoaded", () => {
+				new Masonry(".grid", {
+					itemSelector: ".grid-item",
 					columnWidth: 1,
-					percentPosition: true
+					percentPosition: true,
 				});
 			});
 		</script>
@@ -73,50 +113,24 @@ import SocialLink from "../components/SocialLink.astro";
 		<Header />
 		<main>
 			<div class="grid">
+				{
+					ossProjectsInfo.map((info) => (
+						<div class="grid-item">
+							<h2>{info.name}</h2>
+							<SocialLink
+								class="w-12 h-12"
+								href={info.url}
+								image={info.image}
+							/>
 
-				<div class="grid-item">
-					<h2>Lynis</h2>
-					<SocialLink href="https://github.com/CISOfy/lynis" image="/lynis.png"></SocialLink>
-					<a href="https://github.com/CISOfy/lynis/pull/1009"> #1009 </a>
-				</div>
-
-				<div class="grid-item">
-					<h2>Gitleaks</h2>
-					<SocialLink href="https://github.com/gitleaks/gitleaks" image="/gitleaks.png"></SocialLink>
-					<a href="https://github.com/gitleaks/gitleaks/pull/661"> #661 </a>
-				</div>
-
-				<div class="grid-item">
-					<h2>PySyft</h2>
-					<SocialLink href="https://github.com/OpenMined/PySyft" image="/open-mined.png"></SocialLink>
-					<a href="https://github.com/OpenMined/PySyft/pull/5554"> #5554 </a>
-				</div>
-
-				<div class="grid-item">
-					<h2>sycret</h2>
-					<SocialLink href="https://github.com/OpenMined/sycret" image="/open-mined.png"></SocialLink>
-					<a href="https://github.com/OpenMined/sycret/pull/17"> #17 </a></br>
-					<a href="https://github.com/OpenMined/sycret/pull/18"> #18 </a></br>
-					<a href="https://github.com/OpenMined/sycret/pull/25"> #25 </a></br>
-					<a href="https://github.com/OpenMined/sycret/pull/36"> #36 </a></br>
-				</div>
-
-				<div class="grid-item">
-					<h2>SyMPC</h2>
-					<SocialLink href="https://github.com/OpenMined/SyMPC" image="/open-mined.png"></SocialLink>
-					<a href="https://github.com/OpenMined/SyMPC/pull/114"> #114 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/128"> #128 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/130"> #130 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/132"> #132 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/162"> #162 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/170"> #170 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/174"> #174 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/195"> #195 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/216"> #216 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/253"> #253 </a></br>
-					<a href="https://github.com/OpenMined/SyMPC/pull/281"> #281 </a></br>
-				</div>
-
+							{info.prs.map((pr) => (
+								<a href={`${info.url}/pull/${pr}`}>
+									{`#${pr}`}
+								</a>
+							))}
+						</div>
+					))
+				}
 			</div>
 		</main>
 		<Footer />
