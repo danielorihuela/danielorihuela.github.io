@@ -16,97 +16,30 @@ const posts = (await getCollection("blog")).sort(
 <html lang="en">
 	<head>
 		<BaseHead title={"Blog"} description={SITE_DESCRIPTION} />
-		<style>
-			body {
-				background-color: #222222;
-			}
-			main {
-				width: 70%;
-			}
-			a:hover {
-				color: var(--accent-light);
-			}
-			ul {
-				display: flex;
-				width: 100%;
-				flex-wrap: wrap;
-				gap: 0.5rem;
-				list-style-type: none;
-				justify-content: center;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: 100%;
-				text-align: center;
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				margin-bottom: 0;
-			}
-			ul li:first-child .title {
-				font-size: 1.563em;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				line-height: 1;
-				color: #d3d3d3;
-			}
-			.date {
-				margin: 0;
-				color: #b9b9b9;
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (min-width: 1024px) {
-				ul {
-					gap: 2rem;
-				}
-				ul li {
-					width: 30%;
-				}
-				ul li:first-child {
-					width: 70%;
-					margin-bottom: 1rem;
-					text-align: center;
-					padding: 0 10rem;
-				}
-				ul li:first-child img {
-					width: 100%;
-				}
-				ul li:first-child .title {
-					font-size: 2.369rem;
-				}
-			}
-		</style>
 	</head>
-	<body>
+	<body class="bg-color-[#222222]">
 		<Header />
-		<main>
+		<main class="w-[70%]">
 			<section>
-				<ul>
+				<ul
+					class="flex w-full flex-wrap gap-2 list-none justify-center m-0 p-0 lg:gap-8"
+				>
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.slug}/`}>
-									<Image src={post.data.cover} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
+							<li class="group/item text-center lg:w-[30%] lg:first:w-[85%] lg:first:px-40 xl:first:w-[70%]">
+								<a
+									class="group/ref"
+									href={`/blog/${post.slug}/`}
+								>
+									<Image
+										class="mb-2 rounded-xl group-hover/ref:shadow-ba"
+										src={post.data.cover}
+										alt=""
+									/>
+									<h4 class="m-0 leading-none text-[#d3d3d3] group-hover/ref:text-primary lg:group-first:text-4xl">
+										{post.data.title}
+									</h4>
+									<p class="m-0 text-[#b9b9b9] group-hover/ref:text-primary">
 										<FormattedDate
 											date={post.data.publishdate}
 										/>
