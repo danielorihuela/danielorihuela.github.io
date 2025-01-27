@@ -10,6 +10,7 @@
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
 }
+
 body {
 	width: 100%;
 	margin: 0;
@@ -21,12 +22,14 @@ body {
 
 	background-color: #222222;
 }
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
 }
+
 h1,
 h2,
 h3,
@@ -37,73 +40,89 @@ h6 {
 	line-height: 1.2;
 	color: white;
 }
+
 h1 {
 	font-size: 3.052em;
 }
+
 h2 {
 	font-size: 2.441em;
 }
+
 h3 {
 	font-size: 1.953em;
 }
+
 h4 {
 	font-size: 1.563em;
 }
+
 h5 {
 	font-size: 1.25em;
 }
+
 strong,
 b {
 	font-weight: 700;
 }
+
 a {
 	color: var(--accent);
 }
+
 a:hover {
 	color: var(--accent);
 }
+
 p {
-	margin-bottom: 1em;
+	margin: 1em 0;
 }
-.prose p {
-	margin-bottom: 2em;
-}
+
 textarea {
 	width: 100%;
 	font-size: 16px;
 }
+
 input {
 	font-size: 16px;
 }
+
 table {
 	width: 100%;
 }
+
 code {
 	padding: 2px 5px;
 	background-color: #444444;
 	border-radius: 2px;
 }
+
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
 }
-pre > code {
+
+pre>code {
 	all: unset;
 }
+
 blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
 	margin: 0px;
 	font-size: 1.333em;
 }
+
 hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
 	}
+
 	main {
 		padding: 1em;
 	}
@@ -123,12 +142,19 @@ hr {
 	white-space: nowrap;
 }
 
-body, h1, h2, h3, h4, h5, h6 {
-    font-family: Rajdhani;
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: Rajdhani;
 }
 
-/* Tables */
-table, th, td {
+table,
+th,
+td {
 	border: 1px solid;
 }
 
@@ -141,5 +167,10 @@ table {
 
 ul {
 	list-style-type: disc;
-	padding: 0 2rem;
+	padding: 0 2.5em;
+}
+
+ol {
+	list-style-type: numb;
+	padding: 0 2.5em;
 }

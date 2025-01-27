@@ -1,99 +1,62 @@
 ---
 import { Image } from "astro:assets";
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
 
-import '../styles/neon-code.scss';
+import "../styles/neon-code.scss";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"];
 
 const { title, description, publishdate, updateddate, cover } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={cover.src}/>
-		<style>
-			main {
-				width: 100%;
-				background-color: #222222;
-			}
-
-			.hero-image {
-				width: 40ch;
-				max-width: 100%;
-				margin: auto;
-			}
-			.hero-image img {
-				display: block;
+		<BaseHead title={title} description={description} image={cover.src} />
+		<style is:global>
+			img {
 				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
 			}
 
-			.prose {
-				width: 80ch;
-				max-width: 100%;
-				margin: auto;
-				color: #d3d3d3;
+			div + h1 {
+                               margin-top: 0;
 			}
 
-			.title {
-				margin-bottom: 1rem;
-				padding: 1rem 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5rem 0;
-			}
-			.date {
-				margin-bottom: 0.5rem;
-				color: white;
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-			.title-name {
-				font-family: 'Iceland';
-				color: white;
-			}
-
-			.prose :global(img) {
-				display: flex;
-				margin: 0 auto;
-				margin-bottom: 2em;
-			}
-
-			.prose :global(p) {
-				margin-bottom: 2em;
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin-top: 1em;
 			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
+		<main class="w-full bg-[#222222]">
 			<article>
-				<div class="hero-image">
-					{cover && <Image src={cover} alt="" />}
+				<div class="w-96 max-w-full m-auto">
+					{
+						cover && (
+							<Image
+								class="rounded-xl shadow-ba"
+								src={cover}
+								alt=""
+							/>
+						)
+					}
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
+				<div class="w-[80ch] max-w-full m-auto text-[#d3d3d3]">
+					<div class="py-4 text-center leading-none">
+						<div class="mb-2 text-[#ffffff]">
 							<FormattedDate date={publishdate} />
-							{
-								updateddate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updateddate} />
-									</div>
-								)
-							}
 						</div>
-						<h1 class="title-name">{title}</h1>
+						<h1 class="text-[#ffffff] font-[Iceland]">{title}</h1>
 						<hr />
 					</div>
 					<slot />
