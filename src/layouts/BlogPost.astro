@@ -10,7 +10,7 @@ import "../styles/neon-code.scss";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, publishdate, updateddate, cover } = Astro.props;
+const { title, description, publishdate, cover } = Astro.props;
 ---
 
 <html lang="en">
@@ -22,7 +22,7 @@ const { title, description, publishdate, updateddate, cover } = Astro.props;
 			}
 
 			div + h1 {
-                               margin-top: 0;
+				margin-top: 0;
 			}
 
 			h1,
@@ -41,15 +41,7 @@ const { title, description, publishdate, updateddate, cover } = Astro.props;
 		<main class="w-full bg-[#222222]">
 			<article>
 				<div class="w-96 max-w-full m-auto">
-					{
-						cover && (
-							<Image
-								class="rounded-xl shadow-ba"
-								src={cover}
-								alt=""
-							/>
-						)
-					}
+					<Image class="rounded-xl shadow-ba" src={cover} alt="" />
 				</div>
 				<div class="w-[80ch] max-w-full m-auto text-[#d3d3d3]">
 					<div class="py-4 text-center leading-none">
