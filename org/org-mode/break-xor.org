@@ -17,7 +17,7 @@ This cipher is theoretically unbreakable when using the [[https://www.ciphermach
 - Never reused
 - Kept secret
 
-OTP is [[http://hawkgirl.net/documents/communication/One-time-pad.pdf][impracticable]] with the current internet. Hence, we have to use shorter keys and reuse them. For example, if we have the plaintext "abcdef" and the key "123", then the character "e" will get XORed with "1" and "f" with "2". XOR is not secure in that setup. Let's see how we can break it.
+OTP is [[http://hawkgirl.net/documents/communication/One-time-pad.pdf][impracticable]] with the current internet. Hence, we have to use shorter keys and reuse them. For example, if we have the plaintext "abcdef" and the key "1234", then the character "e" will get XORed with "1" and "f" with "2". XOR is not secure in that setup. Let's see how we can break it.
 
 * Break XOR cipher with frequency analysis
 
