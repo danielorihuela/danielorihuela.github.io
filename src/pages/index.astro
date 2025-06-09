@@ -3,171 +3,356 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const heroTexts = [
+	"Elite Software Engineer",
+	"System Architect",
+	"Code Artisan",
+	"Digital Craftsman",
+];
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			@font-face {
-				font-family: "Moondance";
-				src: url("/fonts/moondance/Moondance.eot");
-				src:
-					url("/fonts/moondance/Moondance.eot?#iefix")
-						format("embedded-opentype"),
-					url("/fonts/moondance/Moondance.woff2") format("woff2"),
-					url("/fonts/moondance/Moondance.woff") format("woff"),
-					url("/fonts/moondance/Moondance.ttf") format("truetype"),
-					url("/fonts/moondance/Moondance.svg#Moondance") format("svg");
-			}
-
-			@keyframes noise-1 {
-				5% { clip-path: inset(1px 0 36px 0); }
-				10% { clip-path: inset(73px 0 2px 0); }
-				15% { clip-path: inset(32px 0 54px 0); }
-				20% { clip-path: inset(100px 0 1px 0); }
-				25% { clip-path: inset(50px 0 36px 0); }
-				30% { clip-path: inset(84px 0 16px 0); }
-				35% { clip-path: inset(40px 0 33px 0); }
-				40% { clip-path: inset(6px 0 10px 0); }
-				45% { clip-path: inset(88px 0 6px 0); }
-				50% { clip-path: inset(86px 0 11px 0); }
-				55% { clip-path: inset(90px 0 7px 0); }
-				60% { clip-path: inset(21px 0 77px 0); }
-				65% { clip-path: inset(65px 0 33px 0); }
-				70% { clip-path: inset(80px 0 15px 0); }
-				75% { clip-path: inset(69px 0 18px 0); }
-				80% { clip-path: inset(33px 0 9px 0); }
-				85% { clip-path: inset(16px 0 61px 0); }
-				90% { clip-path: inset(37px 0 47px 0); }
-				95% { clip-path: inset(75px 0 9px 0); }
-				100% { clip-path: inset(54px 0 36px 0); }
-			}
-
-			@keyframes noise-2 {
-				0% { clip-path: inset(20px 0 34px 0); }
-				5% { clip-path: inset(62px 0 23px 0); }
-				10% { clip-path: inset(75px 0 10px 0); }
-				15% { clip-path: inset(52px 0 38px 0); }
-				20% { clip-path: inset(19px 0 43px 0); }
-				25% { clip-path: inset(61px 0 31px 0); }
-				30% { clip-path: inset(81px 0 11px 0); }
-				35% { clip-path: inset(33px 0 67px 0); }
-				40% { clip-path: inset(87px 0 5px 0); }
-				45% { clip-path: inset(88px 0 3px 0); }
-				50% { clip-path: inset(92px 0 8px 0); }
-				55% { clip-path: inset(85px 0 8px 0); }
-				60% { clip-path: inset(46px 0 49px 0); }
-				65% { clip-path: inset(46px 0 49px 0); }
-				70% { clip-path: inset(89px 0 5px 0); }
-				75% { clip-path: inset(78px 0 17px 0); }
-				80% { clip-path: inset(19px 0 58px 0); }
-				85% { clip-path: inset(80px 0 1px 0); }
-				90% { clip-path: inset(41px 0 51px 0); }
-				95% { clip-path: inset(27px 0 68px 0); }
-				100% { clip-path: inset(63px 0 34px 0); }
-			}
-
-			/* Phone style */
-
-			body {
-				display: flex;
-				flex-direction: column;
-				width: 100%;
-				margin: 0;
-
-				background-color: #222222;
-				background-image: url("/src/images/background/cyber-reaper.avif");
-				background-position: center center;
-				background-repeat: no-repeat;
-				background-attachment: fixed;
-				background-size: cover;
-			}
-
-			.glitched-background-text {
-				position: absolute;
-				z-index: -1;
-				left: 50%;
-				top: 50%;
-				transform: translateX(-50%) translateY(-50%);
-
-				cursor: default;
-
-				font-size: 10vw;
-				text-align: center;
-				font-family: Moondance;
-				color: #ffffff;
-
-				animation: glitch-skew-phone 10s infinite step-end forwards;
-			}
-
-			.glitched-background-text::before {
-				content: attr(data-text);
-
-				position: absolute;
-				width: 100%;
-				top: 0px;
-				left: 2px;
-
-				text-shadow: -2px 0 var(--accent);
-				animation: noise-1 5s infinite linear alternate-reverse;
-			}
-
-			.glitched-background-text::after {
-				content: attr(data-text);
-
-				position: absolute;
-				width: 100%;
-				top: 0px;
-				left: -2px;
-
-				text-shadow:
-					-2px 0 var(--accent),
-					2px 2px var(--accent);
-				animation: noise-2 2s infinite linear alternate-reverse;
-			}
-
-			@keyframes glitch-skew-phone {
-				80% { transform: translateX(-50%) translateY(-50%) skew(-70deg); }
-				81% { transform: translateX(-50%) translateY(-50%); }
-				94% { transform: translateX(-50%) translateY(-50%) skew(-70deg); }
-				95% { transform: translateX(-50%) translateY(-50%); }
-				96% { transform: translateX(-50%) translateY(-50%) skew(-85deg); }
-				97% { transform: translateX(-50%) translateY(-50%); }
-			}
-
-			/* Desktop (or bigger screen) style */
-
-			@media only screen and (min-width: 1024px) {
-				body {
-					background-image: url("/src/images/background/cyber-reaper-full.avif");
-					background-position: right center;
-				}
-
-				.glitched-background-text {
-					left: 5%;
-					transform: translateY(-50%);
-
-					font-size: 6rem;
-
-					animation: glitch-skew-desktop 10s infinite step-end forwards;
-				}
-			}
-
-			@keyframes glitch-skew-desktop {
-				80% { transform: translateY(-50%) skew(-70deg); }
-				81% { transform: translateY(-50%); }
-				94% { transform: translateY(-50%) skew(-70deg); }
-				95% { transform: translateY(-50%); }
-				96% { transform: translateY(-50%) skew(-85deg); }
-				97% { transform: translateY(-50%); }
-			}
-		</style>
 	</head>
 
 	<body>
 		<Header />
-		<div class="glitched-background-text" data-text="DANIEL ORIHUELA">DANIEL ORIHUELA</div>
+		<section
+			class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+		>
+			{/* Centered Wisdom Animation */}
+			<div class="absolute inset-0 flex items-center justify-center">
+				<svg
+					class="w-full h-full max-w-4xl max-h-4xl"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 800 800"
+				>
+					<defs>
+						<radialGradient
+							id="wisdomGlow"
+							cx="50%"
+							cy="50%"
+							r="50%"
+						>
+							<stop
+								offset="0%"
+								style={{
+									stopColor: "#FFFFFF",
+									stopOpacity: 0.1,
+								}}></stop>
+							<stop
+								offset="30%"
+								style={{
+									stopColor: "#00FFFF",
+									stopOpacity: 0.08,
+								}}></stop>
+							<stop
+								offset="60%"
+								style={{
+									stopColor: "#8B5CF6",
+									stopOpacity: 0.05,
+								}}></stop>
+							<stop
+								offset="100%"
+								style={{
+									stopColor: "transparent",
+									stopOpacity: 0,
+								}}></stop>
+						</radialGradient>
+
+						<filter id="softGlow">
+							<feGaussianBlur
+								stdDeviation="3"
+								result="coloredBlur"></feGaussianBlur>
+							<feMerge>
+								<feMergeNode in="coloredBlur"></feMergeNode>
+								<feMergeNode in="SourceGraphic"></feMergeNode>
+							</feMerge>
+						</filter>
+					</defs>
+
+					{
+						/* Central wisdom symbol - geometric representation of knowledge */
+					}
+					<g transform="translate(400, 400)">
+						{/* Outer wisdom ring */}
+						<circle
+							r="150"
+							fill="none"
+							stroke="rgba(0, 255, 255, 0.3)"
+							stroke-width="1"
+							stroke-dasharray="5 10"
+							filter="url(#softGlow)"
+						>
+							<animateTransform
+								attributeName="transform"
+								type="rotate"
+								values="0;360"
+								dur="60s"
+								repeatCount="indefinite"></animateTransform>
+						</circle>
+
+						{/* Middle precision ring */}
+						<circle
+							r="100"
+							fill="none"
+							stroke="rgba(139, 92, 246, 0.4)"
+							stroke-width="1.5"
+							stroke-dasharray="3 6"
+							filter="url(#softGlow)"
+						>
+							<animateTransform
+								attributeName="transform"
+								type="rotate"
+								values="360;0"
+								dur="45s"
+								repeatCount="indefinite"></animateTransform>
+						</circle>
+
+						{/* Inner mastery ring */}
+						<circle
+							r="60"
+							fill="none"
+							stroke="rgba(255, 255, 255, 0.6)"
+							stroke-width="2"
+							stroke-dasharray="2 4"
+							filter="url(#softGlow)"
+						>
+							<animateTransform
+								attributeName="transform"
+								type="rotate"
+								values="0;360"
+								dur="30s"
+								repeatCount="indefinite"></animateTransform>
+						</circle>
+
+						{
+							/* Geometric wisdom points - representing knowledge nodes */
+						}
+						{
+							[...Array(8)].map((_, i) => {
+								const angle = i * 45 * (Math.PI / 180);
+								const radius = 120;
+
+								return (
+									<g>
+										<circle
+											cx={Math.cos(angle) * radius}
+											cy={Math.sin(angle) * radius}
+											r="3"
+											fill="rgba(0, 255, 255, 0.7)"
+											filter="url(#softGlow)"
+										>
+											<animate
+												attributeName="opacity"
+												values="0.3;1;0.3"
+												dur={`${4 + i * 0.5}s`}
+												repeatCount="indefinite"
+											/>
+											<animate
+												attributeName="r"
+												values="2;4;2"
+												dur={`${4 + i * 0.5}s`}
+												repeatCount="indefinite"
+											/>
+										</circle>
+
+										{/* Connecting lines to center - representing knowledge flow */}
+										<line
+											x1={Math.cos(angle) * radius}
+											y1={Math.sin(angle) * radius}
+											x2={Math.cos(angle) * 65}
+											y2={Math.sin(angle) * 65}
+											stroke="rgba(139, 92, 246, 0.3)"
+											stroke-width="1"
+											filter="url(#softGlow)"
+										>
+											<animate
+												attributeName="opacity"
+												values="0.1;0.6;0.1"
+												dur={`${6 + i * 0.3}s`}
+												repeatCount="indefinite"
+											/>
+										</line>
+									</g>
+								);
+							})
+						}
+
+						{/* Central core - the essence of mastery */}
+						<circle
+							r="20"
+							fill="rgba(255, 255, 255, 0.1)"
+							stroke="rgba(255, 255, 255, 0.8)"
+							stroke-width="1"
+							filter="url(#softGlow)"
+						>
+							<animate
+								attributeName="opacity"
+								values="0.6;1;0.6"
+								dur="3s"
+								repeatCount="indefinite"></animate>
+						</circle>
+
+						{/* Subtle precision indicators */}
+						{
+							[...Array(4)].map((_, i) => (
+								<g>
+									<rect
+										x="80"
+										y="-0.5"
+										width="15"
+										height="1"
+										fill="rgba(0, 255, 255, 0.4)"
+										filter="url(#softGlow)"
+									>
+										<animate
+											attributeName="opacity"
+											values="0.2;0.8;0.2"
+											dur={`${5 + i}s`}
+											repeatCount="indefinite"
+										/>
+									</rect>
+								</g>
+							))
+						}
+					</g>
+
+					{/* Subtle background wisdom pattern */}
+					<defs>
+						<pattern
+							id="wisdomGrid"
+							x="0"
+							y="0"
+							width="40"
+							height="40"
+							patternUnits="userSpaceOnUse"
+						>
+							<circle
+								cx="20"
+								cy="20"
+								r="0.5"
+								fill="rgba(0, 255, 255, 0.1)"></circle>
+						</pattern>
+					</defs>
+					<rect
+						width="100%"
+						height="100%"
+						fill="url(#wisdomGrid)"
+						opacity="0.3"></rect>
+				</svg>
+			</div>
+
+			{/* Subtle ambient glow */}
+			<div class="absolute inset-0 flex items-center justify-center">
+				<div
+					class="w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
+					style={{ animationDuration: "8s" }}
+				>
+				</div>
+			</div>
+
+			{/* Main content */}
+			<div
+				class={"relative z-10 text-center max-w-6xl mx-auto px-6 transition-all duration-1000 opacity-100 translate-y-0"}
+			>
+				<h1
+					class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
+				>
+					<span class="text-white drop-shadow-lg">Daniel</span>
+					<span
+						class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 animate-pulse drop-shadow-2xl"
+					>
+						Orihuela
+					</span>
+				</h1>
+
+				<div class="h-20 mb-8 flex items-center justify-center">
+					<h2
+					id = "hero-text"
+						class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-300 transition-all duration-500 drop-shadow-lg"
+					>
+						Elite Software Engineer
+					</h2>
+				</div>
+
+				<p
+					class="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-md"
+				>
+					Crafting exceptional software solutions with the precision
+					of a master artisan. Every line of code, every system
+					design, every architectural decision—executed with
+					unwavering excellence.
+				</p>
+
+				<div
+					class="flex flex-col sm:flex-row gap-6 justify-center items-center"
+				>
+					<button
+						class="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 border border-purple-400/30"
+					>
+						<span class="relative z-10">View My Work</span>
+						<div
+							class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+						>
+						</div>
+					</button>
+
+					<button
+						class="group px-8 py-4 border-2 border-gray-700 text-gray-300 font-semibold rounded-lg transition-all duration-300 hover:border-cyan-400 hover:text-cyan-400 hover:shadow-lg hover:shadow-cyan-400/50 backdrop-blur-sm"
+					>
+						<span class="flex items-center gap-2">
+							Get In Touch
+							<i class="fa-solid fa-arrow-down"></i>
+						</span>
+					</button>
+				</div>
+
+				<div class="mt-16 flex justify-center">
+					<div class="animate-bounce">
+						<i class="fa-solid fa-arrow-down"></i>
+					</div>
+				</div>
+			</div>
+
+			{/* Enhanced gradient overlay */}
+			<div
+				class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent"
+			>
+			</div>
+		</section>
 		<Footer />
+
+		<script>
+			// JavaScript for interactivity
+			document.addEventListener("DOMContentLoaded", () => {
+				const heroContent = document.getElementById("hero-content");
+				const heroText = document.getElementById("hero-text");
+				const heroTexts = [
+					"Elite Software Engineer",
+					"System Architect",
+					"Code Artisan",
+					"Digital Craftsman",
+				];
+
+				// Make the hero content visible
+				if (heroContent) {
+					heroContent.classList.remove("opacity-0", "translate-y-10");
+					heroContent.classList.add("opacity-100", "translate-y-0");
+				}
+
+				// Cycle through hero texts
+				let currentTextIndex = 0;
+				setInterval(() => {
+					currentTextIndex =
+						(currentTextIndex + 1) % heroTexts.length;
+					if (heroText) {
+						heroText.textContent = heroTexts[currentTextIndex];
+					}
+				}, 3000);
+			});
+		</script>
 	</body>
 </html>

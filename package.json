@@ -23,6 +23,7 @@
     "masonry-layout": "^4.2.2",
     "sass": "^1.78.0",
     "tailwindcss": "^3.4.14",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4"
   },
   "devDependencies": {

@@ -17,38 +17,83 @@ const socialLinksInfo = [
 
 	<body>
 		<Header />
-		<main class="m-full">
-			<article>
-				<div class="prose m-auto w-[80ch] max-w-full text-[#d3d3d3]">
-					<div class="mb-4 py-4 text-center leading-none">
-						<h1 class="font-[Iceland] text-white mb-2">About Me</h1>
-						<hr />
-					</div>
-					<p>
-						Hi! I'm Daniel Orihuela, a Software Engineer interested
-						in Cybersecurity, Cryptography, Algorithms, Distributed
-						Systems and AI.
-					</p>
-
-					<p>
-						I have five years of professional experience in the
-						fintech and security space. Currently focused on
-						building cryptographic libraries. Nonetheless, I am
-						always striving to improve my knowledge around making
-						secure and privacy friendly products with great user
-						experiences.
-					</p>
-
-					<p>
-						On my free time I enjoy improving my craftmanship,
-						learning martial arts, reading books and playing video
-						games.
-					</p>
-
-					<p>Aspiring hacker.</p>
+		<section class="pt-32 pb-24 bg-gradient-to-b from-black to-gray-900">
+			<div class="max-w-4xl mx-auto px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+						Daniel <span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-royalPurple via-royalPurple to-cyan-400"
+							>Orihuela</span
+						>
+					</h1>
 				</div>
-			</article>
-		</main>
+
+				<div class="prose prose-lg prose-invert max-w-none">
+					<div class="space-y-8 text-gray-300 leading-relaxed">
+						<p class="text-xl">
+							Every master craftsman has a story. Mine begins with
+							an insatiable curiosity about how systems work, how
+							they can be improved, and how they can be built to
+							last.
+						</p>
+
+						<div
+							class="bg-gray-800/30 p-8 rounded-lg border border-gray-700"
+						>
+							<h2 class="text-2xl font-bold text-white mb-4">
+								About Me
+							</h2>
+							<p>
+								I believe that software engineering is an art
+								form that requires both technical precision and
+								creative vision. Every line of code should serve
+								a purpose, every architecture decision should be
+								deliberate, and every system should be built to
+								endure.
+							</p>
+						</div>
+
+						<div class="grid md:grid-cols-2 gap-8">
+							<div
+								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
+							>
+								<h3
+									class="text-xl font-bold text-purple-400 mb-3"
+								>
+									Expertise
+								</h3>
+								<p class="text-sm">
+									Over a lustrum of experience building tools
+									to help clients in the Fintech and
+									Cybersecurity space.
+									<br />
+									<br />
+									From AI systems that extract insights from
+									invoices to low-level cryptographic
+									libraries that secured operations in
+									electronic voting systems.
+								</p>
+							</div>
+							<div
+								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
+							>
+								<h3
+									class="text-xl font-bold text-cyan-400 mb-3"
+								>
+									Innovation
+								</h3>
+								<p class="text-sm">
+									Constantly pushing the boundaries of what's
+									possible, exploring emerging technologies
+									and methodologies to deliver exceptional
+									results.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 		<footer>
 			<div class="flex justify-center gap-4">
 				{
