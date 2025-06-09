@@ -3,13 +3,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-
-const heroTexts = [
-	"Elite Software Engineer",
-	"System Architect",
-	"Code Artisan",
-	"Digital Craftsman",
-];
+import BackgroundAnimation from "../components/BackgroundAnimation.astro";
 ---
 
 <html lang="en">
@@ -22,237 +16,7 @@ const heroTexts = [
 		<section
 			class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
 		>
-			{/* Centered Wisdom Animation */}
-			<div class="absolute inset-0 flex items-center justify-center">
-				<svg
-					class="w-full h-full max-w-4xl max-h-4xl"
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 800 800"
-				>
-					<defs>
-						<radialGradient
-							id="wisdomGlow"
-							cx="50%"
-							cy="50%"
-							r="50%"
-						>
-							<stop
-								offset="0%"
-								style={{
-									stopColor: "#FFFFFF",
-									stopOpacity: 0.1,
-								}}></stop>
-							<stop
-								offset="30%"
-								style={{
-									stopColor: "#00FFFF",
-									stopOpacity: 0.08,
-								}}></stop>
-							<stop
-								offset="60%"
-								style={{
-									stopColor: "#8B5CF6",
-									stopOpacity: 0.05,
-								}}></stop>
-							<stop
-								offset="100%"
-								style={{
-									stopColor: "transparent",
-									stopOpacity: 0,
-								}}></stop>
-						</radialGradient>
-
-						<filter id="softGlow">
-							<feGaussianBlur
-								stdDeviation="3"
-								result="coloredBlur"></feGaussianBlur>
-							<feMerge>
-								<feMergeNode in="coloredBlur"></feMergeNode>
-								<feMergeNode in="SourceGraphic"></feMergeNode>
-							</feMerge>
-						</filter>
-					</defs>
-
-					{
-						/* Central wisdom symbol - geometric representation of knowledge */
-					}
-					<g transform="translate(400, 400)">
-						{/* Outer wisdom ring */}
-						<circle
-							r="150"
-							fill="none"
-							stroke="rgba(0, 255, 255, 0.3)"
-							stroke-width="1"
-							stroke-dasharray="5 10"
-							filter="url(#softGlow)"
-						>
-							<animateTransform
-								attributeName="transform"
-								type="rotate"
-								values="0;360"
-								dur="60s"
-								repeatCount="indefinite"></animateTransform>
-						</circle>
-
-						{/* Middle precision ring */}
-						<circle
-							r="100"
-							fill="none"
-							stroke="rgba(139, 92, 246, 0.4)"
-							stroke-width="1.5"
-							stroke-dasharray="3 6"
-							filter="url(#softGlow)"
-						>
-							<animateTransform
-								attributeName="transform"
-								type="rotate"
-								values="360;0"
-								dur="45s"
-								repeatCount="indefinite"></animateTransform>
-						</circle>
-
-						{/* Inner mastery ring */}
-						<circle
-							r="60"
-							fill="none"
-							stroke="rgba(255, 255, 255, 0.6)"
-							stroke-width="2"
-							stroke-dasharray="2 4"
-							filter="url(#softGlow)"
-						>
-							<animateTransform
-								attributeName="transform"
-								type="rotate"
-								values="0;360"
-								dur="30s"
-								repeatCount="indefinite"></animateTransform>
-						</circle>
-
-						{
-							/* Geometric wisdom points - representing knowledge nodes */
-						}
-						{
-							[...Array(8)].map((_, i) => {
-								const angle = i * 45 * (Math.PI / 180);
-								const radius = 120;
-
-								return (
-									<g>
-										<circle
-											cx={Math.cos(angle) * radius}
-											cy={Math.sin(angle) * radius}
-											r="3"
-											fill="rgba(0, 255, 255, 0.7)"
-											filter="url(#softGlow)"
-										>
-											<animate
-												attributeName="opacity"
-												values="0.3;1;0.3"
-												dur={`${4 + i * 0.5}s`}
-												repeatCount="indefinite"
-											/>
-											<animate
-												attributeName="r"
-												values="2;4;2"
-												dur={`${4 + i * 0.5}s`}
-												repeatCount="indefinite"
-											/>
-										</circle>
-
-										{/* Connecting lines to center - representing knowledge flow */}
-										<line
-											x1={Math.cos(angle) * radius}
-											y1={Math.sin(angle) * radius}
-											x2={Math.cos(angle) * 65}
-											y2={Math.sin(angle) * 65}
-											stroke="rgba(139, 92, 246, 0.3)"
-											stroke-width="1"
-											filter="url(#softGlow)"
-										>
-											<animate
-												attributeName="opacity"
-												values="0.1;0.6;0.1"
-												dur={`${6 + i * 0.3}s`}
-												repeatCount="indefinite"
-											/>
-										</line>
-									</g>
-								);
-							})
-						}
-
-						{/* Central core - the essence of mastery */}
-						<circle
-							r="20"
-							fill="rgba(255, 255, 255, 0.1)"
-							stroke="rgba(255, 255, 255, 0.8)"
-							stroke-width="1"
-							filter="url(#softGlow)"
-						>
-							<animate
-								attributeName="opacity"
-								values="0.6;1;0.6"
-								dur="3s"
-								repeatCount="indefinite"></animate>
-						</circle>
-
-						{/* Subtle precision indicators */}
-						{
-							[...Array(4)].map((_, i) => (
-								<g>
-									<rect
-										x="80"
-										y="-0.5"
-										width="15"
-										height="1"
-										fill="rgba(0, 255, 255, 0.4)"
-										filter="url(#softGlow)"
-									>
-										<animate
-											attributeName="opacity"
-											values="0.2;0.8;0.2"
-											dur={`${5 + i}s`}
-											repeatCount="indefinite"
-										/>
-									</rect>
-								</g>
-							))
-						}
-					</g>
-
-					{/* Subtle background wisdom pattern */}
-					<defs>
-						<pattern
-							id="wisdomGrid"
-							x="0"
-							y="0"
-							width="40"
-							height="40"
-							patternUnits="userSpaceOnUse"
-						>
-							<circle
-								cx="20"
-								cy="20"
-								r="0.5"
-								fill="rgba(0, 255, 255, 0.1)"></circle>
-						</pattern>
-					</defs>
-					<rect
-						width="100%"
-						height="100%"
-						fill="url(#wisdomGrid)"
-						opacity="0.3"></rect>
-				</svg>
-			</div>
-
-			{/* Subtle ambient glow */}
-			<div class="absolute inset-0 flex items-center justify-center">
-				<div
-					class="w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
-					style={{ animationDuration: "8s" }}
-				>
-				</div>
-			</div>
+			<BackgroundAnimation />
 
 			{/* Main content */}
 			<div
@@ -271,10 +35,10 @@ const heroTexts = [
 
 				<div class="h-20 mb-8 flex items-center justify-center">
 					<h2
-					id = "hero-text"
+						id="hero-text"
 						class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-300 transition-all duration-500 drop-shadow-lg"
 					>
-						Elite Software Engineer
+						Software Engineer
 					</h2>
 				</div>
 
@@ -328,20 +92,12 @@ const heroTexts = [
 		<script>
 			// JavaScript for interactivity
 			document.addEventListener("DOMContentLoaded", () => {
-				const heroContent = document.getElementById("hero-content");
 				const heroText = document.getElementById("hero-text");
 				const heroTexts = [
-					"Elite Software Engineer",
-					"System Architect",
-					"Code Artisan",
-					"Digital Craftsman",
+					"Software Engineer",
+					"Security Enthusiast",
+					"Code Craftsman",
 				];
-
-				// Make the hero content visible
-				if (heroContent) {
-					heroContent.classList.remove("opacity-0", "translate-y-10");
-					heroContent.classList.add("opacity-100", "translate-y-0");
-				}
 
 				// Cycle through hero texts
 				let currentTextIndex = 0;
