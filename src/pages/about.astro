@@ -3,10 +3,9 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import SocialLink from "../components/SocialLink.astro";
 
-const socialLinksInfo = [
-	["https://github.com/danielorihuela", "/github.svg"],
-	["mailto:danielorihuelarodriguez@gmail.com", "/email.svg"],
-	["https://twitter.com/_DanielOrihuela", "/twitter.svg"],
+const contactLinks = [
+	["https://github.com/danielorihuela", "/github.svg", "Github"],
+	["mailto:danielorihuelarodriguez@gmail.com", "/email.svg", "Email"],
 ];
 ---
 
@@ -58,7 +57,7 @@ const socialLinksInfo = [
 								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
 							>
 								<h3
-									class="text-xl font-bold text-purple-400 mb-3"
+									class="text-xl font-bold text-royalPurple mb-3"
 								>
 									Expertise
 								</h3>
@@ -68,10 +67,9 @@ const socialLinksInfo = [
 									Cybersecurity space.
 									<br />
 									<br />
-									From AI systems that extract insights from
-									invoices to low-level cryptographic
-									libraries that secured operations in
-									electronic voting systems.
+									From AI systems that extract insights from invoices
+									to low-level cryptographic libraries that secured
+									operations in electronic voting systems.
 								</p>
 							</div>
 							<div
@@ -93,19 +91,22 @@ const socialLinksInfo = [
 					</div>
 				</div>
 			</div>
-		</section>
-		<footer>
-			<div class="flex justify-center gap-4">
-				{
-					socialLinksInfo.map((socialLinkInfo) => (
-						<SocialLink
-							class="w-12 h-12"
-							href={socialLinkInfo[0]}
-							image={socialLinkInfo[1]}
-						/>
-					))
-				}
+
+			<div class="mt-16">
+				<div class="flex justify-center gap-4">
+					{
+						contactLinks.map(([href, image]) => (
+							<SocialLink
+								class="w-12 h-12"
+								href={href}
+								image={image}
+							/>
+						))
+					}
+				</div>
+
 			</div>
-		</footer>
+		</section>
+		<footer></footer>
 	</body>
 </html>

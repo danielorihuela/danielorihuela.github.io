@@ -1,13 +1,4 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import {
-	Astronav,
-	MenuItems,
-	MenuIcon,
-	OpenIcon,
-	CloseIcon,
-} from "astro-navbar";
-
 const navItems = [
 	{ name: "Home", path: "/" },
 	{ name: "About", path: "/about" },
@@ -29,9 +20,9 @@ const currentPath = Astro.url.pathname;
 					href="/"
 					class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"
 				>
-					<span class="text-purple-400">&lt;</span>
+					<span class="text-royalPurple">&lt;</span>
 					DO
-					<span class="text-purple-400">/&gt;</span>
+					<span class="text-royalPurple">/&gt;</span>
 				</a>
 
 				{/* Desktop Navigation */}
@@ -48,7 +39,7 @@ const currentPath = Astro.url.pathname;
 							>
 								{item.name}
 								<span
-									class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-400 to-cyan-400 transform transition-transform duration-300 ${
+									class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 ${
 										currentPath === item.path
 											? "scale-x-100"
 											: "scale-x-0 group-hover:scale-x-100"
