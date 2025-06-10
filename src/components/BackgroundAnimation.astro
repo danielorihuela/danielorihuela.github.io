@@ -34,39 +34,8 @@ function animatedCirclesData() {
 
 {/* Centered Wisdom Animation */}
 <div class="absolute inset-0 flex items-center justify-center">
-    <svg
-        class="w-full h-full max-w-4xl max-h-4xl"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 800 800"
-    >
+    <svg class="w-full h-full" viewBox="0 0 800 800">
         <defs>
-            <radialGradient id="wisdomGlow" cx="50%" cy="50%" r="50%">
-                <stop
-                    offset="0%"
-                    style={{
-                        stopColor: "#FFFFFF",
-                        stopOpacity: 0.1,
-                    }}></stop>
-                <stop
-                    offset="30%"
-                    style={{
-                        stopColor: "#00FFFF",
-                        stopOpacity: 0.08,
-                    }}></stop>
-                <stop
-                    offset="60%"
-                    style={{
-                        stopColor: "#8B5CF6",
-                        stopOpacity: 0.05,
-                    }}></stop>
-                <stop
-                    offset="100%"
-                    style={{
-                        stopColor: "transparent",
-                        stopOpacity: 0,
-                    }}></stop>
-            </radialGradient>
-
             <filter id="softGlow">
                 <feGaussianBlur stdDeviation="3" result="coloredBlur"
                 ></feGaussianBlur>
@@ -80,7 +49,7 @@ function animatedCirclesData() {
         {/* Central wisdom symbol - geometric representation of knowledge */}
         <g transform="translate(400, 400)">
             {
-                animatedCirclesData().map((circle, index) => (
+                animatedCirclesData().map((circle) => (
                     <circle
                         r={circle.radius}
                         fill="none"
@@ -147,25 +116,7 @@ function animatedCirclesData() {
                     dur="3s"
                     repeatCount="indefinite"></animate>
             </circle>
-
         </g>
-
-        {/* Subtle background wisdom pattern */}
-        <defs>
-            <pattern
-                id="wisdomGrid"
-                x="0"
-                y="0"
-                width="40"
-                height="40"
-                patternUnits="userSpaceOnUse"
-            >
-                <circle cx="20" cy="20" r="0.5" fill="rgba(0, 255, 255, 0.1)"
-                ></circle>
-            </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#wisdomGrid)" opacity="0.3"
-        ></rect>
     </svg>
 </div>
 

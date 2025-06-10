@@ -9,9 +9,9 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="px-4 py-0 bg-[#222222]">
+<header class="px-4 py-0">
 	<nav
-		class={"fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-purple-900/30"}
+		class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"
 	>
 		<div class="max-w-7xl mx-auto px-6 lg:px-8">
 			<div class="flex items-center justify-between h-20">
@@ -27,27 +27,25 @@ const currentPath = Astro.url.pathname;
 
 				{/* Desktop Navigation */}
 				<div class="hidden md:flex items-center space-x-8">
-					{
-						navItems.map((item) => (
-							<a
-								href={item.path}
-								class={`relative px-4 py-2 text-sm font-medium transition-all duration-300 group ${
+					{navItems.map((item) => (
+						<a
+							href={item.path}
+							class={`relative px-4 py-2 text-sm font-medium transition-all duration-300 group ${
+								currentPath === item.path
+									? "text-cyan-400"
+									: "text-gray-300 hover:text-white"
+							}`}
+						>
+							{item.name}
+							<span
+								class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 ${
 									currentPath === item.path
-										? "text-cyan-400"
-										: "text-gray-300 hover:text-white"
+										? "scale-x-100"
+										: "scale-x-0 group-hover:scale-x-100"
 								}`}
-							>
-								{item.name}
-								<span
-									class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 ${
-										currentPath === item.path
-											? "scale-x-100"
-											: "scale-x-0 group-hover:scale-x-100"
-									}`}
-								/>
-							</a>
-						))
-					}
+							/>
+						</a>
+					))}
 				</div>
 
 				{/* Mobile menu button */}
@@ -64,36 +62,74 @@ const currentPath = Astro.url.pathname;
 						class="w-6 h-6"
 					>
 						<path
+							id="menu-path"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="2"
-							d="M4 6h16M4 12h16m-7 6h7"></path>
+							d="M4 6h16M4 12h16m-7 6h7"
+						></path>
 					</svg>
 				</button>
 			</div>
 
 			{/* Mobile Navigation */}
 			<div
-                    id="mobile-menu"
-                    class="hidden md:hidden transition-all duration-300 overflow-hidden"
-                >
-                    <div
-                        class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"
-                    >
-                        {navItems.map((item) => (
-                            <a
-                                href={item.path}
-                                class={`block px-6 py-3 text-sm font-medium transition-colors duration-300 ${
-                                    currentPath === item.path
-                                        ? "text-cyan-400 bg-purple-900/20"
-                                        : "text-gray-300 hover:text-white hover:bg-gray-800/50"
-                                }`}
-                            >
-                                {item.name}
-                            </a>
-                        ))}
-                    </div>
-                </div>
+				id="mobile-menu"
+				class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"
+			>
+				<div
+					class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"
+				>
+					{navItems.map((item) => (
+						<a
+							href={item.path}
+							id="menu-item"
+							class={`block px-6 py-3 text-sm font-medium transition-colors duration-300 ${
+								currentPath === item.path
+									? "text-cyan-400 bg-purple-900/20"
+									: "text-gray-300 hover:text-white hover:bg-gray-800/50"
+							}`}
+						>
+							{item.name}
+						</a>
+					))}
+				</div>
+			</div>
 		</div>
 	</nav>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const mobileMenuButton = document.getElementById("mobile-menu-button");
+			const menuIconPath = document.getElementById("menu-path");
+			if (!mobileMenuButton || !menuIconPath) return;
+
+			mobileMenuButton.addEventListener("click", () => {
+				const mobileMenu = document.getElementById("mobile-menu");
+				if (!mobileMenu) return;
+
+				if (mobileMenu.classList.contains("max-h-0")) {
+					// Show menu
+					mobileMenu.classList.remove("max-h-0", "opacity-0");
+					mobileMenu.classList.add("max-h-96", "opacity-100");
+
+					// Change icon to "X"
+					menuIconPath.setAttribute(
+						"d",
+						"M6 18L18 6M6 6l12 12"
+					); // X icon path
+				} else {
+					// Hide menu
+					mobileMenu.classList.remove("max-h-96", "opacity-100");
+					mobileMenu.classList.add("max-h-0", "opacity-0");
+
+					// Change icon back to menu
+					menuIconPath.setAttribute(
+						"d",
+						"M4 6h16M4 12h16m-7 6h7"
+					); // Menu icon path
+				}
+			});
+		});
+	</script>
 </header>
