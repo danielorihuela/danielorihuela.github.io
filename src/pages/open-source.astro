@@ -62,13 +62,13 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		</script>
 	</head>
 
-	<body>
+	<body class="bg-gradient-to-b from-black to-gray-900">
 		<Header />
-		<main class="w-full">
+		<main class="w-full h-screen pt-32">
 			<div class="grid">
 				{
 					ossProjectsInfo.map((info) => (
-						<div class="grid-item flex flex-col items-center w-full px-8 border-2 border-dashed border-primary min-[480px]:w-auto min-[480px]:py-8">
+						<div class="grid-item flex flex-col items-center w-full px-8 bg-gray-800/30 p-8 rounded-lg border border-gray-700 min-[480px]:w-auto min-[480px]:py-8">
 							<h2>{info.name}</h2>
 							<SocialLink
 								class="w-12 h-12"

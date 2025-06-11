@@ -5,6 +5,9 @@ export default {
 		extend: {
 			colors: {
 				royalPurple: '#7851a9',
+				primary: {
+				DEFAULT: 'var(--accent)',
+			}
 			},
 		}
 	},
