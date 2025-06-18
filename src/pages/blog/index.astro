@@ -26,20 +26,19 @@ const posts = (await getCollection("blog")).sort(
 				>
 					{
 						posts.map((post) => (
-							<li class="group/item text-center lg:w-[30%] lg:first:w-[85%] lg:first:px-40 xl:first:w-[70%]">
+							<li class="group text-center lg:w-[30%] lg:first:w-[85%] lg:first:px-40 xl:first:w-[70%]">
 								<a
-									class="group/ref"
 									href={`/blog/${post.slug}/`}
 								>
 									<Image
-										class="mb-2 rounded-xl group-hover/ref:shadow-ba"
+										class="mb-2 rounded-xl group-hover:shadow-2xl group-hover:shadow-royalPurple/70"
 										src={post.data.cover}
 										alt=""
 									/>
-									<h4 class="m-0 leading-none text-[#d3d3d3] group-hover/ref:text-primary lg:group-first:text-4xl">
+									<h4 class="m-0 leading-none text-[#d3d3d3] group-hover:text-royalPurple lg:group-first:text-4xl">
 										{post.data.title}
 									</h4>
-									<p class="m-0 text-[#b9b9b9] group-hover/ref:text-primary">
+									<p class="m-0 text-[#b9b9b9] group-hover:text-royalPurple">
 										<FormattedDate
 											date={post.data.publishdate}
 										/>
