@@ -4,10 +4,10 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				royalPurple: '#7851a9',
+				royalPurple: 'var(--royal-purple)',
 				primary: {
-				DEFAULT: 'var(--accent)',
-			}
+					DEFAULT: 'var(--electric-blue)',
+				}
 			},
 		}
 	},
