@@ -1,0 +1,130 @@
+---
+function animatedCirclesData() {
+    return [
+        // Outer wisdom ring
+        {
+            radius: 150,
+            strokeColor: "rgba(0, 255, 255, 0.3)",
+            strokeWidth: 1,
+            strokeDashArray: "5 10",
+            values: "0;360",
+            duration: "60s",
+        },
+        // Middle precision ring
+        {
+            radius: 100,
+            strokeColor: "rgba(139, 92, 246, 0.4)",
+            strokeWidth: 1.5,
+            strokeDashArray: "3 6",
+            values: "360;0",
+            duration: "45s",
+        },
+        // Inner mastery ring
+        {
+            radius: 60,
+            strokeColor: "rgba(255, 255, 255, 0.6)",
+            strokeWidth: 2,
+            strokeDashArray: "2 4",
+            values: "0;360",
+            duration: "30s",
+        },
+    ];
+}
+---
+
+{/* Centered Wisdom Animation */}
+<div class="absolute inset-0 flex items-center justify-center">
+    <svg class="w-full h-full" viewBox="0 0 800 800">
+        <defs>
+            <filter id="softGlow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"
+                ></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+
+        {/* Central wisdom symbol - geometric representation of knowledge */}
+        <g transform="translate(400, 400)">
+            {
+                animatedCirclesData().map((circle) => (
+                    <circle
+                        r={circle.radius}
+                        fill="none"
+                        stroke={circle.strokeColor}
+                        stroke-width={circle.strokeWidth}
+                        stroke-dasharray={circle.strokeDashArray}
+                        filter="url(#softGlow)"
+                    >
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            values={circle.values}
+                            dur={circle.duration}
+                            repeatCount="indefinite"
+                        />
+                    </circle>
+                ))
+            }
+
+            {/* Geometric wisdom points - representing knowledge nodes */}
+            {
+                [...Array(8)].map((_, i) => {
+                    const angle = i * 45 * (Math.PI / 180);
+                    const radius = 120;
+
+                    return (
+                        <g>
+                            <circle
+                                cx={Math.cos(angle) * radius}
+                                cy={Math.sin(angle) * radius}
+                                r="3"
+                                fill="rgba(0, 255, 255, 0.7)"
+                                filter="url(#softGlow)"
+                            >
+                                <animate
+                                    attributeName="opacity"
+                                    values="0.3;1;0.3"
+                                    dur={`${4 + i * 0.5}s`}
+                                    repeatCount="indefinite"
+                                />
+                                <animate
+                                    attributeName="r"
+                                    values="2;4;2"
+                                    dur={`${4 + i * 0.5}s`}
+                                    repeatCount="indefinite"
+                                />
+                            </circle>
+                        </g>
+                    );
+                })
+            }
+
+            {/* Central core - the essence of mastery */}
+            <circle
+                r="20"
+                fill="rgba(255, 255, 255, 0.1)"
+                stroke="rgba(255, 255, 255, 0.8)"
+                stroke-width="1"
+                filter="url(#softGlow)"
+            >
+                <animate
+                    attributeName="opacity"
+                    values="0.6;1;0.6"
+                    dur="3s"
+                    repeatCount="indefinite"></animate>
+            </circle>
+        </g>
+    </svg>
+</div>
+
+{/* Subtle ambient glow */}
+<div class="absolute inset-0 flex items-center justify-center">
+    <div
+        class="w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
+        style={{ animationDuration: "8s" }}
+    >
+    </div>
+</div>

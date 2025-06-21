@@ -43,7 +43,7 @@ Let's start writing a simple program to print to the stdout.
 ** Hello world assembly
 
 
-#+begin_src nasm
+#+begin_src asm
 BITS 64 ; Define target architecture bits
 
 section .data ; Data segment
@@ -85,7 +85,7 @@ We inject shellcodes into running programs. Hence, we cannot specify the data la
 
 Removing the segments is easy, but... how can we mix the string? The stack will be our ally. Remember that when calling a function, a stack frame is created with the arguments, the local variables, and the return address. We can misuse that in assembly to load a string. The idea is to place the string directly after a call instruction. That way the return address of the stack will match the address of the string and we will be able to retrieve it inside the function.
 
-#+begin_src nasm
+#+begin_src asm
 BITS 64
 
 call below
@@ -130,7 +130,7 @@ Notice how many ~00~ are there. These are the null bytes.
 
 We can us the two's complement to avoid that. If we pass a negative number to the ~call~ instruction, the value will be padded with ~0xff~ instead of null bytes. A standard implementation of this solution consists of jumping to the end of the assembly program to a ~call~ instruction that will jump back to a function.
 
-#+begin_src nasm
+#+begin_src asm
 BITS 64
 
 jmp short bottom
@@ -182,7 +182,7 @@ Computers have 16 registers. 64-bit registers are built on top of old registers.
 
 When using bigger registers, values are padded with null bytes if they can't fill the space. Therefore, we want to use the smallest register possible in each operation. However, the remaining bytes can contain any data. We need to zero them out. This can be easily achieved with the xor operation. Additionally, calling ~mov register, 0~ adds null bytes. We need to use ~dec register~.
 
-#+begin_src nasm
+#+begin_src asm
 BITS 64
 
 jmp short bottom
@@ -268,7 +268,7 @@ You can try it out with ~gcc shell.c -o shell; chmod +x shell; ./shell~.
 
 If you search on the internet, you will find that [[https://man7.org/linux/man-pages/man3/system.3.html][system]] internally calls [[https://man7.org/linux/man-pages/man3/execl.3.html][execl]], which is build on top of the [[https://man7.org/linux/man-pages/man2/execve.2.html][execve]] system call. Execve receives three parameters: the program, the argument to the program, and key-value pairs to be passed as the environment. In our case, to spawn a shell, we are only interested in the first argument. Overall, building an assembly program that spawns a shell seems easy. Just call ~execve~ with ~/bin/sh~ as the program name.
 
-#+begin_src nasm
+#+begin_src asm
 BITS 64
 
 jmp short bottom

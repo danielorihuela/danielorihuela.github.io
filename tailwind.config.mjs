@@ -3,14 +3,12 @@ export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
 		extend: {
-			boxShadow: {
-				'ba': 'var(--box-shadow)',
-			}
-		},
-		colors: {
-			primary: {
-				DEFAULT: 'var(--accent)',
-			}
+			colors: {
+				royalPurple: 'var(--royal-purple)',
+				primary: {
+					DEFAULT: 'var(--electric-blue)',
+				}
+			},
 		}
 	},
 	plugins: [],

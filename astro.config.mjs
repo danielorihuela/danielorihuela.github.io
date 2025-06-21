@@ -11,6 +11,8 @@ export default defineConfig({
     site: 'https://danielorihuela.dev/',
     integrations: [mdx(), sitemap(), tailwind()],
     markdown: {
-        syntaxHighlight: 'prism',
+        shikiConfig: {
+            theme: 'dracula',
+        },
     },
 });

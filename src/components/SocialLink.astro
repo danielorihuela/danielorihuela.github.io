@@ -28,13 +28,14 @@ const { href, image, class: className } = Astro.props;
         grid-column-start: 1;
         opacity: 0;
         position: relative;
+        border-radius: 10px;
         background: repeating-conic-gradient(
             from var(--a),
-            var(--accent) 0%,
-            var(--accent) 5%,
+            var(--electric-blue) 0%,
+            var(--electric-blue) 5%,
             transparent 5%,
             transparent 40%,
-            var(--accent) 50%
+            var(--electric-blue) 50%
         );
         animation: animate 2s infinite linear;
     }
@@ -43,13 +44,31 @@ const { href, image, class: className } = Astro.props;
         content: "";
         position: absolute;
         inset: 3px;
-        background-color: #222222;
+        background-color: darkslateblue;
+        border-radius: 10px;
+    }
+
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 10px royalblue; }
+        50% { box-shadow: 0 0 20px royalblue; }
+        100% { box-shadow: 0 0 10px royalblue; }
+    }
+
+    .pulse-btn {
+        grid-row: 1 / -1;
+        grid-column: 1 / -1;
+        z-index: 0;
+
+        color: royalblue;
+        border: none;
+        border-radius: 10px;
+        animation: pulseGlow 1.5s infinite alternate;
     }
 </style>
 
 <div class:list={[ "grid group", className ]}>
     <div class="loader group-hover:opacity-100"></div>
-    <a class="row-span-full col-span-full z-0" href={href}>
+    <a class="pulse-btn" href={href}>
         <img src={image} />
     </a>
 </div>

@@ -3,10 +3,9 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import SocialLink from "../components/SocialLink.astro";
 
-const socialLinksInfo = [
-	["https://github.com/danielorihuela", "/github.svg"],
-	["mailto:danielorihuelarodriguez@gmail.com", "/email.svg"],
-	["https://twitter.com/_DanielOrihuela", "/twitter.svg"],
+const contactLinks = [
+	["https://github.com/danielorihuela", "/github.svg", "Github"],
+	["mailto:danielorihuelarodriguez@gmail.com", "/email.svg", "Email"],
 ];
 ---
 
@@ -17,50 +16,96 @@ const socialLinksInfo = [
 
 	<body>
 		<Header />
-		<main class="m-full">
-			<article>
-				<div class="prose m-auto w-[80ch] max-w-full text-[#d3d3d3]">
-					<div class="mb-4 py-4 text-center leading-none">
-						<h1 class="font-[Iceland] text-white mb-2">About Me</h1>
-						<hr />
-					</div>
-					<p>
-						Hi! I'm Daniel Orihuela, a Software Engineer interested
-						in Cybersecurity, Cryptography, Algorithms, Distributed
-						Systems and AI.
-					</p>
-
-					<p>
-						I have five years of professional experience in the
-						fintech and security space. Currently focused on
-						building cryptographic libraries. Nonetheless, I am
-						always striving to improve my knowledge around making
-						secure and privacy friendly products with great user
-						experiences.
-					</p>
-
-					<p>
-						On my free time I enjoy improving my craftmanship,
-						learning martial arts, reading books and playing video
-						games.
-					</p>
-
-					<p>Aspiring hacker.</p>
+		<section class="pt-32 pb-24 bg-gradient-to-b from-black to-gray-900">
+			<div class="max-w-4xl mx-auto px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-[Iceland]">
+						Daniel <span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-royalPurple via-royalPurple to-cyan-400"
+							>Orihuela</span
+						>
+					</h1>
 				</div>
-			</article>
-		</main>
-		<footer>
-			<div class="flex justify-center gap-4">
-				{
-					socialLinksInfo.map((socialLinkInfo) => (
-						<SocialLink
-							class="w-12 h-12"
-							href={socialLinkInfo[0]}
-							image={socialLinkInfo[1]}
-						/>
-					))
-				}
+
+				<div class="prose prose-lg prose-invert max-w-none">
+					<div class="space-y-8 text-gray-300 leading-relaxed">
+						<p class="text-xl">
+							Every master craftsman has a story. Mine begins with
+							an insatiable curiosity about how systems work, how
+							they can be improved, and how they can be built to
+							last.
+						</p>
+
+						<div
+							class="bg-gray-800/30 p-8 rounded-lg border border-gray-700"
+						>
+							<h2 class="text-2xl font-bold text-white mb-4 font-[Iceland]">
+								About Me
+							</h2>
+							<p>
+								I'm a dedicated Software Engineer with a deep-rooted passion
+								for Cybersecurity, Cryptography, Algorithms, Distributed Systems,
+								and AI. Over the past five years, I have honed my expertise within
+								the fintech and security sectors, designing and developing robust,
+								scalable solutions that prioritize security and efficiency.
+								<br />
+								<br />
+								A relentless problem solver and aspiring hacker, I thrive on challenges that push
+								the boundaries of secure systems and innovation.
+							</p>
+						</div>
+
+						<div class="grid md:grid-cols-2 gap-8">
+							<div
+								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
+							>
+								<h3
+									class="text-xl font-bold text-royalPurple mb-3 font-[Iceland]"
+								>
+									Expertise
+								</h3>
+								<p class="text-sm">
+									I specialize in building scalable, secure systems with a strong focus on privacy.
+									My expertise spans backend engineering, cryptographic libraries, software architecture,
+									and developer tooling, ensuring robust and efficient solutions.
+								</p>
+							</div>
+							<div
+								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
+							>
+								<h3
+									class="text-xl font-bold text-cyan-400 mb-3 font-[Iceland]"
+								>
+									Philosophy & Vision
+								</h3>
+								<p class="text-sm">
+									Security and scalability should never be a second thought.
+									I build systems with resilience and privacy in mind, ensuring
+									they are both secure and scalable from the ground up. 
+									I strive to design solutions that are 	 efficient, maintainable,
+									and future-proof.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</footer>
+
+			<div class="mt-16">
+				<div class="flex justify-center gap-4">
+					{
+						contactLinks.map(([href, image]) => (
+							<SocialLink
+								class="w-12 h-12"
+								href={href}
+								image={image}
+							/>
+						))
+					}
+				</div>
+
+			</div>
+		</section>
+		<footer></footer>
 	</body>
 </html>
