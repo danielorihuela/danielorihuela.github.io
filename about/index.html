@@ -1,184 +1,37 @@
-<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/about/"><!-- Primary Meta Tags --><title>About Me</title><meta name="title" content="About Me"><meta name="description" content=""><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/about/"><meta property="og:title" content="About Me"><meta property="og:description" content=""><meta property="og:image" content="https://danielorihuela.dev/me.svg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/about/"><meta property="twitter:title" content="About Me"><meta property="twitter:description" content=""><meta property="twitter:image" content="https://danielorihuela.dev/me.svg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.CGCRsbFX.css">
-<link rel="stylesheet" href="/_astro/_slug_.C6YaSCZn.css">
-<style>@property --a{syntax: "<angle>"; inherits: false; initial-value: 0deg;}@keyframes animate{0%{--a: 0deg}to{--a: 360deg}}.loader[data-astro-cid-xfej6wit]{grid-row-start:1;grid-column-start:1;opacity:0;position:relative;background:repeating-conic-gradient(from var(--a),var(--accent) 0%,var(--accent) 5%,transparent 5%,transparent 40%,var(--accent) 50%);animation:animate 2s infinite linear}.loader[data-astro-cid-xfej6wit]:before{content:"";position:absolute;inset:3px;background-color:#222}
-</style></head> <body> <header class="px-4 py-0 bg-[#222222]" data-astro-cid-3ef6ksr2> <div class="sm:hidden text-end" data-astro-cid-3ef6ksr2>  <button id="astronav-menu" aria-label="Toggle Menu">  <span class="astronav-open-icon astronav-toggle flex p-2" data-astro-cid-3ef6ksr2> <img src="/hamburger.svg" data-astro-cid-3ef6ksr2></span> <span class="astronav-close-icon astronav-toggle hidden flex p-2" data-astro-cid-3ef6ksr2>  <img src="/hamburger.svg" data-astro-cid-3ef6ksr2> </span>  </button> <nav class="astronav-items astronav-toggle hidden" data-astro-cid-3ef6ksr2>  <ul data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2><a href="/" data-astro-cid-3ef6ksr2> Home </a></li> <li data-astro-cid-3ef6ksr2><a href="/about" class="font-bold" data-astro-cid-3ef6ksr2> About </a></li> <li data-astro-cid-3ef6ksr2><a href="/blog" data-astro-cid-3ef6ksr2> Blog </a></li> <li data-astro-cid-3ef6ksr2> <a href="/open-source" data-astro-cid-3ef6ksr2> Open Source </a> </li> <li data-astro-cid-3ef6ksr2><div class="line-separator" data-astro-cid-3ef6ksr2></div></li> <li data-astro-cid-3ef6ksr2> <div class="flex justify-end" data-astro-cid-3ef6ksr2> <a class="" href="/feed.xml" data-astro-cid-3ef6ksr2><img src="/rss.svg" data-astro-cid-3ef6ksr2></a> </div> </li> </ul>  </nav>  <script>(function(){const closeOnClick = false;
-
-["DOMContentLoaded", "astro:after-swap"].forEach((event) => {
-  document.addEventListener(event, addListeners);
-});
-
-// Function to clone and replace elements
-function cloneAndReplace(element) {
-  const clone = element.cloneNode(true);
-  element.parentNode.replaceChild(clone, element);
-}
-
-function addListeners() {
-  // Clean up existing listeners
-  const oldMenuButton = document.getElementById("astronav-menu");
-  if (oldMenuButton) {
-    cloneAndReplace(oldMenuButton);
-  }
-
-  const oldDropdownMenus = document.querySelectorAll(".astronav-dropdown");
-  oldDropdownMenus.forEach((menu) => {
-    cloneAndReplace(menu);
-  });
-
-  // Mobile nav toggle
-  const menuButton = document.getElementById("astronav-menu");
-  menuButton && menuButton.addEventListener("click", toggleMobileNav);
-
-  // Dropdown menus
-  const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
-  dropdownMenus.forEach((menu) => {
-    const button = menu.querySelector("button");
-    button &&
-      button.addEventListener("click", (event) =>
-        toggleDropdownMenu(event, menu, dropdownMenus)
-      );
-
-    // Handle Submenu Dropdowns
-    const dropDownSubmenus = menu.querySelectorAll(
-      ".astronav-dropdown-submenu"
-    );
-
-    dropDownSubmenus.forEach((submenu) => {
-      const submenuButton = submenu.querySelector("button");
-      submenuButton &&
-        submenuButton.addEventListener("click", (event) => {
-          event.stopImmediatePropagation();
-          toggleSubmenuDropdown(event, submenu);
-        });
-    });
-  });
-
-  // Clicking away from dropdown will remove the dropdown class
-  document.addEventListener("click", closeAllDropdowns);
-
-  if (closeOnClick) {
-    handleCloseOnClick();
-  }
-}
-
-function toggleMobileNav() {
-  [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
-    el.classList.toggle("hidden");
-  });
-}
-
-function toggleDropdownMenu(event, menu, dropdownMenus) {
-  toggleMenu(menu);
-
-  // Close one dropdown when selecting another
-  Array.from(dropdownMenus)
-    .filter((el) => el !== menu && !menu.contains(el))
-    .forEach(closeMenu);
-
-  event.stopPropagation();
-}
-
-function toggleSubmenuDropdown(event, submenu) {
-  event.stopPropagation();
-  toggleMenu(submenu);
-
-  // Close sibling submenus at the same nesting level
-  const siblingSubmenus = submenu
-    .closest(".astronav-dropdown")
-    .querySelectorAll(".astronav-dropdown-submenu");
-  Array.from(siblingSubmenus)
-    .filter((el) => el !== submenu && !submenu.contains(el))
-    .forEach(closeMenu);
-}
-
-function closeAllDropdowns(event) {
-  const dropdownMenus = document.querySelectorAll(".dropdown-toggle");
-  const dropdownParent = document.querySelectorAll(
-    ".astronav-dropdown, .astronav-dropdown-submenu"
-  );
-  const isButtonInsideDropdown = [
-    ...document.querySelectorAll(
-      `.astronav-dropdown button, .astronav-dropdown label, .astronav-dropdown input,
-	  .astronav-dropdown-submenu button, .astronav-dropdown-submenu label, .astronav-dropdown-submenu input,
-	  #astronav-menu`
-    ),
-  ].some((button) => button.contains(event.target));
-  if (!isButtonInsideDropdown) {
-    dropdownMenus.forEach((d) => {
-      // console.log("I ran", d);
-      // if (!d.contains(event.target)) {
-      d.classList.remove("open");
-      d.removeAttribute("open");
-      d.classList.add("hidden");
-      // }
-    });
-    dropdownParent.forEach((d) => {
-      d.classList.remove("open");
-      d.removeAttribute("open");
-      d.setAttribute("aria-expanded", "false");
-    });
-  }
-}
-
-function toggleMenu(menu) {
-  menu.classList.toggle("open");
-  const expanded = menu.getAttribute("aria-expanded") === "true";
-  menu.setAttribute("aria-expanded", expanded ? "false" : "true");
-  menu.hasAttribute("open")
-    ? menu.removeAttribute("open")
-    : menu.setAttribute("open", "");
-
-  const dropdownToggle = menu.querySelector(".dropdown-toggle");
-  const dropdownExpanded = dropdownToggle.getAttribute("aria-expanded");
-  dropdownToggle.classList.toggle("hidden");
-  dropdownToggle.setAttribute(
-    "aria-expanded",
-    dropdownExpanded === "true" ? "false" : "true"
-  );
-}
-
-function closeMenu(menu) {
-  // console.log("closing", menu);
-  menu.classList.remove("open");
-  menu.removeAttribute("open");
-  menu.setAttribute("aria-expanded", "false");
-  const dropdownToggles = menu.querySelectorAll(".dropdown-toggle");
-  dropdownToggles.forEach((toggle) => {
-    toggle.classList.add("hidden");
-    toggle.setAttribute("aria-expanded", "false");
-  });
-}
-
-function handleCloseOnClick() {
-  const navMenuItems = document.querySelector(".astronav-items");
-  const navToggle = document.getElementById("astronav-menu");
-  const navLink = navMenuItems && navMenuItems.querySelectorAll("a");
-
-  const MenuIcons = navToggle.querySelectorAll(".astronav-toggle");
-
-  navLink &&
-    navLink.forEach((item) => {
-      item.addEventListener("click", () => {
-        navMenuItems?.classList.add("hidden");
-        MenuIcons.forEach((el) => {
-          el.classList.toggle("hidden");
-        });
-      });
-    });
-}
-})();</script> </div> <nav class="hidden sm:flex" data-astro-cid-3ef6ksr2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2> Home </a> <a href="/about" class="font-bold" data-astro-cid-3ef6ksr2> About </a> <a href="/blog" data-astro-cid-3ef6ksr2> Blog </a> <a href="/open-source" data-astro-cid-3ef6ksr2> Open Source </a> <div class="line-separator" data-astro-cid-3ef6ksr2></div> <div class="flex items-center" data-astro-cid-3ef6ksr2> <a href="/feed.xml" data-astro-cid-3ef6ksr2><img src="/rss.svg" data-astro-cid-3ef6ksr2></a> </div> </div> </nav> </header>  <main class="m-full"> <article> <div class="prose m-auto w-[80ch] max-w-full text-[#d3d3d3]"> <div class="mb-4 py-4 text-center leading-none"> <h1 class="font-[Iceland] text-white mb-2">About Me</h1> <hr> </div> <p>
-Hi! I'm Daniel Orihuela, a Software Engineer interested
-						in Cybersecurity, Cryptography, Algorithms, Distributed
-						Systems and AI.
-</p> <p>
-I have five years of professional experience in the
-						fintech and security space. Currently focused on
-						building cryptographic libraries. Nonetheless, I am
-						always striving to improve my knowledge around making
-						secure and privacy friendly products with great user
-						experiences.
-</p> <p>
-On my free time I enjoy improving my craftmanship,
-						learning martial arts, reading books and playing video
-						games.
-</p> <p>Aspiring hacker.</p> </div> </article> </main> <footer> <div class="flex justify-center gap-4"> <div class="grid group w-12 h-12" data-astro-cid-xfej6wit> <div class="loader group-hover:opacity-100" data-astro-cid-xfej6wit></div> <a class="row-span-full col-span-full z-0" href="https://github.com/danielorihuela" data-astro-cid-xfej6wit> <img src="/github.svg" data-astro-cid-xfej6wit> </a> </div><div class="grid group w-12 h-12" data-astro-cid-xfej6wit> <div class="loader group-hover:opacity-100" data-astro-cid-xfej6wit></div> <a class="row-span-full col-span-full z-0" href="mailto:danielorihuelarodriguez@gmail.com" data-astro-cid-xfej6wit> <img src="/email.svg" data-astro-cid-xfej6wit> </a> </div><div class="grid group w-12 h-12" data-astro-cid-xfej6wit> <div class="loader group-hover:opacity-100" data-astro-cid-xfej6wit></div> <a class="row-span-full col-span-full z-0" href="https://twitter.com/_DanielOrihuela" data-astro-cid-xfej6wit> <img src="/twitter.svg" data-astro-cid-xfej6wit> </a> </div> </div> </footer> </body></html>
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/about/"><!-- Primary Meta Tags --><title>About Me</title><meta name="title" content="About Me"><meta name="description" content=""><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/about/"><meta property="og:title" content="About Me"><meta property="og:description" content=""><meta property="og:image" content="https://danielorihuela.dev/me.svg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/about/"><meta property="twitter:title" content="About Me"><meta property="twitter:description" content=""><meta property="twitter:image" content="https://danielorihuela.dev/me.svg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.BdnWl1ph.css">
+<link rel="stylesheet" href="/_astro/_slug_.wqGeQQNF.css">
+<style>@property --a{syntax: "<angle>"; inherits: false; initial-value: 0deg;}@keyframes animate{0%{--a: 0deg}to{--a: 360deg}}.loader[data-astro-cid-xfej6wit]{grid-row-start:1;grid-column-start:1;opacity:0;position:relative;border-radius:10px;background:repeating-conic-gradient(from var(--a),var(--electric-blue) 0%,var(--electric-blue) 5%,transparent 5%,transparent 40%,var(--electric-blue) 50%);animation:animate 2s infinite linear}.loader[data-astro-cid-xfej6wit]:before{content:"";position:absolute;inset:3px;background-color:#483d8b;border-radius:10px}@keyframes pulseGlow{0%{box-shadow:0 0 10px #4169e1}50%{box-shadow:0 0 20px #4169e1}to{box-shadow:0 0 10px #4169e1}}.pulse-btn[data-astro-cid-xfej6wit]{grid-row:1 / -1;grid-column:1 / -1;z-index:0;color:#4169e1;border:none;border-radius:10px;animation:pulseGlow 1.5s infinite alternate}
+</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+DO
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <section class="pt-32 pb-24 bg-gradient-to-b from-black to-gray-900"> <div class="max-w-4xl mx-auto px-6 lg:px-8"> <div class="text-center mb-16"> <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-[Iceland]">
+Daniel <span class="text-transparent bg-clip-text bg-gradient-to-r from-royalPurple via-royalPurple to-cyan-400">Orihuela</span> </h1> </div> <div class="prose prose-lg prose-invert max-w-none"> <div class="space-y-8 text-gray-300 leading-relaxed"> <p class="text-xl">
+Every master craftsman has a story. Mine begins with
+							an insatiable curiosity about how systems work, how
+							they can be improved, and how they can be built to
+							last.
+</p> <div class="bg-gray-800/30 p-8 rounded-lg border border-gray-700"> <h2 class="text-2xl font-bold text-white mb-4 font-[Iceland]">
+About Me
+</h2> <p>
+I'm a dedicated Software Engineer with a deep-rooted passion
+								for Cybersecurity, Cryptography, Algorithms, Distributed Systems,
+								and AI. Over the past five years, I have honed my expertise within
+								the fintech and security sectors, designing and developing robust,
+								scalable solutions that prioritize security and efficiency.
+<br> <br>
+A relentless problem solver and aspiring hacker, I thrive on challenges that push
+								the boundaries of secure systems and innovation.
+</p> </div> <div class="grid md:grid-cols-2 gap-8"> <div class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"> <h3 class="text-xl font-bold text-royalPurple mb-3 font-[Iceland]">
+Expertise
+</h3> <p class="text-sm">
+I specialize in building scalable, secure systems with a strong focus on privacy.
+									My expertise spans backend engineering, cryptographic libraries, software architecture,
+									and developer tooling, ensuring robust and efficient solutions.
+</p> </div> <div class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"> <h3 class="text-xl font-bold text-cyan-400 mb-3 font-[Iceland]">
+Philosophy & Vision
+</h3> <p class="text-sm">
+Security and scalability should never be a second thought.
+									I build systems with resilience and privacy in mind, ensuring
+									they are both secure and scalable from the ground up. 
+									I strive to design solutions that are 	 efficient, maintainable,
+									and future-proof.
+</p> </div> </div> </div> </div> </div> <div class="mt-16"> <div class="flex justify-center gap-4"> <div class="grid group w-12 h-12" data-astro-cid-xfej6wit> <div class="loader group-hover:opacity-100" data-astro-cid-xfej6wit></div> <a class="pulse-btn" href="https://github.com/danielorihuela" data-astro-cid-xfej6wit> <img src="/github.svg" data-astro-cid-xfej6wit> </a> </div><div class="grid group w-12 h-12" data-astro-cid-xfej6wit> <div class="loader group-hover:opacity-100" data-astro-cid-xfej6wit></div> <a class="pulse-btn" href="mailto:danielorihuelarodriguez@gmail.com" data-astro-cid-xfej6wit> <img src="/email.svg" data-astro-cid-xfej6wit> </a> </div> </div> </div> </section> <footer></footer> </body></html>
