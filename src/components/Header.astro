@@ -30,7 +30,7 @@ const currentPath = Astro.url.pathname;
 					{navItems.map((item) => (
 						<a
 							href={item.path}
-							class={`relative px-4 py-2 text-sm font-medium transition-all duration-300 group ${
+							class={`relative px-4 duration-300 group font-[Iceland] ${
 								currentPath === item.path
 									? "text-cyan-400"
 									: "text-gray-300 hover:text-white"
