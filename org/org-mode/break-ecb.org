@@ -1,0 +1,334 @@
+#+title: Cryptopals: Break an ECB encrypted message (easy)
+#+description: Learn to break a message encrypted with the ECB block cipher mode (easy exercise).
+#+publishdate: 2025-05-27
+#+cover: ../../images/covers/cryptopals.jpg
+#+options: ^:nil
+
+Today, we will learn about the ECB block cipher mode, how it works, and how to break it. This post is related to https://cryptopals.com/sets/2/challenges/12.
+
+* ECB block cipher mode
+
+The Electronic Code Book (ECB) is a block cipher mode of operation. Data is encrypted in blocks of fixed size and with the same key. Also, some bytes are added when the plaintext doesn't have a length that is a multiple of the block size, known as ~padding~.
+
+Let ~p~ be the plaintext, ~c~ the ciphertext, ~k~ the key, and ~cipher~ any encryption algorithm. Assume that the ciphertext can be divided into blocks of length equal to ~k~, without any leftover bytes. For each ~i~ from 0 to the number of blocks in the plaintext, we have that ~c[i] = cipher(p[i], k)~.
+
+The problem is that it reuses the key. You might think that this shouldn't be a problem. However, identical plain blocks will return the same encrypted blocks. It becomes apparent when you see the following images.
+
+#+begin_export markdown
+<center> Plain image </center>
+#+end_export
+[[../../images/break-ecb/penguin.png]]
+
+#+begin_export markdown
+<center> Image encrypted with ECB mode </center>
+#+end_export
+[[../../images/break-ecb/ecb_penguin.png]]
+
+The data was encrypted, but we can still see the penguin... more or less. Let's see how we can break this block cipher mode.
+
+* Break ECB mode (easy level)
+
+Let's pretend we have access to an encryption oracle that encrypts data in a particular way. It encrypts the result of appending some data to the user input. This oracle also knows the secret key.
+
+In rust, this could look like this.
+
+#+begin_src rust
+// Cipher function
+pub fn encrypt(data: &[u8], key: &[u8]) -> Vec<u8> {
+    let unknown_string = BASE64_STANDARD.decode(UNKNOWN_STRING).expect("Valid data");
+    let data = [data, &unknown_string].concat();
+
+    encrypt_aes_128_ecb(&data, key)
+}
+
+fn main() {
+  ...
+  let key = random_bytes(16);
+  let encryption_fn = |data: &[u8]| encrypt(data, &key); // encryption oracle
+}
+#+end_src
+
+Of course, in a real scenario, we won't implement the function ourselves. We will be given call access to it. With the preparation out of the way, let's move into the first step for breaking ECB.
+
+** Find the block size
+
+We are using 128-bit block size, but we won't have this information available in every situation. There's a very simple way to discover the block size. Remember, ECB encrypts data in blocks of fixed size. Thus, if we find two inputs that return ciphertexts of different lengths, the difference must be the block size.
+
+To get familiar with this idea, let's go to https://www.devglan.com/online-tools/aes-encryption-decryption and play around with it. You will see that the result of encrypting strings between 1 and 15 characters returns ciphertexts of equal length. But, as soon as you encrypt a string with 16 characters, the ciphertext length increases. Take into account that the result is in base64 by default. Hence, the length increase won't match the block size.
+
+#+begin_src pseudocode
+"a"      -> "kc86jk6HnV9AtZ57SmbuJw=="
+"aa"     -> "UAGUUSk778f9tDRGTVKvYw=="
+...
+"a" * 16 -> "UOrlU8c7SzBd+8BGIi4CAJHPOo5Oh51fQLWee0pm7ic="
+#+end_src
+
+Let's see an implementation.
+
+#+begin_src rust
+pub fn compute_block_size_and_padding_length<F>(encryption_fn: F) -> (usize, usize)
+where
+    F: Fn(&[u8]) -> Vec<u8>,
+{
+    let mut i = 0;
+    let mut len_diff = 0;
+    while len_diff == 0 {
+        len_diff = encryption_fn(&vec![0; i + 1]).len() - encryption_fn(&vec![0; i]).len();
+        i += 1;
+    }
+
+    (len_diff, i)
+}
+#+end_src
+
+Computing the padding is not needed. It's a nice-to-have. It helps with printing the original message, once broken, without the padding.
+
+** Check if oracle is using ECB mode
+
+Again, we might not have this information readily available in a real situation. Thus, we must practice how we can check if ECB is being used.
+
+We will feed the encryption oracle with an unnecessarily long input that uses the same character over and over again. In the resulting ciphertext, we will check if all blocks are equal. If that's the case, the oracle uses ECB mode. Remember that ECB uses the same key to encrypt different blocks. Hence, the same plain blocks return the same encrypted blocks.
+
+#+begin_quote
+NOTE
+
+In this particular exercise, the oracle appends some unknown data. We need to check if the number of repeated blocks is greater or equal than the number of input ones. Some encrypted blocks could have the same value.
+#+end_quote
+
+#+begin_src rust
+pub fn is_ecb<F>(encryption_fn: F, block_size: usize) -> bool
+where
+    F: Fn(&[u8]) -> Vec<u8>,
+{
+    let plain = vec![0; block_size * 100];
+    let ciphertext = encryption_fn(&plain);
+
+    max_repeated_block(&ciphertext) >= 100
+}
+#+end_src
+
+** Break the first byte
+
+At a high level, what we want to do is isolate the first byte and brute-force the value. The general flow is more complex. Let's start with the pseudocode to break the first byte.
+
+#+begin_src
+prefix = string of length block size - 1
+ciphertext = encryption_oracle(prefix)
+
+every_possible_ciphertext = empty dictionary
+for each possible character
+  current_prefix = prefix + character
+  possible_ciphertext = encryption_oracle(current_prefix)
+  store possible_ciphertext in every_possible_ciphertext
+   
+for (character, possible_ciphertext) in every_possible_ciphertext
+  if ciphertext == possible_ciphertext
+    return character
+#+end_src
+
+Let's walk through the pseudocode step by step.
+
+First, we build an input to isolate the first byte of the unknown string. Since our input is one byte smaller than the block size, the first byte of the unknown string will move into the first block of data. Calling the oracle with that will give us the "actual" ciphertext.
+
+#+begin_example
+Example
+
+block_size = 16
+unknown_string = "mydata..."
+prefix = "a" x 15
+
+Encryption oracle will use the following
+data as input to be encrypted
+
+data = "aaaaaaaaaaaaaaamydata..."
+        | first block  | second block
+#+end_example
+
+We are in full control of the prefix. The only unknown is the last character. The one we want to decrypt.
+
+Second, we want to construct every possible ciphertext. For that, we will call the encryption oracle with each possible character that could appear in the message, appended to the prefix.
+
+#+begin_example
+Example
+
+We call the oracle with
+
+input = "aaaaaaaaaaaaaaaa"
+input = "aaaaaaaaaaaaaaab"
+input = "aaaaaaaaaaaaaaac"
+...
+input = "aaaaaaaaaaaaaaaz"
+input = "aaaaaaaaaaaaaaa!"
+...
+input = "aaaaaaaaaaaaaaa:"
+
+and we create a dictionary
+
+"a" -> first possible ciphertext
+"b" -> second possible ciphertext
+...
+#+end_example
+
+Third and last step, we must find which of the possible ciphertexts is equal to the "actual" ciphertext. The one we got from calling the oracle with the prefix. 
+
+With that, we broke the first byte. Hurray!!!
+
+In rust, it could look something like:
+
+#+begin_src rust
+let crafted_prefix = vec![0; block_size - 1];
+let ciphertext_block_to_character = brute_force_ciphertext_block(&encrypt_fn, crafted_prefix, 0, block_size);
+let ciphertext = encrypt_fn(&crafted_prefix);
+let character = ciphertext_block_to_character.get(&ciphertext[0..16]).expect("Exists");
+#+end_src
+
+I'm leaving some functions and extra details out. We will see them in the next section.
+
+** Break the following bytes
+
+Breaking ECB is an iterative method. Breaking the second byte assumes you know the first byte. Breaking the third byte assumes you know the first and the second byte. Breaking the nth byte assumes you know the previous block size minus one bytes.
+
+We need to generalize how we broke the first byte to decrypt the whole message. With a bit of arithmetics, we can handle it. Which mechanishm will we need to extend it? Well...
+
+**Extend crafted prefix**
+
+We will use decrypted bytes to craft the prefix for the following iterations. We will still use prefixes one byte smaller than the block size, but on each iteration we will append the last decrypted character and remove the first byte. This will support bruteforcing the following bytes. Without previous decrypted bytes, the dictionary should be built based on many unknowns, instead of one. One for each unknown character. This quickly gets intractable. That's the reason we go byte by byte.
+
+In general, breaking the nth byte requires knowing the previous block size minus one characters. This reduces the unknowns to one single byte, which we can easily bruteforce.
+
+#+begin_example
+block size = 16
+unknown string = "random message data"
+
+Iteration 1
+whole_prefix = "aaaaaaaaaaaaaaa"
+                | used prefix |
+we break the first byte and obtain "r"
+
+Iteration 2
+whole_prefix = "aaaaaaaaaaaaaaar"
+                 | used prefix |
+we break the second byte and obtain "a"
+
+Iteration 3
+whole_prefix = "aaaaaaaaaaaaaaara"
+                  | used prefix |
+we break the third byte and obtain "n"
+
+...
+
+Iteration n
+whole_prefix = "aaaaaaaaaaaaaaarandom message dat"
+                                  | used prefix |
+we break the last byte and obtain "a"
+#+end_example
+
+**Isolate following bytes**
+
+We also need to change on each iteration the data we pass to the oracle in order to get the real value of the ciphertext. In each iteration, we have to isolate the following byte. We have to decrease the size of the input data by one. Once we finish with the current block, we have to start over again, and input data one byte smaller than the block size.
+
+#+begin_example
+block size = 16
+unknown string = "random message data"
+
+Iteration 1
+input = "a" x 15
+encryption_oracle will encrypt "aaaaaaaaaaaaaaarandom message data"
+                                | first block  | second block  |
+we break the first byte and obtain "r" (first block)
+
+Iteration 2
+input = "a" x 14
+encryption_oracle will encrypt "aaaaaaaaaaaaaarandom message data"
+                                | first block  | second block  |
+we break the second byte and obtain "a" (first block)
+
+Iteration 3
+input = "a" x 13
+encryption_oracle will encrypt "aaaaaaaaaaaaarandom message data"
+                                | first block  | second block  |
+we break the third byte and obtain "n" (first block)
+
+...
+
+Iteration 16
+input = ""
+encryption_oracle will encrypt "random message data"
+                                | first block  | second block  |
+we break the sixteenth byte and obtain "d" (first block)
+first block completed, we have to break the second block now
+
+Iteration 17
+input = "a" x 15
+encryption_oracle will encrypt "aaaaaaaaaaaaaaarandom message data"
+                                | first block  | second block  |
+we break the seventeenth byte and obtain "a" (second block)
+
+...
+#+end_example
+
+That's about it. We are ready to see the final implementation.
+
+**Implementation**
+
+#+begin_src rust
+pub fn attack_ecb_one_byte_at_a_time<F>(encrypt_fn: F) -> String
+where
+    F: Fn(&[u8]) -> Vec<u8>,
+{
+    let (block_size, padding_length) = compute_block_size_and_padding_length(&encrypt_fn);
+    if !is_ecb(&encrypt_fn, block_size) {
+        panic!("Data not encryped with ECB");
+    }
+
+    let mut plain = vec![0; block_size - 1];
+    let num_target_bytes = encrypt_fn(&[]).len() - padding_length;
+    for i in 0..num_target_bytes {
+        let crafted_prefix = &plain[plain.len() - (block_size - 1)..];
+        let ciphertext_block_to_character =
+            brute_force_ciphertext_block(&encrypt_fn, crafted_prefix, 0, block_size);
+
+        let raw_prefix = vec![0; block_size - 1 - (i % block_size)];
+        let ciphertext = encrypt_fn(&raw_prefix);
+        let start = (i / block_size) * block_size;
+        let end = start + block_size;
+        let character = ciphertext_block_to_character
+            .get(&ciphertext[start..end])
+            .expect("Exists");
+
+        plain.push(*character);
+    }
+
+    String::from_utf8(plain[block_size - 1..].to_vec()).expect("Valid plain message")
+}
+
+pub fn brute_force_ciphertext_block<F>(
+    encryption_fn: F,
+    prefix: &[u8],
+    block_position: usize,
+    block_size: usize,
+) -> HashMap<Vec<u8>, u8>
+where
+    F: Fn(&[u8]) -> Vec<u8>,
+{
+    let mut encrypted_block_to_character = HashMap::new();
+    for i in 0..=255u8 {
+        let prefix_with_character = [prefix, &[i]].concat().to_vec();
+        let encrypted_data = encryption_fn(&prefix_with_character);
+        let start = block_position * block_size;
+        let end = start + block_size;
+        let encrypted_block = encrypted_data[start..end].to_vec();
+        encrypted_block_to_character.insert(encrypted_block, i);
+    }
+
+    encrypted_block_to_character
+}
+#+end_src
+
+** Code
+
+You can check the whole implementation https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge12.rs.
+
+* Conclusion 
+
+The XOR cipher is simple but easy to attack. Modern products should avoid it at all costs. Instead, use OTP (if you can manage the complexity) or AES.

