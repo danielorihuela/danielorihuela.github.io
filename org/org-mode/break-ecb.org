@@ -176,9 +176,9 @@ With that, we broke the first byte. Hurray!!!
 In rust, it could look something like:
 
 #+begin_src rust
-let crafted_prefix = vec![0; block_size - 1];
-let ciphertext_block_to_character = brute_force_ciphertext_block(&encrypt_fn, crafted_prefix, 0, block_size);
-let ciphertext = encrypt_fn(&crafted_prefix);
+let prefix = vec![0; block_size - 1];
+let ciphertext_block_to_character = brute_force_ciphertext_block(&encrypt_fn, prefix, 0, block_size);
+let ciphertext = encrypt_fn(&prefix);
 let character = ciphertext_block_to_character.get(&ciphertext[0..16]).expect("Exists");
 #+end_src
 
@@ -186,48 +186,52 @@ I'm leaving some functions and extra details out. We will see them in the next s
 
 ** Break the following bytes
 
-Breaking ECB is an iterative method. Breaking the second byte assumes you know the first byte. Breaking the third byte assumes you know the first and the second byte. Breaking the nth byte assumes you know the previous block size minus one bytes.
+Breaking ECB is an iterative method. Breaking the second byte requires knowing the first byte. Breaking the third byte requires knowing the first and the second bytes. Breaking the nth byte requires knowing the previous "block size minus one" bytes.
 
-We need to generalize how we broke the first byte to decrypt the whole message. With a bit of arithmetics, we can handle it. Which mechanishm will we need to extend it? Well...
+To break the message, we have to generalize the method used to break the first byte. With a bit of arithmetic, we can handle it. Let's see the modified mechanisms.
 
 **Extend crafted prefix**
 
-We will use decrypted bytes to craft the prefix for the following iterations. We will still use prefixes one byte smaller than the block size, but on each iteration we will append the last decrypted character and remove the first byte. This will support bruteforcing the following bytes. Without previous decrypted bytes, the dictionary should be built based on many unknowns, instead of one. One for each unknown character. This quickly gets intractable. That's the reason we go byte by byte.
+To break the following byte, we will use all previous decrypted bytes. Prefixes will still be one byte smaller than the block size, but they will include the decrypted bytes preceding the byte we want to break. To accomplish that, on each iteration, we will append the last decrypted character and remove the first byte. That assures us that the difference between all the possible ciphertexts in the dictionary and the ciphertext we are searching for is only one byte. The last one. All previous bytes are known to us. Otherwise, the dictionary must be built based on many unknowns instead of one. One for each unknown character. It quickly gets intractable. That's the reason we go byte by byte.
 
-In general, breaking the nth byte requires knowing the previous block size minus one characters. This reduces the unknowns to one single byte, which we can easily bruteforce.
+In general, breaking the nth byte requires knowing the previous "block size minus one" bytes. This reduces the unknowns to one byte, which we can easily brute-force.
 
 #+begin_example
+Example
+
 block size = 16
 unknown string = "random message data"
 
 Iteration 1
-whole_prefix = "aaaaaaaaaaaaaaa"
-                | used prefix |
+prefix = "aaaaaaaaaaaaaaa"
+          | used prefix |
 we break the first byte and obtain "r"
 
 Iteration 2
-whole_prefix = "aaaaaaaaaaaaaaar"
-                 | used prefix |
+prefix = "aaaaaaaaaaaaaaar"
+           | used prefix |
 we break the second byte and obtain "a"
 
 Iteration 3
-whole_prefix = "aaaaaaaaaaaaaaara"
-                  | used prefix |
+prefix = "aaaaaaaaaaaaaaara"
+            | used prefix |
 we break the third byte and obtain "n"
 
 ...
 
 Iteration n
-whole_prefix = "aaaaaaaaaaaaaaarandom message dat"
-                                  | used prefix |
+prefix = "aaaaaaaaaaaaaaarandom message dat"
+                            | used prefix |
 we break the last byte and obtain "a"
 #+end_example
 
 **Isolate following bytes**
 
-We also need to change on each iteration the data we pass to the oracle in order to get the real value of the ciphertext. In each iteration, we have to isolate the following byte. We have to decrease the size of the input data by one. Once we finish with the current block, we have to start over again, and input data one byte smaller than the block size.
+We need to accommodate the prefix to prepare the following byte we want to break. To accomplish that, we decrease the size of the prefix by one on each iteration. Once the prefix length is zero, we have broken all the bytes from the block. To break the following block, we come back to using a prefix of "block size minus one" characters and repeat the process.
 
 #+begin_example
+Example
+
 block size = 16
 unknown string = "random message data"
 
@@ -267,9 +271,23 @@ we break the seventeenth byte and obtain "a" (second block)
 ...
 #+end_example
 
+**Brute-force the correct block**
+
+I didn't show it, but the function that creates the dictionary with all the possible ciphertexts only stores one block of data, not the whole ciphertext. That remains the same, but we have to make sure that we compare the correct ciphertext block against each possible ciphertext block in the dictionary.
+
+#+begin_src rust
+let start = (i / block_size) * block_size;
+let end = start + block_size;
+let character = ciphertext_block_to_character.get(&ciphertext[start..end]).expect("Exists");
+#+end_src
+
 That's about it. We are ready to see the final implementation.
 
 **Implementation**
+
+Before moving forward, let me explain an important detail about the ~brute_force_ciphertext_block~ function. This function returns a dictionary with every possible ciphertext. If you read the implementation, you will see that we always store the first block of the ciphertext. That might be confusing, but it has a simple explanation. The encryption oracle doesn't prepend any information. Besides, to get every possibility, we only care about the prefix plus any given letter. At this step, the string appended by the oracle is irrelevant. We only care about the ciphertext of the data we are feeding in, which becomes the first block of the resulting ciphertext.
+
+That's it. I just wanted to explain the inner workings of that function, so that's clear what's going on.
 
 #+begin_src rust
 pub fn attack_ecb_one_byte_at_a_time<F>(encrypt_fn: F) -> String
