@@ -101,7 +101,7 @@ We will split the ciphertext into blocks of key length and group them based on t
 Each group will help us find one character of the key.
 
 #+begin_src text
-  break cipher into blocks of key length
+  break ciphertext into blocks of key length
   transpose the blocks
 #+end_src
 
