@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/break-ecb"><!-- Primary Meta Tags --><title>Cryptopals: Break an ECB encrypted message (easy)</title><meta name="title" content="Cryptopals: Break an ECB encrypted message (easy)"><meta name="description" content="Learn to break a message encrypted with the ECB block cipher mode (easy exercise)."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/break-ecb"><meta property="og:title" content="Cryptopals: Break an ECB encrypted message (easy)"><meta property="og:description" content="Learn to break a message encrypted with the ECB block cipher mode (easy exercise)."><meta property="og:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/break-ecb"><meta property="twitter:title" content="Cryptopals: Break an ECB encrypted message (easy)"><meta property="twitter:description" content="Learn to break a message encrypted with the ECB block cipher mode (easy exercise)."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.IGnllL6P.css">
+<link rel="stylesheet" href="/_astro/_slug_.DgHCkA33.css">
+<style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
+</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+DO
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/cryptopals.B5aQRihb_Z2vct6J.webp" class="rounded-xl shadow-ba" alt="" width="888" height="888" loading="lazy" decoding="async"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2025-05-27T00:00:00.000Z"> May 27, 2025 </time> </div> <h1 class="font-[Iceland]"> Cryptopals: Break an ECB encrypted message (easy) </h1> <hr> </div>  <ul>
+<li><a href="#ecb-block-cipher-mode">ECB block cipher mode</a></li>
+<li><a href="#break-ecb-mode-easy-level">Break ECB mode (easy level)</a>
+<ul>
+<li><a href="#find-the-block-size">Find the block size</a></li>
+<li><a href="#check-if-oracle-is-using-ecb-mode">Check if oracle is using ECB
+mode</a></li>
+<li><a href="#break-the-first-byte">Break the first byte</a></li>
+<li><a href="#break-the-following-bytes">Break the following bytes</a></li>
+<li><a href="#code">Code</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<p>Today, we will learn about the ECB block cipher mode, how it works, and
+how to break it. This post is related to
+<a href="https://cryptopals.com/sets/2/challenges/12">https://cryptopals.com/sets/2/challenges/12</a>.</p>
+<h1 id="ecb-block-cipher-mode">ECB block cipher mode</h1>
+<p>The Electronic Code Book (ECB) is a block cipher mode of operation. Data
+is encrypted in blocks of fixed size and with the same key. Also, some
+bytes are added when the plaintext doesn’t have a length that is a
+multiple of the block size, known as <code>padding</code>.</p>
+<p>Let <code>p</code> be the plaintext, <code>c</code> the ciphertext, <code>k</code> the key, and <code>cipher</code>
+any encryption algorithm. Assume that the ciphertext can be divided into
+blocks of length equal to <code>k</code>, without any leftover bytes. For each <code>i</code>
+from 0 to the number of blocks in the plaintext, we have that
+<code>c[i] = cipher(p[i], k)</code>.</p>
+<p>The main issue with this mode is that it reuses the same key for all
+blocks. You might think that this shouldn’t be a problem. However,
+identical plain blocks will return the same encrypted blocks. It becomes
+apparent when you see the following images.</p>
+<center> Plain image </center>
+<p><img  src="/_astro/penguin.BIfGp336_ZDQwzB.webp" alt="" width="265" height="314" loading="lazy" decoding="async"></p>
+<center> Image encrypted with ECB mode </center>
+<p><img  src="/_astro/ecb_penguin.Bruby45M_ZlngnN.webp" alt="" width="265" height="314" loading="lazy" decoding="async"></p>
+<p>The data was encrypted, but we can still see the penguin… more or less.
+Let’s see how we can break this block cipher mode.</p>
+<h1 id="break-ecb-mode-easy-level">Break ECB mode (easy level)</h1>
+<p>Let’s pretend we have access to an encryption oracle that encrypts data
+in a particular way. It encrypts the result of appending some data to
+the user input. This oracle also knows the secret key.</p>
+<p>In rust, this could look like this.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#6272A4">// Cipher function</span></span>
+<span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> encrypt</span><span style="color:#F8F8F2">(data</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">], key</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">> {</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> unknown_string </span><span style="color:#FF79C6">=</span><span style="color:#BD93F9"> BASE64_STANDARD</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">decode</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">UNKNOWN_STRING</span><span style="color:#F8F8F2">)</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Valid data"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> data </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [data, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">unknown_string]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">concat</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#50FA7B">    encrypt_aes_128_ecb</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">data, key)</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">fn</span><span style="color:#50FA7B"> main</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#FF79C6">  ...</span></span>
+<span class="line"><span style="color:#FF79C6">  let</span><span style="color:#F8F8F2"> key </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> random_bytes</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">16</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#FF79C6">  let</span><span style="color:#F8F8F2"> encryption_fn </span><span style="color:#FF79C6">=</span><span style="color:#FF79C6"> |</span><span style="color:#F8F8F2">data</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]</span><span style="color:#FF79C6">|</span><span style="color:#50FA7B"> encrypt</span><span style="color:#F8F8F2">(data, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">key); </span><span style="color:#6272A4">// encryption oracle</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<p>Of course, in a real scenario, we won’t implement the function
+ourselves. We will be given call access to it. With the preparation out
+of the way, let’s move into the first step for breaking ECB.</p>
+<h2 id="find-the-block-size">Find the block size</h2>
+<p>We are using 128-bit block size, but we won’t have this information
+available in every situation. There’s a very simple way to discover the
+block size. Remember, ECB encrypts data in blocks of fixed size. Thus,
+if we find two inputs that return ciphertexts of different lengths, the
+difference must be the block size.</p>
+<p>To get familiar with this idea, let’s go to
+<a href="https://www.devglan.com/online-tools/aes-encryption-decryption">https://www.devglan.com/online-tools/aes-encryption-decryption</a> and
+play around with it. You will see that the result of encrypting strings
+between 1 and 15 characters returns ciphertexts of equal length. But, as
+soon as you encrypt a string with 16 characters, the ciphertext length
+increases. Take into account that the result is in base64 by default.
+Hence, the length increase won’t match the block size.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>"a"      -> "kc86jk6HnV9AtZ57SmbuJw=="</span></span>
+<span class="line"><span>"aa"     -> "UAGUUSk778f9tDRGTVKvYw=="</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>"a" * 16 -> "UOrlU8c7SzBd+8BGIi4CAJHPOo5Oh51fQLWee0pm7ic="</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Let’s see an implementation.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> compute_block_size_and_padding_length</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(encryption_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#F8F8F2"> (</span><span style="color:#8BE9FD;font-style:italic">usize</span><span style="color:#F8F8F2">, </span><span style="color:#8BE9FD;font-style:italic">usize</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">=</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> len_diff </span><span style="color:#FF79C6">=</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#FF79C6">    while</span><span style="color:#F8F8F2"> len_diff </span><span style="color:#FF79C6">==</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">        len_diff </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encryption_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#50FA7B">vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; i </span><span style="color:#FF79C6">+</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#50FA7B"> encryption_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#50FA7B">vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; i])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        i </span><span style="color:#FF79C6">+=</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    (len_diff, i)</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<p>Computing the padding is not needed. It’s a nice-to-have. It helps with
+printing the original message, once broken, without the padding.</p>
+<h2 id="check-if-oracle-is-using-ecb-mode">Check if oracle is using ECB mode</h2>
+<p>Again, we might not have this information readily available in a real
+situation. Thus, we must practice how we can check if ECB is being used.</p>
+<p>We will feed the encryption oracle with an unnecessarily long input that
+uses the same character over and over again. In the resulting
+ciphertext, we will check if all blocks are equal. If that’s the case,
+the oracle uses ECB mode. Remember that ECB uses the same key to encrypt
+different blocks. Hence, the same plain blocks return the same encrypted
+blocks.</p>
+<blockquote>
+<p>NOTE</p>
+<p>In this particular exercise, the oracle appends some unknown data. We
+need to check if the number of repeated blocks is greater or equal
+than the number of input ones. Some encrypted blocks could have the
+same value.</p>
+</blockquote>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> is_ecb</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(encryption_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">, block_size</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> bool</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> plain </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; block_size </span><span style="color:#FF79C6">*</span><span style="color:#BD93F9"> 100</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> ciphertext </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encryption_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">plain);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#50FA7B">    max_repeated_block</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext) </span><span style="color:#FF79C6">>=</span><span style="color:#BD93F9"> 100</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<h2 id="break-the-first-byte">Break the first byte</h2>
+<p>At a high level, what we want to do is isolate the first byte and
+brute-force the value. The general flow is more complex. Let’s start
+with the pseudocode to break the first byte.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>prefix = string of length block size - 1</span></span>
+<span class="line"><span>ciphertext = encryption_oracle(prefix)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>every_possible_ciphertext = empty dictionary</span></span>
+<span class="line"><span>for each possible character</span></span>
+<span class="line"><span>  current_prefix = prefix + character</span></span>
+<span class="line"><span>  possible_ciphertext = encryption_oracle(current_prefix)</span></span>
+<span class="line"><span>  store possible_ciphertext in every_possible_ciphertext</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>for (character, possible_ciphertext) in every_possible_ciphertext</span></span>
+<span class="line"><span>  if ciphertext == possible_ciphertext</span></span>
+<span class="line"><span>    return character</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Let’s walk through the pseudocode step by step.</p>
+<p>First, we build an input to isolate the first byte of the unknown
+string. Since our input is one byte smaller than the block size, the
+first byte of the unknown string will move into the first block of data.
+Calling the oracle with that will give us the “actual” ciphertext.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Example</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>block_size = 16</span></span>
+<span class="line"><span>unknown_string = "mydata..."</span></span>
+<span class="line"><span>prefix = "a" x 15</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Encryption oracle will use the following</span></span>
+<span class="line"><span>data as input to be encrypted</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>data = "aaaaaaaaaaaaaaamydata..."</span></span>
+<span class="line"><span>        | first block  | second block</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>We are in full control of the prefix. The only unknown is the last
+character. The one we want to decrypt.</p>
+<p>Second, we want to construct every possible ciphertext. For that, we
+will call the encryption oracle with each possible character that could
+appear in the message, appended to the prefix.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Example</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>We call the oracle with</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaaa"</span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaab"</span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaac"</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaaz"</span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaa!"</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>input = "aaaaaaaaaaaaaaa:"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>and we create a dictionary</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>"a" -> first possible ciphertext</span></span>
+<span class="line"><span>"b" -> second possible ciphertext</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Third and last step, we must find which of the possible ciphertexts is
+equal to the “actual” ciphertext. The one we got from calling the oracle
+with the prefix.</p>
+<p>With that, we broke the first byte. Hurray!!!</p>
+<p>In rust, it could look something like:</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> prefix </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> ciphertext_block_to_character </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> brute_force_ciphertext_block</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, prefix, </span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">, block_size);</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> ciphertext </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">prefix);</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> character </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> ciphertext_block_to_character</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">get</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext[</span><span style="color:#BD93F9">0</span><span style="color:#FF79C6">..</span><span style="color:#BD93F9">16</span><span style="color:#F8F8F2">])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Exists"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span></code></pre>
+<p>I’m leaving some functions and extra details out. We will see them in
+the next section.</p>
+<h2 id="break-the-following-bytes">Break the following bytes</h2>
+<p>Breaking ECB is an iterative method. Breaking the second byte requires
+knowing the first byte. Breaking the third byte requires knowing the
+first and the second bytes. Breaking the nth byte requires knowing the
+previous “block size minus one” bytes.</p>
+<p>To break the message, we have to generalize the method used to break the
+first byte. With a bit of arithmetic, we can handle it. Let’s see the
+modified mechanisms.</p>
+<p><strong><strong>Extend crafted prefix</strong></strong></p>
+<p>To break the following byte, we will use all previous decrypted bytes.
+Prefixes will still be one byte smaller than the block size, but they
+will include the decrypted bytes preceding the byte we want to break. To
+accomplish that, on each iteration, we will append the last decrypted
+character and remove the first byte. That assures us that the difference
+between all the possible ciphertexts in the dictionary and the
+ciphertext we are searching for is only one byte. The last one. All
+previous bytes are known to us. Otherwise, the dictionary must be built
+based on many unknowns instead of one. One for each unknown character.
+It quickly gets intractable. That’s the reason we go byte by byte.</p>
+<p>In general, breaking the nth byte requires knowing the previous “block
+size minus one” bytes. This reduces the unknowns to one byte, which we
+can easily brute-force.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Example</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>block size = 16</span></span>
+<span class="line"><span>unknown string = "random message data"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 1</span></span>
+<span class="line"><span>prefix = "aaaaaaaaaaaaaaa"</span></span>
+<span class="line"><span>          | used prefix |</span></span>
+<span class="line"><span>we break the first byte and obtain "r"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 2</span></span>
+<span class="line"><span>prefix = "aaaaaaaaaaaaaaar"</span></span>
+<span class="line"><span>           | used prefix |</span></span>
+<span class="line"><span>we break the second byte and obtain "a"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 3</span></span>
+<span class="line"><span>prefix = "aaaaaaaaaaaaaaara"</span></span>
+<span class="line"><span>            | used prefix |</span></span>
+<span class="line"><span>we break the third byte and obtain "n"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration n</span></span>
+<span class="line"><span>prefix = "aaaaaaaaaaaaaaarandom message dat"</span></span>
+<span class="line"><span>                            | used prefix |</span></span>
+<span class="line"><span>we break the last byte and obtain "a"</span></span>
+<span class="line"><span></span></span></code></pre>
+<p><strong><strong>Isolate following bytes</strong></strong></p>
+<p>We need to accommodate the prefix to prepare the following byte we want
+to break. To accomplish that, we decrease the size of the prefix by one
+on each iteration. Once the prefix length is zero, we have broken all
+the bytes from the block. To break the following block, we come back to
+using a prefix of “block size minus one” characters and repeat the
+process.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Example</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>block size = 16</span></span>
+<span class="line"><span>unknown string = "random message data"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 1</span></span>
+<span class="line"><span>input = "a" x 15</span></span>
+<span class="line"><span>encryption_oracle will encrypt "aaaaaaaaaaaaaaarandom message data"</span></span>
+<span class="line"><span>                                | first block  | second block  |</span></span>
+<span class="line"><span>we break the first byte and obtain "r" (first block)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 2</span></span>
+<span class="line"><span>input = "a" x 14</span></span>
+<span class="line"><span>encryption_oracle will encrypt "aaaaaaaaaaaaaarandom message data"</span></span>
+<span class="line"><span>                                | first block  | second block  |</span></span>
+<span class="line"><span>we break the second byte and obtain "a" (first block)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 3</span></span>
+<span class="line"><span>input = "a" x 13</span></span>
+<span class="line"><span>encryption_oracle will encrypt "aaaaaaaaaaaaarandom message data"</span></span>
+<span class="line"><span>                                | first block  | second block  |</span></span>
+<span class="line"><span>we break the third byte and obtain "n" (first block)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 16</span></span>
+<span class="line"><span>input = ""</span></span>
+<span class="line"><span>encryption_oracle will encrypt "random message data"</span></span>
+<span class="line"><span>                                | first block  | second block  |</span></span>
+<span class="line"><span>we break the sixteenth byte and obtain "d" (first block)</span></span>
+<span class="line"><span>first block completed, we have to break the second block now</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Iteration 17</span></span>
+<span class="line"><span>input = "a" x 15</span></span>
+<span class="line"><span>encryption_oracle will encrypt "aaaaaaaaaaaaaaarandom message data"</span></span>
+<span class="line"><span>                                | first block  | second block  |</span></span>
+<span class="line"><span>we break the seventeenth byte and obtain "a" (second block)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span></span></span></code></pre>
+<p><strong><strong>Brute-force the correct block</strong></strong></p>
+<p>I didn’t show it, but the function that creates the dictionary with all
+the possible ciphertexts only stores one block of data, not the whole
+ciphertext. That remains the same, but we have to make sure that we
+compare the correct ciphertext block against each possible ciphertext
+block in the dictionary.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (i </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size) </span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> end </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> character </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> ciphertext_block_to_character</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">get</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext[start</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">end])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Exists"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span></code></pre>
+<p>That’s about it. We are ready to see the final implementation.</p>
+<p><strong><strong>Implementation</strong></strong></p>
+<p>Before moving forward, let me explain an important detail about the
+<code>brute_force_ciphertext_block</code> function. This function returns a
+dictionary with every possible ciphertext. If you read the
+implementation, you will see that we always store the first block of the
+ciphertext. That might be confusing, but it has a simple explanation.
+The encryption oracle doesn’t prepend any information. Besides, to get
+every possibility, we only care about the prefix plus any given letter.
+At this step, the string appended by the oracle is irrelevant. We only
+care about the ciphertext of the data we are feeding in, which becomes
+the first block of the resulting ciphertext.</p>
+<p>That’s it. I just wanted to explain the inner workings of that function,
+so that’s clear what’s going on.</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> attack_ecb_one_byte_at_a_time</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(encrypt_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> String</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> (block_size, padding_length) </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> compute_block_size_and_padding_length</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn);</span></span>
+<span class="line"><span style="color:#FF79C6">    if</span><span style="color:#FF79C6"> !</span><span style="color:#50FA7B">is_ecb</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, block_size) {</span></span>
+<span class="line"><span style="color:#50FA7B">        panic!</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Data not encryped with ECB"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> plain </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> num_target_bytes </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> padding_length;</span></span>
+<span class="line"><span style="color:#FF79C6">    for</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">in</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">num_target_bytes {</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> crafted_prefix </span><span style="color:#FF79C6">=</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">plain[plain</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> (block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">)</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> ciphertext_block_to_character </span><span style="color:#FF79C6">=</span></span>
+<span class="line"><span style="color:#50FA7B">            brute_force_ciphertext_block</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, crafted_prefix, </span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">, block_size);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> raw_prefix </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#FF79C6"> -</span><span style="color:#F8F8F2"> (i </span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2"> block_size)];</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> ciphertext </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">raw_prefix);</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (i </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size) </span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> end </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> character </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> ciphertext_block_to_character</span></span>
+<span class="line"><span style="color:#FF79C6">            .</span><span style="color:#50FA7B">get</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext[start</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">end])</span></span>
+<span class="line"><span style="color:#FF79C6">            .</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Exists"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        plain</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">push</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">character);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    String</span><span style="color:#FF79C6">::</span><span style="color:#50FA7B">from_utf8</span><span style="color:#F8F8F2">(plain[block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">to_vec</span><span style="color:#F8F8F2">())</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Valid plain message"</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> brute_force_ciphertext_block</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(</span></span>
+<span class="line"><span style="color:#F8F8F2">    encryption_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    prefix</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">    block_position</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    block_size</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> HashMap</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>, </span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> encrypted_block_to_character </span><span style="color:#FF79C6">=</span><span style="color:#8BE9FD;font-style:italic"> HashMap</span><span style="color:#FF79C6">::</span><span style="color:#50FA7B">new</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#FF79C6">    for</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">in</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6">..=</span><span style="color:#BD93F9">255</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> prefix_with_character </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [prefix, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[i]]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">concat</span><span style="color:#F8F8F2">()</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">to_vec</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> encrypted_data </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encryption_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">prefix_with_character);</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> block_position </span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> end </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> encrypted_block </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> encrypted_data[start</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">end]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">to_vec</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        encrypted_block_to_character</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">insert</span><span style="color:#F8F8F2">(encrypted_block, i);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    encrypted_block_to_character</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<h2 id="code">Code</h2>
+<p>You can check the whole implementation
+<a href="https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge12.rs">https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge12.rs</a>.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>The ECB cipher is simple but highly insecure due to its deterministic
+nature, which leaks patterns in the plaintext. This exercise
+demonstrates how easily it can be broken. Modern cryptographic systems
+should avoid ECB mode entirely and instead use secure modes of operation
+like Galois Counter Mode (GCM) or Counter Mode (CTR).</p>  </div> </article> <footer></footer> </body></html>
