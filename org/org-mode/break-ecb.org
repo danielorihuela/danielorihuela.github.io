@@ -12,7 +12,7 @@ The Electronic Code Book (ECB) is a block cipher mode of operation. Data is encr
 
 Let ~p~ be the plaintext, ~c~ the ciphertext, ~k~ the key, and ~cipher~ any encryption algorithm. Assume that the ciphertext can be divided into blocks of length equal to ~k~, without any leftover bytes. For each ~i~ from 0 to the number of blocks in the plaintext, we have that ~c[i] = cipher(p[i], k)~.
 
-The problem is that it reuses the key. You might think that this shouldn't be a problem. However, identical plain blocks will return the same encrypted blocks. It becomes apparent when you see the following images.
+The main issue with this mode is that it reuses the same key for all blocks. You might think that this shouldn't be a problem. However, identical plain blocks will return the same encrypted blocks. It becomes apparent when you see the following images.
 
 #+begin_export markdown
 <center> Plain image </center>
@@ -349,4 +349,4 @@ You can check the whole implementation https://github.com/danielorihuela/cryptop
 
 * Conclusion 
 
-The XOR cipher is simple but easy to attack. Modern products should avoid it at all costs. Instead, use OTP (if you can manage the complexity) or AES.
+The ECB cipher is simple but highly insecure due to its deterministic nature, which leaks patterns in the plaintext. This exercise demonstrates how easily it can be broken. Modern cryptographic systems should avoid ECB mode entirely and instead use secure modes of operation like Galois Counter Mode (GCM) or Counter Mode (CTR).
