@@ -1,0 +1,158 @@
+#+title: Cryptopals: Break an ECB encrypted message (hard)
+#+description: Learn to break a message encrypted with the ECB block cipher mode (hard exercise).
+#+publishdate: 2025-07-28
+#+cover: ../../images/covers/cryptopals.jpg
+#+options: ^:nil
+
+In the last blog, we learned about ECB and how to break it. Today, we will continue with the topic and learn how to break it in a different setup. This post is related to https://cryptopals.com/sets/2/challenges/14.
+
+* Break ECB mode (hard level)
+
+For this exercise, the oracle won't just append some data, but also prepend data of random length. Without further ado, let's see the process.
+
+** Find the block size
+
+Same as in the previous blog.
+
+** Check if oracle is using ECB mode
+
+Same as in the previous blog.
+
+** Find the prefix length
+
+Now that the oracle adds a prefix, we need to know the length of the prefix.
+
+To determine the prefix length, we first check if the prefix is smaller than the block size. This can be done by calling the oracle with inputs of zero and one byte, then comparing the first block of each ciphertext.
+
+*If the first blocks are different*, the prefix is smaller than the block size. In this case, we continue calling the oracle with inputs that increase by one byte at a time. When the first blocks of two consecutive ciphertexts become equal, we can calculate the prefix length as:
+
+#+begin_src example
+  prefix length = block size - number of input bytes
+#+end_src
+
+*If the first blocks are the same*, the prefix is larger than the block size. Here, we determine how many full blocks the prefix occupies and how many bytes spill into the next block. To do this, we check how many blocks (from the beginning) remain identical in the ciphertexts generated with zero and one bytes. Then, we use the same approach as above to calculate the remaining bytes in the last block.
+
+Once we have the prefix length, we can proceed to the next step.
+
+** Break the first byte
+
+The idea is the same as in the previous blog. We only need to change a bit how we construct the input.
+
+We won't use a string one byte shorter than the block size. We will use a string one byte shorter than the block size, plus the bytes to complete the last prefix block (if the last block isn't equal to the block size). Completing the last prefix block makes sure the data we are interested in starts in the next block (not in the middle of it), and the block size minus one is used to isolate the first byte. As in the previous blog.
+
+Another difference is that we won't take the first block of the ciphertext to compute the dictionary of possible ciphertexts, but the first block after the prefix.
+
+** Break the following bytes
+
+Same as in the previous blog. We just need to use the longer prefix as explained in the previous point.
+
+That's about it. We are ready to see the final implementation.
+
+**Implementation**
+
+#+begin_src rust
+  pub fn attack_ecb_one_byte_at_a_time_prefix<F>(encrypt_fn: F) -> String
+  where
+      F: Fn(&[u8]) -> Vec<u8>,
+  {
+      let (block_size, padding_length) = compute_block_size_and_padding_length(&encrypt_fn);
+      if !is_ecb(&encrypt_fn, block_size) {
+          panic!("Data not encryped with ECB");
+      }
+
+      let prefix_length = prefix_length(&encrypt_fn, block_size);
+      let prefix_trailing_bytes = prefix_length % block_size;
+      let prefix_blocks = match prefix_trailing_bytes {
+          0 => prefix_length / block_size,
+          _ => (prefix_length / block_size) + 1,
+      };
+
+      let bytes_to_fill_last_prefix_block = match prefix_trailing_bytes {
+          0 => 0,
+          _ => block_size - prefix_trailing_bytes,
+      };
+
+      let mut plain = vec![0; block_size - 1];
+      let num_target_bytes = encrypt_fn(&[]).len() - padding_length - prefix_length;
+      for i in 0..num_target_bytes {
+          let crafted_prefix = [
+              &vec![0; bytes_to_fill_last_prefix_block],
+              &plain[plain.len() - (block_size - 1)..],
+          ]
+              .concat();
+          let ciphertext_block_to_character =
+              brute_force_ciphertext_block(&encrypt_fn, &crafted_prefix, prefix_blocks, block_size);
+
+          let raw_prefix =
+              vec![0; bytes_to_fill_last_prefix_block + block_size - 1 - (i % block_size)];
+          let ciphertext = encrypt_fn(&raw_prefix);
+          let start = (prefix_blocks + (i / block_size)) * block_size;
+          let end = start + block_size;
+          let character = ciphertext_block_to_character
+              .get(&ciphertext[start..end])
+              .expect("Exists");
+
+          plain.push(*character);
+      }
+
+      String::from_utf8(plain[block_size - 1..].to_vec()).expect("Valid plain message")
+  }
+
+  pub fn prefix_length<F>(encrypt_fn: F, block_size: usize) -> usize
+  where
+      F: Fn(&[u8]) -> Vec<u8>,
+  {
+      let ciphertext_a = encrypt_fn(&[]);
+      let ciphertext_b = encrypt_fn(&[0]);
+      let prefix_smaller_than_block_size = ciphertext_a[0..block_size] != ciphertext_b[0..block_size];
+      if prefix_smaller_than_block_size {
+          bytes_within_last_prefix_block(encrypt_fn, 0, block_size)
+      } else {
+          let blocks_in_prefix = full_blocks_within_prefix(&ciphertext_a, &ciphertext_b, block_size);
+
+          let initial_bytes = blocks_in_prefix * block_size;
+          let last_bytes = bytes_within_last_prefix_block(encrypt_fn, initial_bytes, block_size);
+          initial_bytes + last_bytes
+      }
+  }
+
+  fn full_blocks_within_prefix(ciphertext_a: &[u8], ciphertext_b: &[u8], block_size: usize) -> usize {
+      let mut i = 0;
+      while ciphertext_a[i..i + block_size] == ciphertext_b[i..i + block_size] {
+          i += block_size;
+      }
+
+      i / block_size
+  }
+
+  fn bytes_within_last_prefix_block<F>(
+      encryption_fn: F,
+      block_position: usize,
+      block_size: usize,
+  ) -> usize
+  where
+      F: Fn(&[u8]) -> Vec<u8>,
+  {
+      let start = block_position;
+      let end = block_position + block_size;
+      let ciphertext_block = |length: usize| encryption_fn(&vec![0; length])[start..end].to_vec();
+
+      let mut i = 0;
+      while ciphertext_block(i) != ciphertext_block(i + 1) {
+          i += 1;
+      }
+
+      match i < block_size {
+          true => block_size - i,
+          false => 0,
+      }
+  }
+#+end_src
+
+** Code
+
+You can check the whole implementation https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge14.rs.
+
+* Conclusion 
+
+ECB with a prefix is still insecure.
