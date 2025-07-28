@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/break-ecb-2"><!-- Primary Meta Tags --><title>Cryptopals: Break an ECB encrypted message (hard)</title><meta name="title" content="Cryptopals: Break an ECB encrypted message (hard)"><meta name="description" content="Learn to break a message encrypted with the ECB block cipher mode (hard exercise)."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/break-ecb-2"><meta property="og:title" content="Cryptopals: Break an ECB encrypted message (hard)"><meta property="og:description" content="Learn to break a message encrypted with the ECB block cipher mode (hard exercise)."><meta property="og:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/break-ecb-2"><meta property="twitter:title" content="Cryptopals: Break an ECB encrypted message (hard)"><meta property="twitter:description" content="Learn to break a message encrypted with the ECB block cipher mode (hard exercise)."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.IGnllL6P.css">
+<link rel="stylesheet" href="/_astro/_slug_.DgHCkA33.css">
+<style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
+</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+DO
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/cryptopals.B5aQRihb_Z2vct6J.webp" class="rounded-xl shadow-ba" alt="" width="888" height="888" loading="lazy" decoding="async"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2025-07-28T00:00:00.000Z"> Jul 28, 2025 </time> </div> <h1 class="font-[Iceland]"> Cryptopals: Break an ECB encrypted message (hard) </h1> <hr> </div>  <ul>
+<li><a href="#break-ecb-mode-hard-level">Break ECB mode (hard level)</a>
+<ul>
+<li><a href="#find-the-block-size">Find the block size</a></li>
+<li><a href="#check-if-oracle-is-using-ecb-mode">Check if oracle is using ECB
+mode</a></li>
+<li><a href="#find-the-prefix-length">Find the prefix length</a></li>
+<li><a href="#break-the-first-byte">Break the first byte</a></li>
+<li><a href="#break-the-following-bytes">Break the following bytes</a></li>
+<li><a href="#code">Code</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<p>In the last blog, we learned about ECB and how to break it. Today, we
+will continue with the topic and learn how to break it in a different
+setup. This post is related to
+<a href="https://cryptopals.com/sets/2/challenges/14">https://cryptopals.com/sets/2/challenges/14</a>.</p>
+<h1 id="break-ecb-mode-hard-level">Break ECB mode (hard level)</h1>
+<p>For this exercise, the oracle won’t just append some data, but also
+prepend data of random length. Without further ado, let’s see the
+process.</p>
+<h2 id="find-the-block-size">Find the block size</h2>
+<p>Same as in the previous blog.</p>
+<h2 id="check-if-oracle-is-using-ecb-mode">Check if oracle is using ECB mode</h2>
+<p>Same as in the previous blog.</p>
+<h2 id="find-the-prefix-length">Find the prefix length</h2>
+<p>Now that the oracle adds a prefix, we need to know the length of the
+prefix.</p>
+<p>To determine the prefix length, we first check if the prefix is smaller
+than the block size. This can be done by calling the oracle with inputs
+of zero and one byte, then comparing the first block of each ciphertext.</p>
+<p><strong>If the first blocks are different</strong>, the prefix is smaller than the
+block size. In this case, we continue calling the oracle with inputs
+that increase by one byte at a time. When the first blocks of two
+consecutive ciphertexts become equal, we can calculate the prefix length
+as:</p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>prefix length = block size - number of input bytes</span></span>
+<span class="line"><span></span></span></code></pre>
+<p><strong>If the first blocks are the same</strong>, the prefix is larger than the
+block size. Here, we determine how many full blocks the prefix occupies
+and how many bytes spill into the next block. To do this, we check how
+many blocks (from the beginning) remain identical in the ciphertexts
+generated with zero and one bytes. Then, we use the same approach as
+above to calculate the remaining bytes in the last block.</p>
+<p>Once we have the prefix length, we can proceed to the next step.</p>
+<h2 id="break-the-first-byte">Break the first byte</h2>
+<p>The idea is the same as in the previous blog. We only need to change a
+bit how we construct the input.</p>
+<p>We won’t use a string one byte shorter than the block size. We will use
+a string one byte shorter than the block size, plus the bytes to
+complete the last prefix block (if the last block isn’t equal to the
+block size). Completing the last prefix block makes sure the data we are
+interested in starts in the next block (not in the middle of it), and
+the block size minus one is used to isolate the first byte. As in the
+previous blog.</p>
+<p>Another difference is that we won’t take the first block of the
+ciphertext to compute the dictionary of possible ciphertexts, but the
+first block after the prefix.</p>
+<h2 id="break-the-following-bytes">Break the following bytes</h2>
+<p>Same as in the previous blog. We just need to use the longer prefix as
+explained in the previous point.</p>
+<p>That’s about it. We are ready to see the final implementation.</p>
+<p><strong><strong>Implementation</strong></strong></p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> attack_ecb_one_byte_at_a_time_prefix</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(encrypt_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> String</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> (block_size, padding_length) </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> compute_block_size_and_padding_length</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn);</span></span>
+<span class="line"><span style="color:#FF79C6">    if</span><span style="color:#FF79C6"> !</span><span style="color:#50FA7B">is_ecb</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, block_size) {</span></span>
+<span class="line"><span style="color:#50FA7B">        panic!</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Data not encryped with ECB"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> prefix_length </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> prefix_length</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, block_size);</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> prefix_trailing_bytes </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> prefix_length </span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> prefix_blocks </span><span style="color:#FF79C6">=</span><span style="color:#FF79C6"> match</span><span style="color:#F8F8F2"> prefix_trailing_bytes {</span></span>
+<span class="line"><span style="color:#BD93F9">        0</span><span style="color:#FF79C6"> =></span><span style="color:#F8F8F2"> prefix_length </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size,</span></span>
+<span class="line"><span style="color:#F8F8F2">        _ </span><span style="color:#FF79C6">=></span><span style="color:#F8F8F2"> (prefix_length </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size) </span><span style="color:#FF79C6">+</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> bytes_to_fill_last_prefix_block </span><span style="color:#FF79C6">=</span><span style="color:#FF79C6"> match</span><span style="color:#F8F8F2"> prefix_trailing_bytes {</span></span>
+<span class="line"><span style="color:#BD93F9">        0</span><span style="color:#FF79C6"> =></span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">        _ </span><span style="color:#FF79C6">=></span><span style="color:#F8F8F2"> block_size </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> prefix_trailing_bytes,</span></span>
+<span class="line"><span style="color:#F8F8F2">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> plain </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> num_target_bytes </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[])</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> padding_length </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> prefix_length;</span></span>
+<span class="line"><span style="color:#FF79C6">    for</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">in</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">num_target_bytes {</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> crafted_prefix </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#FF79C6">            &#x26;</span><span style="color:#50FA7B">vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; bytes_to_fill_last_prefix_block],</span></span>
+<span class="line"><span style="color:#FF79C6">            &#x26;</span><span style="color:#F8F8F2">plain[plain</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">len</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> (block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">)</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">        ]</span></span>
+<span class="line"><span style="color:#FF79C6">            .</span><span style="color:#50FA7B">concat</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> ciphertext_block_to_character </span><span style="color:#FF79C6">=</span></span>
+<span class="line"><span style="color:#50FA7B">            brute_force_ciphertext_block</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">encrypt_fn, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">crafted_prefix, prefix_blocks, block_size);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> raw_prefix </span><span style="color:#FF79C6">=</span></span>
+<span class="line"><span style="color:#50FA7B">            vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; bytes_to_fill_last_prefix_block </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#FF79C6"> -</span><span style="color:#F8F8F2"> (i </span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2"> block_size)];</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> ciphertext </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">raw_prefix);</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (prefix_blocks </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> (i </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size)) </span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> end </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> character </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> ciphertext_block_to_character</span></span>
+<span class="line"><span style="color:#FF79C6">            .</span><span style="color:#50FA7B">get</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext[start</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">end])</span></span>
+<span class="line"><span style="color:#FF79C6">            .</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Exists"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        plain</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">push</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">character);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    String</span><span style="color:#FF79C6">::</span><span style="color:#50FA7B">from_utf8</span><span style="color:#F8F8F2">(plain[block_size </span><span style="color:#FF79C6">-</span><span style="color:#BD93F9"> 1</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">to_vec</span><span style="color:#F8F8F2">())</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">expect</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">"Valid plain message"</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">pub</span><span style="color:#FF79C6"> fn</span><span style="color:#50FA7B"> prefix_length</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(encrypt_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">, block_size</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> usize</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> ciphertext_a </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[]);</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> ciphertext_b </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> encrypt_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">]);</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> prefix_smaller_than_block_size </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> ciphertext_a[</span><span style="color:#BD93F9">0</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">block_size] </span><span style="color:#FF79C6">!=</span><span style="color:#F8F8F2"> ciphertext_b[</span><span style="color:#BD93F9">0</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">block_size];</span></span>
+<span class="line"><span style="color:#FF79C6">    if</span><span style="color:#F8F8F2"> prefix_smaller_than_block_size {</span></span>
+<span class="line"><span style="color:#50FA7B">        bytes_within_last_prefix_block</span><span style="color:#F8F8F2">(encrypt_fn, </span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">, block_size)</span></span>
+<span class="line"><span style="color:#F8F8F2">    } </span><span style="color:#FF79C6">else</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> blocks_in_prefix </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> full_blocks_within_prefix</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext_a, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">ciphertext_b, block_size);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> initial_bytes </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> blocks_in_prefix </span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">        let</span><span style="color:#F8F8F2"> last_bytes </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> bytes_within_last_prefix_block</span><span style="color:#F8F8F2">(encrypt_fn, initial_bytes, block_size);</span></span>
+<span class="line"><span style="color:#F8F8F2">        initial_bytes </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> last_bytes</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">fn</span><span style="color:#50FA7B"> full_blocks_within_prefix</span><span style="color:#F8F8F2">(ciphertext_a</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">], ciphertext_b</span><span style="color:#FF79C6">:</span><span style="color:#FF79C6"> &#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">], block_size</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">=</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#FF79C6">    while</span><span style="color:#F8F8F2"> ciphertext_a[i</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">i </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size] </span><span style="color:#FF79C6">==</span><span style="color:#F8F8F2"> ciphertext_b[i</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">i </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size] {</span></span>
+<span class="line"><span style="color:#F8F8F2">        i </span><span style="color:#FF79C6">+=</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    i </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2"> block_size</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">fn</span><span style="color:#50FA7B"> bytes_within_last_prefix_block</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">F</span><span style="color:#F8F8F2">>(</span></span>
+<span class="line"><span style="color:#F8F8F2">    encryption_fn</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> F</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    block_position</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    block_size</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> usize</span></span>
+<span class="line"><span style="color:#FF79C6">where</span></span>
+<span class="line"><span style="color:#8BE9FD;font-style:italic">    F</span><span style="color:#FF79C6">:</span><span style="color:#50FA7B"> Fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">[</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-></span><span style="color:#8BE9FD;font-style:italic"> Vec</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#8BE9FD;font-style:italic">u8</span><span style="color:#F8F8F2">>,</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> start </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> block_position;</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> end </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> block_position </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> block_size;</span></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#F8F8F2"> ciphertext_block </span><span style="color:#FF79C6">=</span><span style="color:#FF79C6"> |</span><span style="color:#F8F8F2">length</span><span style="color:#FF79C6">:</span><span style="color:#8BE9FD;font-style:italic"> usize</span><span style="color:#FF79C6">|</span><span style="color:#50FA7B"> encryption_fn</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">&#x26;</span><span style="color:#50FA7B">vec!</span><span style="color:#F8F8F2">[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">; length])[start</span><span style="color:#FF79C6">..</span><span style="color:#F8F8F2">end]</span><span style="color:#FF79C6">.</span><span style="color:#50FA7B">to_vec</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    let</span><span style="color:#FF79C6"> mut</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">=</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#FF79C6">    while</span><span style="color:#50FA7B"> ciphertext_block</span><span style="color:#F8F8F2">(i) </span><span style="color:#FF79C6">!=</span><span style="color:#50FA7B"> ciphertext_block</span><span style="color:#F8F8F2">(i </span><span style="color:#FF79C6">+</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">) {</span></span>
+<span class="line"><span style="color:#F8F8F2">        i </span><span style="color:#FF79C6">+=</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">    match</span><span style="color:#F8F8F2"> i </span><span style="color:#FF79C6">&#x3C;</span><span style="color:#F8F8F2"> block_size {</span></span>
+<span class="line"><span style="color:#BD93F9">        true</span><span style="color:#FF79C6"> =></span><span style="color:#F8F8F2"> block_size </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> i,</span></span>
+<span class="line"><span style="color:#BD93F9">        false</span><span style="color:#FF79C6"> =></span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<h2 id="code">Code</h2>
+<p>You can check the whole implementation
+<a href="https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge14.rs">https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge14.rs</a>.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>ECB with a prefix is still insecure.</p>  </div> </article> <footer></footer> </body></html>
