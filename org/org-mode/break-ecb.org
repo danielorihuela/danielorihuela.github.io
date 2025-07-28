@@ -1,6 +1,6 @@
 #+title: Cryptopals: Break an ECB encrypted message (easy)
 #+description: Learn to break a message encrypted with the ECB block cipher mode (easy exercise).
-#+publishdate: 2025-05-27
+#+publishdate: 2025-07-10
 #+cover: ../../images/covers/cryptopals.jpg
 #+options: ^:nil
 
