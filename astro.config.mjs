@@ -15,5 +15,5 @@ export default defineConfig({
             theme: 'dracula',
         },
     },
-    trailingSlash: 'never',
+    trailingSlash: 'always',
 });
