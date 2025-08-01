@@ -16,6 +16,9 @@
             nodejs_24
             pandoc
           ];
+          shellHook = ''
+            npm ci
+          '';
         };
       });
 }
