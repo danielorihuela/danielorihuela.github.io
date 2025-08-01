@@ -1,1 +1,0 @@
-import"./hoisted.DNq6m-fi.js";document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("hero-text");if(!t)return;const n=["Software Engineer","Security Enthusiast","Code Craftsman"];let e=0;setInterval(()=>{e=(e+1)%n.length,t.textContent=n[e]},3e3)});
