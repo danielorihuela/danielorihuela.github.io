@@ -1,5 +1,9 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
+import sanitizeHtml from 'sanitize-html';
+import MarkdownIt from 'markdown-it';
+
+const parser = new MarkdownIt();
 
 export async function GET(context) {
     const blogPosts = await getCollection('blog');
@@ -20,6 +24,7 @@ export async function GET(context) {
             description: post.data.description,
             customData: post.data.customData,
             link: `/blog/${post.slug}/`,
+            content: sanitizeHtml(parser.render(post.body)),
             author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)'
         })),
     });
