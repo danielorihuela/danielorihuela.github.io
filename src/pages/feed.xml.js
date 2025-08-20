@@ -1,12 +1,28 @@
-import { getCollection } from 'astro:content';
-import rss from '@astrojs/rss';
-import sanitizeHtml from 'sanitize-html';
-import MarkdownIt from 'markdown-it';
-
-const parser = new MarkdownIt();
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { getContainerRenderer as getMDXRenderer } from "@astrojs/mdx";
+import { loadRenderers } from "astro:container";
+import { getCollection } from "astro:content";
+import rss from "@astrojs/rss";
 
 export async function GET(context) {
-    const blogPosts = await getCollection('blog');
+    const renderers = await loadRenderers([getMDXRenderer()]);
+    const container = await AstroContainer.create({ renderers });
+    const posts = await getCollection('blog');
+
+    const items = [];
+    for (const post of posts) {
+        const { Content } = await post.render();
+        items.push({
+            title: post.data.title,
+            author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)',
+            pubDate: post.data.publishdate,
+            customData: post.data.customData,
+            link: new URL(`/blog/${post.slug}`, context.url.origin).toString(),
+            description: `${post.data.description}`,
+            content: await container.renderToString(Content),
+            customData: `<image>${post.data.cover.src}</image>`
+         });
+    }
 
     return rss({
         title: 'Daniel Orihuela\'s Blog',
@@ -18,19 +34,6 @@ export async function GET(context) {
         customData:
             `<atom:link href="${new URL('feed.xml', context.site)}" rel="self" type="application/rss+xml" />`
         ,
-        items: blogPosts.map((post) => ({
-            title: post.data.title,
-            description: post.data.description,
-            author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)',
-            pubDate: post.data.publishdate,
-            customData: post.data.customData,
-            link: `/blog/${post.slug}/`,
-            content: sanitizeHtml(parser.render(post.body), {
-                allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
-            }),
-            customData: `
-                <image>${`https://danielorihuela.dev${post.data.cover.src}`}</image>
-            `
-        })),
+        items,
     });
 }

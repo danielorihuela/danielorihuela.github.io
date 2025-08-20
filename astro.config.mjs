@@ -16,4 +16,15 @@ export default defineConfig({
         },
     },
     trailingSlash: 'always',
+
+    // The build and vite options are required to ensure
+    // that image are correctly prefixed in the rss feed
+    build: {
+        assetsPrefix: 'https://danielorihuela.dev/'
+    },
+    vite: {
+        ssr: {
+        external: ['astro/container', '@astrojs/mdx'],
+        },
+    },
 });
