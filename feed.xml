@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Daniel Orihuela&apos;s Blog</title><description>Dive into the fascinating world of software development, security, and AI with Daniel Orihuela.</description><link>https://danielorihuela.dev/</link><atom:link href="https://danielorihuela.dev/feed.xml" rel="self" type="application/rss+xml"/><item><title>H4ck1ng G00gl3 ep000 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch02/</guid><description>Hack your way through H4ck1ng G00gl3 ep000 challenge 02. Exploit web vulnerabilities, master path traversal and Perl code injection, and claim victory.</description><content:encoded>&lt;ul&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Daniel Orihuela&apos;s Blog</title><description>Dive into the fascinating world of software development, security, and AI with Daniel Orihuela.</description><link>https://danielorihuela.dev/</link><atom:link href="https://danielorihuela.dev/feed.xml" rel="self" type="application/rss+xml"/><item><title>H4ck1ng G00gl3 ep000 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch02/</guid><description>Hack your way through H4ck1ng G00gl3 ep000 challenge 02. Exploit web vulnerabilities, master path traversal and Perl code injection, and claim victory.</description><pubDate>Tue, 18 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -57,7 +57,7 @@ read the contents of the file sending a request with the &lt;strong&gt;term&lt;/
 &lt;strong&gt;file&lt;/strong&gt; query strings equal to &lt;code&gt;solve&lt;/code&gt; and &lt;code&gt;|cat%20/flag|&lt;/code&gt;. With that,
 we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</guid><description>Reverse engineer H4ck1ng G00gl3 ep001 challenge 02: analyze executable strings, disassemble code, and execute hidden functions to uncover the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</guid><description>Reverse engineer H4ck1ng G00gl3 ep001 challenge 02: analyze executable strings, disassemble code, and execute hidden functions to uncover the flag.</description><pubDate>Thu, 20 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -101,7 +101,7 @@ Visiting the URL shows the following website.&lt;/p&gt;
 &lt;p&gt;After clicking the button, the flag will appear. With that, we completed
 the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (hard)</title><link>https://danielorihuela.dev/blog/break-ecb-2/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb-2/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (hard exercise).</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (hard)</title><link>https://danielorihuela.dev/blog/break-ecb-2/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb-2/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (hard exercise).</description><pubDate>Mon, 28 Jul 2025 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#break-ecb-mode-hard-level&quot;&gt;Break ECB mode (hard level)&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#find-the-block-size&quot;&gt;Find the block size&lt;/a&gt;&lt;/li&gt;
@@ -267,7 +267,7 @@ where
 &lt;a href=&quot;https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge14.rs&quot;&gt;https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge14.rs&lt;/a&gt;.&lt;/p&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;ECB with a prefix is still insecure.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep000 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch01/</guid><description>Think like a hacker to solve H4ck1ng G00gl3 ep000 challenge 01. Use SQL injection to outsmart the AI in this web exploitation adventure.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep000 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep000ch01/</guid><description>Think like a hacker to solve H4ck1ng G00gl3 ep000 challenge 01. Use SQL injection to outsmart the AI in this web exploitation adventure.</description><pubDate>Tue, 18 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -346,7 +346,7 @@ put the King in a safe place or kill your piece. Now, winning the game
 was easy. Once you win, the webpage should print the flag on the screen.
 With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break a repeating-key XOR message</title><link>https://danielorihuela.dev/blog/break-xor/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-xor/</guid><description>Learn to break a message encrypted with the XOR cipher and a repeating key.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break a repeating-key XOR message</title><link>https://danielorihuela.dev/blog/break-xor/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-xor/</guid><description>Learn to break a message encrypted with the XOR cipher and a repeating key.</description><pubDate>Mon, 11 Nov 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#xor-cipher&quot;&gt;XOR Cipher&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#break-xor-cipher-with-frequency-analysis&quot;&gt;Break XOR cipher with frequency
 analysis&lt;/a&gt;
@@ -562,7 +562,7 @@ pub fn break_single_xor_bytes(data: &amp;amp;[u8]) -&amp;gt; DecryptMetadata {
 &lt;p&gt;The XOR cipher is simple but easy to attack. Modern products should
 avoid it at all costs. Instead, use OTP (if you can manage the
 complexity) or AES.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch01/</guid><description>Reverse engineer your way to solving H4ck1ng G00gl3 ep001 challenge 01. Extract strings, find private keys, and decrypt the flag to crack this challenge.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch01/</guid><description>Reverse engineer your way to solving H4ck1ng G00gl3 ep001 challenge 01. Extract strings, find private keys, and decrypt the flag to crack this challenge.</description><pubDate>Tue, 18 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -620,7 +620,7 @@ command.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (easy)</title><link>https://danielorihuela.dev/blog/break-ecb/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (easy exercise).</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (easy)</title><link>https://danielorihuela.dev/blog/break-ecb/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (easy exercise).</description><pubDate>Thu, 10 Jul 2025 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#ecb-block-cipher-mode&quot;&gt;ECB block cipher mode&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#break-ecb-mode-easy-level&quot;&gt;Break ECB mode (easy level)&lt;/a&gt;
 &lt;ul&gt;
@@ -991,7 +991,7 @@ nature, which leaks patterns in the plaintext. This exercise
 demonstrates how easily it can be broken. Modern cryptographic systems
 should avoid ECB mode entirely and instead use secure modes of operation
 like Galois Counter Mode (GCM) or Counter Mode (CTR).&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Format string vulnerability</title><link>https://danielorihuela.dev/blog/format_string_vuln/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/format_string_vuln/</guid><description>Learn how format string exploits work and discover preventive measures to safeguard your code against them.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/cryptopals.B5aQRihb.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Format string vulnerability</title><link>https://danielorihuela.dev/blog/format_string_vuln/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/format_string_vuln/</guid><description>Learn how format string exploits work and discover preventive measures to safeguard your code against them.</description><pubDate>Mon, 29 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-format-string-vulnerability&quot;&gt;What&apos;s a format string
 vulnerability?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-the-problem&quot;&gt;What&apos;s the problem?&lt;/a&gt;&lt;/li&gt;
@@ -1252,7 +1252,7 @@ gdb -q --batch --ex &quot;p 0x1d9b8 - 0xffff&quot;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;Don&apos;t execute format string inputted by the users. Thanks. That will
 save you lots of headaches.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch03/</guid><description>Reverse engineer your way through H4ck1ng G00gl3 ep001 challenge 03. Exploit PHP serialization and directory traversal to uncover and decode the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/format-string-vuln.DlCIcyQp.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch03/</guid><description>Reverse engineer your way through H4ck1ng G00gl3 ep001 challenge 03. Exploit PHP serialization and directory traversal to uncover and decode the flag.</description><pubDate>Fri, 28 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1339,7 +1339,7 @@ in the output.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Deploy blog written with org-mode on GitHub Pages</title><link>https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</guid><description>Join me on my adventure to crafting a personal blog with Hugo, GitHub Pages, and GitHub Actions. Learn how to use these tools to create and deploy your own site effortlessly.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Deploy blog written with org-mode on GitHub Pages</title><link>https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</guid><description>Join me on my adventure to crafting a personal blog with Hugo, GitHub Pages, and GitHub Actions. Learn how to use these tools to create and deploy your own site effortlessly.</description><pubDate>Sun, 03 Jul 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#context&quot;&gt;Context&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#goal-expected-final-workflow&quot;&gt;Goal (expected final workflow)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#steps&quot;&gt;Steps&lt;/a&gt;
@@ -1522,7 +1522,7 @@ Actions workflow will publish them.&lt;/p&gt;
 we only need to focus on writing org-mode files. Lastly, we know this
 workflow works because we used it to deploy this post!!!&lt;/p&gt;
 &lt;p&gt;I hope you liked it and that you have learned something!&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch01/</guid><description>Crack H4ck1ng G00gl3 ep002 challenge 01: decode steganography in an image, use LSB technique and extract hidden messages from SSL certificates.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/deploy-blog.BtZybPcF.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch01/</guid><description>Crack H4ck1ng G00gl3 ep002 challenge 01: decode steganography in an image, use LSB technique and extract hidden messages from SSL certificates.</description><pubDate>Thu, 03 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1580,7 +1580,7 @@ the following.&lt;/p&gt;
 &lt;p&gt;After getting the output, we can see the flag in the &lt;strong&gt;issuer&lt;/strong&gt; field.
 With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</guid><description>Explore H4ck1ng G00gl3 ep002 challenge 02: install Timesketch via Docker, analyze logs, and uncover the flag in this thrilling forensics journey.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</guid><description>Explore H4ck1ng G00gl3 ep002 challenge 02: install Timesketch via Docker, analyze logs, and uncover the flag in this thrilling forensics journey.</description><pubDate>Fri, 04 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1595,7 +1595,7 @@ challenge 02&lt;/strong&gt;. This challenge is about &lt;strong&gt;Forensics&lt;
 csv file. The readme explains how to install timesketch using docker.
 Once installed, we can import the logs and check the latest one. There,
 you will find the flag. With that, we completed the challenge.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch03/</guid><description>Escape a restricted shell in H4ck1ng G00gl3 ep002 challenge 03. Override builtin functions and use Bash tricks to find and reveal the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch03/</guid><description>Escape a restricted shell in H4ck1ng G00gl3 ep002 challenge 03. Override builtin functions and use Bash tricks to find and reveal the flag.</description><pubDate>Sat, 05 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1636,7 +1636,56 @@ echo
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 01: navigate restricted shells, extract tokens, and uncover the flag using OAuth 2.0 and JWT.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 02: use the Konami cheat code, escape a restricted Python shell, and reveal the hidden flag.</description><pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
+challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
+think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
+challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Escape Restricted Shell&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;The description gives us the command to connect to a remote machine.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;At this point, we can try winning the game or cheating, as the hint
+suggests. At first, I tried to play the game for a while, searching for
+clues on how to cheat it. I could not find a way. I was recovering a lot
+of coordinates and images that didn&apos;t make sense and didn&apos;t help me.
+Later I learned that they are related to the bonus challenge for this
+episode. After dying a couple of times, the game became tedious, and I
+didn&apos;t find a way to cheat. I asked the community for help. The hint is
+related to the &lt;a href=&quot;https://www.digitaltrends.com/gaming/famous-cheat-codes-in-video-games/#:~:text=In%20its%20most%20famous%20form,a%20cakewalk%20with%20the%20code&quot;&gt;famous Konami cheat
+code&lt;/a&gt;.
+After introducing it, we get to another screen where we can input text.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Notice that it won&apos;t execute any command. We need to do some research.
+First, I &lt;strong&gt;copied the error output of the command &quot;cd ~&quot;&lt;/strong&gt; into the
+Google search engine.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;We can try to execute a python function to check if it&apos;s a python shell
+and its version. In that case, I decided to call:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;print &quot;asd&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;By the given output, we can see that the &lt;strong&gt;shell is running python
+version 3&lt;/strong&gt;. Lucky me, I found a &lt;a href=&quot;https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3&quot;&gt;webpage with tricks to scape from
+restricted python3
+shells&lt;/a&gt;.
+That page shows how to access the &lt;strong&gt;builtins&lt;/strong&gt; module, for example.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://docs.python.org/3/library/builtins.html&quot;&gt;builtins&lt;/a&gt; module
+gives access to several functions, one of them being the &lt;strong&gt;open&lt;/strong&gt;
+function. That means that we can open a file and read it. We know from
+past challenges that the flag file is at the root directory, and
+therefore, we can get the flag with&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;print(len.__self__.open(&apos;flag&apos;).read())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 01: navigate restricted shells, extract tokens, and uncover the flag using OAuth 2.0 and JWT.</description><pubDate>Wed, 09 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1748,56 +1797,7 @@ Authorization header&lt;/strong&gt;.&lt;/p&gt;
 to search for the flag in the response. With that, we completed the
 challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 02: use the Konami cheat code, escape a restricted Python shell, and reveal the hidden flag.</description><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
-challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
-think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
-challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Escape Restricted Shell&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The description gives us the command to connect to a remote machine.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;At this point, we can try winning the game or cheating, as the hint
-suggests. At first, I tried to play the game for a while, searching for
-clues on how to cheat it. I could not find a way. I was recovering a lot
-of coordinates and images that didn&apos;t make sense and didn&apos;t help me.
-Later I learned that they are related to the bonus challenge for this
-episode. After dying a couple of times, the game became tedious, and I
-didn&apos;t find a way to cheat. I asked the community for help. The hint is
-related to the &lt;a href=&quot;https://www.digitaltrends.com/gaming/famous-cheat-codes-in-video-games/#:~:text=In%20its%20most%20famous%20form,a%20cakewalk%20with%20the%20code&quot;&gt;famous Konami cheat
-code&lt;/a&gt;.
-After introducing it, we get to another screen where we can input text.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Notice that it won&apos;t execute any command. We need to do some research.
-First, I &lt;strong&gt;copied the error output of the command &quot;cd ~&quot;&lt;/strong&gt; into the
-Google search engine.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;We can try to execute a python function to check if it&apos;s a python shell
-and its version. In that case, I decided to call:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;print &quot;asd&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;By the given output, we can see that the &lt;strong&gt;shell is running python
-version 3&lt;/strong&gt;. Lucky me, I found a &lt;a href=&quot;https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3&quot;&gt;webpage with tricks to scape from
-restricted python3
-shells&lt;/a&gt;.
-That page shows how to access the &lt;strong&gt;builtins&lt;/strong&gt; module, for example.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://docs.python.org/3/library/builtins.html&quot;&gt;builtins&lt;/a&gt; module
-gives access to several functions, one of them being the &lt;strong&gt;open&lt;/strong&gt;
-function. That means that we can open a file and read it. We know from
-past challenges that the flag file is at the root directory, and
-therefore, we can get the flag with&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;print(len.__self__.open(&apos;flag&apos;).read())
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</guid><description>Hack your way through H4ck1ng G00gl3 ep003 challenge 03. Decompile, modify the apk, and scan the QR code to reveal the hidden flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</guid><description>Hack your way through H4ck1ng G00gl3 ep003 challenge 03. Decompile, modify the apk, and scan the QR code to reveal the hidden flag.</description><pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1850,7 +1850,7 @@ For that challenge, the change is tiny.&lt;/p&gt;
 appear after scanning the QR code. With that, we completed the
 challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</guid><description>Crack H4ck1ng G00gl3 ep004 challenge 01: explore endpoints, use .tar.gz files and dry run features, and trick the system into revealing the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</guid><description>Crack H4ck1ng G00gl3 ep004 challenge 01: explore endpoints, use .tar.gz files and dry run features, and trick the system into revealing the flag.</description><pubDate>Sun, 20 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1903,7 +1903,7 @@ Therefore, we will use &quot;/&quot; as the value for the submission field.&lt;/
 &lt;p&gt;Making this call will return us the flag! With that, we completed the
 challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</guid><description>Exploit H4ck1ng G00gl3 ep004 challenge 02: find vulnerabilities, bypass string comparison, and reset passwords to log in as &apos;tin&apos; and reveal the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</guid><description>Exploit H4ck1ng G00gl3 ep004 challenge 02: find vulnerabilities, bypass string comparison, and reset passwords to log in as &apos;tin&apos; and reveal the flag.</description><pubDate>Sun, 20 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -2026,7 +2026,7 @@ var resetOptions = {
 &lt;p&gt;Executing the script returns the response with the flag. With that, we
 completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</guid><description>Complete H4ck1ng G00gl3 ep004 challenge 03: Explore hidden tabs, read server-side scripts, and use creative commits to reveal the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</guid><description>Complete H4ck1ng G00gl3 ep004 challenge 03: Explore hidden tabs, read server-side scripts, and use creative commits to reveal the flag.</description><pubDate>Mon, 21 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -2076,7 +2076,7 @@ to read the &quot;flag&quot; file? With that idea, I modified the script.&lt;/p&
 push, we can read the flag in the output. With that, we completed the
 challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 01: manipulate binary data, discover hidden drawings, and stitch images together to reveal the final URL.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 01: manipulate binary data, discover hidden drawings, and stitch images together to reveal the final URL.</description><pubDate>Mon, 28 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -2141,7 +2141,7 @@ collage.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</guid><description>Crack H4ck1ng G00gl3 ep005 challenge 02: exploit cryptographic vulnerabilities, manipulate scores and signatures to trigger an integer overflow, and reveal the flag.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</guid><description>Crack H4ck1ng G00gl3 ep005 challenge 02: exploit cryptographic vulnerabilities, manipulate scores and signatures to trigger an integer overflow, and reveal the flag.</description><pubDate>Fri, 02 Dec 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -2521,7 +2521,70 @@ print(f&quot;Server response: {r.text}&quot;)
 &lt;p&gt;Executing the script prints the flag in the terminal. With that, we
 completed the challenge.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Heap-based buffer overflows</title><link>https://danielorihuela.dev/blog/heap-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/heap-based-buffer-overflows/</guid><description>Learn how heap-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 03: uncover hidden Morse code in the episodes, translate it to find the secret message, and complete the series.</description><pubDate>Fri, 02 Dec 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
+challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
+think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep005
+challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;For this challenge, we don&apos;t have any data. We have to find the secret
+message hidden in the episodes. I opened all the episodes in different
+browser tabs and looked at each introduction. I searched for colours,
+letters, keywords and any information I could see on the screen.
+Besides, I was carefully listening to the storyteller. After a couple of
+hours of watching the introductions in a loop, I asked the community for
+help.&lt;/p&gt;
+&lt;p&gt;It turns out that there is a message in morse. In each episode&apos;s
+introduction, around the time when a person enters and sits on the
+chair, some high-frequency sounds start to play. It never occurred to me
+that it could be morse. In any case, I decreased the video speed to 0.25
+and started taking notes.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;I transformed morse into English and copied the link on the browser. It
+didn&apos;t work. I was stuck for a while here checking the episodes and my
+notes. The problem was that they made a mistake and put the same message
+in two episodes. I found out by asking the community. After fixing that,
+I managed to get the last flag.&lt;/p&gt;
+&lt;p&gt;With that, we completed the challenge and the entire series.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to patch a git dependency in rust with same location but different branch</title><link>https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</guid><description>Learn to patch Rust git dependencies using different branches with the same repository.</description><pubDate>Mon, 29 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;At my current employer, we are developing multiple internal libraries in
+Rust. They are hosted in a git based code hosting.
+&lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories&quot;&gt;Here&lt;/a&gt;
+is how we can specify them from a different repository.&lt;/p&gt;
+&lt;p&gt;Sometimes we want to modify a repository (we will call it &quot;Start&quot;) that
+happens to be one of the lowest dependencies in the tree. And we want to
+test that a specific repository (we will call it &quot;End&quot;) that uses the
+&quot;Start&quot; dependency indirectly still works. For instance, we could have
+the following chain of dependencies: &quot;End&quot; -&amp;gt; &quot;A&quot; -&amp;gt; &quot;B&quot; -&amp;gt; &quot;C&quot; -&amp;gt;
+&quot;Start&quot;, where &quot;-&amp;gt;&quot; represents a dependency.&lt;/p&gt;
+&lt;p&gt;Rust allows to &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;override
+dependencies&lt;/a&gt;, but it
+does not work in all situations. For instance, it &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;does not allow
+patching a git repository using a different branch of the same
+repository&lt;/a&gt;. The
+&lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478#issuecomment-1506056467&quot;&gt;fix&lt;/a&gt;
+is simple but easy to misconfigure. I have problems configuring it every
+time I need to do it.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[patch.&apos;https://github.com/company/Start&apos;]
+start = { git = &quot;https://www.github.com/company//Start.git&quot;, branch = &quot;new-feature&quot; }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are two important details there.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The patch url does not include the trailing &quot;.git&quot;&lt;/li&gt;
+&lt;li&gt;The url in the second line contains &quot;//&quot; before &quot;Start.git&quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Without these two things, you will end with the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Caused by:
+  patch for `start` in `https://github.com/company/Start` points to the same source, but patches must point
+  to different sources
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/patch-dependency.BXipaHaQ.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Heap-based buffer overflows</title><link>https://danielorihuela.dev/blog/heap-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/heap-based-buffer-overflows/</guid><description>Learn how heap-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Sun, 19 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#stack-vs-heap-based-buffer-overflows&quot;&gt;Stack vs Heap-based buffer
 overflows?&lt;/a&gt;&lt;/li&gt;
@@ -2683,70 +2746,264 @@ Everything we know about one variant can be applied to the other (as far
 as I know). They are easy to exploit and protect. However, software
 engineers should be aware of their existence and how to avoid them.
 There is no excuse for avoiding them in your programs!&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to patch a git dependency in rust with same location but different branch</title><link>https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</guid><description>Learn to patch Rust git dependencies using different branches with the same repository.</description><content:encoded>&lt;p&gt;At my current employer, we are developing multiple internal libraries in
-Rust. They are hosted in a git based code hosting.
-&lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories&quot;&gt;Here&lt;/a&gt;
-is how we can specify them from a different repository.&lt;/p&gt;
-&lt;p&gt;Sometimes we want to modify a repository (we will call it &quot;Start&quot;) that
-happens to be one of the lowest dependencies in the tree. And we want to
-test that a specific repository (we will call it &quot;End&quot;) that uses the
-&quot;Start&quot; dependency indirectly still works. For instance, we could have
-the following chain of dependencies: &quot;End&quot; -&amp;gt; &quot;A&quot; -&amp;gt; &quot;B&quot; -&amp;gt; &quot;C&quot; -&amp;gt;
-&quot;Start&quot;, where &quot;-&amp;gt;&quot; represents a dependency.&lt;/p&gt;
-&lt;p&gt;Rust allows to &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;override
-dependencies&lt;/a&gt;, but it
-does not work in all situations. For instance, it &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;does not allow
-patching a git repository using a different branch of the same
-repository&lt;/a&gt;. The
-&lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478#issuecomment-1506056467&quot;&gt;fix&lt;/a&gt;
-is simple but easy to misconfigure. I have problems configuring it every
-time I need to do it.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[patch.&apos;https://github.com/company/Start&apos;]
-start = { git = &quot;https://www.github.com/company//Start.git&quot;, branch = &quot;new-feature&quot; }
+</content:encoded><image>https://danielorihuela.dev/_astro/heap-overflow.CvuaMumU.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to use WASM code from ClojureScript through JavaScript interop</title><link>https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</guid><description>Learn to use WASM code in ClojureScript via JavaScript interop. Explore Rust functions, wasm-bindgen crate, and seamless integration with JS for efficient coding.</description><pubDate>Sat, 10 Jun 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Clojure is a great programming language. I have been working with it
+lately, and it&apos;s been a blast. Another language that I love is Rust. One
+day I was thinking about both languages, their advantages and
+disadvantages, and under which circumstances I should use each. That
+made me wonder if it would be hard to use WASM from Clojurescript.&lt;/p&gt;
+&lt;p&gt;My idea was to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a simple function in Rust&lt;/li&gt;
+&lt;li&gt;Use &lt;a href=&quot;https://github.com/rustwasm/wasm-bindgen&quot;&gt;wasm-bindgen&lt;/a&gt; crate
+to generate the WASM code and JavaScript bindings.&lt;/li&gt;
+&lt;li&gt;Load the code into JavaScript&lt;/li&gt;
+&lt;li&gt;Call WASM code from ClojureScript through the JavaScript interops&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You can check the final code at
+&lt;a href=&quot;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&quot;&gt;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The first two steps were easy. I created a simple Rust function.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn add(a: u8, b: u8) -&amp;gt; u8 {
+    a + b
+}
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There are two important details there.&lt;/p&gt;
+&lt;p&gt;Then, I built the WASM code and JavaScript bindings with the following
+command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;wasm-pack build --target web
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now is when the interesting part starts. We want to use the generated
+JavaScript bindings to call the WASM code. First, we need to &lt;a href=&quot;https://clojurescript.org/guides/quick-start&quot;&gt;create a
+simple website&lt;/a&gt; and &lt;a href=&quot;https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html?highlight=wasm-pack%20build%20--target%20web#without-a-bundler&quot;&gt;load
+the code in the
+browser&lt;/a&gt;.
+In our case, we want to access the WASM functions from the &quot;windows&quot;
+object. So I ended up with the following piece of code.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;script type=&quot;module&quot;&amp;gt;
+  import init, { add } from &apos;./wasm/addition.js&apos;
+
+  async function run() {
+    await init();
+    window.addWasm = add;
+  }
+
+  await run();
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The WASM is now loaded. We are ready to execute the &quot;hello world&quot;
+website.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;clj -M --main cljs.main --compile hello-world.core --repl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But there&apos;s one problem.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;The wasm file cannot be validated. I suspect it is related to Will
+Cohen&apos;s comment on &lt;a href=&quot;https://clojure.atlassian.net/browse/CLJS-3387&quot;&gt;https://clojure.atlassian.net/browse/CLJS-3387&lt;/a&gt;. So
+I tried to serve it with
+&lt;a href=&quot;https://github.com/svenstaro/miniserve&quot;&gt;miniserve&lt;/a&gt;. It worked!&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;We can call WASM code with with the following approach: The
+&lt;a href=&quot;https://cljs.info/cheatsheet/&quot;&gt;cheatsheet&lt;/a&gt; tells us how to access the
+function we jsut exported.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(. js/window (addWasm 5 10))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;You can check the final code at
+&lt;a href=&quot;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&quot;&gt;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And this is how we can call WASM from ClojureScript from a basic
+project. The problem with that approach is that we lost the REPL since
+we cannot use the ClojureScript browser. However, you will probably use
+a build tool like
+&lt;a href=&quot;https://github.com/thheller/shadow-cljs&quot;&gt;shadow-cljs&lt;/a&gt;. An approach
+exists for shadow-cljs to use WASM with the REPL. You can check it
+&lt;a href=&quot;https://github.com/thheller/wasm-pack-cljs&quot;&gt;https://github.com/thheller/wasm-pack-cljs&lt;/a&gt;.&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/cljs-wasm-js.Cyo-3vbn.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How does Key Transparency work?</title><link>https://danielorihuela.dev/blog/key-transparency-high-level/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/key-transparency-high-level/</guid><description>How does Key Transparency secure public key distribution? Discover how protocols like CONIKS and WhatsApp&apos;s implementation tackle these challenges.</description><pubDate>Sat, 06 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#context&quot;&gt;Context&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#whats-key-transparency&quot;&gt;What&apos;s Key Transparency?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-does-it-work-coniks&quot;&gt;How does it work (CONIKS)?&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;The patch url does not include the trailing &quot;.git&quot;&lt;/li&gt;
-&lt;li&gt;The url in the second line contains &quot;//&quot; before &quot;Start.git&quot;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#data-structures&quot;&gt;Data Structures&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#merkle-tree&quot;&gt;Merkle Tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#user-identifier-to-public-key-map&quot;&gt;User identifier to Public Key
+map&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Without these two things, you will end with the following error:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Caused by:
-  patch for `start` in `https://github.com/company/Start` points to the same source, but patches must point
-  to different sources
-&lt;/code&gt;&lt;/pre&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 03: uncover hidden Morse code in the episodes, translate it to find the secret message, and complete the series.</description><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#protocol-phases&quot;&gt;Protocol phases&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#registration-phase&quot;&gt;Registration phase&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#lookup-phase&quot;&gt;Lookup phase&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#monitoring-phase&quot;&gt;Monitoring phase&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#cross-verification-phase&quot;&gt;Cross verification phase&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
-challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
-think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep005
-challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#some-thoughts&quot;&gt;Some thoughts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-does-it-work-whatsapp&quot;&gt;How does it work (WhatsApp)?&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#protocol-phases-1&quot;&gt;Protocol phases&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#registration-phase-1&quot;&gt;Registration phase&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#lookup-phase-1&quot;&gt;Lookup phase&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#challenges&quot;&gt;Challenges&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#some-thoughts-1&quot;&gt;Some thoughts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Context&lt;/h1&gt;
+&lt;p&gt;Lately, I&apos;ve been thinking about how current e2e messaging applications
+distribute public keys as part of my job. There are two ways. You trust
+the service or check that the person you are talking with has the public
+key in his possession. The latter is better, but users must use a side
+channel (e.g. meet in person, phone call) to check it. That&apos;s known as
+Trust On First Use (TOFU). The first time you talk with someone over the
+service, you don&apos;t know who they are, but you can use a side channel to
+check it. From that point, you know that this person controls that
+public key. Unfortunately, this has some disadvantages.&lt;/p&gt;
+&lt;p&gt;The main reasons are that users won&apos;t bother performing the flow and
+that doing it with every person is a burden. Besides, this doesn&apos;t work
+for people who don&apos;t know each other on real life.&lt;/p&gt;
+&lt;p&gt;Key Transparency was born.&lt;/p&gt;
+&lt;h1&gt;What&apos;s Key Transparency?&lt;/h1&gt;
+&lt;p&gt;Key Transparency is a protocol based on append-only logs. The idea is
+that the server providing the public keys also gives proofs that it is
+behaving correctly. Hence, the public key is correct, and you can safely
+talk with the person controlling it.&lt;/p&gt;
+&lt;h1&gt;How does it work (CONIKS)?&lt;/h1&gt;
+&lt;p&gt;To get an idea, we are going to review the
+&lt;a href=&quot;https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/melara&quot;&gt;CONIKS&lt;/a&gt;
+implementation.&lt;/p&gt;
+&lt;h2&gt;Data Structures&lt;/h2&gt;
+&lt;h3&gt;Merkle Tree&lt;/h3&gt;
+&lt;p&gt;A &lt;strong&gt;Merkle Tree&lt;/strong&gt; is a tree made of hashes that allows to verify that a
+node is in the tree. For example, to check that the tree includes the
+hash in red, we only need the hashes in green. Computing the hashes in a
+bottom up fashion with the read and green hashes should give us the same
+root hash.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-&lt;p&gt;For this challenge, we don&apos;t have any data. We have to find the secret
-message hidden in the episodes. I opened all the episodes in different
-browser tabs and looked at each introduction. I searched for colours,
-letters, keywords and any information I could see on the screen.
-Besides, I was carefully listening to the storyteller. After a couple of
-hours of watching the introductions in a loop, I asked the community for
-help.&lt;/p&gt;
-&lt;p&gt;It turns out that there is a message in morse. In each episode&apos;s
-introduction, around the time when a person enters and sits on the
-chair, some high-frequency sounds start to play. It never occurred to me
-that it could be morse. In any case, I decreased the video speed to 0.25
-and started taking notes.&lt;/p&gt;
+&lt;p&gt;That&apos;s fast and easy to verify, can be done in the client&apos;s device and
+allows any user to check that a specific public key is registered in the
+service. This Merkle Tree is computed from time to time, so we end with
+root hashes for different &lt;strong&gt;epochs&lt;/strong&gt;. Each new Merkle Tree includes the
+previous epoch root hash. These chains prevent forking the history.
+Otherwise, the server could build Merkle Trees with malicious intentions
+without leaving any trace.&lt;/p&gt;
+&lt;h3&gt;User identifier to Public Key map&lt;/h3&gt;
+&lt;p&gt;We also need a map between public identifiers and public keys. The
+server hosting the information can be untrusted. If the information is
+wrong, the client will detect that when verifying the proofs.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Public Identifier&lt;/th&gt;
+&lt;th&gt;Public Key&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;6384e2b2184bcbf58eccf10ca7a6563c (alice public id)&lt;/td&gt;
+&lt;td&gt;alice pk&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9f9d51bc70ef21ca5c14f307980a29d8 (bob public id)&lt;/td&gt;
+&lt;td&gt;bob pk&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Protocol phases&lt;/h2&gt;
+&lt;h3&gt;Registration phase&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;User creates a new account their device create a new key pair&lt;/li&gt;
+&lt;li&gt;Client device creates a new key pair&lt;/li&gt;
+&lt;li&gt;Client device sends public key to the server&lt;/li&gt;
+&lt;li&gt;Server adds it to the map&lt;/li&gt;
+&lt;li&gt;Server computes new Merkle Tree&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That&apos;s the simplified flow. However, the Merkle Tree isn&apos;t computed for
+each new key due to scalability issues. It&apos;s done after specific time
+intervals (e.g. every 5 minutes). When the time is right, the server
+creates a snapshot of that epoch. That includes all the new keys added
+in the last batch.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-&lt;p&gt;I transformed morse into English and copied the link on the browser. It
-didn&apos;t work. I was stuck for a while here checking the episodes and my
-notes. The problem was that they made a mistake and put the same message
-in two episodes. I found out by asking the community. After fixing that,
-I managed to get the last flag.&lt;/p&gt;
-&lt;p&gt;With that, we completed the challenge and the entire series.&lt;/p&gt;
+&lt;h3&gt;Lookup phase&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Alice asks for the public key of Bob&lt;/li&gt;
+&lt;li&gt;Server sends public key and inclusion proof&lt;/li&gt;
+&lt;li&gt;Alice verifies the inclusion proof (the given public key is included
+in the Merkle Tree)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Alice knows the given public key is inside the Merkle Tree and trusts
+that it&apos;s Bob&apos;s public key. If it wasn&apos;t, Bob should have notice and
+raised an alarm somewhere.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
+&lt;h3&gt;Monitoring phase&lt;/h3&gt;
+&lt;p&gt;It works the same as the lookup phase. Alice checks that the service
+gives her key when someone asks for her public key. Otherwise he can
+raise the alarm to her contacts.&lt;/p&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Optimize emacs start up time</title><link>https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</guid><description>Frustrated with Emacs start-up times? Discover simple hacks to speed things up and enhance your workflow in this guide.</description><content:encoded>&lt;ul&gt;
+&lt;h3&gt;Cross verification phase&lt;/h3&gt;
+&lt;p&gt;Client asks to different providers to verify the Merkle Tree chain.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;h2&gt;Some thoughts&lt;/h2&gt;
+&lt;p&gt;Pretty cool, right? It&apos;s a good step forward to improve public key
+distribution. However, it has it&apos;s
+&lt;a href=&quot;https://freedom-to-tinker.com/2016/03/31/why-making-johnnys-key-management-transparent-is-so-challenging/&quot;&gt;challenges&lt;/a&gt;.
+What time interval should we use to compute epochs? What happens if a
+new user wants to send a message while the epoch is still building? What
+if clients can&apos;t ask various providers?&lt;/p&gt;
+&lt;p&gt;The biggest problem is that this protocol doesn&apos;t work if the company
+owns the messaging channel and the public key distribution server and
+there aren&apos;t other providers. We have no assurance that the company
+didn&apos;t forge the history. Furthermore, they could add two public keys
+for each user. One controlled by the user and one by the server. That
+way, they can perform a MITM attack. The server would give the fake key
+to any user performing the lookup phase and the real key to any user
+performing the monitoring phase.&lt;/p&gt;
+&lt;h1&gt;How does it work (WhatsApp)?&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/pepr23/presentation/lewi&quot;&gt;WhatsApp started with their own implementation of Key
+Transparency&lt;/a&gt;.
+It might be of more help than CONIKS implementation. The data structures
+are the same, but the phases change a bit.&lt;/p&gt;
+&lt;h2&gt;Protocol phases&lt;/h2&gt;
+&lt;h3&gt;Registration phase&lt;/h3&gt;
+&lt;p&gt;It works the same as in CONIKS.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;h3&gt;Lookup phase&lt;/h3&gt;
+&lt;p&gt;Similar to CONIKS. However, the client first asks for the root hash of
+the last published epoch. Then, the client asks WhatsApp for the public
+key included in the Merklee Tree with that root hash.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;h2&gt;Challenges&lt;/h2&gt;
+&lt;p&gt;We can learn a lot from WhatsApp implementation, especially from the
+challenges they had to face.&lt;/p&gt;
+&lt;p&gt;First, how can they distribute root hashes consistently? How can the
+clients trust they are building Merkle Trees as expected and behaving
+honestly? Ideally, with a distributed ledger technology like blockchain.
+However, they are not doing it for now. They have locked down server
+that the client has to trust. It&apos;s not the best, but a step in the right
+direction.&lt;/p&gt;
+&lt;p&gt;Second, what happens if we always look up the latest key? The server
+could serve a malicious key to Bob, which he will automatically trust.
+Ideally, this could be detected with &lt;strong&gt;Key history checks&lt;/strong&gt;. Each user
+would monitor that WhatsApp always represented their public key
+correctly. However, they didn&apos;t find a way to implement it. Instead,
+they use &lt;strong&gt;dual lookup proofs&lt;/strong&gt;. Whenever Alice requests a lookup proof
+for Bob, she will also ask one for her own key.&lt;/p&gt;
+&lt;h2&gt;Some thoughts&lt;/h2&gt;
+&lt;p&gt;That&apos;s a step in the right direction for e2e encryption. We still have
+to trust WhatsApp server but I hope this won&apos;t happen in the future.
+More importantly, we can learn a lot from their implementation and
+challenges in the future.&lt;/p&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Key Transparency protocol brings some solutions to current limitations
+on public key distributions along with some challenges. Google and
+WhatsApp seem to be doing some work on those areas. Keep a look on
+them!!!&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/key-transparency.degZT15k.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Optimize emacs start up time</title><link>https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</guid><description>Frustrated with Emacs start-up times? Discover simple hacks to speed things up and enhance your workflow in this guide.</description><pubDate>Sat, 18 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#optimization-steps&quot;&gt;Optimization steps&lt;/a&gt;
 &lt;ul&gt;
@@ -2849,7 +3106,7 @@ config&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;Emacs is easy to configure, but hard to optimize. Try all the tricks
 above and check for some more on the internet.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Skip List (in Rust) explained!</title><link>https://danielorihuela.dev/blog/skip-list/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/skip-list/</guid><description>Understand Skip Lists in Rust. Simpler than balanced trees, they offer logarithmic operations but use more memory. Learn their structure and how to implement them.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/emacs-logo.DuuBcpPG.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Skip List (in Rust) explained!</title><link>https://danielorihuela.dev/blog/skip-list/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/skip-list/</guid><description>Understand Skip Lists in Rust. Simpler than balanced trees, they offer logarithmic operations but use more memory. Learn their structure and how to implement them.</description><pubDate>Sat, 18 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-skip-list&quot;&gt;What&apos;s a Skip List?&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#search&quot;&gt;Search&lt;/a&gt;&lt;/li&gt;
@@ -3038,264 +3295,7 @@ struct Node&amp;lt;T&amp;gt; {
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to use WASM code from ClojureScript through JavaScript interop</title><link>https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</guid><description>Learn to use WASM code in ClojureScript via JavaScript interop. Explore Rust functions, wasm-bindgen crate, and seamless integration with JS for efficient coding.</description><content:encoded>&lt;p&gt;Clojure is a great programming language. I have been working with it
-lately, and it&apos;s been a blast. Another language that I love is Rust. One
-day I was thinking about both languages, their advantages and
-disadvantages, and under which circumstances I should use each. That
-made me wonder if it would be hard to use WASM from Clojurescript.&lt;/p&gt;
-&lt;p&gt;My idea was to:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Create a simple function in Rust&lt;/li&gt;
-&lt;li&gt;Use &lt;a href=&quot;https://github.com/rustwasm/wasm-bindgen&quot;&gt;wasm-bindgen&lt;/a&gt; crate
-to generate the WASM code and JavaScript bindings.&lt;/li&gt;
-&lt;li&gt;Load the code into JavaScript&lt;/li&gt;
-&lt;li&gt;Call WASM code from ClojureScript through the JavaScript interops&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;You can check the final code at
-&lt;a href=&quot;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&quot;&gt;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The first two steps were easy. I created a simple Rust function.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-pub fn add(a: u8, b: u8) -&amp;gt; u8 {
-    a + b
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Then, I built the WASM code and JavaScript bindings with the following
-command:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;wasm-pack build --target web
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now is when the interesting part starts. We want to use the generated
-JavaScript bindings to call the WASM code. First, we need to &lt;a href=&quot;https://clojurescript.org/guides/quick-start&quot;&gt;create a
-simple website&lt;/a&gt; and &lt;a href=&quot;https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html?highlight=wasm-pack%20build%20--target%20web#without-a-bundler&quot;&gt;load
-the code in the
-browser&lt;/a&gt;.
-In our case, we want to access the WASM functions from the &quot;windows&quot;
-object. So I ended up with the following piece of code.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;script type=&quot;module&quot;&amp;gt;
-  import init, { add } from &apos;./wasm/addition.js&apos;
-
-  async function run() {
-    await init();
-    window.addWasm = add;
-  }
-
-  await run();
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The WASM is now loaded. We are ready to execute the &quot;hello world&quot;
-website.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;clj -M --main cljs.main --compile hello-world.core --repl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;But there&apos;s one problem.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The wasm file cannot be validated. I suspect it is related to Will
-Cohen&apos;s comment on &lt;a href=&quot;https://clojure.atlassian.net/browse/CLJS-3387&quot;&gt;https://clojure.atlassian.net/browse/CLJS-3387&lt;/a&gt;. So
-I tried to serve it with
-&lt;a href=&quot;https://github.com/svenstaro/miniserve&quot;&gt;miniserve&lt;/a&gt;. It worked!&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;We can call WASM code with with the following approach: The
-&lt;a href=&quot;https://cljs.info/cheatsheet/&quot;&gt;cheatsheet&lt;/a&gt; tells us how to access the
-function we jsut exported.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(. js/window (addWasm 5 10))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;You can check the final code at
-&lt;a href=&quot;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&quot;&gt;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And this is how we can call WASM from ClojureScript from a basic
-project. The problem with that approach is that we lost the REPL since
-we cannot use the ClojureScript browser. However, you will probably use
-a build tool like
-&lt;a href=&quot;https://github.com/thheller/shadow-cljs&quot;&gt;shadow-cljs&lt;/a&gt;. An approach
-exists for shadow-cljs to use WASM with the REPL. You can check it
-&lt;a href=&quot;https://github.com/thheller/wasm-pack-cljs&quot;&gt;https://github.com/thheller/wasm-pack-cljs&lt;/a&gt;.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How does Key Transparency work?</title><link>https://danielorihuela.dev/blog/key-transparency-high-level/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/key-transparency-high-level/</guid><description>How does Key Transparency secure public key distribution? Discover how protocols like CONIKS and WhatsApp&apos;s implementation tackle these challenges.</description><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#context&quot;&gt;Context&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#whats-key-transparency&quot;&gt;What&apos;s Key Transparency?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#how-does-it-work-coniks&quot;&gt;How does it work (CONIKS)?&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#data-structures&quot;&gt;Data Structures&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#merkle-tree&quot;&gt;Merkle Tree&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#user-identifier-to-public-key-map&quot;&gt;User identifier to Public Key
-map&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#protocol-phases&quot;&gt;Protocol phases&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#registration-phase&quot;&gt;Registration phase&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#lookup-phase&quot;&gt;Lookup phase&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#monitoring-phase&quot;&gt;Monitoring phase&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#cross-verification-phase&quot;&gt;Cross verification phase&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#some-thoughts&quot;&gt;Some thoughts&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#how-does-it-work-whatsapp&quot;&gt;How does it work (WhatsApp)?&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#protocol-phases-1&quot;&gt;Protocol phases&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#registration-phase-1&quot;&gt;Registration phase&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#lookup-phase-1&quot;&gt;Lookup phase&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#challenges&quot;&gt;Challenges&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#some-thoughts-1&quot;&gt;Some thoughts&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Context&lt;/h1&gt;
-&lt;p&gt;Lately, I&apos;ve been thinking about how current e2e messaging applications
-distribute public keys as part of my job. There are two ways. You trust
-the service or check that the person you are talking with has the public
-key in his possession. The latter is better, but users must use a side
-channel (e.g. meet in person, phone call) to check it. That&apos;s known as
-Trust On First Use (TOFU). The first time you talk with someone over the
-service, you don&apos;t know who they are, but you can use a side channel to
-check it. From that point, you know that this person controls that
-public key. Unfortunately, this has some disadvantages.&lt;/p&gt;
-&lt;p&gt;The main reasons are that users won&apos;t bother performing the flow and
-that doing it with every person is a burden. Besides, this doesn&apos;t work
-for people who don&apos;t know each other on real life.&lt;/p&gt;
-&lt;p&gt;Key Transparency was born.&lt;/p&gt;
-&lt;h1&gt;What&apos;s Key Transparency?&lt;/h1&gt;
-&lt;p&gt;Key Transparency is a protocol based on append-only logs. The idea is
-that the server providing the public keys also gives proofs that it is
-behaving correctly. Hence, the public key is correct, and you can safely
-talk with the person controlling it.&lt;/p&gt;
-&lt;h1&gt;How does it work (CONIKS)?&lt;/h1&gt;
-&lt;p&gt;To get an idea, we are going to review the
-&lt;a href=&quot;https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/melara&quot;&gt;CONIKS&lt;/a&gt;
-implementation.&lt;/p&gt;
-&lt;h2&gt;Data Structures&lt;/h2&gt;
-&lt;h3&gt;Merkle Tree&lt;/h3&gt;
-&lt;p&gt;A &lt;strong&gt;Merkle Tree&lt;/strong&gt; is a tree made of hashes that allows to verify that a
-node is in the tree. For example, to check that the tree includes the
-hash in red, we only need the hashes in green. Computing the hashes in a
-bottom up fashion with the read and green hashes should give us the same
-root hash.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;That&apos;s fast and easy to verify, can be done in the client&apos;s device and
-allows any user to check that a specific public key is registered in the
-service. This Merkle Tree is computed from time to time, so we end with
-root hashes for different &lt;strong&gt;epochs&lt;/strong&gt;. Each new Merkle Tree includes the
-previous epoch root hash. These chains prevent forking the history.
-Otherwise, the server could build Merkle Trees with malicious intentions
-without leaving any trace.&lt;/p&gt;
-&lt;h3&gt;User identifier to Public Key map&lt;/h3&gt;
-&lt;p&gt;We also need a map between public identifiers and public keys. The
-server hosting the information can be untrusted. If the information is
-wrong, the client will detect that when verifying the proofs.&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Public Identifier&lt;/th&gt;
-&lt;th&gt;Public Key&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;6384e2b2184bcbf58eccf10ca7a6563c (alice public id)&lt;/td&gt;
-&lt;td&gt;alice pk&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;9f9d51bc70ef21ca5c14f307980a29d8 (bob public id)&lt;/td&gt;
-&lt;td&gt;bob pk&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;Protocol phases&lt;/h2&gt;
-&lt;h3&gt;Registration phase&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;User creates a new account their device create a new key pair&lt;/li&gt;
-&lt;li&gt;Client device creates a new key pair&lt;/li&gt;
-&lt;li&gt;Client device sends public key to the server&lt;/li&gt;
-&lt;li&gt;Server adds it to the map&lt;/li&gt;
-&lt;li&gt;Server computes new Merkle Tree&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;That&apos;s the simplified flow. However, the Merkle Tree isn&apos;t computed for
-each new key due to scalability issues. It&apos;s done after specific time
-intervals (e.g. every 5 minutes). When the time is right, the server
-creates a snapshot of that epoch. That includes all the new keys added
-in the last batch.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h3&gt;Lookup phase&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;Alice asks for the public key of Bob&lt;/li&gt;
-&lt;li&gt;Server sends public key and inclusion proof&lt;/li&gt;
-&lt;li&gt;Alice verifies the inclusion proof (the given public key is included
-in the Merkle Tree)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Alice knows the given public key is inside the Merkle Tree and trusts
-that it&apos;s Bob&apos;s public key. If it wasn&apos;t, Bob should have notice and
-raised an alarm somewhere.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h3&gt;Monitoring phase&lt;/h3&gt;
-&lt;p&gt;It works the same as the lookup phase. Alice checks that the service
-gives her key when someone asks for her public key. Otherwise he can
-raise the alarm to her contacts.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h3&gt;Cross verification phase&lt;/h3&gt;
-&lt;p&gt;Client asks to different providers to verify the Merkle Tree chain.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Some thoughts&lt;/h2&gt;
-&lt;p&gt;Pretty cool, right? It&apos;s a good step forward to improve public key
-distribution. However, it has it&apos;s
-&lt;a href=&quot;https://freedom-to-tinker.com/2016/03/31/why-making-johnnys-key-management-transparent-is-so-challenging/&quot;&gt;challenges&lt;/a&gt;.
-What time interval should we use to compute epochs? What happens if a
-new user wants to send a message while the epoch is still building? What
-if clients can&apos;t ask various providers?&lt;/p&gt;
-&lt;p&gt;The biggest problem is that this protocol doesn&apos;t work if the company
-owns the messaging channel and the public key distribution server and
-there aren&apos;t other providers. We have no assurance that the company
-didn&apos;t forge the history. Furthermore, they could add two public keys
-for each user. One controlled by the user and one by the server. That
-way, they can perform a MITM attack. The server would give the fake key
-to any user performing the lookup phase and the real key to any user
-performing the monitoring phase.&lt;/p&gt;
-&lt;h1&gt;How does it work (WhatsApp)?&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/pepr23/presentation/lewi&quot;&gt;WhatsApp started with their own implementation of Key
-Transparency&lt;/a&gt;.
-It might be of more help than CONIKS implementation. The data structures
-are the same, but the phases change a bit.&lt;/p&gt;
-&lt;h2&gt;Protocol phases&lt;/h2&gt;
-&lt;h3&gt;Registration phase&lt;/h3&gt;
-&lt;p&gt;It works the same as in CONIKS.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h3&gt;Lookup phase&lt;/h3&gt;
-&lt;p&gt;Similar to CONIKS. However, the client first asks for the root hash of
-the last published epoch. Then, the client asks WhatsApp for the public
-key included in the Merklee Tree with that root hash.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Challenges&lt;/h2&gt;
-&lt;p&gt;We can learn a lot from WhatsApp implementation, especially from the
-challenges they had to face.&lt;/p&gt;
-&lt;p&gt;First, how can they distribute root hashes consistently? How can the
-clients trust they are building Merkle Trees as expected and behaving
-honestly? Ideally, with a distributed ledger technology like blockchain.
-However, they are not doing it for now. They have locked down server
-that the client has to trust. It&apos;s not the best, but a step in the right
-direction.&lt;/p&gt;
-&lt;p&gt;Second, what happens if we always look up the latest key? The server
-could serve a malicious key to Bob, which he will automatically trust.
-Ideally, this could be detected with &lt;strong&gt;Key history checks&lt;/strong&gt;. Each user
-would monitor that WhatsApp always represented their public key
-correctly. However, they didn&apos;t find a way to implement it. Instead,
-they use &lt;strong&gt;dual lookup proofs&lt;/strong&gt;. Whenever Alice requests a lookup proof
-for Bob, she will also ask one for her own key.&lt;/p&gt;
-&lt;h2&gt;Some thoughts&lt;/h2&gt;
-&lt;p&gt;That&apos;s a step in the right direction for e2e encryption. We still have
-to trust WhatsApp server but I hope this won&apos;t happen in the future.
-More importantly, we can learn a lot from their implementation and
-challenges in the future.&lt;/p&gt;
-&lt;h1&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;Key Transparency protocol brings some solutions to current limitations
-on public key distributions along with some challenges. Google and
-WhatsApp seem to be doing some work on those areas. Keep a look on
-them!!!&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Stack-based buffer overflows</title><link>https://danielorihuela.dev/blog/stack-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/stack-based-buffer-overflows/</guid><description>Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/skip-list.BnqtRHBJ.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Stack-based buffer overflows</title><link>https://danielorihuela.dev/blog/stack-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/stack-based-buffer-overflows/</guid><description>Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Fri, 20 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-buffer-overflow&quot;&gt;What&apos;s a buffer overflow?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-the-stack&quot;&gt;What&apos;s the stack?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#how-to-exploit-stack-based-buffer-overflows&quot;&gt;How to exploit stack based buffer
@@ -3786,7 +3786,7 @@ the exercise: canaries, PIE, ASLR or NX bit.&lt;/p&gt;
 &lt;p&gt;Now we know what a stack based buffer overflow is, why it works, how to
 exploit it and some protections mechanisms. We don&apos;t have an execuse to
 avoid them.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Store shellcode in environment variable</title><link>https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</guid><description>Learn how to store the shellcode in an environment variable and bypass size limitations in buffer overflows.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Store shellcode in environment variable</title><link>https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</guid><description>Learn how to store the shellcode in an environment variable and bypass size limitations in buffer overflows.</description><pubDate>Sun, 29 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#manually-store-shellcode-in-env-var&quot;&gt;Manually store shellcode in env
 var&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#automating-the-attack&quot;&gt;Automating the attack&lt;/a&gt;&lt;/li&gt;
@@ -3890,7 +3890,7 @@ fn main() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Why the Clojure REPL is so cool</title><link>https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</guid><description>Discover why the Clojure REPL experience is superior, and how to harness its power for smoother coding.</description><content:encoded>&lt;p&gt;A couple of weeks ago, I started a side project. The idea is to create a
+</content:encoded><image>https://danielorihuela.dev/_astro/shellcode-env-var.CG5A6neK.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Why the Clojure REPL is so cool</title><link>https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</guid><description>Discover why the Clojure REPL experience is superior, and how to harness its power for smoother coding.</description><pubDate>Sun, 28 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A couple of weeks ago, I started a side project. The idea is to create a
 simple book reading tracker website, and I decided to go with Clojure.
 Why? You may wonder. Well. I wanted to play with and experience a couple
 of things: building an application using a functional programming
@@ -3963,7 +3963,7 @@ They assume the user will write and execute new code on a running
 application (REPL Driven Development). That gives us capabilities not
 present in other languages, frameworks and systems. From my experience,
 they make the development faster and more pleasant.&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Write your own shellcode</title><link>https://danielorihuela.dev/blog/write-your-own-shellcode/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/write-your-own-shellcode/</guid><description>Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets.</description><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/cl-repl.CT6ikvZZ.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Write your own shellcode</title><link>https://danielorihuela.dev/blog/write-your-own-shellcode/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/write-your-own-shellcode/</guid><description>Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets.</description><pubDate>Sat, 19 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-shellcode&quot;&gt;What&apos;s a shellcode?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#building-a-shellcode&quot;&gt;Building a shellcode&lt;/a&gt;
 &lt;ul&gt;
@@ -4370,4 +4370,4 @@ export SHELLCODE=$(cat shell); \
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;/p&gt;
 &lt;p&gt;We got shell access!!!&lt;/p&gt;
-</content:encoded><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item></channel></rss>
+</content:encoded><image>https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item></channel></rss>
