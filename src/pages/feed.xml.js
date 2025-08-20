@@ -20,12 +20,15 @@ export async function GET(context) {
         ,
         items: blogPosts.map((post) => ({
             title: post.data.title,
-            pubDate: post.data.pubDate,
             description: post.data.description,
+            author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)',
+            pubDate: post.data.publishdate,
             customData: post.data.customData,
             link: `/blog/${post.slug}/`,
             content: sanitizeHtml(parser.render(post.body)),
-            author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)'
+            customData: `
+                <image>${`https://danielorihuela.dev${post.data.cover.src}`}</image>
+            `
         })),
     });
 }
