@@ -25,7 +25,9 @@ export async function GET(context) {
             pubDate: post.data.publishdate,
             customData: post.data.customData,
             link: `/blog/${post.slug}/`,
-            content: sanitizeHtml(parser.render(post.body)),
+            content: sanitizeHtml(parser.render(post.body), {
+                allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
+            }),
             customData: `
                 <image>${`https://danielorihuela.dev${post.data.cover.src}`}</image>
             `
