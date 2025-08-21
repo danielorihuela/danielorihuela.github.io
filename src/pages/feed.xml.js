@@ -19,7 +19,7 @@ export async function GET(context) {
             customData: post.data.customData,
             link: new URL(`/blog/${post.slug}`, context.url.origin).toString(),
             description: post.data.description,
-            content: `<![CDATA[ <figure><img alt="" src="${post.data.cover.src}" /></figure> ${await container.renderToString(Content)} ]]>`,
+            content: `<figure><img alt="" src="${post.data.cover.src}" /></figure> ${await container.renderToString(Content)}`,
          });
     }
 
