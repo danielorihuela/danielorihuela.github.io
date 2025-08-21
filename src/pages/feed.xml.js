@@ -13,14 +13,13 @@ export async function GET(context) {
     for (const post of posts) {
         const { Content } = await post.render();
         items.push({
-            title: post.data.title,
-            author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)',
+            title: `<![CDATA[ ${post.data.title} ]]>`,
+            author: '<![CDATA[ danielorihuelarodriguez@gmail.com (Daniel Orihuela) ]]>',
             pubDate: post.data.publishdate,
             customData: post.data.customData,
             link: new URL(`/blog/${post.slug}`, context.url.origin).toString(),
-            description: `${post.data.description}`,
-            content: await container.renderToString(Content),
-            customData: `<image>${post.data.cover.src}</image>`
+            description: `<![CDATA[ ${post.data.description }]]>`,
+            content: `<![CDATA[ <figure><img alt="" src="${post.data.cover.src}" /></figure> ${await container.renderToString(Content)} ]]>`,
          });
     }
 
