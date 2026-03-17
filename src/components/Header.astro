@@ -1,49 +1,36 @@
 ---
 const navItems = [
-	{ name: "Home", path: "/" },
-	{ name: "About", path: "/about/" },
-	{ name: "Blog", path: "/blog/" },
-	{ name: "Open Source", path: "/open-source/" },
+	{ name: "blog", path: "/", cmd: "blog" },
+	{ name: "oss", path: "/open-source/", cmd: "contrib" },
 ];
 
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="px-4 py-0">
-	<nav
-		class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"
-	>
-		<div class="max-w-7xl mx-auto px-6 lg:px-8">
-			<div class="flex items-center justify-between h-20">
-				{/* Logo */}
+<header>
+	<nav class="fixed top-0 left-0 right-0 z-50 bg-cyber-black/95 backdrop-blur-sm border-b border-cyber-border">
+		<div class="max-w-6xl mx-auto px-4 lg:px-6">
+			<div class="flex items-center justify-between h-14">
+				{/* Terminal Prompt Logo */}
 				<a
 					href="/"
-					class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"
+					class="font-display text-sm text-terminal-text hover:text-accent transition-colors duration-200 group"
 				>
-					<span class="text-royalPurple">&lt;</span>
-					DO
-					<span class="text-royalPurple">/&gt;</span>
+					<span class="text-accent font-bold">daniel</span><span class="text-terminal-dim">@</span><span class="text-terminal-bright">oss</span><span class="text-terminal-dim">:</span><span class="text-terminal-text">~</span>
 				</a>
 
 				{/* Desktop Navigation */}
-				<div class="hidden md:flex items-center space-x-8">
+				<div class="hidden md:flex items-center gap-1">
 					{navItems.map((item) => (
 						<a
 							href={item.path}
-							class={`relative px-4 duration-300 group font-[Iceland] ${
+							class={`font-display text-sm px-3 py-1.5 rounded transition-all duration-200 ${
 								currentPath === item.path
-									? "text-cyan-400"
-									: "text-gray-300 hover:text-white"
+									? "text-accent bg-accent/10 border border-accent/30"
+									: "text-terminal-dim hover:text-accent hover:bg-accent/5"
 							}`}
 						>
-							{item.name}
-							<span
-								class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 ${
-									currentPath === item.path
-										? "scale-x-100"
-										: "scale-x-0 group-hover:scale-x-100"
-								}`}
-							/>
+							<span class="text-terminal-dim mr-1">./</span>{item.cmd}
 						</a>
 					))}
 				</div>
@@ -51,46 +38,29 @@ const currentPath = Astro.url.pathname;
 				{/* Mobile menu button */}
 				<button
 					id="mobile-menu-button"
-					class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"
+					class="md:hidden text-terminal-dim hover:text-accent transition-colors duration-200 font-display text-sm"
+					aria-label="Toggle menu"
 				>
-					<svg
-						id="menu-icon"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						class="w-6 h-6"
-					>
-						<path
-							id="menu-path"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16m-7 6h7"
-						></path>
-					</svg>
+					<span id="menu-label">[menu]</span>
 				</button>
 			</div>
 
 			{/* Mobile Navigation */}
 			<div
 				id="mobile-menu"
-				class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"
+				class="md:hidden overflow-hidden transition-all duration-300 max-h-0 opacity-0"
 			>
-				<div
-					class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"
-				>
+				<div class="py-2 border-t border-cyber-border">
 					{navItems.map((item) => (
 						<a
 							href={item.path}
-							id="menu-item"
-							class={`block px-6 py-3 text-sm font-medium transition-colors duration-300 ${
+							class={`block font-display text-sm px-4 py-2.5 transition-all duration-200 ${
 								currentPath === item.path
-									? "text-cyan-400 bg-purple-900/20"
-									: "text-gray-300 hover:text-white hover:bg-gray-800/50"
+									? "text-accent bg-accent/10"
+									: "text-terminal-dim hover:text-accent hover:bg-accent/5"
 							}`}
 						>
-							{item.name}
+							<span class="text-accent mr-2">&gt;</span>{item.cmd}
 						</a>
 					))}
 				</div>
@@ -100,34 +70,22 @@ const currentPath = Astro.url.pathname;
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
-			const mobileMenuButton = document.getElementById("mobile-menu-button");
-			const menuIconPath = document.getElementById("menu-path");
-			if (!mobileMenuButton || !menuIconPath) return;
+			const btn = document.getElementById("mobile-menu-button");
+			const label = document.getElementById("menu-label");
+			if (!btn || !label) return;
 
-			mobileMenuButton.addEventListener("click", () => {
-				const mobileMenu = document.getElementById("mobile-menu");
-				if (!mobileMenu) return;
+			btn.addEventListener("click", () => {
+				const menu = document.getElementById("mobile-menu");
+				if (!menu) return;
 
-				if (mobileMenu.classList.contains("max-h-0")) {
-					// Show menu
-					mobileMenu.classList.remove("max-h-0", "opacity-0");
-					mobileMenu.classList.add("max-h-96", "opacity-100");
-
-					// Change icon to "X"
-					menuIconPath.setAttribute(
-						"d",
-						"M6 18L18 6M6 6l12 12"
-					); // X icon path
+				if (menu.classList.contains("max-h-0")) {
+					menu.classList.remove("max-h-0", "opacity-0");
+					menu.classList.add("max-h-96", "opacity-100");
+					label.textContent = "[close]";
 				} else {
-					// Hide menu
-					mobileMenu.classList.remove("max-h-96", "opacity-100");
-					mobileMenu.classList.add("max-h-0", "opacity-0");
-
-					// Change icon back to menu
-					menuIconPath.setAttribute(
-						"d",
-						"M4 6h16M4 12h16m-7 6h7"
-					); // Menu icon path
+					menu.classList.remove("max-h-96", "opacity-100");
+					menu.classList.add("max-h-0", "opacity-0");
+					label.textContent = "[menu]";
 				}
 			});
 		});

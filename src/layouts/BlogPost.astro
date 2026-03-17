@@ -1,60 +1,192 @@
 ---
 import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
-type Props = CollectionEntry<"blog">["data"];
+interface Props {
+	title: string;
+	description: string;
+	publishdate: Date;
+	cover: any;
+	slug: string;
+}
 
-const { title, description, publishdate, cover } = Astro.props;
+const { title, description, publishdate, cover, slug } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={cover.src} />
+		<BaseHead title={title} description={description} image={cover?.src} />
 		<style is:global>
-			img {
-				margin: 0 auto;
+			/* Table of Contents & List Fixes */
+			.article-content ul, 
+			.article-content ol {
+				margin: 1.5em 0;
+			}
+			
+			.article-content ul ul, 
+			.article-content ul ol,
+			.article-content ol ul,
+			.article-content ol ol {
+				margin: 0.5em 0 0.5em 1.5em;
+				padding-left: 0.5em;
+				border-left: 1px solid var(--border);
 			}
 
-			div + h1 {
-				margin-top: 0;
+			.article-content li {
+				margin-bottom: 0.5em;
 			}
 
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				margin-top: 1em;
+			/* Image Handling */
+			.article-content img {
+				margin: 2em auto;
+				border: 1px solid var(--border);
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+			}
+
+			/* Typography & Spacing */
+			.article-content h1,
+			.article-content h2,
+			.article-content h3 {
+				font-family: 'Share Tech Mono', monospace;
+				margin-top: 2em;
+				margin-bottom: 1em;
+				color: var(--text-bright);
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+			}
+
+			.article-content h1::before { content: '#'; color: var(--accent); opacity: 0.6; }
+			.article-content h2::before { content: '##'; color: var(--accent); opacity: 0.6; }
+			.article-content h3::before { content: '###'; color: var(--accent); opacity: 0.6; }
+
+			.article-content p {
+				color: var(--text-body);
+				line-height: 1.8;
+				margin-bottom: 1.5em;
+			}
+
+			.article-content a {
+				color: var(--accent);
+				text-decoration: none;
+				border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+				transition: all 0.2s ease;
+			}
+
+			.article-content a:hover {
+				color: #fff;
+				border-bottom-color: var(--accent);
+				text-shadow: 0 0 8px var(--accent-glow);
+			}
+
+			/* Code Snippets */
+			.article-content pre {
+				margin: 2em -1.5em;
+				padding: 1.5em;
+				background-color: #0c0d14 !important;
+				border-top: 1px solid var(--border);
+				border-bottom: 1px solid var(--border);
+				position: relative;
+			}
+
+			@media (min-width: 768px) {
+				.article-content pre {
+					margin: 2em 0;
+					border: 1px solid var(--border);
+					border-radius: 4px;
+				}
+			}
+
+			/* Custom Divider */
+			.article-content hr {
+				border: none;
+				height: 1px;
+				background: linear-gradient(to right, transparent, var(--border), transparent);
+				margin: 3em 0;
+				position: relative;
+				overflow: visible;
+			}
+
+			.article-content hr::after {
+				content: '[---]';
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				background: var(--bg-dark);
+				padding: 0 1em;
+				font-family: 'Share Tech Mono', monospace;
+				font-size: 0.7em;
+				color: var(--text-dim);
 			}
 		</style>
 	</head>
 
-	<body
-		class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"
-	>
+	<body class="bg-cyber-black min-h-screen flex flex-col">
 		<Header />
-		<article class="my-32">
-			<div
-				class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"
-			>
-				<div class="w-96 max-w-full m-auto">
-					<Image class="rounded-xl shadow-ba" src={cover} alt="" />
+		<article class="flex-1 pt-24 pb-20">
+			<div class="max-w-4xl mx-auto px-4 lg:px-8">
+				{/* Terminal command prompt - Matching Home page style */}
+				<div class="font-display text-xs md:text-sm mb-8 mt-4 border-b border-cyber-border pb-4 flex items-center gap-2">
+					<span class="text-accent font-bold">$</span>
+					<span class="text-terminal-bright font-bold">cat blog/{slug}.md</span>
 				</div>
-				<div class="py-4 text-center leading-none">
-					<div class="mb-2 text-[#ffffff]">
-						<FormattedDate date={publishdate} />
+
+				<div class="terminal-window shadow-2xl">
+					<div class="terminal-header flex justify-between items-center bg-accent/5 border-b border-cyber-border px-4 py-2">
+						<div class="flex items-center gap-2">
+							<span class="text-accent text-[10px]">READ_ONLY</span>
+							<span class="text-terminal-dim">|</span>
+							<span class="text-terminal-bright text-xs font-mono">{slug}.md</span>
+						</div>
+						<div class="text-[10px] text-terminal-dim font-mono hidden sm:block">
+							Lines: <span class="text-accent">AUTO</span> | Encoding: <span class="text-accent">UTF-8</span>
+						</div>
 					</div>
-					<h1 class="font-[Iceland]">
-						{title}
-					</h1>
-					<hr />
+					
+					<div class="terminal-body p-0">
+						{/* Cover image - Full display, no cropping */}
+						{cover && (
+							<div class="w-full bg-black/40 border-b border-cyber-border overflow-hidden">
+								<Image
+									class="w-full h-auto max-h-[500px] object-contain mx-auto"
+									src={cover}
+									alt=""
+									quality={100}
+								/>
+							</div>
+						)}
+
+						{/* Article header */}
+						<div class="px-6 lg:px-12 pt-10 pb-8 last:border-b-0">
+							<div class="flex items-center gap-3 mb-4 font-display text-xs text-terminal-dim">
+								<span class="text-accent">#</span>
+								<FormattedDate date={publishdate} />
+							</div>
+							
+							<h1 class="text-3xl md:text-5xl font-display text-white mb-6 leading-tight">
+								{title}
+							</h1>
+							
+							<div class="w-16 h-1 bg-accent/30 mb-10"></div>
+						</div>
+
+						{/* Article content */}
+						<div class="article-content px-6 lg:px-12 pb-12 text-terminal-text">
+							<slot />
+						</div>
+					</div>
 				</div>
-				<slot />
+				
+				{/* Post-article navigation */}
+				<div class="mt-12 flex justify-center">
+					<a href="/" class="font-display text-sm text-terminal-dim hover:text-accent flex items-center gap-2 transition-colors">
+						<span>&lt;</span> ./return_to_index
+					</a>
+				</div>
 			</div>
 		</article>
 		<Footer />

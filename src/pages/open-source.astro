@@ -43,47 +43,68 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		prs: [114, 128, 130, 132, 162, 170, 174, 195, 216, 253, 281],
 	},
 ];
+
+const totalPRs = ossProjectsInfo.reduce((sum, p) => sum + p.prs.length, 0);
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title="Open Source" description="description" />
-
-		<script>
-			import Masonry from "masonry-layout";
-
-			document.addEventListener("DOMContentLoaded", () => {
-				new Masonry(".grid", {
-					itemSelector: ".grid-item",
-					columnWidth: 1,
-					percentPosition: true,
-				});
-			});
-		</script>
+		<BaseHead title="Open Source" description="Open source contributions to security and privacy tools." />
 	</head>
 
-	<body class="bg-gradient-to-b from-black to-gray-900">
+	<body class="bg-cyber-black min-h-screen flex flex-col">
 		<Header />
-		<main class="w-full h-screen pt-32">
-			<div class="grid">
-				{
-					ossProjectsInfo.map((info) => (
-						<div class="grid-item flex flex-col items-center w-full px-8 bg-gray-800/30 p-8 rounded-lg border border-gray-700 min-[480px]:w-auto min-[480px]:py-8">
-							<h2 class="font-[Iceland]">{info.name}</h2>
-							<SocialLink
-								class="w-12 h-12"
-								href={info.url}
-								image={info.image}
-							/>
+		<main class="flex-1 pt-20 pb-16">
+			<div class="max-w-4xl mx-auto px-4 lg:px-6">
+				{/* Terminal header - Clean Command Prompt */}
+				<div class="font-display text-xs md:text-sm mb-8 mt-8 border-b border-cyber-border pb-4 flex items-center gap-2">
+					<span class="text-accent font-bold">$</span>
+					<span class="text-terminal-bright font-bold">git log --contributions</span>
+					<span class="text-terminal-dim ml-2 opacity-60 hidden sm:inline">| {ossProjectsInfo.length} projects · {totalPRs} PRs</span>
+				</div>
 
-							{info.prs.map((pr) => (
-								<a href={`${info.url}/pull/${pr}`}>
-									{`#${pr}`}
-								</a>
-							))}
+				{/* Project grid */}
+				<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					{ossProjectsInfo.map((info) => (
+						<div class="terminal-window group hover:border-accent/40 transition-all duration-300">
+							<div class="terminal-header">
+								<span class="text-accent">user</span>@{info.name.toLowerCase()}
+							</div>
+							<div class="terminal-body">
+								{/* Project logo & name */}
+								<div class="flex items-center gap-3 mb-4">
+									<SocialLink
+										class="w-8 h-8"
+										href={info.url}
+										image={info.image}
+									/>
+									<a
+										href={info.url}
+										class="font-display text-base text-terminal-bright group-hover:text-accent transition-colors duration-200"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{info.name}
+									</a>
+								</div>
+
+								{/* PR links */}
+								<div class="flex flex-wrap gap-1.5">
+									{info.prs.map((pr) => (
+										<a
+											href={`${info.url}/pull/${pr}`}
+											class="inline-block font-display text-xs px-2 py-0.5 rounded border border-cyber-border text-terminal-dim hover:text-accent hover:border-accent/40 hover:bg-accent/5 transition-all duration-200"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											#{pr}
+										</a>
+									))}
+								</div>
+							</div>
 						</div>
-					))
-				}
+					))}
+				</div>
 			</div>
 		</main>
 		<Footer />

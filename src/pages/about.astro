@@ -1,6 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import SocialLink from "../components/SocialLink.astro";
 
 const contactLinks = [
@@ -11,101 +12,107 @@ const contactLinks = [
 
 <html lang="en">
 	<head>
-		<BaseHead title="About Me" description="" />
+		<BaseHead title="About Me" description="Software engineer specializing in cybersecurity, cryptography, and distributed systems." />
 	</head>
 
-	<body>
+	<body class="bg-cyber-black min-h-screen flex flex-col">
 		<Header />
-		<section class="pt-32 pb-24 bg-gradient-to-b from-black to-gray-900">
-			<div class="max-w-4xl mx-auto px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h1 class="text-4xl md:text-5xl font-bold text-white mb-6 font-[Iceland]">
-						Daniel <span
-							class="text-transparent bg-clip-text bg-gradient-to-r from-royalPurple via-royalPurple to-cyan-400"
-							>Orihuela</span
-						>
-					</h1>
+		<main class="flex-1 pt-20 pb-16">
+			<div class="max-w-3xl mx-auto px-4 lg:px-6">
+				{/* Terminal header */}
+				<div class="font-display text-sm text-terminal-dim mb-8 mt-8">
+					<span class="text-accent">$</span> cat profile.txt
 				</div>
 
-				<div class="prose prose-lg prose-invert max-w-none">
-					<div class="space-y-8 text-gray-300 leading-relaxed">
-						<p class="text-xl">
-							Every master craftsman has a story. Mine begins with
-							an insatiable curiosity about how systems work, how
-							they can be improved, and how they can be built to
-							last.
+				{/* Identity block */}
+				<div class="terminal-window mb-6">
+					<div class="terminal-header">
+						daniel — identity
+					</div>
+					<div class="terminal-body">
+						<h1 class="text-3xl md:text-4xl font-display mb-2">
+							Daniel <span class="text-accent">Orihuela</span>
+						</h1>
+						<p class="text-terminal-dim text-sm font-display mt-0">
+							Software Engineer · Security Researcher · Open Source Contributor
 						</p>
+					</div>
+				</div>
 
-						<div
-							class="bg-gray-800/30 p-8 rounded-lg border border-gray-700"
-						>
-							<h2 class="text-2xl font-bold text-white mb-4 font-[Iceland]">
-								About Me
-							</h2>
+				{/* About block */}
+				<div class="terminal-window mb-6">
+					<div class="terminal-header">
+						about.md
+					</div>
+					<div class="terminal-body space-y-4 text-terminal-text leading-relaxed">
+						<p>
+							I'm a dedicated Software Engineer with a deep-rooted passion
+							for Cybersecurity, Cryptography, Algorithms, Distributed Systems,
+							and AI. Over the past five years, I have honed my expertise within
+							the fintech and security sectors, designing and developing robust,
+							scalable solutions that prioritize security and efficiency.
+						</p>
+						<p>
+							A relentless problem solver and aspiring hacker, I thrive on challenges that push
+							the boundaries of secure systems and innovation.
+						</p>
+					</div>
+				</div>
+
+				{/* Skills grid */}
+				<div class="grid md:grid-cols-2 gap-4 mb-6">
+					<div class="terminal-window">
+						<div class="terminal-header">
+							expertise.log
+						</div>
+						<div class="terminal-body">
+							<ul class="space-y-1 text-sm text-terminal-text p-0">
+								<li>Backend Engineering</li>
+								<li>Cryptographic Libraries</li>
+								<li>Software Architecture</li>
+								<li>Developer Tooling</li>
+								<li>Privacy-first Systems</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="terminal-window">
+						<div class="terminal-header">
+							philosophy.log
+						</div>
+						<div class="terminal-body text-sm text-terminal-text">
+							<p class="mt-0">
+								Security and scalability should never be a second thought.
+								I build systems with resilience and privacy in mind, ensuring
+								they are both secure and scalable from the ground up.
+							</p>
 							<p>
-								I'm a dedicated Software Engineer with a deep-rooted passion
-								for Cybersecurity, Cryptography, Algorithms, Distributed Systems,
-								and AI. Over the past five years, I have honed my expertise within
-								the fintech and security sectors, designing and developing robust,
-								scalable solutions that prioritize security and efficiency.
-								<br />
-								<br />
-								A relentless problem solver and aspiring hacker, I thrive on challenges that push
-								the boundaries of secure systems and innovation.
+								I strive to design solutions that are efficient, maintainable,
+								and future-proof.
 							</p>
 						</div>
+					</div>
+				</div>
 
-						<div class="grid md:grid-cols-2 gap-8">
-							<div
-								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
-							>
-								<h3
-									class="text-xl font-bold text-royalPurple mb-3 font-[Iceland]"
-								>
-									Expertise
-								</h3>
-								<p class="text-sm">
-									I specialize in building scalable, secure systems with a strong focus on privacy.
-									My expertise spans backend engineering, cryptographic libraries, software architecture,
-									and developer tooling, ensuring robust and efficient solutions.
-								</p>
-							</div>
-							<div
-								class="bg-gray-800/30 p-6 rounded-lg border border-gray-700"
-							>
-								<h3
-									class="text-xl font-bold text-cyan-400 mb-3 font-[Iceland]"
-								>
-									Philosophy & Vision
-								</h3>
-								<p class="text-sm">
-									Security and scalability should never be a second thought.
-									I build systems with resilience and privacy in mind, ensuring
-									they are both secure and scalable from the ground up. 
-									I strive to design solutions that are 	 efficient, maintainable,
-									and future-proof.
-								</p>
-							</div>
+				{/* Contact */}
+				<div class="terminal-window">
+					<div class="terminal-header">
+						contact — links
+					</div>
+					<div class="terminal-body">
+						<div class="flex items-center gap-4">
+							{contactLinks.map(([href, image]) => (
+								<SocialLink
+									class="w-10 h-10"
+									href={href}
+									image={image}
+								/>
+							))}
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="mt-16">
-				<div class="flex justify-center gap-4">
-					{
-						contactLinks.map(([href, image]) => (
-							<SocialLink
-								class="w-12 h-12"
-								href={href}
-								image={image}
-							/>
-						))
-					}
-				</div>
-
-			</div>
-		</section>
-		<footer></footer>
+		</main>
+		<Footer />
 	</body>
 </html>

@@ -24,7 +24,7 @@ export default defineConfig({
     },
     vite: {
         ssr: {
-        external: ['astro/container', '@astrojs/mdx'],
+            external: ['astro/container', '@astrojs/mdx'],
         },
     },
 });

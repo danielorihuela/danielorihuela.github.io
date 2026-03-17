@@ -1,2 +1,36 @@
-<footer>
+---
+const year = new Date().getFullYear();
+const uptime = year - 2019;
+---
+
+<footer class="border-t border-cyber-border bg-cyber-black/80">
+	<div class="max-w-6xl mx-auto px-4 lg:px-6 py-4">
+		<div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+			{/* Contact links */}
+			<div class="flex items-center gap-4 font-display text-xs">
+				<a
+					href="https://github.com/danielorihuela"
+					class="text-terminal-dim hover:text-accent transition-colors duration-200"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					github
+				</a>
+				<a
+					href="mailto:danielorihuelarodriguez@gmail.com"
+					class="text-terminal-dim hover:text-accent transition-colors duration-200"
+				>
+					email
+				</a>
+			</div>
+
+			{/* Status bar */}
+			<div class="flex items-center gap-4 font-display text-xs text-terminal-dim">
+				<span>
+					<span class="text-accent">[</span>UPTIME<span class="text-accent">:</span> {uptime}yr<span class="text-accent">]</span>
+				</span>
+				<span>© {year}</span>
+			</div>
+		</div>
+	</div>
 </footer>
