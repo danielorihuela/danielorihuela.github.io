@@ -47,21 +47,41 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 			}
 
 			/* Typography & Spacing */
+			/* Typography & Spacing */
 			.article-content h1,
 			.article-content h2,
-			.article-content h3 {
+			.article-content h3,
+			.article-content h4,
+			.article-content h5,
+			.article-content h6 {
 				font-family: 'Share Tech Mono', monospace;
-				margin-top: 2em;
-				margin-bottom: 1em;
-				color: var(--text-bright);
+				margin-top: 2.5em;
+				margin-bottom: 1.2em;
+				line-height: 1.2;
+				letter-spacing: 0.05em;
 				display: flex;
-				align-items: center;
+				align-items: baseline;
 				gap: 0.5em;
+				color: var(--accent);
 			}
 
-			.article-content h1::before { content: '#'; color: var(--accent); opacity: 0.6; }
-			.article-content h2::before { content: '##'; color: var(--accent); opacity: 0.6; }
-			.article-content h3::before { content: '###'; color: var(--accent); opacity: 0.6; }
+			.article-content h1 { font-size: 2.2em; text-transform: uppercase; font-weight: bold; }
+			.article-content h1::before { content: ">"; opacity: 0.8; }
+
+			.article-content h2 { font-size: 1.8em; text-transform: uppercase; }
+			.article-content h2::before { content: ">>"; opacity: 0.7; }
+
+			.article-content h3 { font-size: 1.4em; text-transform: uppercase; }
+			.article-content h3::before { content: ">>>"; opacity: 0.6; }
+
+			.article-content h4 { font-size: 1.2em; }
+			.article-content h4::before { content: ">>>>"; opacity: 0.5; }
+
+			.article-content h5 { font-size: 1.1em; color: var(--accent-dim); }
+			.article-content h5::before { content: ">>>>>"; opacity: 0.4; }
+
+			.article-content h6 { font-size: 1em; color: var(--accent-dim); }
+			.article-content h6::before { content: ">>>>>>"; opacity: 0.3; }
 
 			.article-content p {
 				color: var(--text-body);
@@ -80,6 +100,71 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				color: #fff;
 				border-bottom-color: var(--accent);
 				text-shadow: 0 0 8px var(--accent-glow);
+			}
+
+			/* High-Tech Elegant Table of Contents (ToC) */
+			/* Targets the first list in the article content */
+			.article-content > ul:first-of-type {
+				list-style: none;
+				padding: 1.5rem 2rem;
+				margin: 2.5rem 0 4rem 0;
+				border: 1px solid var(--border);
+				background: rgba(0, 212, 255, 0.02);
+				position: relative;
+				display: block; /* Full width */
+				width: 100%;
+				box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.02);
+			}
+
+			.article-content > ul:first-of-type::before {
+				content: "BRANCH_TABLE";
+				display: block;
+				font-size: 0.65rem;
+				color: var(--accent);
+				margin-bottom: 1.5rem;
+				font-weight: bold;
+				letter-spacing: 0.4em;
+				opacity: 0.8;
+			}
+
+			.article-content > ul:first-of-type li {
+				position: relative;
+				padding-left: 2rem;
+				margin-bottom: 0.8rem;
+				transition: transform 0.2s ease;
+			}
+
+			.article-content > ul:first-of-type li:hover {
+				transform: translateX(4px);
+			}
+
+			.article-content > ul:first-of-type li::before {
+				content: "[+]";
+				position: absolute;
+				left: 0;
+				color: var(--text-dim);
+				font-family: 'Share Tech Mono', monospace;
+				font-size: 0.8rem;
+				transition: all 0.2s ease;
+			}
+
+			.article-content > ul:first-of-type li:hover::before {
+				content: "[*]";
+				color: var(--accent);
+				text-shadow: 0 0 10px var(--accent);
+			}
+
+			.article-content > ul:first-of-type a {
+				text-transform: uppercase;
+				font-size: 0.9rem;
+				letter-spacing: 0.1em;
+				border-bottom: none !important;
+				color: var(--text-body);
+			}
+
+			.article-content > ul:first-of-type a:hover {
+				color: #fff;
+				text-shadow: 0 0 12px var(--accent);
 			}
 
 			/* Code Snippets */
@@ -132,7 +217,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				{/* Terminal command prompt - Matching Home page style */}
 				<div class="font-display text-xs md:text-sm mb-8 mt-4 border-b border-cyber-border pb-4 flex items-center gap-2">
 					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold">cat blog/{slug}.md</span>
+					<span class="text-terminal-bright font-bold">cat ./blog/{slug}.md</span>
 				</div>
 
 				<div class="terminal-window shadow-2xl">
@@ -161,7 +246,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 						)}
 
 						{/* Article header */}
-						<div class="px-6 lg:px-12 pt-10 pb-8 last:border-b-0">
+						<div class="px-4 lg:px-6 pt-10 pb-8 last:border-b-0">
 							<div class="flex items-center gap-3 mb-4 font-display text-xs text-terminal-dim">
 								<span class="text-accent">#</span>
 								<FormattedDate date={publishdate} />
@@ -175,17 +260,10 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 						</div>
 
 						{/* Article content */}
-						<div class="article-content px-6 lg:px-12 pb-12 text-terminal-text">
+						<div class="article-content px-4 lg:px-6 pb-12 text-terminal-text">
 							<slot />
 						</div>
 					</div>
-				</div>
-				
-				{/* Post-article navigation */}
-				<div class="mt-12 flex justify-center">
-					<a href="/" class="font-display text-sm text-terminal-dim hover:text-accent flex items-center gap-2 transition-colors">
-						<span>&lt;</span> ./return_to_index
-					</a>
 				</div>
 			</div>
 		</article>

@@ -37,7 +37,7 @@ function formatDateTechnical(date: Date) {
 				{/* Terminal header - Clean Command Prompt */}
 				<div class="font-display text-xs md:text-sm mb-8 mt-8 border-b border-cyber-border pb-4 flex items-center gap-2">
 					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold">find ./blog -type f -exec ls -la &#123;&#125; +</span>
+					<span class="text-terminal-bright font-bold">find ./blog -maxdepth 1 -name "*.md" -type f</span>
 				</div>
 
 				{/* Polished Hacker Blog List */}
