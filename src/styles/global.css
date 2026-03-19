@@ -388,13 +388,13 @@ img {
 }
 
 .article-content pre:hover::after {
-	opacity: 0.8;
-	text-shadow: 0 0 8px var(--accent);
+	opacity: 0.9;
+	text-shadow: 0 0 10px var(--accent);
 }
 
 .article-content pre:hover {
-	border-color: rgba(0, 212, 255, 0.25) !important;
-	box-shadow: 0 0 30px rgba(0, 212, 255, 0.04) !important;
+	border-color: rgba(0, 212, 255, 0.4) !important;
+	box-shadow: 0 0 40px rgba(0, 212, 255, 0.08), inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
 }
 
 /* Line Numbers & Code Layout */
