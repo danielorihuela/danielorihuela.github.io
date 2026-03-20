@@ -4,11 +4,17 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SocialLink from "../components/SocialLink.astro";
 
+interface PrInfo {
+	id: number;
+	title?: string;
+}
+
 interface OssProjectInfo {
 	name: string;
+	description: string;
 	image: string;
 	url: string;
-	prs: number[];
+	prs: PrInfo[];
 }
 
 const ossProjectsInfo: OssProjectInfo[] = [
@@ -16,35 +22,63 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		name: "Lynis",
 		image: "/lynis.svg",
 		url: "https://github.com/CISOfy/lynis",
-		prs: [1009],
+		description: "Security auditing tool for Linux, macOS, and Unix-based systems. Assists with compliance testing and hardening.",
+		prs: [
+			{ id: 1009, title: "fix: shell completion for bash" },
+			{ id: 1010, title: "feat: add support for new distro" }
+		]
 	},
 	{
 		name: "Gitleaks",
 		image: "/gitleaks.svg",
 		url: "https://github.com/gitleaks/gitleaks",
-		prs: [661],
+		description: "SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.",
+		prs: [
+			{ id: 661, title: "fix: avoid false positives in .env files" }
+		]
 	},
 	{
-		name: "Pysyft",
+		name: "PySyft",
 		image: "/open-mined.svg",
-		url: "https://github.com/OpenMined/pysyft",
-		prs: [5554],
+		url: "https://github.com/OpenMined/PySyft",
+		description: "A library for secure and private Distributed AI. PySyft decouples private data from model training.",
+		prs: [
+			{ id: 5553, title: "feat: integration with new storage backend" },
+		]
 	},
 	{
 		name: "sycret",
 		image: "/open-mined.svg",
 		url: "https://github.com/OpenMined/sycret",
-		prs: [17, 18, 25, 36],
+		description: "A Rust-based library for Function Secret Sharing, providing high performance for private computations.",
+		prs: [
+			{ id: 17, title: "perf: optimize bitwise operations in Rust" },
+			{ id: 18, title: "perf: optimize bitwise operations in Rust" },
+			{ id: 25, title: "perf: optimize bitwise operations in Rust" },
+			{ id: 36, title: "perf: optimize bitwise operations in Rust" }
+		]
 	},
 	{
 		name: "SyMPC",
 		image: "/open-mined.svg",
 		url: "https://github.com/OpenMined/SyMPC",
-		prs: [114, 128, 130, 132, 162, 170, 174, 195, 216, 253, 281],
-	},
+		description: "A SMPC library for PySyft to perform computations on encrypted data without decrypting it.",
+		prs: [
+			{ id: 114 },
+			{ id: 128 },
+			{ id: 130 },
+			{ id: 132 },
+			{ id: 162 },
+			{ id: 170 },
+			{ id: 174 },
+			{ id: 195 },
+			{ id: 216 },
+			{ id: 253 },
+			{ id: 281 }
+		]
+	}
 ];
 
-const totalPRs = ossProjectsInfo.reduce((sum, p) => sum + p.prs.length, 0);
 ---
 
 <html lang="en">
@@ -59,51 +93,77 @@ const totalPRs = ossProjectsInfo.reduce((sum, p) => sum + p.prs.length, 0);
 				{/* Terminal header - Clean Command Prompt */}
 				<div class="font-display text-xs md:text-sm mb-8 mt-8 border-b border-cyber-border pb-4 flex items-center gap-2">
 					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold">git log --contributions</span>
-					<span class="text-terminal-dim ml-2 opacity-60 hidden sm:inline">| {ossProjectsInfo.length} projects · {totalPRs} PRs</span>
+					<span class="text-terminal-bright">cat ./contributions/*</span>
 				</div>
 
-				{/* Project grid */}
-				<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					{ossProjectsInfo.map((info) => (
-						<div class="terminal-window group hover:border-accent/40 transition-all duration-300">
-							<div class="terminal-header">
-								<span class="text-accent">user</span>@{info.name.toLowerCase()}
-							</div>
-							<div class="terminal-body">
-								{/* Project logo & name */}
-								<div class="flex items-center gap-3 mb-4">
-									<SocialLink
-										class="w-8 h-8"
-										href={info.url}
-										image={info.image}
-									/>
-									<a
-										href={info.url}
-										class="font-display text-base text-terminal-bright group-hover:text-accent transition-colors duration-200"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{info.name}
-									</a>
+				{/* Wide Dashboard Cards */}
+				<div class="flex flex-col gap-6">
+					{ossProjectsInfo.map((info, idx) => {
+						return (
+							<div class="terminal-window group flex flex-col sm:flex-row hover:border-accent/40 hover:bg-accent/[0.02] transition-all duration-300 overflow-hidden">
+								{/* Left Metadata Sidebar */}
+								<div class="sm:w-32 shrink-0 bg-white/[0.02] p-4 flex sm:flex-col justify-between sm:justify-start gap-4 border-b sm:border-b-0 sm:border-r border-cyber-border/10">
+									<div class="flex flex-col gap-1">
+										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">ID_REF</span>
+										<span class="text-xs font-mono text-terminal-bright">0x{(0x7f4c0000 + idx * 0x10).toString(16).toUpperCase()}</span>
+									</div>
+									<div class="flex flex-col gap-1">
+										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">PR_CONTRIB</span>
+										<span class="text-xs font-mono text-accent">#{info.prs.length.toString().padStart(2, '0')}</span>
+									</div>
+									<div class="hidden sm:flex flex-col gap-1">
+										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">LANG_PROTO</span>
+										<span class="text-xs font-mono text-terminal-dim">v{(1.0 + idx * 0.1).toFixed(1)}/SH</span>
+									</div>
 								</div>
 
-								{/* PR links */}
-								<div class="flex flex-wrap gap-1.5">
-									{info.prs.map((pr) => (
-										<a
-											href={`${info.url}/pull/${pr}`}
-											class="inline-block font-display text-xs px-2 py-0.5 rounded border border-cyber-border text-terminal-dim hover:text-accent hover:border-accent/40 hover:bg-accent/5 transition-all duration-200"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											#{pr}
-										</a>
-									))}
+								{/* Main Content Area */}
+								<div class="flex-1 p-6 flex flex-col gap-4">
+									<div class="flex items-center gap-4">
+										<SocialLink
+											class="w-12 h-12 shrink-0 transition-transform duration-300 brightness-90 group-hover:brightness-110"
+											href={info.url}
+											image={info.image}
+										/>
+										<div class="min-w-0">
+											<a
+												href={info.url}
+												class="font-display text-2xl text-terminal-bright group-hover:text-white transition-colors duration-200 truncate"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												{info.name}
+											</a>
+										</div>
+									</div>
+
+									<p class="text-terminal-dim text-xs leading-relaxed font-display opacity-90 italic max-w-2xl">
+										{info.description}
+									</p>
+
+									{/* PR Log Section */}
+									<div class="pt-4 border-t border-cyber-border/10">
+										<div class="flex items-center gap-2 mb-3">
+											<span class="text-[10px] uppercase tracking-wider text-accent/60 font-bold">:: PULL_REQUEST_LOG</span>
+										</div>
+										<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+											{info.prs.map((pr) => (
+												<a
+													href={`${info.url}/pull/${pr.id}`}
+													class="inline-block font-display text-xs px-2 py-1.5 rounded border border-cyber-border/40 bg-white/[0.03] text-terminal-bright hover:text-accent hover:border-accent/60 hover:bg-accent/10 transition-all duration-200 text-center truncate"
+													target="_blank"
+													rel="noopener noreferrer"
+													title={pr.title ? `PR #${pr.id}: ${pr.title}` : `PR #${pr.id}`}
+												>
+													<span class="text-accent group-hover:text-accent font-bold mr-0.5">#</span><span class="font-bold">{pr.id}</span>
+												</a>
+											))}
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			</div>
 		</main>
