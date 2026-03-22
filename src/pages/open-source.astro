@@ -15,6 +15,7 @@ interface OssProjectInfo {
 	image: string;
 	url: string;
 	prs: PrInfo[];
+	stack: string;
 }
 
 const ossProjectsInfo: OssProjectInfo[] = [
@@ -23,6 +24,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		image: "/lynis.svg",
 		url: "https://github.com/CISOfy/lynis",
 		description: "Security auditing tool for Linux, macOS, and Unix-based systems. Assists with compliance testing and hardening.",
+		stack: "BASH",
 		prs: [
 			{ id: 1009, title: "fix: shell completion for bash" },
 			{ id: 1010, title: "feat: add support for new distro" }
@@ -33,6 +35,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		image: "/gitleaks.svg",
 		url: "https://github.com/gitleaks/gitleaks",
 		description: "SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.",
+		stack: "GO",
 		prs: [
 			{ id: 661, title: "fix: avoid false positives in .env files" }
 		]
@@ -42,6 +45,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		image: "/open-mined.svg",
 		url: "https://github.com/OpenMined/PySyft",
 		description: "A library for secure and private Distributed AI. PySyft decouples private data from model training.",
+		stack: "PYTHON / TENSOR",
 		prs: [
 			{ id: 5553, title: "feat: integration with new storage backend" },
 		]
@@ -51,6 +55,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		image: "/open-mined.svg",
 		url: "https://github.com/OpenMined/sycret",
 		description: "A Rust-based library for Function Secret Sharing, providing high performance for private computations.",
+		stack: "RUST",
 		prs: [
 			{ id: 17, title: "perf: optimize bitwise operations in Rust" },
 			{ id: 18, title: "perf: optimize bitwise operations in Rust" },
@@ -63,6 +68,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		image: "/open-mined.svg",
 		url: "https://github.com/OpenMined/SyMPC",
 		description: "A SMPC library for PySyft to perform computations on encrypted data without decrypting it.",
+		stack: "PYTHON",
 		prs: [
 			{ id: 114 },
 			{ id: 128 },
@@ -102,18 +108,18 @@ const ossProjectsInfo: OssProjectInfo[] = [
 						return (
 							<div class="terminal-window group flex flex-col sm:flex-row hover:border-accent/40 hover:bg-accent/[0.02] transition-all duration-300 overflow-hidden">
 								{/* Left Metadata Sidebar */}
-								<div class="sm:w-32 shrink-0 bg-white/[0.02] p-4 flex sm:flex-col justify-between sm:justify-start gap-4 border-b sm:border-b-0 sm:border-r border-cyber-border/10">
-									<div class="flex flex-col gap-1">
-										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">ID_REF</span>
-										<span class="text-xs font-mono text-terminal-bright">0x{(0x7f4c0000 + idx * 0x10).toString(16).toUpperCase()}</span>
+								<div class="sm:w-32 shrink-0 bg-white/[0.02] p-4 flex sm:flex-col justify-between sm:justify-start gap-5 border-b sm:border-b-0 sm:border-r border-cyber-border/10">
+									<div class="flex flex-col gap-1.5">
+										<span class="text-xs uppercase tracking-wider text-terminal-text opacity-60 font-bold">ID_REF</span>
+										<span class="text-sm font-mono text-terminal-bright">0x{(0x7f4c0000 + idx * 0x10).toString(16).toUpperCase()}</span>
 									</div>
-									<div class="flex flex-col gap-1">
-										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">PR_CONTRIB</span>
-										<span class="text-xs font-mono text-accent">#{info.prs.length.toString().padStart(2, '0')}</span>
+									<div class="flex flex-col gap-1.5">
+										<span class="text-xs uppercase tracking-wider text-terminal-text opacity-60 font-bold">PR_CONTRIB</span>
+										<span class="text-sm font-mono text-terminal-bright">#{info.prs.length.toString().padStart(2, '0')}</span>
 									</div>
-									<div class="hidden sm:flex flex-col gap-1">
-										<span class="text-[10px] uppercase tracking-wider text-terminal-dim/70 font-bold">LANG_PROTO</span>
-										<span class="text-xs font-mono text-terminal-dim">v{(1.0 + idx * 0.1).toFixed(1)}/SH</span>
+									<div class="hidden sm:flex flex-col gap-1.5">
+										<span class="text-xs uppercase tracking-wider text-terminal-text opacity-60 font-bold">BASE_STACK</span>
+										<span class="text-sm font-mono text-terminal-bright">{info.stack}</span>
 									</div>
 								</div>
 
@@ -137,25 +143,28 @@ const ossProjectsInfo: OssProjectInfo[] = [
 										</div>
 									</div>
 
-									<p class="text-terminal-dim text-xs leading-relaxed font-display opacity-90 italic max-w-2xl">
+									<p class="text-terminal-text text-sm leading-relaxed max-w-2xl">
 										{info.description}
 									</p>
 
 									{/* PR Log Section */}
 									<div class="pt-4 border-t border-cyber-border/10">
 										<div class="flex items-center gap-2 mb-3">
-											<span class="text-[10px] uppercase tracking-wider text-accent/60 font-bold">:: PULL_REQUEST_LOG</span>
+											<span class="text-xs uppercase tracking-wider text-accent font-bold">:: PULL_REQUEST_LOG</span>
 										</div>
-										<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+										<div class="flex flex-col gap-1">
 											{info.prs.map((pr) => (
 												<a
 													href={`${info.url}/pull/${pr.id}`}
-													class="inline-block font-display text-xs px-2 py-1.5 rounded border border-cyber-border/40 bg-white/[0.03] text-terminal-bright hover:text-accent hover:border-accent/60 hover:bg-accent/10 transition-all duration-200 text-center truncate"
+													class="group/pr flex items-center gap-3 text-sm px-3 py-2 border-l-2 border-transparent hover:border-accent hover:bg-gradient-to-r hover:from-accent/10 hover:to-transparent text-terminal-text transition-all duration-300 hover:translate-x-1 uppercase"
 													target="_blank"
 													rel="noopener noreferrer"
-													title={pr.title ? `PR #${pr.id}: ${pr.title}` : `PR #${pr.id}`}
 												>
-													<span class="text-accent group-hover:text-accent font-bold mr-0.5">#</span><span class="font-bold">{pr.id}</span>
+													<span class="text-accent group-hover/pr:scale-110 transition-transform duration-300 font-bold">{'>'}</span>
+													<span class="text-terminal-bright font-mono min-w-[64px] group-hover/pr:text-white transition-colors duration-300">PR #{pr.id}</span>
+													<span class="text-terminal-text group-hover/pr:text-terminal-bright transition-colors duration-300 truncate font-medium tracking-tight">
+														{pr.title || "Unlogged contribution..."}
+													</span>
 												</a>
 											))}
 										</div>
