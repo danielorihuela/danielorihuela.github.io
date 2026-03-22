@@ -5,12 +5,12 @@ const uptime = year - 2019;
 
 <footer class="border-t border-cyber-border bg-cyber-black/80">
 	<div class="max-w-6xl mx-auto px-4 lg:px-6 py-4">
-		<div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+		<div class="flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
 			{/* Contact links */}
-			<div class="flex items-center gap-4 font-display text-xs">
+			<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest leading-none">
 				<a
 					href="https://github.com/danielorihuela"
-					class="text-terminal-dim hover:text-accent transition-colors duration-200"
+					class="text-terminal-text opacity-60 hover:text-accent hover:opacity-100 transition-all duration-300"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -18,18 +18,18 @@ const uptime = year - 2019;
 				</a>
 				<a
 					href="mailto:danielorihuelarodriguez@gmail.com"
-					class="text-terminal-dim hover:text-accent transition-colors duration-200"
+					class="text-terminal-text opacity-60 hover:text-accent hover:opacity-100 transition-all duration-300"
 				>
 					email
 				</a>
 			</div>
 
 			{/* Status bar */}
-			<div class="flex items-center gap-4 font-display text-xs text-terminal-dim">
+			<div class="flex items-center gap-4 text-[10px] uppercase tracking-widest text-terminal-text opacity-60">
 				<span>
-					<span class="text-accent">[</span>UPTIME<span class="text-accent">:</span> {uptime}yr<span class="text-accent">]</span>
+					<span class="text-accent opacity-100">[</span>UPTIME<span class="text-accent opacity-100">:</span> {uptime}YR<span class="text-accent opacity-100">]</span>
 				</span>
-				<span>© {year}</span>
+				<span>© {year} — CORE_SYS</span>
 			</div>
 		</div>
 	</div>

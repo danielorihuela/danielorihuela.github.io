@@ -26,14 +26,14 @@ const contactLinks = [
 
 				{/* Identity block */}
 				<div class="terminal-window mb-6">
-					<div class="terminal-header">
-						daniel — identity
+					<div class="terminal-header uppercase tracking-widest text-[10px]">
+						identity.sh — profile_id
 					</div>
 					<div class="terminal-body">
 						<h1 class="text-3xl md:text-4xl font-display mb-2">
 							Daniel <span class="text-accent">Orihuela</span>
 						</h1>
-						<p class="text-terminal-dim text-sm font-display mt-0">
+						<p class="text-terminal-text opacity-60 text-xs font-mono mt-0 uppercase tracking-wider">
 							Software Engineer · Security Researcher · Open Source Contributor
 						</p>
 					</div>
@@ -41,10 +41,10 @@ const contactLinks = [
 
 				{/* About block */}
 				<div class="terminal-window mb-6">
-					<div class="terminal-header">
-						about.md
+					<div class="terminal-header uppercase tracking-widest text-[10px]">
+						about.md — core_data
 					</div>
-					<div class="terminal-body space-y-4 text-terminal-text leading-relaxed">
+					<div class="terminal-body space-y-4 text-terminal-text text-sm leading-relaxed">
 						<p>
 							I'm a dedicated Software Engineer with a deep-rooted passion
 							for Cybersecurity, Cryptography, Algorithms, Distributed Systems,
@@ -62,25 +62,26 @@ const contactLinks = [
 				{/* Skills grid */}
 				<div class="grid md:grid-cols-2 gap-4 mb-6">
 					<div class="terminal-window">
-						<div class="terminal-header">
+						<div class="terminal-header uppercase tracking-widest text-[10px]">
 							expertise.log
 						</div>
 						<div class="terminal-body">
 							<ul class="space-y-1 text-sm text-terminal-text p-0">
-								<li>Backend Engineering</li>
-								<li>Cryptographic Libraries</li>
-								<li>Software Architecture</li>
-								<li>Developer Tooling</li>
-								<li>Privacy-first Systems</li>
+								{['Backend Engineering', 'Cryptographic Libraries', 'Software Architecture', 'Developer Tooling', 'Privacy-first Systems'].map((skill) => (
+									<li class="flex items-center gap-2">
+										<span class="text-accent font-bold text-[10px]">{'>'}</span>
+										{skill}
+									</li>
+								))}
 							</ul>
 						</div>
 					</div>
 
 					<div class="terminal-window">
-						<div class="terminal-header">
+						<div class="terminal-header uppercase tracking-widest text-[10px]">
 							philosophy.log
 						</div>
-						<div class="terminal-body text-sm text-terminal-text">
+						<div class="terminal-body text-sm text-terminal-text leading-relaxed">
 							<p class="mt-0">
 								Security and scalability should never be a second thought.
 								I build systems with resilience and privacy in mind, ensuring
@@ -96,17 +97,20 @@ const contactLinks = [
 
 				{/* Contact */}
 				<div class="terminal-window">
-					<div class="terminal-header">
-						contact — links
+					<div class="terminal-header uppercase tracking-widest text-[10px]">
+						contact.sh — link_node
 					</div>
 					<div class="terminal-body">
-						<div class="flex items-center gap-4">
-							{contactLinks.map(([href, image]) => (
-								<SocialLink
-									class="w-10 h-10"
-									href={href}
-									image={image}
-								/>
+						<div class="flex items-center gap-6">
+							{contactLinks.map(([href, image, label]) => (
+								<a href={href} class="group flex items-center gap-2 text-terminal-text hover:text-terminal-bright transition-all duration-300" target="_blank" rel="noopener noreferrer">
+									<SocialLink
+										class="w-8 h-8 group-hover:scale-110 transition-transform duration-300"
+										href={href}
+										image={image}
+									/>
+									<span class="text-xs font-mono uppercase tracking-wider opacity-60 group-hover:opacity-100 transition-opacity duration-300">{label}</span>
+								</a>
 							))}
 						</div>
 					</div>
