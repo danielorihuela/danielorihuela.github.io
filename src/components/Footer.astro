@@ -1,44 +1,157 @@
 ---
-const buildHash = Math.random().toString(16).substring(2, 8).toUpperCase();
+const links = [
+	{
+		label: "github",
+		href: "https://github.com/danielorihuela",
+	},
+	{
+		label: "email",
+		href: "mailto:danielorihuelarodriguez@gmail.com",
+	},
+];
+
+const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 ---
 
-<footer class="border-t border-cyber-border bg-cyber-black/80">
-	<div class="max-w-6xl mx-auto px-4 lg:px-6 py-4">
-		<div class="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono">
-			{/* Contact links */}
-			<div class="flex items-center gap-6 text-[10px] uppercase tracking-widest leading-none">
-				<a
-					href="https://github.com/danielorihuela"
-					class="group flex items-center gap-1.5 text-terminal-text opacity-60 hover:text-terminal-bright hover:opacity-100 transition-all duration-300"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<span class="w-1.5 h-2.5 bg-accent opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
-					github
-				</a>
-				<a
-					href="mailto:danielorihuelarodriguez@gmail.com"
-					class="group flex items-center gap-1.5 text-terminal-text opacity-60 hover:text-terminal-bright hover:opacity-100 transition-all duration-300"
-				>
-					<span class="w-1.5 h-2.5 bg-accent opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
-					email
-				</a>
-			</div>
+<footer class="footer">
+	<div class="footer-container">
+		<div class="text-info-container">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						class="link"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span />
+						{link.label}
+					</a>
+				))
+			}
+		</div>
 
-			{/* Status */}
-			<div class="flex items-center gap-6 text-[10px] uppercase tracking-widest">
-				<div class="hidden sm:flex items-center gap-2 text-terminal-text opacity-40">
-					<span>BUILD_REF</span>
-					<span class="text-terminal-bright ml-1 font-bold">0x{buildHash}</span>
-				</div>
-				<div class="flex items-center gap-2.5">
-					<span class="relative flex h-1.5 w-1.5">
-						<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span>
-						<span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent shadow-[0_0_8px_rgba(0,212,255,0.8)]"></span>
-					</span>
-					<span class="text-terminal-text opacity-80 font-bold">SYS.ONLINE</span>
-				</div>
-			</div>
+		<div class="text-info-container">
+			{
+				checks.map((check) => (
+					<div class="check-container">
+						<span class="light-container">
+							<span class="light-pulse" />
+							<span class="light" />
+						</span>
+						<span class="check-label">{check}</span>
+					</div>
+				))
+			}
 		</div>
 	</div>
 </footer>
+
+<style>
+	.footer {
+		border-top: 1px solid var(--border);
+		background-color: var(--bg-dark);
+	}
+
+	.footer-container {
+		display: flex;
+		justify-content: space-between;
+
+		max-width: 60vw;
+		margin: 0 auto;
+		padding: 1rem 0;
+	}
+
+	@media (min-width: 640px) {
+		.footer-container {
+			flex-direction: row;
+		}
+	}
+
+	/* Common styles */
+	.text-info-container {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+
+		font-size: 0.625rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	/* Link styles */
+	.link {
+		display: flex;
+		gap: 0.375rem;
+
+		color: var(--text-body);
+		opacity: 0.8;
+	}
+
+	.link:hover {
+		color: var(--text-bright);
+		opacity: 1;
+	}
+
+	.link span {
+		width: 0.375rem;
+		height: 0.625rem;
+
+		background-color: var(--accent);
+
+		opacity: 0;
+	}
+
+	.link:hover span {
+		opacity: 1;
+	}
+
+	/* Status styles */
+	.check-container {
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+	}
+
+	.light-container {
+		position: relative;
+		display: flex;
+		width: 0.375rem;
+		height: 0.375rem;
+	}
+
+	.light-pulse {
+		display: inline-flex;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+
+		background-color: var(--accent);
+		opacity: 0.7;
+		border-radius: 100%;
+
+		animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+	}
+
+	@keyframes ping {
+		75%,
+		100% {
+			transform: scale(2);
+			opacity: 0;
+		}
+	}
+
+	.light {
+		display: flex;
+		border-radius: 100px;
+		width: 100%;
+		height: 100%;
+		background-color: var(--accent);
+	}
+
+	.check-label {
+		color: var(--text-body);
+		opacity: 0.8;
+		font-weight: bold;
+	}
+</style>
