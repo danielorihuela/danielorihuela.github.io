@@ -10,38 +10,25 @@ const { href, image, class: className } = Astro.props;
 
 <a
 	href={href}
-	class:list={["social-link group", className]}
+	class:list={["social-link", className]}
 	target="_blank"
 	rel="noopener noreferrer"
 >
-	<div class="social-link-inner">
-		<img src={image} alt="" class="w-full h-full object-contain" />
-		<div class="sweep-line"></div>
-	</div>
+	<img src={image} alt="" />
 </a>
 
 <style>
 	.social-link {
-		display: block;
-		position: relative;
+		overflow: hidden;
 		border-radius: 6px;
 		border: 1px solid var(--border);
 		background: var(--bg-panel);
-		padding: 0.6em;
-		transition: all 0.3s ease;
-		overflow: hidden;
+		padding: 0.4em;
+		transition: border-color 0.3s ease;
 	}
 
 	.social-link:hover {
 		border-color: var(--accent);
-		box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
-	}
-
-	.social-link-inner {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
 	}
 
 	.social-link img {
@@ -50,27 +37,34 @@ const { href, image, class: className } = Astro.props;
 	}
 
 	.social-link:hover img {
-		filter: grayscale(0%) brightness(1) drop-shadow(0 0 4px rgba(0, 212, 255, 0.3));
+		filter: grayscale(0%) brightness(1);
 	}
 
-	.sweep-line {
+	.social-link::before {
+		content: "";
 		position: absolute;
 		left: 0;
 		top: -2px;
 		width: 100%;
 		height: 2px;
-		background: linear-gradient(90deg, transparent, var(--accent), transparent);
-		opacity: 0;
-		transition: opacity 0.3s ease;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			var(--accent),
+			transparent
+		);
 	}
 
-	.social-link:hover .sweep-line {
-		opacity: 1;
+	.social-link:hover::before {
 		animation: sweepLine 2s ease-in-out infinite;
 	}
 
 	@keyframes sweepLine {
-		0% { top: -2px; }
-		100% { top: 100%; }
+		0% {
+			top: -2px;
+		}
+		100% {
+			top: 100%;
+		}
 	}
 </style>
