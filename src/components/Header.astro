@@ -8,60 +8,53 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header>
-	<nav class="fixed top-0 left-0 right-0 z-50 bg-cyber-black/95 backdrop-blur-sm border-b border-cyber-border">
-		<div class="max-w-6xl mx-auto px-4 lg:px-6">
-			<div class="flex items-center justify-between h-14">
-				{/* Terminal Prompt Logo */}
-				<a
-					href="/"
-					class="font-display text-sm text-terminal-text hover:text-accent transition-colors duration-300 group"
-				>
-					<span class="text-accent font-bold">danielorihuela</span><span class="text-terminal-text opacity-40">@</span><span class="text-terminal-bright">dev</span><span class="text-terminal-text opacity-40">:</span><span class="text-terminal-text">~</span>
+	<nav class="header-nav">
+		<div class="nav-container">
+			<div class="nav-content">
+				<a href="/" class="logo-link">
+					<span class="logo-user">danielorihuela</span><span
+						class="logo-at">@</span
+					><span class="logo-host">dev</span><span class="logo-colon"
+						>:</span
+					><span class="logo-tilde">~</span>
 				</a>
 
-				{/* Desktop Navigation */}
-				<div class="hidden md:flex items-center gap-1">
-					{navItems.map((item) => (
-						<a
-							href={item.path}
-							class={`font-display text-xs px-3 py-1.5 rounded transition-all duration-300 uppercase tracking-wider ${
-								currentPath === item.path
-									? "text-accent bg-accent/10 border border-accent/30 shadow-[0_0_10px_rgba(0,212,255,0.1)]"
-									: "text-terminal-text opacity-60 hover:text-accent hover:bg-accent/5 hover:opacity-100"
-							}`}
-						>
-							<span class="text-accent/40 mr-1 group-hover:text-accent group-hover:scale-110 transition-all duration-300">./</span>{item.cmd}
-						</a>
-					))}
+				<div class="desktop-nav">
+					{
+						navItems.map((item) => (
+							<a
+								href={item.path}
+								class={`nav-link ${currentPath === item.path ? "active" : ""}`}
+							>
+								<span class="nav-prefix">./</span>
+								{item.cmd}
+							</a>
+						))
+					}
 				</div>
 
-				{/* Mobile menu button */}
 				<button
 					id="mobile-menu-button"
-					class="md:hidden text-terminal-text opacity-60 hover:text-accent hover:opacity-100 transition-all duration-300 font-display text-xs uppercase tracking-widest"
+					class="mobile-menu-btn"
 					aria-label="Toggle menu"
 				>
 					<span id="menu-label">[menu]</span>
 				</button>
 			</div>
 
-			<div
-				id="mobile-menu"
-				class="md:hidden overflow-hidden transition-all duration-500 max-h-0 opacity-0"
-			>
-				<div class="py-2 border-t border-cyber-border/30">
-					{navItems.map((item) => (
-						<a
-							href={item.path}
-							class={`block font-display text-xs uppercase tracking-widest px-4 py-3.5 transition-all duration-300 ${
-								currentPath === item.path
-									? "text-accent bg-accent/10 border-l-2 border-accent"
-									: "text-terminal-text opacity-60 hover:text-accent hover:bg-accent/5 hover:opacity-100"
-							}`}
-						>
-							<span class="text-accent mr-3">_</span>{item.cmd}
-						</a>
-					))}
+			<div id="mobile-menu" class="mobile-menu">
+				<div class="mobile-menu-content">
+					{
+						navItems.map((item) => (
+							<a
+								href={item.path}
+								class={`mobile-nav-link ${currentPath === item.path ? "active" : ""}`}
+							>
+								<span class="mobile-nav-prefix">_</span>
+								{item.cmd}
+							</a>
+						))
+					}
 				</div>
 			</div>
 		</div>
@@ -77,16 +70,221 @@ const currentPath = Astro.url.pathname;
 				const menu = document.getElementById("mobile-menu");
 				if (!menu) return;
 
-				if (menu.classList.contains("max-h-0")) {
-					menu.classList.remove("max-h-0", "opacity-0");
-					menu.classList.add("max-h-96", "opacity-100");
-					label.textContent = "[close]";
-				} else {
-					menu.classList.remove("max-h-96", "opacity-100");
-					menu.classList.add("max-h-0", "opacity-0");
+				if (menu.classList.contains("is-open")) {
+					menu.classList.remove("is-open");
 					label.textContent = "[menu]";
+				} else {
+					menu.classList.add("is-open");
+					label.textContent = "[close]";
 				}
 			});
 		});
 	</script>
 </header>
+
+<style>
+	/* Header Nav */
+	.header-nav {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 50;
+		background-color: rgba(8, 9, 14, 0.95);
+		backdrop-filter: blur(4px);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.nav-container {
+		max-width: 72rem;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	@media (min-width: 1024px) {
+		.nav-container {
+			padding: 0 1.5rem;
+		}
+	}
+
+	.nav-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 3.5rem;
+	}
+
+	/* Logo */
+	.logo-link {
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.875rem;
+		color: var(--text-body);
+		transition: color 0.3s ease;
+		text-decoration: none;
+	}
+
+	.logo-link:hover {
+		color: var(--accent);
+	}
+
+	.logo-user {
+		color: var(--accent);
+		font-weight: bold;
+	}
+
+	.logo-at {
+		color: var(--text-body);
+		opacity: 0.4;
+	}
+
+	.logo-host {
+		color: var(--text-bright);
+	}
+
+	.logo-colon {
+		color: var(--text-body);
+		opacity: 0.4;
+	}
+
+	.logo-tilde {
+		color: var(--text-body);
+	}
+
+	/* Desktop Navigation */
+	.desktop-nav {
+		display: none;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	@media (min-width: 768px) {
+		.desktop-nav {
+			display: flex;
+		}
+	}
+
+	.nav-link {
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+		padding: 0.375rem 0.75rem;
+		border-radius: 0.25rem;
+		transition: all 0.3s ease;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		text-decoration: none;
+		color: var(--text-body);
+		opacity: 0.6;
+		display: flex;
+		align-items: center;
+		border: 1px solid transparent;
+	}
+
+	.nav-link:hover {
+		color: var(--accent);
+		background-color: rgba(0, 212, 255, 0.05);
+		opacity: 1;
+		text-shadow: none;
+	}
+
+	.nav-link.active {
+		color: var(--accent);
+		background-color: rgba(0, 212, 255, 0.1);
+		border-color: rgba(0, 212, 255, 0.3);
+		box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+		opacity: 1;
+	}
+
+	.nav-prefix {
+		color: rgba(0, 212, 255, 0.4);
+		margin-right: 0.25rem;
+		transition: all 0.3s ease;
+	}
+
+	.nav-link:hover .nav-prefix {
+		color: var(--accent);
+		transform: scale(1.1);
+	}
+
+	/* Mobile Menu Button */
+	.mobile-menu-btn {
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: var(--text-body);
+		opacity: 0.6;
+		transition: all 0.3s ease;
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		padding: 0;
+	}
+
+	@media (min-width: 768px) {
+		.mobile-menu-btn {
+			display: none;
+		}
+	}
+
+	.mobile-menu-btn:hover {
+		color: var(--accent);
+		opacity: 1;
+	}
+
+	/* Mobile Menu Content */
+	.mobile-menu {
+		overflow: hidden;
+		transition: all 0.5s ease;
+		max-height: 0;
+		opacity: 0;
+	}
+
+	@media (min-width: 768px) {
+		.mobile-menu {
+			display: none;
+		}
+	}
+
+	.mobile-menu.is-open {
+		max-height: 24rem;
+		opacity: 1;
+	}
+
+	.mobile-menu-content {
+		padding: 0.5rem 0;
+		border-top: 1px solid rgba(28, 32, 53, 0.3);
+	}
+
+	.mobile-nav-link {
+		display: block;
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		padding: 0.875rem 1rem;
+		transition: all 0.3s ease;
+		color: var(--text-body);
+		opacity: 0.6;
+		text-decoration: none;
+		border-left: 2px solid transparent;
+	}
+
+	.mobile-nav-link:hover {
+		color: var(--accent);
+		background-color: rgba(0, 212, 255, 0.05);
+		opacity: 1;
+		text-shadow: none;
+	}
+
+	.mobile-nav-link.active {
+		color: var(--accent);
+		background-color: rgba(0, 212, 255, 0.1);
+		border-left-color: var(--accent);
+		opacity: 1;
+	}
+
+	.mobile-nav-prefix {
+		color: var(--accent);
+		margin-right: 0.75rem;
+	}
+</style>
