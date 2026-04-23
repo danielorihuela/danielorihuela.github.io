@@ -1,0 +1,42 @@
+---
+interface Props {
+	formattedDate: string;
+	hash: string;
+}
+
+const { formattedDate, hash } = Astro.props;
+---
+
+<div class="metadata-column">
+	<span class="metadata-date">{formattedDate}</span>
+	<span class="metadata-hash-container">
+		[rev:<span class="metadata-hash">{hash}</span>]
+	</span>
+</div>
+
+<style>
+	.metadata-column {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+
+		gap: 1rem;
+
+		font-size: 0.75rem;
+		font-family:
+			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+			"Liberation Mono", "Courier New", monospace;
+
+		color: #b0bec5;
+		opacity: 0.6;
+	}
+
+	.metadata-date {
+		font-weight: 700;
+	}
+
+	.metadata-hash {
+		color: #e0e6ed;
+		font-weight: 700;
+	}
+</style>

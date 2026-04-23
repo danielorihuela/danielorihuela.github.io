@@ -2,11 +2,13 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import MetaDataColumn from "../components/MetaDataColumn.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort((a, b) => {
-	const dateDiff = b.data.publishdate.valueOf() - a.data.publishdate.valueOf();
+	const dateDiff =
+		b.data.publishdate.valueOf() - a.data.publishdate.valueOf();
 	if (dateDiff !== 0) return dateDiff;
 	return b.slug.localeCompare(a.slug);
 });
@@ -18,11 +20,11 @@ function getShortHash(str: string) {
 		hash ^= str.charCodeAt(i);
 		hash = Math.imul(hash, 16777619);
 	}
-	return (hash >>> 0).toString(16).padStart(7, '0').slice(0, 7);
+	return (hash >>> 0).toString(16).padStart(7, "0").slice(0, 7);
 }
 
 function formatDateTechnical(date: Date) {
-	return date.toISOString().split('T')[0].replaceAll('-', '.');
+	return date.toISOString().split("T")[0].replaceAll("-", ".");
 }
 ---
 
@@ -35,56 +37,63 @@ function formatDateTechnical(date: Date) {
 		<main class="flex-1 pt-20 pb-16">
 			<div class="max-w-4xl mx-auto px-4 lg:px-6">
 				{/* Terminal header - Clean Command Prompt */}
-				<div class="font-display text-xs md:text-sm mb-8 mt-8 border-b border-cyber-border pb-4 flex items-center gap-2">
+				<div
+					class="font-display text-xs md:text-sm mb-8 mt-8 border-b border-cyber-border pb-4 flex items-center gap-2"
+				>
 					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold">find ./blog -maxdepth 1 -name "*.md" -type f</span>
+					<span class="text-terminal-bright font-bold"
+						>find ./blog -maxdepth 1 -name "*.md" -type f</span
+					>
 				</div>
 
 				{/* Polished Hacker Blog List */}
 				<div class="flex flex-col space-y-1">
-					{posts.map((post) => {
-						const hash = getShortHash(post.slug);
-						const formattedDate = formatDateTechnical(post.data.publishdate);
-						
-						return (
-							<a
-								href={`/blog/${post.slug}/`}
-								class="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 px-4 py-3 border-l-2 border-transparent hover:border-accent hover:bg-gradient-to-r hover:from-accent/10 hover:to-transparent transition-all duration-300 hover:translate-x-1"
-							>
-								{/* Meta Data Column */}
-								<div class="flex items-center gap-4 text-xs font-mono flex-shrink-0">
-									<span class="text-terminal-text opacity-60 font-bold tracking-tight uppercase">
-										{formattedDate}
-									</span>
-									<span class="text-terminal-text opacity-60 hidden md:inline">
-										[rev:<span class="text-terminal-bright font-bold">{hash}</span>]
-									</span>
-								</div>
+					{
+						posts.map((post) => {
+							const hash = getShortHash(post.slug);
+							const formattedDate = formatDateTechnical(
+								post.data.publishdate,
+							);
 
-								{/* Title Column */}
-								<div class="flex-1 min-w-0 flex items-start sm:items-center gap-2">
-									<span class="text-accent group-hover:scale-110 transition-transform duration-300 hidden sm:inline -ml-2 mt-0.5 sm:mt-0">
-										&gt;
-									</span>
-									<h2 class="text-sm md:text-base font-display text-terminal-bright group-hover:text-white transition-colors duration-300 m-0 leading-snug">
-										{post.data.title}
-									</h2>
-								</div>
+							return (
+								<a
+									href={`/blog/${post.slug}/`}
+									class="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 px-4 py-3 border-l-2 border-transparent hover:border-accent hover:bg-gradient-to-r hover:from-accent/10 hover:to-transparent transition-all duration-300 hover:translate-x-1"
+								>
+									{/* Meta Data Column */}
+									<MetaDataColumn
+										formattedDate={formattedDate}
+										hash={hash}
+									/>
 
-								{/* Interaction Indicator */}
-								<div class="hidden md:block">
-									<span class="text-[10px] font-display text-terminal-text opacity-0 group-hover:opacity-60 transition-all duration-300 uppercase tracking-widest">
-										<span class="text-accent">__</span>read_entry
-									</span>
-								</div>
-							</a>
-						);
-					})}
+									{/* Title Column */}
+									<div class="flex-1 min-w-0 flex items-start sm:items-center gap-2">
+										<span class="text-accent group-hover:scale-110 transition-transform duration-300 hidden sm:inline -ml-2 mt-0.5 sm:mt-0">
+											&gt;
+										</span>
+										<h2 class="text-sm md:text-base font-display text-terminal-bright group-hover:text-white transition-colors duration-300 m-0 leading-snug">
+											{post.data.title}
+										</h2>
+									</div>
+
+									{/* Interaction Indicator */}
+									<div class="hidden md:block">
+										<span class="text-[10px] font-display text-terminal-text opacity-0 group-hover:opacity-60 transition-all duration-300 uppercase tracking-widest">
+											<span class="text-accent">__</span>
+											read_entry
+										</span>
+									</div>
+								</a>
+							);
+						})
+					}
 				</div>
 
 				{/* End of list indicator */}
 				<div class="mt-12 text-center">
-					<span class="inline-block w-2.5 h-1 bg-cyber-border animate-pulse"></span>
+					<span
+						class="inline-block w-2.5 h-1 bg-cyber-border animate-pulse"
+					></span>
 				</div>
 			</div>
 		</main>
