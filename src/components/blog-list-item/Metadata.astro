@@ -1,0 +1,52 @@
+---
+interface Props {
+	slug: string;
+	date: Date;
+}
+
+const { slug, date } = Astro.props;
+
+// FNV-1a variant
+function hash(str: string) {
+	let hash = 2166136261;
+	for (let i = 0; i < str.length; i++) {
+		hash ^= str.charCodeAt(i);
+		hash = Math.imul(hash, 16777619);
+	}
+	return (hash >>> 0).toString(16).padStart(7, "0").slice(0, 7);
+}
+
+function formatDate(date: Date) {
+	return date.toISOString().split("T")[0].replaceAll("-", ".");
+}
+---
+
+<div class="metadata-column">
+	<span class="metadata-date">{formatDate(date)}</span>
+	<span>
+		[rev:<span class="metadata-hash">{hash(slug)}</span>]
+	</span>
+</div>
+
+<style>
+	.metadata-column {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+
+		gap: 1rem;
+
+		font-size: 0.75rem;
+		font-family:
+			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+			"Liberation Mono", "Courier New", monospace;
+
+		color: #b0bec5;
+		opacity: 0.7;
+	}
+
+	.metadata-date,
+	.metadata-hash {
+		font-weight: 700;
+	}
+</style>
