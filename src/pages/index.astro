@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Metadata from "../components/blog-list-item/Metadata.astro";
 import Title from "../components/blog-list-item/Title.astro";
+import Indicator from "../components/blog-list-item/Indicator.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 
@@ -49,12 +50,8 @@ const posts = (await getCollection("blog")).sort((a, b) => {
 
 									<Title title={post.data.title} />
 
-									{/* Interaction Indicator */}
-									<div class="hidden md:block">
-										<span class="text-[10px] font-display text-terminal-text opacity-0 group-hover:opacity-60 transition-all duration-300 uppercase tracking-widest">
-											<span class="text-accent">__</span>
-											read_entry
-										</span>
+									<div class="indicator-wrapper">
+										<Indicator />
 									</div>
 								</a>
 							);
@@ -66,3 +63,21 @@ const posts = (await getCollection("blog")).sort((a, b) => {
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.indicator-wrapper {
+		display: none;
+		opacity: 0;
+		transition: opacity 300ms;
+	}
+
+	@media (min-width: 768px) {
+		.indicator-wrapper {
+			display: block;
+		}
+
+		.group:hover .indicator-wrapper {
+			opacity: 0.6;
+		}
+	}
+</style>
