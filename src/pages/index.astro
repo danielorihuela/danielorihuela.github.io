@@ -12,7 +12,7 @@ const posts = (await getCollection("blog")).sort((a, b) => {
 	const dateDiff =
 		b.data.publishdate.valueOf() - a.data.publishdate.valueOf();
 	if (dateDiff !== 0) return dateDiff;
-	return b.slug.localeCompare(a.slug);
+	return b.id.localeCompare(a.id);
 });
 ---
 
@@ -35,11 +35,11 @@ const posts = (await getCollection("blog")).sort((a, b) => {
 					posts.map((post) => {
 						return (
 							<a
-								href={`/blog/${post.slug}/`}
+								href={`/blog/${post.id}/`}
 								class="group blog-post-link"
 							>
 								<Metadata
-									slug={post.slug}
+									slug={post.id}
 									date={post.data.publishdate}
 								/>
 

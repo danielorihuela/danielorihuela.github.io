@@ -1,15 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-
 import sitemap from '@astrojs/sitemap';
-
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
     site: 'https://danielorihuela.dev/',
-    integrations: [mdx(), sitemap(), tailwind()],
+    integrations: [mdx(), sitemap()],
     markdown: {
         shikiConfig: {
             theme: 'poimandres',
@@ -23,8 +21,10 @@ export default defineConfig({
         assetsPrefix: 'https://danielorihuela.dev/'
     },
     vite: {
+        plugins: [tailwindcss()],
         ssr: {
             external: ['astro/container', '@astrojs/mdx'],
         },
     },
 });
+
