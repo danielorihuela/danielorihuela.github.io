@@ -1,0 +1,122 @@
+---
+interface PrInfo {
+	id: number;
+	title?: string;
+}
+
+interface Props {
+	url: string;
+	prs: PrInfo[];
+}
+
+const { url, prs } = Astro.props;
+---
+
+<div class="pr-log-section">
+	<div class="pr-log-header">
+		<span class="pr-log-label">:: PULL_REQUEST_LOG</span>
+	</div>
+	<div class="pr-list">
+		{
+			prs.map((pr) => (
+				<a
+					href={`${url}/pull/${pr.id}`}
+					class="pr-link"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<span class="pr-indicator">{">"}</span>
+					<span class="pr-id">PR #{pr.id}</span>
+					<span class="pr-title">
+						{pr.title || "Unlogged contribution..."}
+					</span>
+				</a>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.pr-log-section {
+		padding-top: 1rem;
+		border-top: 1px solid rgba(28, 32, 53, 0.1);
+	}
+
+	.pr-log-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.pr-log-label {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--accent);
+		font-weight: 700;
+	}
+
+	.pr-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.pr-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.875rem;
+		padding: 0.5rem 0.75rem;
+		border-left: 2px solid transparent;
+		color: var(--text-body);
+		transition: all 0.3s ease;
+		text-decoration: none;
+	}
+
+	.pr-link:hover {
+		border-left-color: var(--accent);
+		background: linear-gradient(
+			to right,
+			rgba(0, 212, 255, 0.1),
+			transparent
+		);
+		transform: translateX(0.25rem);
+	}
+
+	.pr-indicator {
+		color: var(--accent);
+		transition: transform 0.3s ease;
+		font-weight: 700;
+	}
+
+	.pr-link:hover .pr-indicator {
+		transform: scale(1.1);
+	}
+
+	.pr-id {
+		color: var(--text-bright);
+		font-family: "Share Tech Mono", monospace;
+		min-width: 64px;
+		transition: color 0.3s ease;
+	}
+
+	.pr-link:hover .pr-id {
+		color: #ffffff;
+	}
+
+	.pr-title {
+		color: var(--text-body);
+		transition: color 0.3s ease;
+		font-weight: 500;
+		letter-spacing: -0.025em;
+		line-height: 1.375;
+		flex: 1;
+	}
+
+	.pr-link:hover .pr-title {
+		color: var(--text-bright);
+		text-shadow: none;
+	}
+</style>
