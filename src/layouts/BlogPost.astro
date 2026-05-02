@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
 
 interface Props {
 	title: string;
@@ -21,12 +22,12 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		<BaseHead title={title} description={description} image={cover?.src} />
 		<style is:global>
 			/* Table of Contents & List Fixes */
-			.article-content ul, 
+			.article-content ul,
 			.article-content ol {
 				margin: 1.5em 0;
 			}
-			
-			.article-content ul ul, 
+
+			.article-content ul ul,
 			.article-content ul ol,
 			.article-content ol ul,
 			.article-content ol ol {
@@ -54,7 +55,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 			.article-content h4,
 			.article-content h5,
 			.article-content h6 {
-				font-family: 'Share Tech Mono', monospace;
+				font-family: "Share Tech Mono", monospace;
 				margin-top: 2.5em;
 				margin-bottom: 1.2em;
 				line-height: 1.2;
@@ -65,23 +66,59 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				color: var(--accent);
 			}
 
-			.article-content h1 { font-size: 2.2em; text-transform: uppercase; font-weight: bold; }
-			.article-content h1::before { content: ">"; opacity: 0.8; }
+			.article-content h1 {
+				font-size: 2.2em;
+				text-transform: uppercase;
+				font-weight: bold;
+			}
+			.article-content h1::before {
+				content: ">";
+				opacity: 0.8;
+			}
 
-			.article-content h2 { font-size: 1.8em; text-transform: uppercase; }
-			.article-content h2::before { content: ">>"; opacity: 0.7; }
+			.article-content h2 {
+				font-size: 1.8em;
+				text-transform: uppercase;
+			}
+			.article-content h2::before {
+				content: ">>";
+				opacity: 0.7;
+			}
 
-			.article-content h3 { font-size: 1.4em; text-transform: uppercase; }
-			.article-content h3::before { content: ">>>"; opacity: 0.6; }
+			.article-content h3 {
+				font-size: 1.4em;
+				text-transform: uppercase;
+			}
+			.article-content h3::before {
+				content: ">>>";
+				opacity: 0.6;
+			}
 
-			.article-content h4 { font-size: 1.2em; }
-			.article-content h4::before { content: ">>>>"; opacity: 0.5; }
+			.article-content h4 {
+				font-size: 1.2em;
+			}
+			.article-content h4::before {
+				content: ">>>>";
+				opacity: 0.5;
+			}
 
-			.article-content h5 { font-size: 1.1em; color: var(--accent-dim); }
-			.article-content h5::before { content: ">>>>>"; opacity: 0.4; }
+			.article-content h5 {
+				font-size: 1.1em;
+				color: var(--accent-dim);
+			}
+			.article-content h5::before {
+				content: ">>>>>";
+				opacity: 0.4;
+			}
 
-			.article-content h6 { font-size: 1em; color: var(--accent-dim); }
-			.article-content h6::before { content: ">>>>>>"; opacity: 0.3; }
+			.article-content h6 {
+				font-size: 1em;
+				color: var(--accent-dim);
+			}
+			.article-content h6::before {
+				content: ">>>>>>";
+				opacity: 0.3;
+			}
 
 			.article-content p {
 				color: var(--text-body);
@@ -130,7 +167,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 
 			/* Glow point at the top of the manifest line */
 			.article-content > ul:first-of-type::after {
-				content: '';
+				content: "";
 				position: absolute;
 				top: 0;
 				left: -2px;
@@ -143,9 +180,18 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 			}
 
 			@keyframes pulse {
-				0% { opacity: 0.5; transform: scale(1); }
-				50% { opacity: 1; transform: scale(1.2); }
-				100% { opacity: 0.5; transform: scale(1); }
+				0% {
+					opacity: 0.5;
+					transform: scale(1);
+				}
+				50% {
+					opacity: 1;
+					transform: scale(1.2);
+				}
+				100% {
+					opacity: 0.5;
+					transform: scale(1);
+				}
 			}
 
 			.article-content > ul:first-of-type li {
@@ -161,13 +207,12 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				position: absolute;
 				left: 0;
 				color: var(--text-dim);
-				font-family: 'Share Tech Mono', monospace;
+				font-family: "Share Tech Mono", monospace;
 				font-size: 0.75rem;
 				letter-spacing: 0.1em;
 				transition: all 0.2s ease;
 				opacity: 0.6;
 			}
-
 
 			.article-content > ul:first-of-type li:hover::before {
 				content: ">>";
@@ -214,21 +259,26 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 			.article-content hr {
 				border: none;
 				height: 1px;
-				background: linear-gradient(to right, transparent, var(--border), transparent);
+				background: linear-gradient(
+					to right,
+					transparent,
+					var(--border),
+					transparent
+				);
 				margin: 3em 0;
 				position: relative;
 				overflow: visible;
 			}
 
 			.article-content hr::after {
-				content: '[---]';
+				content: "[---]";
 				position: absolute;
 				left: 50%;
 				top: 50%;
 				transform: translate(-50%, -50%);
 				background: var(--bg-dark);
 				padding: 0 1em;
-				font-family: 'Share Tech Mono', monospace;
+				font-family: "Share Tech Mono", monospace;
 				font-size: 0.7em;
 				color: var(--text-dim);
 			}
@@ -240,52 +290,55 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		<article class="flex-1 pt-24 pb-20">
 			<div class="max-w-4xl mx-auto px-4 lg:px-8">
 				{/* Terminal command prompt - Matching Home page style */}
-				<div class="font-display text-xs md:text-sm mb-8 mt-4 border-b border-cyber-border pb-4 flex items-center gap-2">
+				<div
+					class="font-display text-xs md:text-sm mb-8 mt-4 border-b border-cyber-border pb-4 flex items-center gap-2"
+				>
 					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold">cat ./blog/{slug}.md</span>
+					<span class="text-terminal-bright font-bold"
+						>cat ./blog/{slug}.md</span
+					>
 				</div>
 
 				<div class="terminal-window shadow-2xl">
-					<div class="terminal-header flex justify-between items-center bg-accent/5 border-b border-cyber-border px-4 py-2">
-						<div class="flex items-center gap-2">
-							<span class="text-accent text-[10px]">READ_ONLY</span>
-							<span class="text-terminal-dim">|</span>
-							<span class="text-terminal-bright text-xs font-mono">{slug}.md</span>
-						</div>
-						<div class="text-[10px] text-terminal-dim font-mono hidden sm:block">
-							Lines: <span class="text-accent">AUTO</span> | Encoding: <span class="text-accent">UTF-8</span>
-						</div>
-					</div>
-					
+					<TerminalHeader slug={slug} />
+
 					<div class="terminal-body p-0">
 						{/* Cover image - Full display, no cropping */}
-						{cover && (
-							<div class="w-full bg-black/40 border-b border-cyber-border overflow-hidden">
-								<Image
-									class="w-full h-auto max-h-[500px] object-contain mx-auto"
-									src={cover}
-									alt=""
-									quality={100}
-								/>
-							</div>
-						)}
+						{
+							cover && (
+								<div class="w-full bg-black/40 border-b border-cyber-border overflow-hidden">
+									<Image
+										class="w-full h-auto max-h-[500px] object-contain mx-auto"
+										src={cover}
+										alt=""
+										quality={100}
+									/>
+								</div>
+							)
+						}
 
 						{/* Article header */}
 						<div class="px-4 lg:px-6 pt-10 pb-8 last:border-b-0">
-							<div class="flex items-center gap-3 mb-4 font-display text-xs text-terminal-dim">
+							<div
+								class="flex items-center gap-3 mb-4 font-display text-xs text-terminal-dim"
+							>
 								<span class="text-accent">#</span>
 								<FormattedDate date={publishdate} />
 							</div>
-							
-							<h1 class="text-3xl md:text-5xl font-display text-white mb-6 leading-tight">
+
+							<h1
+								class="text-3xl md:text-5xl font-display text-white mb-6 leading-tight"
+							>
 								{title}
 							</h1>
-							
+
 							<div class="w-16 h-1 bg-accent/30 mb-10"></div>
 						</div>
 
 						{/* Article content */}
-						<div class="article-content px-4 lg:px-6 pb-12 text-terminal-text">
+						<div
+							class="article-content px-4 lg:px-6 pb-12 text-terminal-text"
+						>
 							<slot />
 						</div>
 					</div>
