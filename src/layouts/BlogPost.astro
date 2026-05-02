@@ -1,10 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
 import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
 	title: string;
@@ -17,395 +15,389 @@ interface Props {
 const { title, description, publishdate, cover, slug } = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} image={cover?.src} />
-		<style is:global>
-			/* Table of Contents & List Fixes */
-			.article-content ul,
-			.article-content ol {
-				margin: 1.5em 0;
-			}
+<BaseLayout
+	title={title}
+	description={description}
+	image={cover?.src}
+	bodyClass="blog-layout-body"
+>
+	<article class="blog-article-wrapper">
+		<div class="blog-container">
+			{/* Terminal command prompt - Matching Home page style */}
+			<div class="blog-terminal-prompt">
+				<span class="blog-prompt-symbol">$</span>
+				<span class="blog-prompt-command">cat ./blog/{slug}.md</span>
+			</div>
 
-			.article-content ul ul,
-			.article-content ul ol,
-			.article-content ol ul,
-			.article-content ol ol {
-				margin: 0.5em 0 0.5em 1.5em;
-				padding-left: 0.5em;
-				border-left: 1px solid var(--border);
-			}
+			<div class="terminal-window blog-shadow">
+				<TerminalHeader slug={slug} />
 
-			.article-content li {
-				margin-bottom: 0.5em;
-			}
+				<div class="terminal-body blog-terminal-body">
+					{
+						cover && (
+							<div class="blog-cover-wrapper">
+								<Image
+									class="blog-cover-image"
+									src={cover}
+									alt=""
+									quality={100}
+								/>
+							</div>
+						)
+					}
 
-			/* Image Handling */
-			.article-content img {
-				margin: 2em auto;
-				border: 1px solid var(--border);
-				box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-			}
+					<ArticleHeader title={title} publishdate={publishdate} />
 
-			/* Typography & Spacing */
-			/* Typography & Spacing */
-			.article-content h1,
-			.article-content h2,
-			.article-content h3,
-			.article-content h4,
-			.article-content h5,
-			.article-content h6 {
-				font-family: "Share Tech Mono", monospace;
-				margin-top: 2.5em;
-				margin-bottom: 1.2em;
-				line-height: 1.2;
-				letter-spacing: 0.05em;
-				display: flex;
-				align-items: baseline;
-				gap: 0.5em;
-				color: var(--accent);
-			}
-
-			.article-content h1 {
-				font-size: 2.2em;
-				text-transform: uppercase;
-				font-weight: bold;
-			}
-			.article-content h1::before {
-				content: ">";
-				opacity: 0.8;
-			}
-
-			.article-content h2 {
-				font-size: 1.8em;
-				text-transform: uppercase;
-			}
-			.article-content h2::before {
-				content: ">>";
-				opacity: 0.7;
-			}
-
-			.article-content h3 {
-				font-size: 1.4em;
-				text-transform: uppercase;
-			}
-			.article-content h3::before {
-				content: ">>>";
-				opacity: 0.6;
-			}
-
-			.article-content h4 {
-				font-size: 1.2em;
-			}
-			.article-content h4::before {
-				content: ">>>>";
-				opacity: 0.5;
-			}
-
-			.article-content h5 {
-				font-size: 1.1em;
-				color: var(--accent-dim);
-			}
-			.article-content h5::before {
-				content: ">>>>>";
-				opacity: 0.4;
-			}
-
-			.article-content h6 {
-				font-size: 1em;
-				color: var(--accent-dim);
-			}
-			.article-content h6::before {
-				content: ">>>>>>";
-				opacity: 0.3;
-			}
-
-			.article-content p {
-				color: var(--text-body);
-				line-height: 1.8;
-				margin-bottom: 1.5em;
-			}
-
-			.article-content a {
-				color: var(--accent);
-				text-decoration: none;
-				border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-				transition: all 0.2s ease;
-			}
-
-			.article-content a:hover {
-				color: #fff;
-				border-bottom-color: var(--accent);
-				text-shadow: 0 0 8px var(--accent-glow);
-			}
-
-			/* Hacker Elegant Table of Contents (ToC) — "Vertical Manifest" */
-			/* Targets the first list in the article content */
-			.article-content > ul:first-of-type {
-				list-style: none;
-				padding: 2rem 1.5rem 2.5rem 2rem;
-				margin: 3.5rem 0 5rem 0;
-				border-left: 1px solid var(--border);
-				background: transparent;
-				position: relative;
-				display: block;
-				width: 100%;
-				counter-reset: toc-counter;
-			}
-
-			.article-content > ul:first-of-type::before {
-				content: "[ MANIFEST_ENTRY_POINTS ]";
-				display: block;
-				font-size: 0.7rem;
-				color: var(--accent);
-				margin-bottom: 2rem;
-				font-weight: bold;
-				letter-spacing: 0.3em;
-				opacity: 0.9;
-				text-shadow: 0 0 10px var(--accent-glow);
-			}
-
-			/* Glow point at the top of the manifest line */
-			.article-content > ul:first-of-type::after {
-				content: "";
-				position: absolute;
-				top: 0;
-				left: -2px;
-				width: 4px;
-				height: 4px;
-				background: var(--accent);
-				border-radius: 50%;
-				box-shadow: 0 0 8px var(--accent);
-				animation: pulse 2s infinite;
-			}
-
-			@keyframes pulse {
-				0% {
-					opacity: 0.5;
-					transform: scale(1);
-				}
-				50% {
-					opacity: 1;
-					transform: scale(1.2);
-				}
-				100% {
-					opacity: 0.5;
-					transform: scale(1);
-				}
-			}
-
-			.article-content > ul:first-of-type li {
-				position: relative;
-				padding-left: 3.5rem;
-				margin-bottom: 1.2rem;
-				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-				counter-increment: toc-counter;
-			}
-
-			.article-content > ul:first-of-type li::before {
-				content: "0x0" counter(toc-counter);
-				position: absolute;
-				left: 0;
-				color: var(--text-dim);
-				font-family: "Share Tech Mono", monospace;
-				font-size: 0.75rem;
-				letter-spacing: 0.1em;
-				transition: all 0.2s ease;
-				opacity: 0.6;
-			}
-
-			.article-content > ul:first-of-type li:hover::before {
-				content: ">>";
-				color: var(--accent);
-				text-shadow: 0 0 12px var(--accent);
-				opacity: 1;
-				font-weight: bold;
-			}
-
-			.article-content > ul:first-of-type a {
-				text-transform: uppercase;
-				font-size: 0.95rem;
-				letter-spacing: 0.15em;
-				border-bottom: none !important;
-				color: var(--text-body);
-				transition: all 0.2s ease;
-				display: inline-block;
-			}
-
-			.article-content > ul:first-of-type a:hover {
-				color: #fff;
-				text-shadow: 0 0 15px var(--accent);
-			}
-
-			/* Code Snippets */
-			.article-content pre {
-				margin: 2em -1.5em;
-				padding: 1.5em;
-				background-color: #0c0d14 !important;
-				border-top: 1px solid var(--border);
-				border-bottom: 1px solid var(--border);
-				position: relative;
-			}
-
-			@media (min-width: 768px) {
-				.article-content pre {
-					margin: 2em 0;
-					border: 1px solid var(--border);
-					border-radius: 4px;
-				}
-			}
-
-			/* Custom Divider */
-			.article-content hr {
-				border: none;
-				height: 1px;
-				background: linear-gradient(
-					to right,
-					transparent,
-					var(--border),
-					transparent
-				);
-				margin: 3em 0;
-				position: relative;
-				overflow: visible;
-			}
-
-			.article-content hr::after {
-				content: "[---]";
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				transform: translate(-50%, -50%);
-				background: var(--bg-dark);
-				padding: 0 1em;
-				font-family: "Share Tech Mono", monospace;
-				font-size: 0.7em;
-				color: var(--text-dim);
-			}
-
-			.blog-layout-body {
-				background-color: var(--bg-dark);
-				min-height: 100vh;
-				display: flex;
-				flex-direction: column;
-			}
-			.blog-article-wrapper {
-				flex: 1 1 0%;
-				padding-top: 6rem;
-				padding-bottom: 5rem;
-			}
-			.blog-container {
-				max-width: 56rem;
-				margin-left: auto;
-				margin-right: auto;
-				padding-left: 1rem;
-				padding-right: 1rem;
-			}
-			@media (min-width: 1024px) {
-				.blog-container {
-					padding-left: 2rem;
-					padding-right: 2rem;
-				}
-				.blog-article-content {
-					padding-left: 1.5rem;
-					padding-right: 1.5rem;
-				}
-			}
-			.blog-terminal-prompt {
-				font-family: "Share Tech Mono", monospace;
-				font-size: 0.75rem;
-				line-height: 1rem;
-				margin-top: 1rem;
-				margin-bottom: 2rem;
-				border-bottom: 1px solid var(--border);
-				padding-bottom: 1rem;
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
-			}
-			@media (min-width: 768px) {
-				.blog-terminal-prompt {
-					font-size: 0.875rem;
-					line-height: 1.25rem;
-				}
-			}
-			.blog-prompt-symbol {
-				color: var(--accent);
-				font-weight: bold;
-			}
-			.blog-prompt-command {
-				color: var(--text-bright);
-				font-weight: bold;
-			}
-			.blog-shadow {
-				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-			}
-			.terminal-body {
-				padding: 1.5em;
-			}
-			.blog-cover-wrapper {
-				width: 100%;
-				background-color: rgba(0, 0, 0, 0.4);
-				border-bottom: 1px solid var(--border);
-				overflow: hidden;
-			}
-			.blog-cover-image {
-				width: 100%;
-				height: auto;
-				max-height: 500px;
-				object-fit: contain;
-				margin-left: auto;
-				margin-right: auto;
-			}
-			.blog-article-content {
-				padding-left: 1rem;
-				padding-right: 1rem;
-				padding-bottom: 3rem;
-				color: var(--text-body);
-			}
-		</style>
-	</head>
-
-	<body class="blog-layout-body">
-		<Header />
-		<article class="blog-article-wrapper">
-			<div class="blog-container">
-				{/* Terminal command prompt - Matching Home page style */}
-				<div class="blog-terminal-prompt">
-					<span class="blog-prompt-symbol">$</span>
-					<span class="blog-prompt-command">cat ./blog/{slug}.md</span
-					>
-				</div>
-
-				<div class="terminal-window blog-shadow">
-					<TerminalHeader slug={slug} />
-
-					<div class="terminal-body blog-terminal-body">
-						{
-							cover && (
-								<div class="blog-cover-wrapper">
-									<Image
-										class="blog-cover-image"
-										src={cover}
-										alt=""
-										quality={100}
-									/>
-								</div>
-							)
-						}
-
-						<ArticleHeader
-							title={title}
-							publishdate={publishdate}
-						/>
-
-						<div class="article-content blog-article-content">
-							<slot />
-						</div>
+					<div class="article-content blog-article-content">
+						<slot />
 					</div>
 				</div>
 			</div>
-		</article>
-		<Footer />
-	</body>
-</html>
+		</div>
+	</article>
+</BaseLayout>
+
+<style is:global>
+	/* Table of Contents & List Fixes */
+	.article-content ul,
+	.article-content ol {
+		margin: 1.5em 0;
+	}
+
+	.article-content ul ul,
+	.article-content ul ol,
+	.article-content ol ul,
+	.article-content ol ol {
+		margin: 0.5em 0 0.5em 1.5em;
+		padding-left: 0.5em;
+		border-left: 1px solid var(--border);
+	}
+
+	.article-content li {
+		margin-bottom: 0.5em;
+	}
+
+	/* Image Handling */
+	.article-content img {
+		margin: 2em auto;
+		border: 1px solid var(--border);
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+	}
+
+	/* Typography & Spacing */
+	/* Typography & Spacing */
+	.article-content h1,
+	.article-content h2,
+	.article-content h3,
+	.article-content h4,
+	.article-content h5,
+	.article-content h6 {
+		font-family: "Share Tech Mono", monospace;
+		margin-top: 2.5em;
+		margin-bottom: 1.2em;
+		line-height: 1.2;
+		letter-spacing: 0.05em;
+		display: flex;
+		align-items: baseline;
+		gap: 0.5em;
+		color: var(--accent);
+	}
+
+	.article-content h1 {
+		font-size: 2.2em;
+		text-transform: uppercase;
+		font-weight: bold;
+	}
+	.article-content h1::before {
+		content: ">";
+		opacity: 0.8;
+	}
+
+	.article-content h2 {
+		font-size: 1.8em;
+		text-transform: uppercase;
+	}
+	.article-content h2::before {
+		content: ">>";
+		opacity: 0.7;
+	}
+
+	.article-content h3 {
+		font-size: 1.4em;
+		text-transform: uppercase;
+	}
+	.article-content h3::before {
+		content: ">>>";
+		opacity: 0.6;
+	}
+
+	.article-content h4 {
+		font-size: 1.2em;
+	}
+	.article-content h4::before {
+		content: ">>>>";
+		opacity: 0.5;
+	}
+
+	.article-content h5 {
+		font-size: 1.1em;
+		color: var(--accent-dim);
+	}
+	.article-content h5::before {
+		content: ">>>>>";
+		opacity: 0.4;
+	}
+
+	.article-content h6 {
+		font-size: 1em;
+		color: var(--accent-dim);
+	}
+	.article-content h6::before {
+		content: ">>>>>>";
+		opacity: 0.3;
+	}
+
+	.article-content p {
+		color: var(--text-body);
+		line-height: 1.8;
+		margin-bottom: 1.5em;
+	}
+
+	.article-content a {
+		color: var(--accent);
+		text-decoration: none;
+		border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+		transition: all 0.2s ease;
+	}
+
+	.article-content a:hover {
+		color: #fff;
+		border-bottom-color: var(--accent);
+		text-shadow: 0 0 8px var(--accent-glow);
+	}
+
+	/* Hacker Elegant Table of Contents (ToC) — "Vertical Manifest" */
+	/* Targets the first list in the article content */
+	.article-content > ul:first-of-type {
+		list-style: none;
+		padding: 2rem 1.5rem 2.5rem 2rem;
+		margin: 3.5rem 0 5rem 0;
+		border-left: 1px solid var(--border);
+		background: transparent;
+		position: relative;
+		display: block;
+		width: 100%;
+		counter-reset: toc-counter;
+	}
+
+	.article-content > ul:first-of-type::before {
+		content: "[ MANIFEST_ENTRY_POINTS ]";
+		display: block;
+		font-size: 0.7rem;
+		color: var(--accent);
+		margin-bottom: 2rem;
+		font-weight: bold;
+		letter-spacing: 0.3em;
+		opacity: 0.9;
+		text-shadow: 0 0 10px var(--accent-glow);
+	}
+
+	/* Glow point at the top of the manifest line */
+	.article-content > ul:first-of-type::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: -2px;
+		width: 4px;
+		height: 4px;
+		background: var(--accent);
+		border-radius: 50%;
+		box-shadow: 0 0 8px var(--accent);
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0% {
+			opacity: 0.5;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1.2);
+		}
+		100% {
+			opacity: 0.5;
+			transform: scale(1);
+		}
+	}
+
+	.article-content > ul:first-of-type li {
+		position: relative;
+		padding-left: 3.5rem;
+		margin-bottom: 1.2rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		counter-increment: toc-counter;
+	}
+
+	.article-content > ul:first-of-type li::before {
+		content: "0x0" counter(toc-counter);
+		position: absolute;
+		left: 0;
+		color: var(--text-dim);
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		transition: all 0.2s ease;
+		opacity: 0.6;
+	}
+
+	.article-content > ul:first-of-type li:hover::before {
+		content: ">>";
+		color: var(--accent);
+		text-shadow: 0 0 12px var(--accent);
+		opacity: 1;
+		font-weight: bold;
+	}
+
+	.article-content > ul:first-of-type a {
+		text-transform: uppercase;
+		font-size: 0.95rem;
+		letter-spacing: 0.15em;
+		border-bottom: none !important;
+		color: var(--text-body);
+		transition: all 0.2s ease;
+		display: inline-block;
+	}
+
+	.article-content > ul:first-of-type a:hover {
+		color: #fff;
+		text-shadow: 0 0 15px var(--accent);
+	}
+
+	/* Code Snippets */
+	.article-content pre {
+		margin: 2em -1.5em;
+		padding: 1.5em;
+		background-color: #0c0d14 !important;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		position: relative;
+	}
+
+	@media (min-width: 768px) {
+		.article-content pre {
+			margin: 2em 0;
+			border: 1px solid var(--border);
+			border-radius: 4px;
+		}
+	}
+
+	/* Custom Divider */
+	.article-content hr {
+		border: none;
+		height: 1px;
+		background: linear-gradient(
+			to right,
+			transparent,
+			var(--border),
+			transparent
+		);
+		margin: 3em 0;
+		position: relative;
+		overflow: visible;
+	}
+
+	.article-content hr::after {
+		content: "[---]";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		background: var(--bg-dark);
+		padding: 0 1em;
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.7em;
+		color: var(--text-dim);
+	}
+
+	.blog-layout-body {
+		background-color: var(--bg-dark);
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+	.blog-article-wrapper {
+		flex: 1 1 0%;
+		padding-top: 6rem;
+		padding-bottom: 5rem;
+	}
+	.blog-container {
+		max-width: 56rem;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+	@media (min-width: 1024px) {
+		.blog-container {
+			padding-left: 2rem;
+			padding-right: 2rem;
+		}
+		.blog-article-content {
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
+		}
+	}
+	.blog-terminal-prompt {
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+		line-height: 1rem;
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+		border-bottom: 1px solid var(--border);
+		padding-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	@media (min-width: 768px) {
+		.blog-terminal-prompt {
+			font-size: 0.875rem;
+			line-height: 1.25rem;
+		}
+	}
+	.blog-prompt-symbol {
+		color: var(--accent);
+		font-weight: bold;
+	}
+	.blog-prompt-command {
+		color: var(--text-bright);
+		font-weight: bold;
+	}
+	.blog-shadow {
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	}
+	.terminal-body {
+		padding: 1.5em;
+	}
+	.blog-cover-wrapper {
+		width: 100%;
+		background-color: rgba(0, 0, 0, 0.4);
+		border-bottom: 1px solid var(--border);
+		overflow: hidden;
+	}
+	.blog-cover-image {
+		width: 100%;
+		height: auto;
+		max-height: 500px;
+		object-fit: contain;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.blog-article-content {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-bottom: 3rem;
+		color: var(--text-body);
+	}
+</style>

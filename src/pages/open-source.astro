@@ -1,8 +1,6 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 import Banner from "../components/open-source-banner/Banner.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 interface PrInfo {
 	id: number;
@@ -89,43 +87,36 @@ const ossProjectsInfo: OssProjectInfo[] = [
 ];
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead
-			title="Open Source"
-			description="Open source contributions to security and privacy tools."
-		/>
-	</head>
-
-	<body class="page-body">
-		<Header />
-		<main class="page-main">
-			<div class="container">
-				<div class="terminal-header-title">
-					<span class="prompt-symbol">$</span>
-					<span class="prompt-command">cat ./contributions/*</span>
-				</div>
-
-				<div class="projects-list">
-					{
-						ossProjectsInfo.map((info, idx) => (
-							<Banner
-								idx={idx}
-								name={info.name}
-								description={info.description}
-								image={info.image}
-								url={info.url}
-								prs={info.prs}
-								stack={info.stack}
-							/>
-						))
-					}
-				</div>
+<BaseLayout
+	title="Open Source"
+	description="Open source contributions to security and privacy tools."
+	bodyClass="page-body"
+>
+	<main class="page-main">
+		<div class="container">
+			<div class="terminal-header-title">
+				<span class="prompt-symbol">$</span>
+				<span class="prompt-command">cat ./contributions/*</span>
 			</div>
-		</main>
-		<Footer />
-	</body>
-</html>
+
+			<div class="projects-list">
+				{
+					ossProjectsInfo.map((info, idx) => (
+						<Banner
+							idx={idx}
+							name={info.name}
+							description={info.description}
+							image={info.image}
+							url={info.url}
+							prs={info.prs}
+							stack={info.stack}
+						/>
+					))
+				}
+			</div>
+		</div>
+	</main>
+</BaseLayout>
 
 <style>
 	.page-body {
