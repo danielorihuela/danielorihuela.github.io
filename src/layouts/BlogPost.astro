@@ -3,8 +3,8 @@ import { Image } from "astro:assets";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import FormattedDate from "../components/FormattedDate.astro";
 import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
+import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
 
 interface Props {
 	title: string;
@@ -305,7 +305,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 					<div class="terminal-body p-0">
 						{/* Cover image - Full display, no cropping */}
 						{
-							cover && (
+							(
 								<div class="w-full bg-black/40 border-b border-cyber-border overflow-hidden">
 									<Image
 										class="w-full h-auto max-h-[500px] object-contain mx-auto"
@@ -318,22 +318,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 						}
 
 						{/* Article header */}
-						<div class="px-4 lg:px-6 pt-10 pb-8 last:border-b-0">
-							<div
-								class="flex items-center gap-3 mb-4 font-display text-xs text-terminal-dim"
-							>
-								<span class="text-accent">#</span>
-								<FormattedDate date={publishdate} />
-							</div>
-
-							<h1
-								class="text-3xl md:text-5xl font-display text-white mb-6 leading-tight"
-							>
-								{title}
-							</h1>
-
-							<div class="w-16 h-1 bg-accent/30 mb-10"></div>
-						</div>
+						<ArticleHeader title={title} publishdate={publishdate} />
 
 						{/* Article content */}
 						<div
