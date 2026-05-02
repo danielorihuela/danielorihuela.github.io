@@ -282,33 +282,110 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				font-size: 0.7em;
 				color: var(--text-dim);
 			}
+
+			.blog-layout-body {
+				background-color: var(--bg-dark);
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+			.blog-article-wrapper {
+				flex: 1 1 0%;
+				padding-top: 6rem;
+				padding-bottom: 5rem;
+			}
+			.blog-container {
+				max-width: 56rem;
+				margin-left: auto;
+				margin-right: auto;
+				padding-left: 1rem;
+				padding-right: 1rem;
+			}
+			@media (min-width: 1024px) {
+				.blog-container {
+					padding-left: 2rem;
+					padding-right: 2rem;
+				}
+				.blog-article-content {
+					padding-left: 1.5rem;
+					padding-right: 1.5rem;
+				}
+			}
+			.blog-terminal-prompt {
+				font-family: "Share Tech Mono", monospace;
+				font-size: 0.75rem;
+				line-height: 1rem;
+				margin-top: 1rem;
+				margin-bottom: 2rem;
+				border-bottom: 1px solid var(--border);
+				padding-bottom: 1rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+			@media (min-width: 768px) {
+				.blog-terminal-prompt {
+					font-size: 0.875rem;
+					line-height: 1.25rem;
+				}
+			}
+			.blog-prompt-symbol {
+				color: var(--accent);
+				font-weight: bold;
+			}
+			.blog-prompt-command {
+				color: var(--text-bright);
+				font-weight: bold;
+			}
+			.blog-shadow {
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+			}
+			.terminal-body {
+				padding: 1.5em;
+			}
+			.blog-cover-wrapper {
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-bottom: 1px solid var(--border);
+				overflow: hidden;
+			}
+			.blog-cover-image {
+				width: 100%;
+				height: auto;
+				max-height: 500px;
+				object-fit: contain;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.blog-article-content {
+				padding-left: 1rem;
+				padding-right: 1rem;
+				padding-bottom: 3rem;
+				color: var(--text-body);
+			}
 		</style>
 	</head>
 
-	<body class="bg-cyber-black min-h-screen flex flex-col">
+	<body class="blog-layout-body">
 		<Header />
-		<article class="flex-1 pt-24 pb-20">
-			<div class="max-w-4xl mx-auto px-4 lg:px-8">
+		<article class="blog-article-wrapper">
+			<div class="blog-container">
 				{/* Terminal command prompt - Matching Home page style */}
-				<div
-					class="font-display text-xs md:text-sm mb-8 mt-4 border-b border-cyber-border pb-4 flex items-center gap-2"
-				>
-					<span class="text-accent font-bold">$</span>
-					<span class="text-terminal-bright font-bold"
-						>cat ./blog/{slug}.md</span
+				<div class="blog-terminal-prompt">
+					<span class="blog-prompt-symbol">$</span>
+					<span class="blog-prompt-command">cat ./blog/{slug}.md</span
 					>
 				</div>
 
-				<div class="terminal-window shadow-2xl">
+				<div class="terminal-window blog-shadow">
 					<TerminalHeader slug={slug} />
 
-					<div class="terminal-body p-0">
-						{/* Cover image - Full display, no cropping */}
+					<div class="terminal-body blog-terminal-body">
 						{
-							(
-								<div class="w-full bg-black/40 border-b border-cyber-border overflow-hidden">
+							cover && (
+								<div class="blog-cover-wrapper">
 									<Image
-										class="w-full h-auto max-h-[500px] object-contain mx-auto"
+										class="blog-cover-image"
 										src={cover}
 										alt=""
 										quality={100}
@@ -317,13 +394,12 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 							)
 						}
 
-						{/* Article header */}
-						<ArticleHeader title={title} publishdate={publishdate} />
+						<ArticleHeader
+							title={title}
+							publishdate={publishdate}
+						/>
 
-						{/* Article content */}
-						<div
-							class="article-content px-4 lg:px-6 pb-12 text-terminal-text"
-						>
+						<div class="article-content blog-article-content">
 							<slot />
 						</div>
 					</div>
