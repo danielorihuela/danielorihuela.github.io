@@ -19,5 +19,10 @@ export default defineConfig({
     build: {
         assetsPrefix: 'https://danielorihuela.dev/'
     },
+    vite: {
+        ssr: {
+            external: ['astro/container', '@astrojs/mdx'],
+        },
+    },
 });
 
