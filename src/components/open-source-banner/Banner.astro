@@ -1,4 +1,5 @@
 ---
+import TerminalWindow from "../TerminalWindow.astro";
 import Metadata from "./Metadata.astro";
 import PrLog from "./PrLog.astro";
 import SocialLink from "../SocialLink.astro";
@@ -21,7 +22,7 @@ interface Props {
 const { idx, name, description, image, url, prs, stack } = Astro.props;
 ---
 
-<div class="terminal-window project-card group">
+<TerminalWindow class="project-card group">
 	<Metadata idx={idx} prCount={prs.length} stack={stack} />
 
 	<div class="project-content">
@@ -47,7 +48,7 @@ const { idx, name, description, image, url, prs, stack } = Astro.props;
 
 		<PrLog url={url} prs={prs} />
 	</div>
-</div>
+</TerminalWindow>
 
 <style>
 	.project-card {
