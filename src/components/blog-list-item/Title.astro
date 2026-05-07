@@ -15,32 +15,25 @@ const { title } = Astro.props;
 	.title-column {
 		display: flex;
 		align-items: center;
-		flex: 1;
-		min-width: 0;
 		gap: 0.5rem;
 	}
 
 	.title-symbol {
-		display: none;
-	}
-
-	@media (min-width: 640px) {
-		.title-symbol {
-			display: inline;
-			margin-top: 0;
-			color: #00d4ff;
-			transition: transform 300ms;
-		}
+		transition: transform 300ms;
 	}
 
 	.title-text {
-		font-size: 0.875rem;
+		font-size: 1rem;
 		margin: 0;
 	}
 
-	@media (min-width: 768px) {
+	@media (max-width: 640px) {
+		.title-symbol {
+			display: none;
+		}
+
 		.title-text {
-			font-size: 1rem;
+			font-size: 0.875rem;
 		}
 	}
 </style>
