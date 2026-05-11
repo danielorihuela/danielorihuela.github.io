@@ -13,9 +13,8 @@ const { slug } = Astro.props;
 		<span class="post-terminal-filename">{slug}.md</span>
 	</div>
 	<div class="post-terminal-top-bar-right">
-		Lines: <span class="post-terminal-value">AUTO</span> | Encoding: <span
-			class="post-terminal-value">UTF-8</span
-		>
+		Lines: <span class="post-terminal-value">AUTO</span>
+		| Encoding: <span class="post-terminal-value">UTF-8</span>
 	</div>
 </div>
 
@@ -24,32 +23,22 @@ const { slug } = Astro.props;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		background-color: rgba(0, 212, 255, 0.05);
-		border-bottom: 1px solid var(--border);
+		background-color: var(--accent-extra-dim);
 		padding: 0.5rem 1rem;
 
-		/* Properties preserved from global .terminal-header class */
-		gap: 0.5em;
 		font-family: "Share Tech Mono", monospace;
 		font-size: 0.8em;
-		color: var(--accent);
 	}
 
 	.post-terminal-top-bar::before {
 		content: "●";
 		color: var(--accent);
-		font-size: 0.6em;
-	}
-
-	.post-terminal-top-bar-left {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		font-size: 0.8em;
 	}
 
 	.post-terminal-badge {
 		color: var(--accent);
-		font-size: 10px;
+		font-size: 0.8em;
 	}
 
 	.post-terminal-separator {
@@ -58,29 +47,30 @@ const { slug } = Astro.props;
 
 	.post-terminal-filename {
 		color: var(--text-bright);
-		font-size: 0.75rem;
-		line-height: 1rem;
-		font-family:
-			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-			"Liberation Mono", "Courier New", monospace;
+		font-size: 0.8rem;
+		font-family: "Courier New", monospace;
 	}
 
 	.post-terminal-top-bar-right {
 		display: none;
-		font-size: 10px;
-		color: var(--text-dim);
-		font-family:
-			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-			"Liberation Mono", "Courier New", monospace;
 	}
 
-	.post-terminal-top-bar-right .post-terminal-value {
+	.post-terminal-value {
 		color: var(--accent);
 	}
 
 	@media (min-width: 640px) {
+		.post-terminal-top-bar-left {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
 		.post-terminal-top-bar-right {
 			display: block;
+			font-size: 0.8em;
+			color: var(--text-dim);
+			font-family: "Courier New", monospace;
 		}
 	}
 </style>
