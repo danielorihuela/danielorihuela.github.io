@@ -6,6 +6,7 @@
 	--accent: #00d4ff;
 	--accent-dim: #0098b8;
 	--accent-glow: rgba(0, 212, 255, 0.4);
+	--accent-glow-dim: rgba(0, 212, 255, 0.02);
 	--accent-extra-dim: #00d4ff0d;
 	--magenta: #ff003c;
 	--bg-dark: #08090e;

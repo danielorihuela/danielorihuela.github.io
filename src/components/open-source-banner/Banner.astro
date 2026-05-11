@@ -27,19 +27,15 @@ const { idx, name, description, image, url, prs, stack } = Astro.props;
 
 	<div class="project-content">
 		<div class="project-header">
-			<div class="project-icon-wrapper">
-				<SocialLink href={url} image={image} />
-			</div>
-			<div class="project-title-wrapper">
-				<a
-					href={url}
-					class="project-title"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					{name}
-				</a>
-			</div>
+			<SocialLink href={url} image={image} class="project-icon-wrapper" />
+			<a
+				href={url}
+				class="project-title"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				{name}
+			</a>
 		</div>
 
 		<p class="project-description">
@@ -55,22 +51,14 @@ const { idx, name, description, image, url, prs, stack } = Astro.props;
 		display: flex;
 		flex-direction: column;
 		transition: all 0.3s ease;
-		border-color: var(--border);
-	}
-
-	@media (min-width: 640px) {
-		.project-card {
-			flex-direction: row;
-		}
 	}
 
 	.project-card:hover {
-		border-color: rgba(0, 212, 255, 0.4);
-		background-color: rgba(0, 212, 255, 0.02);
+		border-color: var(--accent-glow);
+		background-color: var(--accent-glow-dim);
 	}
 
 	.project-content {
-		flex: 1;
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -86,27 +74,13 @@ const { idx, name, description, image, url, prs, stack } = Astro.props;
 	.project-icon-wrapper {
 		width: 3rem;
 		height: 3rem;
-		flex-shrink: 0;
 		transition: transform 0.3s ease;
 	}
 
-	.project-card:hover .project-icon-wrapper > * {
-		filter: brightness(1.1);
-	}
-
-	.project-title-wrapper {
-		min-width: 0;
-	}
-
 	.project-title {
-		font-family: inherit;
 		font-size: 1.5rem;
 		color: var(--text-bright);
 		transition: color 0.2s ease;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: block;
 	}
 
 	.project-card:hover .project-title {
@@ -114,10 +88,14 @@ const { idx, name, description, image, url, prs, stack } = Astro.props;
 	}
 
 	.project-description {
-		color: var(--text-body);
 		font-size: 0.875rem;
 		line-height: 1.625;
-		max-width: 42rem;
 		margin: 0;
+	}
+
+	@media (min-width: 640px) {
+		.project-card {
+			flex-direction: row;
+		}
 	}
 </style>

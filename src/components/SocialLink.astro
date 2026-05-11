@@ -5,7 +5,7 @@ interface Props {
 	class?: string;
 }
 
-const { href, image, class: className } = Astro.props;
+const { href, image, class: className, ...rest } = Astro.props;
 ---
 
 <a
@@ -13,6 +13,7 @@ const { href, image, class: className } = Astro.props;
 	class:list={["social-link", className]}
 	target="_blank"
 	rel="noopener noreferrer"
+	{...rest}
 >
 	<img src={image} alt="" />
 </a>
@@ -29,7 +30,9 @@ const { href, image, class: className } = Astro.props;
 		border: 1px solid var(--border);
 		background: var(--bg-panel);
 		padding: 0.4em;
-		transition: border-color 0.3s ease, filter 0.3s ease;
+		transition:
+			border-color 0.3s ease,
+			filter 0.3s ease;
 		filter: brightness(0.9);
 	}
 
