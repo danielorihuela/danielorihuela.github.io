@@ -70,6 +70,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 	/* Table of Contents & List Fixes */
 	.article-content ul,
 	.article-content ol {
+		list-style-type: none;
 		margin: 1.5em 0;
 	}
 
@@ -197,6 +198,56 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: #fff;
 		border-bottom-color: var(--accent);
 		text-shadow: 0 0 8px var(--accent-glow);
+	}
+
+	/* Inline Code */
+	.article-content :not(pre) > code {
+		padding: 2px 6px;
+		background-color: rgba(0, 212, 255, 0.06);
+		border: 1px solid var(--border);
+		border-radius: 3px;
+		color: var(--accent);
+		font-family: "IBM Plex Mono", monospace;
+		font-size: 0.9em;
+	}
+
+	/* Blockquote */
+	.article-content blockquote {
+		border-left: 3px solid var(--accent);
+		padding: 0.5em 0 0.5em 1.5em;
+		margin: 1.5em 0;
+		background: rgba(0, 212, 255, 0.03);
+		color: var(--text-dim);
+		font-style: italic;
+	}
+
+	/* Tables */
+	.article-content table {
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+		color: var(--text-body);
+		margin: 2em 0;
+	}
+
+	.article-content table,
+	.article-content th,
+	.article-content td {
+		border: 1px solid var(--border);
+	}
+
+	.article-content th {
+		background: var(--accent-extra-dim);
+		color: var(--accent);
+		font-family: "Share Tech Mono", monospace;
+		text-transform: uppercase;
+		font-size: 0.85em;
+		letter-spacing: 0.05em;
+		padding: 0.75em;
+	}
+
+	.article-content td {
+		padding: 0.75em;
 	}
 
 	/* Hacker Elegant Table of Contents (ToC) — "Vertical Manifest" */
@@ -397,7 +448,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: var(--text-dim);
 		font-size: 0.75rem;
 		opacity: 0.3;
-		border-right: 1px solid rgba(0, 212, 255, 0.05);
+		border-right: 1px solid var(--accent-extra-dim);
 	}
 
 	/* Phosphor Glow Overrides */
