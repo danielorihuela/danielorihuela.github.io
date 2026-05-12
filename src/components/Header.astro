@@ -43,19 +43,17 @@ const currentPath = Astro.url.pathname;
 			</div>
 
 			<div id="mobile-menu" class="mobile-menu">
-				<div class="mobile-menu-content">
-					{
-						navItems.map((item) => (
-							<a
-								href={item.path}
-								class={`mobile-nav-link ${currentPath === item.path ? "active" : ""}`}
-							>
-								<span class="mobile-nav-prefix">_</span>
-								{item.cmd}
-							</a>
-						))
-					}
-				</div>
+				{
+					navItems.map((item) => (
+						<a
+							href={item.path}
+							class={`mobile-nav-link ${currentPath === item.path ? "active" : ""}`}
+						>
+							<span class="mobile-nav-prefix">_</span>
+							{item.cmd}
+						</a>
+					))
+				}
 			</div>
 		</div>
 	</nav>
@@ -83,10 +81,8 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <style>
-	/* Header Nav */
 	.header-nav {
 		position: fixed;
-		top: 0;
 		left: 0;
 		right: 0;
 		z-index: 50;
@@ -96,15 +92,7 @@ const currentPath = Astro.url.pathname;
 	}
 
 	.nav-container {
-		max-width: 72rem;
-		margin: 0 auto;
 		padding: 0 1rem;
-	}
-
-	@media (min-width: 1024px) {
-		.nav-container {
-			padding: 0 1.5rem;
-		}
 	}
 
 	.nav-content {
@@ -114,13 +102,10 @@ const currentPath = Astro.url.pathname;
 		height: 3.5rem;
 	}
 
-	/* Logo */
 	.logo-link {
 		font-family: "Share Tech Mono", monospace;
 		font-size: 0.875rem;
-		color: var(--text-body);
 		transition: color 0.3s ease;
-		text-decoration: none;
 	}
 
 	.logo-link:hover {
@@ -128,13 +113,11 @@ const currentPath = Astro.url.pathname;
 	}
 
 	.logo-user {
-		color: var(--accent);
 		font-weight: bold;
 	}
 
 	.logo-at {
 		color: var(--text-body);
-		opacity: 0.4;
 	}
 
 	.logo-host {
@@ -143,21 +126,18 @@ const currentPath = Astro.url.pathname;
 
 	.logo-colon {
 		color: var(--text-body);
-		opacity: 0.4;
 	}
 
 	.logo-tilde {
 		color: var(--text-body);
 	}
 
-	/* Desktop Navigation */
 	.desktop-nav {
 		display: none;
-		align-items: center;
 		gap: 0.25rem;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 640px) {
 		.desktop-nav {
 			display: flex;
 		}
@@ -171,56 +151,42 @@ const currentPath = Astro.url.pathname;
 		transition: all 0.3s ease;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		text-decoration: none;
 		color: var(--text-body);
 		opacity: 0.6;
 		display: flex;
-		align-items: center;
 		border: 1px solid transparent;
 	}
 
 	.nav-link:hover {
 		color: var(--accent);
-		background-color: rgba(0, 212, 255, 0.05);
+		background-color: var(--accent-extra-dim);
 		opacity: 1;
-		text-shadow: none;
 	}
 
 	.nav-link.active {
 		color: var(--accent);
 		background-color: rgba(0, 212, 255, 0.1);
 		border-color: rgba(0, 212, 255, 0.3);
-		box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 		opacity: 1;
 	}
 
 	.nav-prefix {
-		color: rgba(0, 212, 255, 0.4);
-		margin-right: 0.25rem;
 		transition: all 0.3s ease;
 	}
 
-	.nav-link:hover .nav-prefix {
-		color: var(--accent);
-		transform: scale(1.1);
-	}
-
-	/* Mobile Menu Button */
 	.mobile-menu-btn {
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		color: var(--text-body);
-		opacity: 0.6;
 		transition: all 0.3s ease;
 		font-family: "Share Tech Mono", monospace;
 		font-size: 0.75rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		padding: 0;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 640px) {
 		.mobile-menu-btn {
 			display: none;
 		}
@@ -228,31 +194,21 @@ const currentPath = Astro.url.pathname;
 
 	.mobile-menu-btn:hover {
 		color: var(--accent);
-		opacity: 1;
 	}
 
-	/* Mobile Menu Content */
 	.mobile-menu {
-		overflow: hidden;
 		transition: all 0.5s ease;
-		max-height: 0;
 		opacity: 0;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 640px) {
 		.mobile-menu {
 			display: none;
 		}
 	}
 
 	.mobile-menu.is-open {
-		max-height: 24rem;
 		opacity: 1;
-	}
-
-	.mobile-menu-content {
-		padding: 0.5rem 0;
-		border-top: 1px solid rgba(28, 32, 53, 0.3);
 	}
 
 	.mobile-nav-link {
@@ -265,13 +221,12 @@ const currentPath = Astro.url.pathname;
 		transition: all 0.3s ease;
 		color: var(--text-body);
 		opacity: 0.6;
-		text-decoration: none;
 		border-left: 2px solid transparent;
 	}
 
 	.mobile-nav-link:hover {
 		color: var(--accent);
-		background-color: rgba(0, 212, 255, 0.05);
+		background-color: var(--accent-extra-dim);
 		opacity: 1;
 		text-shadow: none;
 	}

@@ -50,11 +50,11 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 <style>
 	.footer {
 		border-top: 1px solid var(--border);
-		background-color: var(--bg-dark);
 	}
 
 	.footer-container {
 		display: flex;
+		flex-direction: column;
 		justify-content: space-between;
 
 		max-width: 60vw;
@@ -62,16 +62,8 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 		padding: 1rem 0;
 	}
 
-	@media (min-width: 640px) {
-		.footer-container {
-			flex-direction: row;
-		}
-	}
-
-	/* Common styles */
 	.text-info-container {
 		display: flex;
-		align-items: center;
 		gap: 1.5rem;
 
 		font-size: 0.625rem;
@@ -79,9 +71,9 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 		text-transform: uppercase;
 	}
 
-	/* Link styles */
 	.link {
 		display: flex;
+		align-items: center;
 		gap: 0.375rem;
 
 		color: var(--text-body);
@@ -106,7 +98,6 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 		opacity: 1;
 	}
 
-	/* Status styles */
 	.check-container {
 		display: flex;
 		align-items: center;
@@ -115,7 +106,6 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 
 	.light-container {
 		position: relative;
-		display: flex;
 		width: 0.375rem;
 		height: 0.375rem;
 	}
@@ -150,8 +140,13 @@ const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
 	}
 
 	.check-label {
-		color: var(--text-body);
 		opacity: 0.8;
 		font-weight: bold;
+	}
+
+	@media (min-width: 640px) {
+		.footer-container {
+			flex-direction: row;
+		}
 	}
 </style>
