@@ -22,10 +22,8 @@ function formatDate(date: Date) {
 ---
 
 <div class="metadata-column">
-	<span class="metadata-date">{formatDate(date)}</span>
-	<span>
-		[rev:<span class="metadata-hash">{hash(slug)}</span>]
-	</span>
+	<span>{formatDate(date)}</span>
+	<span>[rev:{hash(slug)}]</span>
 </div>
 
 <style>
@@ -40,10 +38,5 @@ function formatDate(date: Date) {
 
 		color: var(--text-body);
 		opacity: 0.7;
-	}
-
-	.metadata-date,
-	.metadata-hash {
-		font-weight: 700;
 	}
 </style>

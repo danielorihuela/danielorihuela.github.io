@@ -12,8 +12,7 @@ const currentPath = Astro.url.pathname;
 		<div class="nav-container">
 			<div class="nav-content">
 				<a href="/" class="logo-link">
-					<span class="logo-user">danielorihuela</span><span
-						class="logo-at">@</span
+					<span>danielorihuela</span><span class="logo-at">@</span
 					><span class="logo-host">dev</span><span class="logo-colon"
 						>:</span
 					><span class="logo-tilde">~</span>
@@ -68,13 +67,8 @@ const currentPath = Astro.url.pathname;
 				const menu = document.getElementById("mobile-menu");
 				if (!menu) return;
 
-				if (menu.classList.contains("is-open")) {
-					menu.classList.remove("is-open");
-					label.textContent = "[menu]";
-				} else {
-					menu.classList.add("is-open");
-					label.textContent = "[close]";
-				}
+				const isOpen = menu.classList.toggle("is-open");
+				label.textContent = isOpen ? "[close]" : "[menu]";
 			});
 		});
 	</script>
@@ -110,10 +104,6 @@ const currentPath = Astro.url.pathname;
 
 	.logo-link:hover {
 		color: var(--accent);
-	}
-
-	.logo-user {
-		font-weight: bold;
 	}
 
 	.logo-at {
