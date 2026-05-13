@@ -1,6 +1,4 @@
 ---
-import Metadata from "../components/blog-list-item/Metadata.astro";
-import Title from "../components/blog-list-item/Title.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -10,6 +8,20 @@ const posts = (await getCollection("blog")).sort(
 		b.data.publishdate.valueOf() - a.data.publishdate.valueOf() ||
 		b.id.localeCompare(a.id),
 );
+
+// FNV-1a variant
+function hash(str: string) {
+	let hash = 2166136261;
+	for (let i = 0; i < str.length; i++) {
+		hash ^= str.charCodeAt(i);
+		hash = Math.imul(hash, 16777619);
+	}
+	return (hash >>> 0).toString(16).padStart(7, "0").slice(0, 7);
+}
+
+function formatDate(date: Date) {
+	return date.toISOString().split("T")[0].replaceAll("-", ".");
+}
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -25,9 +37,15 @@ const posts = (await getCollection("blog")).sort(
 			posts.map((post) => {
 				return (
 					<a href={`/blog/${post.id}/`} class="group blog-post-link">
-						<Metadata slug={post.id} date={post.data.publishdate} />
+						<div class="metadata-column">
+							<span>{formatDate(post.data.publishdate)}</span>
+							<span>[rev:{hash(post.id)}]</span>
+						</div>
 
-						<Title title={post.data.title} />
+						<div class="title-column">
+							<span class="title-symbol">&gt;</span>
+							<h2 class="title-text">{post.data.title}</h2>
+						</div>
 
 						<span class="indicator-text">READ_ENTRY</span>
 					</a>
@@ -92,6 +110,45 @@ const posts = (await getCollection("blog")).sort(
 			transparent
 		);
 		transform: translateX(0.25rem);
+	}
+
+	.metadata-column {
+		display: flex;
+		align-items: center;
+
+		gap: 1rem;
+
+		font-size: 0.75rem;
+		font-family: "Liberation Mono", monospace;
+
+		color: var(--text-body);
+		opacity: 0.7;
+	}
+
+	.title-column {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.title-symbol {
+		display: none;
+	}
+
+	.title-text {
+		font-size: 0.875rem;
+		margin: 0;
+	}
+
+	@media (min-width: 640px) {
+		.title-symbol {
+			display: block;
+			transition: transform 300ms;
+		}
+
+		.title-text {
+			font-size: 1rem;
+		}
 	}
 
 	.indicator-text {
