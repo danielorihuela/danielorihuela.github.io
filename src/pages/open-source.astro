@@ -4,17 +4,15 @@ import Command from "../components/Command.astro";
 import Panel from "../components/Panel.astro";
 import IconLink from "../components/IconLink.astro";
 
-interface PrInfo {
-	id: number;
-	title?: string;
-}
-
 interface OssProjectInfo {
 	name: string;
 	description: string;
 	image: string;
 	url: string;
-	prs: PrInfo[];
+	prs: {
+		id: number;
+		title?: string;
+	}[];
 	stack: string;
 }
 
