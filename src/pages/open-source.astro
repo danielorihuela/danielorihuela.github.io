@@ -2,9 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Command from "../components/Command.astro";
 import Panel from "../components/Panel.astro";
-import Metadata from "../components/open-source-banner/Metadata.astro";
 import IconLink from "../components/IconLink.astro";
-import PrLog from "../components/open-source-banner/PrLog.astro";
 
 interface PrInfo {
 	id: number;
@@ -21,52 +19,6 @@ interface OssProjectInfo {
 }
 
 const ossProjectsInfo: OssProjectInfo[] = [
-	{
-		name: "Lynis",
-		image: "/lynis.svg",
-		url: "https://github.com/CISOfy/lynis",
-		description:
-			"Security auditing tool for Linux, macOS, and Unix-based systems. Assists with compliance testing and hardening.",
-		stack: "BASH",
-		prs: [
-			{
-				id: 1009,
-				title: "[AUTH-9284] Feature: gather locked accounts info",
-			},
-		],
-	},
-	{
-		name: "Gitleaks",
-		image: "/gitleaks.svg",
-		url: "https://github.com/gitleaks/gitleaks",
-		description:
-			"SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.",
-		stack: "GO",
-		prs: [{ id: 661, title: "fix: csv report in excel" }],
-	},
-	{
-		name: "PySyft",
-		image: "/open-mined.svg",
-		url: "https://github.com/OpenMined/PySyft",
-		description:
-			"A library for secure and private Distributed AI. PySyft decouples private data from model training.",
-		stack: "PYTHON / TENSOR",
-		prs: [{ id: 5554, title: "feat: move allowlist from syft to sympc" }],
-	},
-	{
-		name: "sycret",
-		image: "/open-mined.svg",
-		url: "https://github.com/OpenMined/sycret",
-		description:
-			"A Rust-based library for Function Secret Sharing, providing high performance for private computations.",
-		stack: "RUST",
-		prs: [
-			{ id: 17, title: "Chore/remove test warnings" },
-			{ id: 18, title: "feat: retrieve alpha from key" },
-			{ id: 25, title: "fix: python automated tests" },
-			{ id: 36, title: "Refactor/solve clippy warnings" },
-		],
-	},
 	{
 		name: "SyMPC",
 		image: "/open-mined.svg",
@@ -88,7 +40,59 @@ const ossProjectsInfo: OssProjectInfo[] = [
 			{ id: 281, title: "docs: protocol table" },
 		],
 	},
+	{
+		name: "sycret",
+		image: "/open-mined.svg",
+		url: "https://github.com/OpenMined/sycret",
+		description:
+			"A Rust-based library for Function Secret Sharing, providing high performance for private computations.",
+		stack: "RUST",
+		prs: [
+			{ id: 17, title: "Chore/remove test warnings" },
+			{ id: 18, title: "feat: retrieve alpha from key" },
+			{ id: 25, title: "fix: python automated tests" },
+			{ id: 36, title: "Refactor/solve clippy warnings" },
+		],
+	},
+	{
+		name: "PySyft",
+		image: "/open-mined.svg",
+		url: "https://github.com/OpenMined/PySyft",
+		description:
+			"A library for secure and private Distributed AI. PySyft decouples private data from model training.",
+		stack: "PYTHON / TENSOR",
+		prs: [{ id: 5554, title: "feat: move allowlist from syft to sympc" }],
+	},
+	{
+		name: "Gitleaks",
+		image: "/gitleaks.svg",
+		url: "https://github.com/gitleaks/gitleaks",
+		description:
+			"SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.",
+		stack: "GO",
+		prs: [{ id: 661, title: "fix: csv report in excel" }],
+	},
+	{
+		name: "Lynis",
+		image: "/lynis.svg",
+		url: "https://github.com/CISOfy/lynis",
+		description:
+			"Security auditing tool for Linux, macOS, and Unix-based systems. Assists with compliance testing and hardening.",
+		stack: "BASH",
+		prs: [
+			{
+				id: 1009,
+				title: "[AUTH-9284] Feature: gather locked accounts info",
+			},
+		],
+	},
 ];
+
+const projectsMetadata = ossProjectsInfo.map((project, idx) => [
+	["ID_REF", `0x${(0x7f4c0000 + idx * 0x10).toString(16).toUpperCase()}`],
+	["PR_CONTRIB", `#${project.prs.length.toString().padStart(2, "0")}`],
+	["BASE_STACK", project.stack],
+]);
 ---
 
 <BaseLayout
@@ -101,13 +105,20 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		<div class="list">
 			{
 				ossProjectsInfo.map(
-					({ name, image, url, description, stack, prs }, idx) => (
+					({ name, image, url, description, prs }, idx) => (
 						<Panel class="card group">
-							<Metadata
-								idx={idx}
-								prCount={prs.length}
-								stack={stack}
-							/>
+							<div class="sidebar">
+								{projectsMetadata[idx].map(([label, value]) => (
+									<div class="metadata-item">
+										<span class="metadata-label">
+											{label}
+										</span>
+										<span class="metadata-value">
+											{value}
+										</span>
+									</div>
+								))}
+							</div>
 
 							<div class="content">
 								<div class="header">
@@ -121,7 +132,32 @@ const ossProjectsInfo: OssProjectInfo[] = [
 
 								<p class="description">{description}</p>
 
-								<PrLog url={url} prs={prs} />
+								<div class="pr-log-section">
+									<div class="pr-log-header">
+										<span class="pr-log-label">
+											:: PULL_REQUEST_LOG
+										</span>
+									</div>
+									{prs.map((pr) => (
+										<a
+											href={`${url}/pull/${pr.id}`}
+											class="pr-link"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<span class="pr-indicator">
+												{">"}
+											</span>
+											<span class="pr-id">
+												PR #{pr.id}
+											</span>
+											<span class="pr-title">
+												{pr.title ||
+													"Unlogged contribution..."}
+											</span>
+										</a>
+									))}
+								</div>
 							</div>
 						</Panel>
 					),
@@ -165,6 +201,41 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		background-color: var(--accent-glow-dim);
 	}
 
+	.sidebar {
+		flex-shrink: 0;
+		background-color: rgba(255, 255, 255, 0.02);
+		padding: 1rem;
+		display: flex;
+		gap: 1rem 1.5rem;
+		border-bottom: 1px solid rgba(28, 32, 53, 0.1);
+	}
+
+	@media (min-width: 640px) {
+		.sidebar {
+			width: 8rem;
+			flex-direction: column;
+			gap: 1.25rem;
+		}
+	}
+
+	.metadata-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+	}
+
+	.metadata-label {
+		font-size: 0.75rem;
+		letter-spacing: 0.05em;
+		opacity: 0.6;
+		font-weight: 700;
+	}
+
+	.metadata-value {
+		font-size: 0.875rem;
+		font-family: "Share Tech Mono", monospace;
+	}
+
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -191,5 +262,60 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		font-size: 0.875rem;
 		line-height: 1.625;
 		margin: 0;
+	}
+
+	.pr-log-section {
+		padding-top: 1rem;
+	}
+
+	.pr-log-header {
+		margin-bottom: 0.75rem;
+	}
+
+	.pr-log-label {
+		font-size: 0.75rem;
+		letter-spacing: 0.05em;
+		color: var(--accent);
+	}
+
+	.pr-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.875rem;
+		padding: 0.25rem 0.75rem;
+		border-left: 2px solid transparent;
+		transition: all 0.3s ease;
+	}
+
+	.pr-link:hover {
+		border-left-color: var(--accent);
+		background: linear-gradient(
+			to right,
+			rgba(0, 212, 255, 0.1),
+			transparent
+		);
+		transform: translateX(0.25rem);
+	}
+
+	.pr-indicator {
+		transition: transform 0.3s ease;
+		font-weight: 700;
+	}
+
+	.pr-id {
+		color: var(--text-body);
+		font-family: "Share Tech Mono", monospace;
+		min-width: 64px;
+		transition: color 0.3s ease;
+	}
+
+	.pr-title {
+		color: var(--text-body);
+		transition: color 0.3s ease;
+	}
+
+	.pr-link:hover .pr-title {
+		text-shadow: none;
 	}
 </style>
