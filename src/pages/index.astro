@@ -2,6 +2,7 @@
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Command from "../components/Command.astro";
 
 const posts = (await getCollection("blog")).sort(
 	(a, b) =>
@@ -26,12 +27,7 @@ function formatDate(date: Date) {
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<main>
-		<div class="terminal-header-bar">
-			<span class="terminal-prompt">$</span>
-			<span class="terminal-command"
-				>find ./blog -maxdepth 1 -name "*.md" -type f</span
-			>
-		</div>
+		<Command command='find ./blog -maxdepth 1 -name "*.md" -type f' />
 
 		{
 			posts.map((post) => {
@@ -62,27 +58,6 @@ function formatDate(date: Date) {
 		max-width: 56rem;
 		margin: 0 auto;
 		font-family: "Share Tech Mono", monospace;
-	}
-
-	.terminal-header-bar {
-		font-size: 0.75rem;
-		margin: 1rem 0;
-		border-bottom: 1px solid var(--border);
-		padding-bottom: 1rem;
-	}
-
-	@media (min-width: 640px) {
-		.terminal-header-bar {
-			font-size: 0.875rem;
-		}
-	}
-
-	.terminal-prompt {
-		color: var(--accent);
-	}
-
-	.terminal-command {
-		color: var(--text-bright);
 	}
 
 	.blog-post-link {

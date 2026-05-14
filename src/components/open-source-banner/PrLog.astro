@@ -47,7 +47,6 @@ const { url, prs } = Astro.props;
 		font-size: 0.75rem;
 		letter-spacing: 0.05em;
 		color: var(--accent);
-		font-weight: 700;
 	}
 
 	.pr-link {
@@ -76,24 +75,21 @@ const { url, prs } = Astro.props;
 	}
 
 	.pr-id {
-		color: var(--text-bright);
+		color: var(--text-body);
 		font-family: "Share Tech Mono", monospace;
 		min-width: 64px;
 		transition: color 0.3s ease;
 	}
 
 	.pr-link:hover .pr-id {
-		color: #ffffff;
 	}
 
 	.pr-title {
 		color: var(--text-body);
 		transition: color 0.3s ease;
-		font-weight: 500;
 	}
 
 	.pr-link:hover .pr-title {
-		color: var(--text-bright);
 		text-shadow: none;
 	}
 </style>
