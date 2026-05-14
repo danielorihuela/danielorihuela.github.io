@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Command from "../components/Command.astro";
-import TerminalWindow from "../components/TerminalWindow.astro";
+import Panel from "../components/Panel.astro";
 import Metadata from "../components/open-source-banner/Metadata.astro";
-import SocialLink from "../components/SocialLink.astro";
+import IconLink from "../components/IconLink.astro";
 import PrLog from "../components/open-source-banner/PrLog.astro";
 
 interface PrInfo {
@@ -102,7 +102,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 			{
 				ossProjectsInfo.map(
 					({ name, image, url, description, stack, prs }, idx) => (
-						<TerminalWindow class="card group">
+						<Panel class="card group">
 							<Metadata
 								idx={idx}
 								prCount={prs.length}
@@ -111,7 +111,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 
 							<div class="content">
 								<div class="header">
-									<SocialLink
+									<IconLink
 										href={url}
 										image={image}
 										class="icon"
@@ -123,7 +123,7 @@ const ossProjectsInfo: OssProjectInfo[] = [
 
 								<PrLog url={url} prs={prs} />
 							</div>
-						</TerminalWindow>
+						</Panel>
 					),
 				)
 			}

@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
 import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
-import TerminalWindow from "../components/TerminalWindow.astro";
+import Panel from "../components/Panel.astro";
 
 interface Props {
 	title: string;
@@ -30,7 +30,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				<span class="blog-prompt-command">cat ./blog/{slug}.md</span>
 			</div>
 
-			<TerminalWindow class="blog-shadow">
+			<Panel class="blog-shadow">
 				<TerminalHeader slug={slug} />
 
 				<div class="terminal-body blog-terminal-body">
@@ -53,7 +53,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 						<slot />
 					</div>
 				</div>
-			</TerminalWindow>
+			</Panel>
 		</div>
 	</article>
 </BaseLayout>
