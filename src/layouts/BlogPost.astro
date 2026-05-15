@@ -247,18 +247,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		margin: 3.5rem 0;
 	}
 
-	.article-content > ul:first-of-type::before {
-		content: "[ MANIFEST_ENTRY_POINTS ]";
-		display: block;
-		font-size: 0.7rem;
-		color: var(--accent);
-		margin-bottom: 2rem;
-		font-weight: bold;
-		letter-spacing: 0.3em;
-		opacity: 0.9;
-		text-shadow: 0 0 10px var(--accent-glow);
-	}
-
 	.article-content > ul:first-of-type li {
 		position: relative;
 		padding-left: 3.5rem;
@@ -268,9 +256,12 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 	}
 
 	.article-content > ul:first-of-type li::before {
-		content: "0x0" counter(toc-counter);
 		position: absolute;
 		left: 0;
+		top: 0.2rem; /* Visual nudge to perfectly center with text baseline */
+		width: 2.5rem;
+		text-align: right;
+		content: "0x0" counter(toc-counter);
 		color: var(--text-dim);
 		font-family: "Share Tech Mono", monospace;
 		font-size: 0.75rem;
@@ -280,17 +271,14 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 	}
 
 	.article-content > ul:first-of-type li:hover::before {
-		content: ">>";
+		content: "->";
 		color: var(--accent);
-		text-shadow: 0 0 12px var(--accent);
 		opacity: 1;
-		font-weight: bold;
 	}
 
 	.article-content > ul:first-of-type a {
 		text-transform: uppercase;
 		font-size: 0.95rem;
-		letter-spacing: 0.15em;
 		border-bottom: none !important;
 		color: var(--text-body);
 		transition: all 0.2s ease;
@@ -298,8 +286,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 	}
 
 	.article-content > ul:first-of-type a:hover {
-		color: #fff;
-		text-shadow: 0 0 15px var(--accent);
+		color: var(--accent);
 	}
 
 	/* Code Snippets */
