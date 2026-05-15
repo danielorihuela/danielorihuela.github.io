@@ -4,6 +4,7 @@ import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
 import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
+import Command from "../components/Command.astro";
 
 interface Props {
 	title: string;
@@ -24,11 +25,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 >
 	<article class="blog-article-wrapper">
 		<div class="blog-container">
-			{/* Terminal command prompt - Matching Home page style */}
-			<div class="blog-terminal-prompt">
-				<span class="blog-prompt-symbol">$</span>
-				<span class="blog-prompt-command">cat ./blog/{slug}.md</span>
-			</div>
+			<Command command={`cat ./blog/${slug}.md`} />
 
 			<Panel class="blog-shadow">
 				<TerminalHeader slug={slug} />
@@ -60,16 +57,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 
 <style is:global>
 	/* Table of Contents & List Fixes */
-	/* Article Content Styles (moved from global.css) */
-	.article-content {
-		font-size: 1.05rem;
-		line-height: 1.8;
-		color: var(--text-body);
-	}
-
-	/* Table of Contents & List Fixes */
-	.article-content ul,
-	.article-content ol {
+	.article-content ul {
 		list-style-type: none;
 		margin: 1.5em 0;
 	}
@@ -103,12 +91,14 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 
 	/* Image Handling */
 	.article-content img {
-		margin: 2em auto;
+		display: flex;
+		max-width: 100%;
+		height: auto;
+		margin: 0 auto;
 		border: 1px solid var(--border);
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 	}
 
-	/* Typography & Spacing */
 	/* Typography & Spacing */
 	.article-content h1,
 	.article-content h2,
@@ -254,14 +244,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 	/* Targets the first list in the article content */
 	.article-content > ul:first-of-type {
 		list-style: none;
-		padding: 2rem 1.5rem 2.5rem 2rem;
-		margin: 3.5rem 0 5rem 0;
-		border-left: 1px solid var(--border);
-		background: transparent;
-		position: relative;
-		display: block;
-		width: 100%;
-		counter-reset: toc-counter;
+		margin: 3.5rem 0;
 	}
 
 	.article-content > ul:first-of-type::before {
@@ -274,35 +257,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		letter-spacing: 0.3em;
 		opacity: 0.9;
 		text-shadow: 0 0 10px var(--accent-glow);
-	}
-
-	/* Glow point at the top of the manifest line */
-	.article-content > ul:first-of-type::after {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: -2px;
-		width: 4px;
-		height: 4px;
-		background: var(--accent);
-		border-radius: 50%;
-		box-shadow: 0 0 8px var(--accent);
-		animation: pulse 2s infinite;
-	}
-
-	@keyframes pulse {
-		0% {
-			opacity: 0.5;
-			transform: scale(1);
-		}
-		50% {
-			opacity: 1;
-			transform: scale(1.2);
-		}
-		100% {
-			opacity: 0.5;
-			transform: scale(1);
-		}
 	}
 
 	.article-content > ul:first-of-type li {
@@ -353,7 +307,7 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		counter-reset: line;
 		position: relative;
 		padding-top: 3rem !important;
-		margin: 2.5rem -1.5rem !important;
+		margin: 2.5rem 0 !important;
 		background-color: #06070a !important;
 		border: 1px solid var(--border) !important;
 		border-radius: 4px;
@@ -361,13 +315,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 			0 10px 40px rgba(0, 0, 0, 0.6),
 			inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
 		overflow: hidden !important;
-	}
-
-	@media (min-width: 768px) {
-		.article-content pre {
-			margin: 2.5rem 0 !important;
-			border: 1px solid var(--border) !important;
-		}
 	}
 
 	/* Header Bar */
@@ -386,55 +333,17 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: var(--accent);
 		text-transform: uppercase;
 		letter-spacing: 0.2em;
-		z-index: 10;
-		opacity: 0.9;
-		backdrop-filter: blur(4px);
-	}
-
-	/* Interaction Indicator */
-	.article-content pre::after {
-		content: "RAW_STREAM";
-		position: absolute;
-		top: 0.75rem;
-		right: 1.2rem;
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.6rem;
-		font-weight: bold;
-		color: var(--accent);
-		opacity: 0;
-		transition: all 0.3s ease;
-		z-index: 20;
-		letter-spacing: 0.1em;
-	}
-
-	.article-content pre:hover::after {
-		opacity: 0.9;
-		text-shadow: 0 0 10px var(--accent);
-	}
-
-	.article-content pre:hover {
-		border-color: rgba(0, 212, 255, 0.4) !important;
-		box-shadow:
-			0 0 40px rgba(0, 212, 255, 0.08),
-			inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
 	}
 
 	/* Line Numbers & Code Layout */
 	.article-content pre code {
-		display: block !important;
-		width: 100%;
-		background: transparent !important;
-		border: none !important;
-		padding: 0 !important;
+		display: grid !important;
 		overflow-x: auto !important;
 	}
 
 	.article-content .line {
-		display: table-row;
 		counter-increment: line;
-		padding-right: 1.5rem;
-		white-space: pre;
-		min-height: 1.5rem;
+		line-height: 1.7;
 	}
 
 	.article-content .line::before {
@@ -443,55 +352,15 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		text-align: right;
 		width: 3.5rem;
 		padding-right: 1.5rem;
-		margin-right: 1rem;
-		user-select: none;
 		color: var(--text-dim);
-		font-size: 0.75rem;
-		opacity: 0.3;
 		border-right: 1px solid var(--accent-extra-dim);
+		/* Sticky logic */
+		position: sticky;
+		left: 0;
+		background-color: #06070a;
 	}
 
-	/* Phosphor Glow Overrides */
-	.article-content pre span {
-		text-shadow: 0 0 1px currentColor;
-	}
-
-	/* Custom Divider */
-	.article-content hr {
-		border: none;
-		height: 1px;
-		background: linear-gradient(
-			to right,
-			transparent,
-			var(--border),
-			transparent
-		);
-		margin: 3em 0;
-		position: relative;
-		overflow: visible;
-	}
-
-	.article-content hr::after {
-		content: "[---]";
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		background: var(--bg-dark);
-		padding: 0 1em;
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.7em;
-		color: var(--text-dim);
-	}
-
-	.blog-layout-body {
-		background-color: var(--bg-dark);
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-	}
 	.blog-article-wrapper {
-		flex: 1 1 0%;
 		padding-top: 6rem;
 		padding-bottom: 5rem;
 	}
@@ -501,42 +370,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		margin-right: auto;
 		padding-left: 1rem;
 		padding-right: 1rem;
-	}
-	@media (min-width: 1024px) {
-		.blog-container {
-			padding-left: 2rem;
-			padding-right: 2rem;
-		}
-		.blog-article-content {
-			padding-left: 1.5rem;
-			padding-right: 1.5rem;
-		}
-	}
-	.blog-terminal-prompt {
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.75rem;
-		line-height: 1rem;
-		margin-top: 1rem;
-		margin-bottom: 2rem;
-		border-bottom: 1px solid var(--border);
-		padding-bottom: 1rem;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-	@media (min-width: 768px) {
-		.blog-terminal-prompt {
-			font-size: 0.875rem;
-			line-height: 1.25rem;
-		}
-	}
-	.blog-prompt-symbol {
-		color: var(--accent);
-		font-weight: bold;
-	}
-	.blog-prompt-command {
-		color: var(--text-bright);
-		font-weight: bold;
 	}
 	.blog-shadow {
 		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -555,13 +388,10 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		height: auto;
 		max-height: 500px;
 		object-fit: contain;
-		margin-left: auto;
-		margin-right: auto;
 	}
 	.blog-article-content {
 		padding-left: 1rem;
 		padding-right: 1rem;
 		padding-bottom: 3rem;
-		color: var(--text-body);
 	}
 </style>
