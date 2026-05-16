@@ -7,31 +7,25 @@ interface Props {
 const { publishdate, contentLength } = Astro.props;
 
 const formattedDate = publishdate.toISOString().split("T")[0];
-
 const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 ---
 
-<div class="post-terminal-top-bar">
-	<div class="post-terminal-top-bar-left">
-		<span class="post-terminal-badge">READ_ONLY</span>
-		<span class="post-terminal-separator">|</span>
-		<span class="post-terminal-meta"
-			>DATE: <span class="post-terminal-value">{formattedDate}</span
-			></span
+<div class="container">
+	<div class="left">
+		<span class="badge">READ_ONLY</span>
+		<span class="key"
+			>| DATE: <span class="value">{formattedDate}</span></span
 		>
-		<span class="post-terminal-separator">|</span>
-		<span class="post-terminal-meta"
-			>SIZE: <span class="post-terminal-value">{fileSize}</span></span
-		>
+		<span class="key">| SIZE: <span class="value">{fileSize}</span></span>
 	</div>
-	<div class="post-terminal-top-bar-right">
-		Lines: <span class="post-terminal-value">AUTO</span>
-		| Encoding: <span class="post-terminal-value">UTF-8</span>
+	<div class="right">
+		Lines: <span class="value">AUTO</span>
+		| Encoding: <span class="value">UTF-8</span>
 	</div>
 </div>
 
 <style>
-	.post-terminal-top-bar {
+	.container {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -42,49 +36,45 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 		font-size: 0.8em;
 	}
 
-	.post-terminal-top-bar::before {
+	.container::before {
 		content: "●";
 		color: var(--accent);
 		font-size: 0.8em;
 	}
 
-	.post-terminal-top-bar-left {
+	.left {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 	}
 
-	.post-terminal-badge {
+	.badge {
 		color: var(--accent);
 		font-size: 0.8em;
 	}
 
-	.post-terminal-separator {
-		color: var(--text-dim);
-	}
-
-	.post-terminal-meta {
+	.key {
 		color: var(--text-dim);
 		font-size: 0.75rem;
 		text-transform: uppercase;
 	}
 
-	.post-terminal-top-bar-right {
+	.right {
 		display: none;
 	}
 
-	.post-terminal-value {
+	.value {
 		color: var(--accent);
 	}
 
 	@media (min-width: 640px) {
-		.post-terminal-top-bar-left {
+		.left {
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
 		}
 
-		.post-terminal-top-bar-right {
+		.right {
 			display: block;
 			font-size: 0.8em;
 			color: var(--text-dim);
