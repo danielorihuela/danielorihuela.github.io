@@ -8,6 +8,7 @@ import Command from "../components/Command.astro";
 import "../styles/code-snippet.css";
 import "../styles/inline-code.css";
 import "../styles/toc.css";
+import "../styles/article-headings.css";
 
 interface Props {
 	title: string;
@@ -20,12 +21,7 @@ interface Props {
 const { title, description, publishdate, cover, slug } = Astro.props;
 ---
 
-<BaseLayout
-	title={title}
-	description={description}
-	image={cover?.src}
-	bodyClass="blog-layout-body"
->
+<BaseLayout title={title} description={description} image={cover?.src}>
 	<article class="blog-article-wrapper">
 		<div class="blog-container">
 			<Command command={`cat ./blog/${slug}.md`} />
@@ -59,34 +55,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 </BaseLayout>
 
 <style is:global>
-	/* Table of Contents & List Fixes */
-	.article-content ul ul,
-	.article-content ul ol,
-	.article-content ol ul,
-	.article-content ol ol {
-		margin: 0.5em 0 0.5em 1.5em;
-		padding-left: 0.5em;
-	}
-
-	.article-content li {
-		margin-bottom: 0.5em;
-	}
-
-	.article-content ul > li {
-		position: relative;
-		padding-left: 1.5rem;
-	}
-
-	.article-content ul > li::before {
-		content: ">";
-		position: absolute;
-		left: 0;
-		color: var(--accent);
-		font-weight: bold;
-		opacity: 0.7;
-	}
-
-	/* Image Handling */
 	.article-content img {
 		display: flex;
 		max-width: 100%;
@@ -94,78 +62,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		margin: 0 auto;
 		border: 1px solid var(--border);
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-	}
-
-	/* Typography & Spacing */
-	.article-content h1,
-	.article-content h2,
-	.article-content h3,
-	.article-content h4,
-	.article-content h5,
-	.article-content h6 {
-		font-family: "Share Tech Mono", monospace;
-		margin-top: 2.5em;
-		margin-bottom: 1.2em;
-		line-height: 1.2;
-		letter-spacing: 0.05em;
-		display: flex;
-		align-items: baseline;
-		gap: 0.5em;
-		color: var(--accent);
-	}
-
-	.article-content h1 {
-		font-size: 2.2em;
-		text-transform: uppercase;
-		font-weight: bold;
-	}
-	.article-content h1::before {
-		content: ">";
-		opacity: 0.8;
-	}
-
-	.article-content h2 {
-		font-size: 1.8em;
-		text-transform: uppercase;
-	}
-	.article-content h2::before {
-		content: ">>";
-		opacity: 0.7;
-	}
-
-	.article-content h3 {
-		font-size: 1.4em;
-		text-transform: uppercase;
-	}
-	.article-content h3::before {
-		content: ">>>";
-		opacity: 0.6;
-	}
-
-	.article-content h4 {
-		font-size: 1.2em;
-	}
-	.article-content h4::before {
-		content: ">>>>";
-		opacity: 0.5;
-	}
-
-	.article-content h5 {
-		font-size: 1.1em;
-		color: var(--accent-dim);
-	}
-	.article-content h5::before {
-		content: ">>>>>";
-		opacity: 0.4;
-	}
-
-	.article-content h6 {
-		font-size: 1em;
-		color: var(--accent-dim);
-	}
-	.article-content h6::before {
-		content: ">>>>>>";
-		opacity: 0.3;
 	}
 
 	.article-content p {
@@ -187,7 +83,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		text-shadow: 0 0 8px var(--accent-glow);
 	}
 
-	/* Blockquote */
 	.article-content blockquote {
 		border-left: 3px solid var(--accent);
 		padding: 0.5em 0 0.5em 1.5em;
@@ -197,13 +92,10 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		font-style: italic;
 	}
 
-	/* Tables */
 	.article-content table {
 		width: 100%;
 		table-layout: fixed;
 		border-collapse: collapse;
-		color: var(--text-body);
-		margin: 2em 0;
 	}
 
 	.article-content table,
@@ -217,8 +109,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: var(--accent);
 		font-family: "Share Tech Mono", monospace;
 		text-transform: uppercase;
-		font-size: 0.85em;
-		letter-spacing: 0.05em;
 		padding: 0.75em;
 	}
 

@@ -1,0 +1,82 @@
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+    font-family: "Share Tech Mono", monospace;
+    text-transform: uppercase;
+    display: flex;
+    gap: 0.5em;
+    color: var(--accent);
+}
+
+.article-content {
+    counter-reset: h1-counter;
+}
+
+.article-content h1 {
+    counter-reset: h2-counter;
+    counter-increment: h1-counter;
+}
+
+.article-content h2 {
+    counter-reset: h3-counter;
+    counter-increment: h2-counter;
+}
+
+.article-content h3 {
+    counter-reset: h4-counter;
+    counter-increment: h3-counter;
+}
+
+.article-content h4 {
+    counter-reset: h5-counter;
+    counter-increment: h4-counter;
+}
+
+.article-content h5 {
+    counter-reset: h6-counter;
+    counter-increment: h5-counter;
+}
+
+.article-content h6 {
+    counter-increment: h6-counter;
+}
+
+.article-content h1::before,
+.article-content h2::before,
+.article-content h3::before,
+.article-content h4::before,
+.article-content h5::before,
+.article-content h6::before {
+    opacity: 0.6;
+}
+
+.article-content h1::before {
+    content: "[ " counter(h1-counter) " ]";
+}
+
+.article-content h2::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) " ]";
+}
+
+.article-content h3::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) " ]";
+}
+
+.article-content h4::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) " ]";
+}
+
+.article-content h5::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter) " ]";
+}
+
+.article-content h6::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter) "." counter(h6-counter) " ]";
+}
