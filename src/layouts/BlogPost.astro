@@ -7,6 +7,7 @@ import Panel from "../components/Panel.astro";
 import Command from "../components/Command.astro";
 import "../styles/code-snippet.css";
 import "../styles/inline-code.css";
+import "../styles/toc.css";
 
 interface Props {
 	title: string;
@@ -59,18 +60,12 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 
 <style is:global>
 	/* Table of Contents & List Fixes */
-	.article-content ul {
-		list-style-type: none;
-		margin: 1.5em 0;
-	}
-
 	.article-content ul ul,
 	.article-content ul ol,
 	.article-content ol ul,
 	.article-content ol ol {
 		margin: 0.5em 0 0.5em 1.5em;
 		padding-left: 0.5em;
-		border-left: 1px solid var(--border);
 	}
 
 	.article-content li {
@@ -229,55 +224,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 
 	.article-content td {
 		padding: 0.75em;
-	}
-
-	/* Hacker Elegant Table of Contents (ToC) — "Vertical Manifest" */
-	/* Targets the first list in the article content */
-	.article-content > ul:first-of-type {
-		list-style: none;
-		margin: 3.5rem 0;
-	}
-
-	.article-content > ul:first-of-type li {
-		position: relative;
-		padding-left: 3.5rem;
-		margin-bottom: 1.2rem;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		counter-increment: toc-counter;
-	}
-
-	.article-content > ul:first-of-type li::before {
-		position: absolute;
-		left: 0;
-		top: 0.2rem; /* Visual nudge to perfectly center with text baseline */
-		width: 2.5rem;
-		text-align: right;
-		content: "0x0" counter(toc-counter);
-		color: var(--text-dim);
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.75rem;
-		letter-spacing: 0.1em;
-		transition: all 0.2s ease;
-		opacity: 0.6;
-	}
-
-	.article-content > ul:first-of-type li:hover::before {
-		content: "->";
-		color: var(--accent);
-		opacity: 1;
-	}
-
-	.article-content > ul:first-of-type a {
-		text-transform: uppercase;
-		font-size: 0.95rem;
-		border-bottom: none !important;
-		color: var(--text-body);
-		transition: all 0.2s ease;
-		display: inline-block;
-	}
-
-	.article-content > ul:first-of-type a:hover {
-		color: var(--accent);
 	}
 
 	.blog-article-wrapper {
