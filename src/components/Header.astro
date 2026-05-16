@@ -190,6 +190,7 @@ const currentPath = Astro.url.pathname;
 		transition: all 0.5s ease;
 		max-height: 0;
 		opacity: 0;
+		visibility: hidden;
 	}
 
 	@media (min-width: 640px) {
@@ -201,6 +202,7 @@ const currentPath = Astro.url.pathname;
 	.mobile-menu.is-open {
 		max-height: 24rem;
 		opacity: 1;
+		visibility: visible;
 	}
 
 	.mobile-nav-link {
