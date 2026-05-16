@@ -1,0 +1,9 @@
+:not(pre)>code {
+    padding: 2px 6px;
+    background-color: rgba(0, 212, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9em;
+}

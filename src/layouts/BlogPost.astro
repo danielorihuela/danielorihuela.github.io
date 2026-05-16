@@ -6,6 +6,7 @@ import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
 import Command from "../components/Command.astro";
 import "../styles/code-snippet.css";
+import "../styles/inline-code.css";
 
 interface Props {
 	title: string;
@@ -189,17 +190,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: #fff;
 		border-bottom-color: var(--accent);
 		text-shadow: 0 0 8px var(--accent-glow);
-	}
-
-	/* Inline Code */
-	.article-content :not(pre) > code {
-		padding: 2px 6px;
-		background-color: rgba(0, 212, 255, 0.06);
-		border: 1px solid var(--border);
-		border-radius: 3px;
-		color: var(--accent);
-		font-family: "IBM Plex Mono", monospace;
-		font-size: 0.9em;
 	}
 
 	/* Blockquote */
