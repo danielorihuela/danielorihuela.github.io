@@ -5,6 +5,7 @@ import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
 import Command from "../components/Command.astro";
+import "../styles/code-snippet.css";
 
 interface Props {
 	title: string;
@@ -31,6 +32,8 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 				<TerminalHeader slug={slug} />
 
 				<div class="terminal-body blog-terminal-body">
+					<ArticleHeader title={title} publishdate={publishdate} />
+
 					{
 						cover && (
 							<div class="blog-cover-wrapper">
@@ -43,8 +46,6 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 							</div>
 						)
 					}
-
-					<ArticleHeader title={title} publishdate={publishdate} />
 
 					<div class="article-content blog-article-content">
 						<slot />
@@ -289,86 +290,20 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 		color: var(--accent);
 	}
 
-	/* Code Snippets */
-	.article-content pre {
-		counter-reset: line;
-		position: relative;
-		padding-top: 3rem !important;
-		margin: 2.5rem 0 !important;
-		background-color: #06070a !important;
-		border: 1px solid var(--border) !important;
-		border-radius: 4px;
-		box-shadow:
-			0 10px 40px rgba(0, 0, 0, 0.6),
-			inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
-		overflow: hidden !important;
-	}
-
-	/* Header Bar */
-	.article-content pre::before {
-		content: "SOURCE: [" attr(data-language) "]";
-		position: absolute;
-		top: 0;
-		left: 0;
-		display: block;
-		width: 100%;
-		padding: 0.7rem 1.2rem;
-		background: rgba(17, 19, 28, 0.95);
-		border-bottom: 1px solid var(--border);
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.65rem;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.2em;
-	}
-
-	/* Line Numbers & Code Layout */
-	.article-content pre code {
-		display: grid !important;
-		overflow-x: auto !important;
-	}
-
-	.article-content .line {
-		counter-increment: line;
-		line-height: 1.7;
-	}
-
-	.article-content .line::before {
-		content: counter(line);
-		display: inline-block;
-		text-align: right;
-		width: 3.5rem;
-		padding-right: 1.5rem;
-		color: var(--text-dim);
-		border-right: 1px solid var(--accent-extra-dim);
-		/* Sticky logic */
-		position: sticky;
-		left: 0;
-		background-color: #06070a;
-	}
-
 	.blog-article-wrapper {
 		padding-top: 6rem;
 		padding-bottom: 5rem;
 	}
 	.blog-container {
 		max-width: 56rem;
-		margin-left: auto;
-		margin-right: auto;
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-	.blog-shadow {
-		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+		margin: 0 auto;
+		padding: 0 1rem;
 	}
 	.terminal-body {
 		padding: 1.5em;
 	}
 	.blog-cover-wrapper {
-		width: 100%;
 		background-color: rgba(0, 0, 0, 0.4);
-		border-bottom: 1px solid var(--border);
-		overflow: hidden;
 	}
 	.blog-cover-image {
 		width: 100%;
