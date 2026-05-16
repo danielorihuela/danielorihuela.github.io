@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
+import FileHeader from "../components/FileHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
 import "../styles/code-snippet.css";
@@ -24,31 +24,29 @@ const { title, description, publishdate, cover, slug, contentLength } =
 <BaseLayout title={title} description={description} image={cover?.src}>
 	<article class="blog-article-wrapper">
 		<div class="blog-container">
-			<Panel class="blog-shadow">
-				<TerminalHeader
+			<Panel>
+				<FileHeader
 					publishdate={publishdate}
 					contentLength={contentLength}
 				/>
 
-				<div class="terminal-body blog-terminal-body">
+				<div class="terminal-body">
 					<h1 class="post-article-title">
 						{title}
 					</h1>
 
 					{
 						cover && (
-							<div class="blog-cover-wrapper">
-								<Image
-									class="blog-cover-image"
-									src={cover}
-									alt=""
-									quality={100}
-								/>
-							</div>
+							<Image
+								class="blog-cover-image"
+								src={cover}
+								alt=""
+								quality={100}
+							/>
 						)
 					}
 
-					<div class="article-content blog-article-content">
+					<div class="article-content">
 						<slot />
 					</div>
 				</div>
@@ -58,6 +56,21 @@ const { title, description, publishdate, cover, slug, contentLength } =
 </BaseLayout>
 
 <style is:global>
+	.blog-article-wrapper {
+		padding-top: 6rem;
+		padding-bottom: 5rem;
+	}
+
+	.blog-container {
+		max-width: 56rem;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	.terminal-body {
+		padding: 1.5em;
+	}
+
 	.post-article-title {
 		font-size: 1.8em;
 		margin-bottom: 1.5rem;
@@ -68,6 +81,21 @@ const { title, description, publishdate, cover, slug, contentLength } =
 			font-size: 2.5em;
 		}
 	}
+
+	.blog-cover-image {
+		background-color: rgba(0, 0, 0, 0.4);
+		width: 100%;
+		height: auto;
+		max-height: 500px;
+		object-fit: contain;
+	}
+
+	.article-content {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-bottom: 3rem;
+	}
+
 	.article-content img {
 		display: flex;
 		max-width: 100%;
@@ -127,32 +155,5 @@ const { title, description, publishdate, cover, slug, contentLength } =
 
 	.article-content td {
 		padding: 0.75em;
-	}
-
-	.blog-article-wrapper {
-		padding-top: 6rem;
-		padding-bottom: 5rem;
-	}
-	.blog-container {
-		max-width: 56rem;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-	.terminal-body {
-		padding: 1.5em;
-	}
-	.blog-cover-wrapper {
-		background-color: rgba(0, 0, 0, 0.4);
-	}
-	.blog-cover-image {
-		width: 100%;
-		height: auto;
-		max-height: 500px;
-		object-fit: contain;
-	}
-	.blog-article-content {
-		padding-left: 1rem;
-		padding-right: 1rem;
-		padding-bottom: 3rem;
 	}
 </style>
