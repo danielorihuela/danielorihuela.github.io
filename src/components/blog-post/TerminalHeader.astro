@@ -1,16 +1,28 @@
 ---
 interface Props {
-	slug: string;
+	publishdate: Date;
+	contentLength: number;
 }
 
-const { slug } = Astro.props;
+const { publishdate, contentLength } = Astro.props;
+
+const formattedDate = publishdate.toISOString().split("T")[0];
+
+const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 ---
 
 <div class="post-terminal-top-bar">
 	<div class="post-terminal-top-bar-left">
 		<span class="post-terminal-badge">READ_ONLY</span>
 		<span class="post-terminal-separator">|</span>
-		<span class="post-terminal-filename">{slug}.md</span>
+		<span class="post-terminal-meta"
+			>DATE: <span class="post-terminal-value">{formattedDate}</span
+			></span
+		>
+		<span class="post-terminal-separator">|</span>
+		<span class="post-terminal-meta"
+			>SIZE: <span class="post-terminal-value">{fileSize}</span></span
+		>
 	</div>
 	<div class="post-terminal-top-bar-right">
 		Lines: <span class="post-terminal-value">AUTO</span>
@@ -36,6 +48,12 @@ const { slug } = Astro.props;
 		font-size: 0.8em;
 	}
 
+	.post-terminal-top-bar-left {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
 	.post-terminal-badge {
 		color: var(--accent);
 		font-size: 0.8em;
@@ -45,10 +63,10 @@ const { slug } = Astro.props;
 		color: var(--text-dim);
 	}
 
-	.post-terminal-filename {
-		color: var(--text-bright);
-		font-size: 0.8rem;
-		font-family: "Courier New", monospace;
+	.post-terminal-meta {
+		color: var(--text-dim);
+		font-size: 0.75rem;
+		text-transform: uppercase;
 	}
 
 	.post-terminal-top-bar-right {

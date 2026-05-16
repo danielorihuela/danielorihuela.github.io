@@ -1,10 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import TerminalHeader from "../components/blog-post/TerminalHeader.astro";
-import ArticleHeader from "../components/blog-post/ArticleHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
-import Command from "../components/Command.astro";
 import "../styles/code-snippet.css";
 import "../styles/inline-code.css";
 import "../styles/toc.css";
@@ -16,21 +14,26 @@ interface Props {
 	publishdate: Date;
 	cover: any;
 	slug: string;
+	contentLength: number;
 }
 
-const { title, description, publishdate, cover, slug } = Astro.props;
+const { title, description, publishdate, cover, slug, contentLength } =
+	Astro.props;
 ---
 
 <BaseLayout title={title} description={description} image={cover?.src}>
 	<article class="blog-article-wrapper">
 		<div class="blog-container">
-			<Command command={`cat ./blog/${slug}.md`} />
-
 			<Panel class="blog-shadow">
-				<TerminalHeader slug={slug} />
+				<TerminalHeader
+					publishdate={publishdate}
+					contentLength={contentLength}
+				/>
 
 				<div class="terminal-body blog-terminal-body">
-					<ArticleHeader title={title} publishdate={publishdate} />
+					<h1 class="post-article-title">
+						{title}
+					</h1>
 
 					{
 						cover && (
@@ -55,6 +58,16 @@ const { title, description, publishdate, cover, slug } = Astro.props;
 </BaseLayout>
 
 <style is:global>
+	.post-article-title {
+		font-size: 1.8em;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 640px) {
+		.post-article-title {
+			font-size: 2.5em;
+		}
+	}
 	.article-content img {
 		display: flex;
 		max-width: 100%;
