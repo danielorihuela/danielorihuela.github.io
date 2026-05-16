@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Command from "../components/Command.astro";
 import Panel from "../components/Panel.astro";
 import IconLink from "../components/IconLink.astro";
 
@@ -98,8 +97,6 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 	description="Open source contributions to security and privacy tools."
 >
 	<main>
-		<Command command="cat ./contributions/*" />
-
 		<div class="list">
 			{
 				ossProjectsInfo.map(
