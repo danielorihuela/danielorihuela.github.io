@@ -46,4 +46,5 @@ pre.astro-code .line::before {
     border-right: 1px solid var(--accent-extra-dim);
     position: sticky;
     left: 0;
+    background-color: #06070a;
 }
