@@ -21,39 +21,43 @@ const { title, description, publishdate, cover, slug, contentLength } =
 
 const formattedDate = publishdate.toISOString().split("T")[0];
 const fileSize = (contentLength / 1024).toFixed(1) + " KB";
+
+const metadata = [
+	{ label: "DATE", value: formattedDate },
+	{ label: "| SIZE", value: fileSize },
+	{ label: "| LINES", value: "AUTO" },
+	{ label: "| ENCODING", value: "UTF-8" },
+];
 ---
 
 <BaseLayout title={title} description={description} image={cover?.src}>
-	<article class="blog-article-wrapper">
-		<div class="blog-container">
+	<article>
+		<div class="post-wrapper">
 			<Panel>
-				<div class="file-header">
-					<div class="metadata">
-						<span>
-							DATE: <span class="value">{formattedDate}</span
-							></span
-						>
-						<span
-							>| SIZE: <span class="value">{fileSize}</span></span
-						>
-						<span class="hide"
-							>| LINES: <span class="value">AUTO</span>
-						</span>
-						<span class="hide"
-							>| ENCODING: <span class="value">UTF-8</span>
-						</span>
+				<div class="post-metadata">
+					<div>
+						{
+							metadata.map((item) => (
+								<span>
+									{item.label}:
+									<span class="metadata-value">
+										{item.value}
+									</span>
+								</span>
+							))
+						}
 					</div>
 				</div>
 
-				<div class="terminal-body">
-					<h1 class="post-article-title">
+				<div class="post-content-wrapper">
+					<h1 class="post-title">
 						{title}
 					</h1>
 
 					{
 						cover && (
 							<Image
-								class="blog-cover-image"
+								class="post-image"
 								src={cover}
 								alt=""
 								quality={100}
@@ -61,7 +65,7 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 						)
 					}
 
-					<div class="article-content">
+					<div class="post-content">
 						<slot />
 					</div>
 				</div>
@@ -71,18 +75,18 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 </BaseLayout>
 
 <style is:global>
-	.blog-article-wrapper {
+	article {
 		padding-top: 6rem;
 		padding-bottom: 5rem;
 	}
 
-	.blog-container {
+	.post-wrapper {
 		max-width: 56rem;
 		margin: 0 auto;
 		padding: 0 1rem;
 	}
 
-	.file-header {
+	.post-metadata {
 		display: flex;
 		justify-content: space-between;
 		background-color: var(--accent-extra-dim);
@@ -94,42 +98,26 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 			content: "●";
 			color: var(--accent);
 		}
-
-		.metadata {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-		}
 	}
 
-	.value {
+	.metadata-value {
 		color: var(--accent);
 	}
 
-	.hide {
-		display: none;
-
-		@media (min-width: 640px) {
-			display: block;
-		}
-	}
-
-	.terminal-body {
+	.post-content-wrapper {
 		padding: 1.5em;
 	}
 
-	.post-article-title {
+	.post-title {
 		font-size: 1.8em;
 		margin-bottom: 1.5rem;
-	}
 
-	@media (min-width: 640px) {
-		.post-article-title {
+		@media (min-width: 640px) {
 			font-size: 2.5em;
 		}
 	}
 
-	.blog-cover-image {
+	.post-image {
 		background-color: rgba(0, 0, 0, 0.4);
 		width: 100%;
 		height: auto;
@@ -137,13 +125,13 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 		object-fit: contain;
 	}
 
-	.article-content {
+	.post-content {
 		padding-left: 1rem;
 		padding-right: 1rem;
 		padding-bottom: 3rem;
 	}
 
-	.article-content img {
+	.post-content img {
 		display: flex;
 		max-width: 100%;
 		height: auto;
@@ -152,26 +140,26 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 	}
 
-	.article-content p {
+	.post-content p {
 		color: var(--text-body);
 		line-height: 1.8;
 		margin-bottom: 1.5em;
 	}
 
-	.article-content a {
+	.post-content a {
 		color: var(--accent);
 		text-decoration: none;
 		border-bottom: 1px solid rgba(0, 212, 255, 0.2);
 		transition: all 0.2s ease;
 	}
 
-	.article-content a:hover {
+	.post-content a:hover {
 		color: #fff;
 		border-bottom-color: var(--accent);
 		text-shadow: 0 0 8px var(--accent-glow);
 	}
 
-	.article-content blockquote {
+	.post-content blockquote {
 		border-left: 3px solid var(--accent);
 		padding: 0.5em 0 0.5em 1.5em;
 		margin: 1.5em 0;
@@ -180,19 +168,19 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 		font-style: italic;
 	}
 
-	.article-content table {
+	.post-content table {
 		width: 100%;
 		table-layout: fixed;
 		border-collapse: collapse;
 	}
 
-	.article-content table,
-	.article-content th,
-	.article-content td {
+	.post-content table,
+	.post-content th,
+	.post-content td {
 		border: 1px solid var(--border);
 	}
 
-	.article-content th {
+	.post-content th {
 		background: var(--accent-extra-dim);
 		color: var(--accent);
 		font-family: "Share Tech Mono", monospace;
@@ -200,7 +188,7 @@ const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 		padding: 0.75em;
 	}
 
-	.article-content td {
+	.post-content td {
 		padding: 0.75em;
 	}
 </style>

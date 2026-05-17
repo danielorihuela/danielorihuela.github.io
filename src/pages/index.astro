@@ -65,23 +65,21 @@ function formatDate(date: Date) {
 		padding: 0.75rem 1rem;
 		border-left: 2px solid transparent;
 		transition: all 300ms;
-	}
 
-	@media (min-width: 640px) {
-		.blog-post-link {
+		@media (min-width: 640px) {
 			flex-direction: row;
 			gap: 1.5rem;
 		}
-	}
 
-	.blog-post-link:hover {
-		border-left-color: var(--accent);
-		background-image: linear-gradient(
-			to right,
-			rgba(0, 212, 255, 0.1),
-			transparent
-		);
-		transform: translateX(0.25rem);
+		&:hover {
+			border-left-color: var(--accent);
+			background-image: linear-gradient(
+				to right,
+				rgba(0, 212, 255, 0.1),
+				transparent
+			);
+			transform: translateX(0.25rem);
+		}
 	}
 
 	.metadata-column {
@@ -105,20 +103,18 @@ function formatDate(date: Date) {
 
 	.title-symbol {
 		display: none;
+
+		@media (min-width: 640px) {
+			display: block;
+			transition: transform 300ms;
+		}
 	}
 
 	.title-text {
 		font-size: 0.875rem;
 		margin: 0;
-	}
 
-	@media (min-width: 640px) {
-		.title-symbol {
-			display: block;
-			transition: transform 300ms;
-		}
-
-		.title-text {
+		@media (min-width: 640px) {
 			font-size: 1rem;
 		}
 	}
@@ -132,14 +128,14 @@ function formatDate(date: Date) {
 		color: var(--text-body);
 		transition: all 300ms;
 		letter-spacing: 0.1em;
-	}
 
-	@media (min-width: 640px) {
-		.indicator-text {
+		@media (min-width: 640px) {
 			display: block;
 			align-self: center;
 		}
+	}
 
+	@media (min-width: 640px) {
 		.group:hover .indicator-text {
 			opacity: 0.6;
 		}
