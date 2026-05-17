@@ -38,7 +38,7 @@ const metadata = [
 					<div>
 						{
 							metadata.map((item) => (
-								<span>
+								<span class="metadata-item">
 									{item.label}:
 									<span class="metadata-value">
 										{item.value}
@@ -97,6 +97,18 @@ const metadata = [
 		&::before {
 			content: "●";
 			color: var(--accent);
+		}
+	}
+
+	.metadata-item {
+		display: none;
+
+		&:nth-child(-n + 2) {
+			display: inline;
+		}
+
+		@media (min-width: 640px) {
+			display: inline;
 		}
 	}
 
