@@ -5,7 +5,7 @@ import Panel from "../components/Panel.astro";
 import "../styles/code-snippet.css";
 import "../styles/inline-code.css";
 import "../styles/toc.css";
-import "../styles/article-headings.css";
+import "../styles/post-headings.css";
 
 interface Props {
 	title: string;
@@ -149,13 +149,11 @@ const metadata = [
 	.post-content a {
 		color: var(--accent);
 		text-decoration: none;
-		border-bottom: 1px solid rgba(0, 212, 255, 0.2);
 		transition: all 0.2s ease;
 	}
 
 	.post-content a:hover {
 		color: #fff;
-		border-bottom-color: var(--accent);
 		text-shadow: 0 0 8px var(--accent-glow);
 	}
 
@@ -172,6 +170,7 @@ const metadata = [
 		width: 100%;
 		table-layout: fixed;
 		border-collapse: collapse;
+		margin-bottom: 1.5em;
 	}
 
 	.post-content table,
