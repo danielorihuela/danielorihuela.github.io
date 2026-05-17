@@ -83,7 +83,10 @@ const metadata = [
 	.post-wrapper {
 		max-width: 56rem;
 		margin: 0 auto;
-		padding: 0 1rem;
+
+		@media (min-width: 640px) {
+			padding: 0 1rem;
+		}
 	}
 
 	.post-metadata {
@@ -117,7 +120,11 @@ const metadata = [
 	}
 
 	.post-content-wrapper {
-		padding: 1.5em;
+		padding: 0.75em;
+
+		@media (min-width: 640px) {
+			padding: 1.5em;
+		}
 	}
 
 	.post-title {
@@ -189,6 +196,7 @@ const metadata = [
 	.post-content th,
 	.post-content td {
 		border: 1px solid var(--border);
+		overflow-wrap: break-word;
 	}
 
 	.post-content th {

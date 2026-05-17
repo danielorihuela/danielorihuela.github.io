@@ -1,38 +1,53 @@
 .post-content>ul:first-child,
 .post-content>ul:first-child ul {
-    list-style-type: none;
     counter-reset: toc-counter;
-    padding: 0;
+
+    @media (min-width: 640px) {
+        list-style-type: none;
+        padding: 0;
+    }
 }
 
-.post-content>ul:first-child {
-    margin: 3.5rem 0;
+@media (min-width: 640px) {
+    .post-content>ul:first-child {
+        margin: 1.5rem 0;
+    }
 }
 
 .post-content>ul:first-child ul {
     margin: 0;
-    margin-left: -1.5rem;
+    margin-left: 0;
+
+    @media (min-width: 640px) {
+        margin-left: -1.5rem;
+    }
 }
 
 .post-content>ul:first-child li {
     position: relative;
-    padding-left: 4.5rem;
+    padding-left: 0;
     margin: 0;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     counter-increment: toc-counter;
+
+    @media (min-width: 640px) {
+        padding-left: 4.5rem;
+    }
 }
 
-.post-content>ul:first-child li::before {
-    position: absolute;
-    left: 0;
-    top: 0.2rem;
-    width: 4rem;
-    text-align: right;
-    content: "[ " counters(toc-counter, ".") " ]";
-    color: var(--text-dim);
-    font-family: "Share Tech Mono", monospace;
-    font-size: 0.75rem;
-    transition: all 0.2s ease;
+@media (min-width: 640px) {
+    .post-content>ul:first-child li::before {
+        position: absolute;
+        left: 0;
+        top: 0.2rem;
+        width: 4rem;
+        text-align: right;
+        content: "[ " counters(toc-counter, ".") " ]";
+        color: var(--text-dim);
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.75rem;
+        transition: all 0.2s ease;
+    }
 }
 
 .post-content>ul:first-child a {

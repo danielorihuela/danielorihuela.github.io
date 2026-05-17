@@ -78,4 +78,5 @@ b {
 a {
 	color: var(--accent);
 	text-decoration: none;
+	overflow-wrap: break-word;
 }
