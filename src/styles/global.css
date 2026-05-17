@@ -1,12 +1,8 @@
-/* ============================================
-   CYBERPUNK HACKER AESTHETIC — GLOBAL STYLES
-   ============================================ */
-
 :root {
 	--accent: #00d4ff;
 	--accent-dim: #0098b8;
-	--accent-glow: rgba(0, 212, 255, 0.4);
-	--accent-glow-dim: rgba(0, 212, 255, 0.02);
+	--accent-glow: #00d4ff66;
+	--accent-glow-dim: #00d4ff05;
 	--accent-extra-dim: #00d4ff0d;
 	--magenta: #ff003c;
 	--bg-dark: #08090e;
@@ -15,6 +11,9 @@
 	--text-body: #b0bec5;
 	--text-bright: #e0e6ed;
 	--text-dim: #525e78;
+
+	--btn-bg-hover: #00d4ff1a;
+	--btn-border-hover: #00d4ff4d;
 }
 
 /* Base */

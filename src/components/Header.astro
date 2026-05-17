@@ -3,90 +3,67 @@ const navItems = [
 	{ name: "blog", path: "/", cmd: "blog" },
 	{ name: "oss", path: "/open-source/", cmd: "contrib" },
 ];
-
 const currentPath = Astro.url.pathname;
 ---
 
 <header>
-	<nav class="header-nav">
-		<div class="nav-container">
-			<div class="nav-content">
-				<a href="/" class="logo-link">
-					<span>danielorihuela</span><span class="logo-at">@</span
-					><span class="logo-host">dev</span><span class="logo-colon"
-						>:</span
-					><span class="logo-tilde">~</span>
-				</a>
-
-				<div class="desktop-nav">
-					{
-						navItems.map((item) => (
-							<a
-								href={item.path}
-								class={`nav-link ${currentPath === item.path ? "active" : ""}`}
-							>
-								<span class="nav-prefix">./</span>
-								{item.cmd}
-							</a>
-						))
-					}
-				</div>
-
-				<button
-					id="mobile-menu-button"
-					class="mobile-menu-btn"
-					aria-label="Toggle menu"
-				>
-					<span id="menu-label">[menu]</span>
-				</button>
-			</div>
-
-			<div id="mobile-menu" class="mobile-menu">
+	<nav>
+		<div class="nav-content">
+			<a href="/" class="logo">danielorihuela<span>@dev:~</span></a>
+			<div class="nav-links desktop">
 				{
-					navItems.map((item) => (
+					navItems.map((i) => (
 						<a
-							href={item.path}
-							class={`mobile-nav-link ${currentPath === item.path ? "active" : ""}`}
+							href={i.path}
+							class:list={[
+								"link",
+								{ active: currentPath === i.path },
+							]}
 						>
-							<span class="mobile-nav-prefix">_</span>
-							{item.cmd}
+							./{i.cmd}
 						</a>
 					))
 				}
 			</div>
+			<button id="menu-toggle">[menu]</button>
+		</div>
+		<div id="mobile-menu" class="nav-links mobile">
+			{
+				navItems.map((i) => (
+					<a
+						href={i.path}
+						class:list={[
+							"link",
+							{ active: currentPath === i.path },
+						]}
+					>
+						- {i.cmd}
+					</a>
+				))
+			}
 		</div>
 	</nav>
 
 	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			const btn = document.getElementById("mobile-menu-button");
-			const label = document.getElementById("menu-label");
-			if (!btn || !label) return;
-
-			btn.addEventListener("click", () => {
-				const menu = document.getElementById("mobile-menu");
-				if (!menu) return;
-
-				const isOpen = menu.classList.toggle("is-open");
-				label.textContent = isOpen ? "[close]" : "[menu]";
-			});
+		const button = document.getElementById("menu-toggle");
+		const menu = document.getElementById("mobile-menu");
+		button?.addEventListener("click", () => {
+			const open = menu?.classList.toggle("open");
+			button.textContent = open ? "[close]" : "[menu]";
 		});
 	</script>
 </header>
 
 <style>
-	.header-nav {
+	nav {
 		position: fixed;
-		left: 0;
-		right: 0;
+		inset: 0 0 auto 0;
 		z-index: 50;
-		background-color: rgba(8, 9, 14, 0.95);
+		background: rgba(8, 9, 14, 0.95);
 		backdrop-filter: blur(4px);
 		border-bottom: 1px solid var(--border);
-	}
-
-	.nav-container {
 		padding: 0 1rem;
+		font-family: "Share Tech Mono", monospace;
 	}
 
 	.nav-content {
@@ -96,144 +73,88 @@ const currentPath = Astro.url.pathname;
 		height: 3.5rem;
 	}
 
-	.logo-link {
-		font-family: "Share Tech Mono", monospace;
+	.logo {
 		font-size: 0.875rem;
-		transition: color 0.3s ease;
+
+		span {
+			color: var(--text-bright);
+		}
 	}
 
-	.logo-link:hover {
-		color: var(--accent);
-	}
+	.nav-links {
+		&.desktop {
+			display: none;
+			gap: 0.25rem;
+			@media (min-width: 640px) {
+				display: flex;
+			}
+		}
 
-	.logo-at {
-		color: var(--text-body);
-	}
-
-	.logo-host {
-		color: var(--text-bright);
-	}
-
-	.logo-colon {
-		color: var(--text-body);
-	}
-
-	.logo-tilde {
-		color: var(--text-body);
-	}
-
-	.desktop-nav {
-		display: none;
-		gap: 0.25rem;
-	}
-
-	@media (min-width: 640px) {
-		.desktop-nav {
+		&.mobile {
 			display: flex;
+			flex-direction: column;
+			max-height: 0;
+			overflow: hidden;
+			transition: 0.5s ease;
+
+			&.open {
+				max-height: 24rem;
+				opacity: 1;
+				padding-bottom: 1rem;
+
+				@media (min-width: 640px) {
+					display: none;
+				}
+			}
+
+			.link {
+				padding: 0.875rem 1rem;
+				border-left: 2px solid transparent;
+			}
+
+			.link:hover,
+			.link.active {
+				border-left-color: var(--accent);
+			}
 		}
 	}
 
-	.nav-link {
-		font-family: "Share Tech Mono", monospace;
+	.link {
 		font-size: 0.75rem;
+		text-transform: uppercase;
+		color: var(--text-body);
+		opacity: 0.6;
+		transition: all 0.3s ease;
 		padding: 0.375rem 0.75rem;
-		border-radius: 0.25rem;
-		transition: all 0.3s ease;
-		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: var(--text-body);
-		opacity: 0.6;
-		display: flex;
 		border: 1px solid transparent;
+
+		&:hover {
+			color: var(--accent);
+			background-color: var(--accent-extra-dim);
+			opacity: 1;
+		}
+
+		&.active {
+			color: var(--accent);
+			background-color: var(--accent-glow-dim);
+			border-color: var(--accent);
+			border-radius: 0.25rem;
+			opacity: 1;
+		}
 	}
 
-	.nav-link:hover {
-		color: var(--accent);
-		background-color: var(--accent-extra-dim);
-		opacity: 1;
-	}
-
-	.nav-link.active {
-		color: var(--accent);
-		background-color: rgba(0, 212, 255, 0.1);
-		border-color: rgba(0, 212, 255, 0.3);
-		opacity: 1;
-	}
-
-	.nav-prefix {
-		transition: all 0.3s ease;
-	}
-
-	.mobile-menu-btn {
-		background: transparent;
+	#menu-toggle {
+		background: none;
 		border: none;
+		color: var(--text-body);
+		font:
+			0.75rem "Share Tech Mono",
+			monospace;
+		text-transform: uppercase;
 		cursor: pointer;
-		color: var(--text-body);
-		transition: all 0.3s ease;
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-	}
-
-	@media (min-width: 640px) {
-		.mobile-menu-btn {
+		@media (min-width: 640px) {
 			display: none;
 		}
-	}
-
-	.mobile-menu-btn:hover {
-		color: var(--accent);
-	}
-
-	.mobile-menu {
-		transition: all 0.5s ease;
-		max-height: 0;
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	@media (min-width: 640px) {
-		.mobile-menu {
-			display: none;
-		}
-	}
-
-	.mobile-menu.is-open {
-		max-height: 24rem;
-		opacity: 1;
-		visibility: visible;
-	}
-
-	.mobile-nav-link {
-		display: block;
-		font-family: "Share Tech Mono", monospace;
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		padding: 0.875rem 1rem;
-		transition: all 0.3s ease;
-		color: var(--text-body);
-		opacity: 0.6;
-		border-left: 2px solid transparent;
-	}
-
-	.mobile-nav-link:hover {
-		color: var(--accent);
-		background-color: var(--accent-extra-dim);
-		opacity: 1;
-		text-shadow: none;
-	}
-
-	.mobile-nav-link.active {
-		color: var(--accent);
-		background-color: rgba(0, 212, 255, 0.1);
-		border-left-color: var(--accent);
-		opacity: 1;
-	}
-
-	.mobile-nav-prefix {
-		color: var(--accent);
-		margin-right: 0.75rem;
 	}
 </style>
