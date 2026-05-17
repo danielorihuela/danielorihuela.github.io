@@ -1,20 +1,20 @@
-.article-content>ul:first-child,
-.article-content>ul:first-child ul {
+.post-content>ul:first-child,
+.post-content>ul:first-child ul {
     list-style-type: none;
     counter-reset: toc-counter;
     padding: 0;
 }
 
-.article-content>ul:first-child {
+.post-content>ul:first-child {
     margin: 3.5rem 0;
 }
 
-.article-content>ul:first-child ul {
+.post-content>ul:first-child ul {
     margin: 0;
     margin-left: -1.5rem;
 }
 
-.article-content>ul:first-child li {
+.post-content>ul:first-child li {
     position: relative;
     padding-left: 4.5rem;
     margin: 0;
@@ -22,7 +22,7 @@
     counter-increment: toc-counter;
 }
 
-.article-content>ul:first-child li::before {
+.post-content>ul:first-child li::before {
     position: absolute;
     left: 0;
     top: 0.2rem;
@@ -35,18 +35,18 @@
     transition: all 0.2s ease;
 }
 
-.article-content>ul:first-child a {
+.post-content>ul:first-child a {
     text-transform: uppercase;
     border-bottom: none;
     color: var(--text-body);
     transition: all 0.2s ease;
 }
 
-.article-content>ul:first-child a:hover {
+.post-content>ul:first-child a:hover {
     color: var(--accent);
 }
 
-.article-content>ul:first-child li:has(a:hover)::before {
+.post-content>ul:first-child li:has(a:hover)::before {
     content: "->";
     color: var(--accent);
     opacity: 1;
