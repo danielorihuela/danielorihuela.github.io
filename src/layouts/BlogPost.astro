@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import FileHeader from "../components/FileHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import Panel from "../components/Panel.astro";
 import "../styles/code-snippet.css";
@@ -19,16 +18,32 @@ interface Props {
 
 const { title, description, publishdate, cover, slug, contentLength } =
 	Astro.props;
+
+const formattedDate = publishdate.toISOString().split("T")[0];
+const fileSize = (contentLength / 1024).toFixed(1) + " KB";
 ---
 
 <BaseLayout title={title} description={description} image={cover?.src}>
 	<article class="blog-article-wrapper">
 		<div class="blog-container">
 			<Panel>
-				<FileHeader
-					publishdate={publishdate}
-					contentLength={contentLength}
-				/>
+				<div class="file-header">
+					<div class="metadata">
+						<span>
+							DATE: <span class="value">{formattedDate}</span
+							></span
+						>
+						<span
+							>| SIZE: <span class="value">{fileSize}</span></span
+						>
+						<span class="hide"
+							>| LINES: <span class="value">AUTO</span>
+						</span>
+						<span class="hide"
+							>| ENCODING: <span class="value">UTF-8</span>
+						</span>
+					</div>
+				</div>
 
 				<div class="terminal-body">
 					<h1 class="post-article-title">
@@ -65,6 +80,38 @@ const { title, description, publishdate, cover, slug, contentLength } =
 		max-width: 56rem;
 		margin: 0 auto;
 		padding: 0 1rem;
+	}
+
+	.file-header {
+		display: flex;
+		justify-content: space-between;
+		background-color: var(--accent-extra-dim);
+		padding: 0.5rem 1rem;
+		font-family: "Share Tech Mono", monospace;
+		font-size: 0.75rem;
+
+		&::before {
+			content: "●";
+			color: var(--accent);
+		}
+
+		.metadata {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+	}
+
+	.value {
+		color: var(--accent);
+	}
+
+	.hide {
+		display: none;
+
+		@media (min-width: 640px) {
+			display: block;
+		}
 	}
 
 	.terminal-body {

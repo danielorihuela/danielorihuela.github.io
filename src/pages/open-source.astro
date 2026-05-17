@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Panel from "../components/Panel.astro";
-import IconLink from "../components/IconLink.astro";
 
 interface OssProjectInfo {
 	name: string;
@@ -117,11 +116,19 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 
 							<div class="content">
 								<div class="header">
-									<IconLink
+									<a
 										href={url}
-										image={image}
-										class="icon"
-									/>
+										class="social-link icon"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<img
+											class="social-link-img"
+											src={image}
+											alt=""
+										/>
+									</a>
+
 									<span class="title">{name} </span>
 								</div>
 
@@ -237,6 +244,60 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 		display: flex;
 		align-items: center;
 		gap: 1rem;
+	}
+
+	.social-link {
+		display: flex;
+		overflow: hidden;
+		border-radius: 6px;
+		border: 1px solid var(--border);
+		background: var(--bg-panel);
+		padding: 0.4em;
+		transition:
+			border-color 0.3s ease,
+			filter 0.3s ease;
+		filter: brightness(1);
+
+		&:hover {
+			border-color: var(--accent);
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: -2px;
+			width: 100%;
+			height: 2px;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				var(--accent),
+				transparent
+			);
+		}
+
+		&:hover::before {
+			animation: sweepLine 2s ease-in-out infinite;
+		}
+	}
+
+	.social-link-img {
+		filter: grayscale(100%) brightness(0.7);
+		transition: filter 0.3s ease;
+
+		&:hover {
+			filter: grayscale(0%) brightness(1);
+		}
+	}
+
+	@keyframes sweepLine {
+		0% {
+			top: -2px;
+		}
+		100% {
+			top: 100%;
+		}
 	}
 
 	.icon {
