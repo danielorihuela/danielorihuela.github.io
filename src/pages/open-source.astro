@@ -330,20 +330,20 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 		padding: 0.25rem 0.75rem;
 		border-left: 2px solid transparent;
 		transition: all 0.3s ease;
-	}
 
-	.pr-link::before {
-		content: ">";
-	}
+		&::before {
+			content: ">";
+		}
 
-	.pr-link:hover {
-		border-left-color: var(--accent);
-		background: linear-gradient(
-			to right,
-			rgba(0, 212, 255, 0.1),
-			transparent
-		);
-		transform: translateX(0.25rem);
+		&:hover {
+			border-left-color: var(--accent);
+			background: linear-gradient(
+				to right,
+				rgba(0, 212, 255, 0.1),
+				transparent
+			);
+			transform: translateX(0.25rem);
+		}
 	}
 
 	.pr-id {
