@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { getContainerRenderer as getMDXRenderer } from "@astrojs/mdx";
 import { loadRenderers } from "astro:container";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import rss from "@astrojs/rss";
 
 export async function GET(context) {
@@ -11,7 +11,7 @@ export async function GET(context) {
 
     const items = [];
     for (const post of posts) {
-        const { Content } = await post.render();
+        const { Content } = await render(post);
         items.push({
             title: post.data.title,
             author: 'danielorihuelarodriguez@gmail.com (Daniel Orihuela)',
@@ -20,7 +20,7 @@ export async function GET(context) {
             link: new URL(`/blog/${post.slug}/`, context.url.origin).toString(),
             description: post.data.description,
             content: `<figure><img alt="" src="${post.data.cover.src}" /></figure> ${await container.renderToString(Content)}`,
-         });
+        });
     }
 
     return rss({

@@ -1,0 +1,84 @@
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    font-family: "Share Tech Mono", monospace;
+    text-transform: uppercase;
+    display: flex;
+    gap: 0.5em;
+    color: var(--accent);
+}
+
+.post-content {
+    counter-reset: h1-counter;
+}
+
+.post-content h1 {
+    counter-reset: h2-counter;
+    counter-increment: h1-counter;
+}
+
+.post-content h2 {
+    counter-reset: h3-counter;
+    counter-increment: h2-counter;
+}
+
+.post-content h3 {
+    counter-reset: h4-counter;
+    counter-increment: h3-counter;
+}
+
+.post-content h4 {
+    counter-reset: h5-counter;
+    counter-increment: h4-counter;
+}
+
+.post-content h5 {
+    counter-reset: h6-counter;
+    counter-increment: h5-counter;
+}
+
+.post-content h6 {
+    counter-increment: h6-counter;
+}
+
+.post-content h1::before,
+.post-content h2::before,
+.post-content h3::before,
+.post-content h4::before,
+.post-content h5::before,
+.post-content h6::before {
+    opacity: 0.6;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.post-content h1::before {
+    content: "[ " counter(h1-counter) " ]";
+}
+
+.post-content h2::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) " ]";
+}
+
+.post-content h3::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) " ]";
+}
+
+.post-content h4::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) " ]";
+}
+
+.post-content h5::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter) " ]";
+}
+
+.post-content h6::before {
+    content: "[ " counter(h1-counter) "." counter(h2-counter) "."
+        counter(h3-counter) "." counter(h4-counter) "." counter(h5-counter) "." counter(h6-counter) " ]";
+}

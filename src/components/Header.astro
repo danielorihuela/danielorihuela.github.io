@@ -1,135 +1,160 @@
 ---
 const navItems = [
-	{ name: "Home", path: "/" },
-	{ name: "About", path: "/about/" },
-	{ name: "Blog", path: "/blog/" },
-	{ name: "Open Source", path: "/open-source/" },
+	{ name: "blog", path: "/", cmd: "blog" },
+	{ name: "oss", path: "/open-source/", cmd: "contrib" },
 ];
-
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="px-4 py-0">
-	<nav
-		class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/90 backdrop-blur-md border-b border-royalPurple/50"
-	>
-		<div class="max-w-7xl mx-auto px-6 lg:px-8">
-			<div class="flex items-center justify-between h-20">
-				{/* Logo */}
-				<a
-					href="/"
-					class="text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300"
-				>
-					<span class="text-royalPurple">&lt;</span>
-					DO
-					<span class="text-royalPurple">/&gt;</span>
-				</a>
-
-				{/* Desktop Navigation */}
-				<div class="hidden md:flex items-center space-x-8">
-					{navItems.map((item) => (
+<header>
+	<nav>
+		<div class="nav-content">
+			<a href="/" class="logo">danielorihuela<span>@dev:~</span></a>
+			<div class="nav-links desktop">
+				{
+					navItems.map((i) => (
 						<a
-							href={item.path}
-							class={`relative px-4 duration-300 group font-[Iceland] ${
-								currentPath === item.path
-									? "text-cyan-400"
-									: "text-gray-300 hover:text-white"
-							}`}
+							href={i.path}
+							class:list={[
+								"link",
+								{ active: currentPath === i.path },
+							]}
 						>
-							{item.name}
-							<span
-								class={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-royalPurple to-cyan-400 transform transition-transform duration-300 ${
-									currentPath === item.path
-										? "scale-x-100"
-										: "scale-x-0 group-hover:scale-x-100"
-								}`}
-							/>
+							./{i.cmd}
 						</a>
-					))}
-				</div>
-
-				{/* Mobile menu button */}
-				<button
-					id="mobile-menu-button"
-					class="md:hidden text-white hover:text-cyan-400 transition-colors duration-300"
-				>
-					<svg
-						id="menu-icon"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						class="w-6 h-6"
+					))
+				}
+			</div>
+			<button id="menu-toggle">[menu]</button>
+		</div>
+		<div id="mobile-menu" class="nav-links mobile">
+			{
+				navItems.map((i) => (
+					<a
+						href={i.path}
+						class:list={[
+							"link",
+							{ active: currentPath === i.path },
+						]}
 					>
-						<path
-							id="menu-path"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16m-7 6h7"
-						></path>
-					</svg>
-				</button>
-			</div>
-
-			{/* Mobile Navigation */}
-			<div
-				id="mobile-menu"
-				class="md:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0"
-			>
-				<div
-					class="py-4 space-y-2 bg-black/95 backdrop-blur-md rounded-lg mt-2 border border-purple-900/30"
-				>
-					{navItems.map((item) => (
-						<a
-							href={item.path}
-							id="menu-item"
-							class={`block px-6 py-3 text-sm font-medium transition-colors duration-300 ${
-								currentPath === item.path
-									? "text-cyan-400 bg-purple-900/20"
-									: "text-gray-300 hover:text-white hover:bg-gray-800/50"
-							}`}
-						>
-							{item.name}
-						</a>
-					))}
-				</div>
-			</div>
+						- {i.cmd}
+					</a>
+				))
+			}
 		</div>
 	</nav>
 
 	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			const mobileMenuButton = document.getElementById("mobile-menu-button");
-			const menuIconPath = document.getElementById("menu-path");
-			if (!mobileMenuButton || !menuIconPath) return;
-
-			mobileMenuButton.addEventListener("click", () => {
-				const mobileMenu = document.getElementById("mobile-menu");
-				if (!mobileMenu) return;
-
-				if (mobileMenu.classList.contains("max-h-0")) {
-					// Show menu
-					mobileMenu.classList.remove("max-h-0", "opacity-0");
-					mobileMenu.classList.add("max-h-96", "opacity-100");
-
-					// Change icon to "X"
-					menuIconPath.setAttribute(
-						"d",
-						"M6 18L18 6M6 6l12 12"
-					); // X icon path
-				} else {
-					// Hide menu
-					mobileMenu.classList.remove("max-h-96", "opacity-100");
-					mobileMenu.classList.add("max-h-0", "opacity-0");
-
-					// Change icon back to menu
-					menuIconPath.setAttribute(
-						"d",
-						"M4 6h16M4 12h16m-7 6h7"
-					); // Menu icon path
-				}
-			});
+		const button = document.getElementById("menu-toggle");
+		const menu = document.getElementById("mobile-menu");
+		button?.addEventListener("click", () => {
+			const open = menu?.classList.toggle("open");
+			button.textContent = open ? "[close]" : "[menu]";
 		});
 	</script>
 </header>
+
+<style>
+	nav {
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: 50;
+		background: rgba(8, 9, 14, 0.95);
+		backdrop-filter: blur(4px);
+		border-bottom: 1px solid var(--border);
+		padding: 0 1rem;
+		font-family: "Share Tech Mono", monospace;
+	}
+
+	.nav-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 3.5rem;
+	}
+
+	.logo {
+		font-size: 0.875rem;
+
+		span {
+			color: var(--text-bright);
+		}
+	}
+
+	.nav-links {
+		&.desktop {
+			display: none;
+			gap: 0.25rem;
+			@media (min-width: 640px) {
+				display: flex;
+			}
+		}
+
+		&.mobile {
+			display: flex;
+			flex-direction: column;
+			max-height: 0;
+			overflow: hidden;
+			transition: 0.5s ease;
+
+			&.open {
+				max-height: 24rem;
+				opacity: 1;
+				padding-bottom: 1rem;
+
+				@media (min-width: 640px) {
+					display: none;
+				}
+			}
+
+			.link {
+				padding: 0.875rem 1rem;
+				border-left: 2px solid transparent;
+			}
+
+			.link:hover,
+			.link.active {
+				border-left-color: var(--accent);
+			}
+		}
+	}
+
+	.link {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		color: var(--text-body);
+		opacity: 0.6;
+		transition: all 0.3s ease;
+		padding: 0.375rem 0.75rem;
+		letter-spacing: 0.05em;
+		border: 1px solid transparent;
+
+		&:hover {
+			color: var(--accent);
+			background-color: var(--accent-extra-dim);
+			opacity: 1;
+		}
+
+		&.active {
+			color: var(--accent);
+			background-color: var(--accent-glow-dim);
+			border-color: var(--accent);
+			border-radius: 0.25rem;
+			opacity: 1;
+		}
+	}
+
+	#menu-toggle {
+		background: none;
+		border: none;
+		color: var(--text-body);
+		font:
+			0.75rem "Share Tech Mono",
+			monospace;
+		text-transform: uppercase;
+		cursor: pointer;
+		@media (min-width: 640px) {
+			display: none;
+		}
+	}
+</style>

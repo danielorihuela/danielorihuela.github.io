@@ -1,2 +1,120 @@
+---
+const links = [
+	{ label: "github", href: "https://github.com/danielorihuela" },
+	{ label: "email", href: "mailto:danielorihuelarodriguez@gmail.com" },
+];
+
+const checks = ["SYS.ONLINE", "COMM.ENCRYPTED"];
+---
+
 <footer>
+	<div class="container">
+		<div class="group">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						class="link"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span class="indicator" />
+						{link.label}
+					</a>
+				))
+			}
+		</div>
+
+		<div class="group">
+			{
+				checks.map((check) => (
+					<div class="status">
+						<span class="light" />
+						{check}
+					</div>
+				))
+			}
+		</div>
+	</div>
 </footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 1rem 0;
+	}
+
+	.container {
+		max-width: 90vw;
+		margin: 0 auto;
+
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.625rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+
+		@media (min-width: 640px) {
+			max-width: 60vw;
+		}
+	}
+
+	.group {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.link {
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+		color: var(--text-body);
+
+		&:hover {
+			color: var(--text-bright);
+			.indicator {
+				opacity: 1;
+			}
+		}
+	}
+
+	.indicator {
+		width: 0.375rem;
+		height: 0.625rem;
+		background: var(--accent);
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.status {
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+		pointer-events: none;
+	}
+
+	.light {
+		position: relative;
+		width: 0.375rem;
+		height: 0.375rem;
+		border-radius: 50%;
+		background: var(--accent);
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: inherit;
+			animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+		}
+	}
+
+	@keyframes ping {
+		75%,
+		100% {
+			transform: scale(2.5);
+			opacity: 0;
+		}
+	}
+</style>
