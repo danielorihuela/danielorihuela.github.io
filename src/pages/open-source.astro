@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Panel from "../components/Panel.astro";
+import LinkEntry from "../components/LinkEntry.astro";
 
 interface OssProjectInfo {
 	name: string;
@@ -195,11 +196,11 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 										:: PULL_REQUEST_LOG
 									</div>
 									{prs.map((pr) => (
-										<a
+										<LinkEntry
 											href={`${url}/pull/${pr.id}`}
+											external
+											indicator="VIEW_PR"
 											class="pr-link"
-											target="_blank"
-											rel="noopener noreferrer"
 										>
 											<span class="pr-date">
 												[{pr.date}]
@@ -210,10 +211,7 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 											<span class="pr-title">
 												{pr.title}
 											</span>
-											<span class="indicator-text">
-												VIEW_PR
-											</span>
-										</a>
+										</LinkEntry>
 									))}
 								</div>
 							</div>
@@ -379,23 +377,9 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 	}
 
 	.pr-link {
-		display: flex;
-		align-items: flex-start;
 		gap: 0.75rem;
 		font-size: 0.875rem;
 		padding: 0.125rem 0.5rem;
-		transition: all 0.2s ease;
-		border-left: 2px solid transparent;
-
-		&:hover {
-			border-left-color: var(--accent);
-			background-image: linear-gradient(
-				to right,
-				rgba(0, 212, 255, 0.1),
-				transparent
-			);
-			transform: translateX(0.25rem);
-		}
 	}
 
 	.pr-date {
@@ -416,26 +400,5 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 	.pr-title {
 		color: var(--text-bright);
 		transition: color 0.3s ease;
-	}
-
-	.indicator-text {
-		display: none;
-		opacity: 0;
-		margin-left: auto;
-		font-size: 0.65rem;
-		color: var(--text-body);
-		transition: all 300ms;
-		letter-spacing: 0.1em;
-
-		@media (min-width: 640px) {
-			display: block;
-			align-self: center;
-		}
-	}
-
-	@media (min-width: 640px) {
-		.pr-link:hover .indicator-text {
-			opacity: 0.6;
-		}
 	}
 </style>

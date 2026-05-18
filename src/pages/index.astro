@@ -2,6 +2,7 @@
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LinkEntry from "../components/LinkEntry.astro";
 
 const posts = (await getCollection("blog")).sort(
 	(a, b) =>
@@ -29,16 +30,18 @@ function formatDate(date: Date) {
 		{
 			posts.map((post) => {
 				return (
-					<a href={`/blog/${post.id}/`} class="group blog-post-link">
+					<LinkEntry
+						href={`/blog/${post.id}/`}
+						indicator="READ_ENTRY"
+						class="link"
+					>
 						<div class="metadata-column">
 							<span>{formatDate(post.data.publishdate)}</span>
 							<span>[rev:{hash(post.id)}]</span>
 						</div>
 
 						<h2 class="title-text">{post.data.title}</h2>
-
-						<span class="indicator-text">READ_ENTRY</span>
-					</a>
+					</LinkEntry>
 				);
 			})
 		}
@@ -54,28 +57,14 @@ function formatDate(date: Date) {
 		font-family: "Share Tech Mono", monospace;
 	}
 
-	.blog-post-link {
+	.link {
 		display: flex;
 		flex-direction: column;
 		margin-top: 0.25rem;
-		gap: 0.5rem;
-		padding: 0.75rem 1rem;
-		border-left: 2px solid transparent;
-		transition: all 300ms;
 
 		@media (min-width: 640px) {
 			flex-direction: row;
 			gap: 1.5rem;
-		}
-
-		&:hover {
-			border-left-color: var(--accent);
-			background-image: linear-gradient(
-				to right,
-				rgba(0, 212, 255, 0.1),
-				transparent
-			);
-			transform: translateX(0.25rem);
 		}
 	}
 
@@ -101,28 +90,6 @@ function formatDate(date: Date) {
 
 		@media (min-width: 640px) {
 			font-size: 1rem;
-		}
-	}
-
-	.indicator-text {
-		display: none;
-		opacity: 0;
-		margin-left: auto;
-
-		font-size: 0.65rem;
-		color: var(--text-body);
-		transition: all 300ms;
-		letter-spacing: 0.1em;
-
-		@media (min-width: 640px) {
-			display: block;
-			align-self: center;
-		}
-	}
-
-	@media (min-width: 640px) {
-		.group:hover .indicator-text {
-			opacity: 0.6;
 		}
 	}
 </style>

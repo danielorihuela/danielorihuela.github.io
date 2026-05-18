@@ -1,0 +1,70 @@
+---
+interface Props {
+	href: string;
+	external?: boolean;
+	indicator: string;
+	class?: string;
+}
+
+const { href, external, indicator, class: className, ...rest } = Astro.props;
+---
+
+<a
+	href={href}
+	class:list={["log-link group", className]}
+	target={external ? "_blank" : undefined}
+	rel={external ? "noopener noreferrer" : undefined}
+	{...rest}
+>
+	<slot />
+
+	<span class="indicator-text">{indicator}</span>
+</a>
+
+<style>
+	.log-link {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		border-left: 2px solid transparent;
+		transition: all 300ms;
+
+		&:hover {
+			border-left-color: var(--accent);
+			background-image: linear-gradient(
+				to right,
+				rgba(0, 212, 255, 0.1),
+				transparent
+			);
+			transform: translateX(0.25rem);
+		}
+	}
+
+	.metadata {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex-shrink: 0;
+	}
+
+	.indicator-text {
+		display: none;
+		opacity: 0;
+		margin-left: auto;
+
+		font-size: 0.65rem;
+		color: var(--text-body);
+		transition: all 300ms;
+		letter-spacing: 0.1em;
+		flex-shrink: 0;
+
+		@media (min-width: 640px) {
+			display: block;
+			align-self: center;
+		}
+	}
+
+	.log-link:hover .indicator-text {
+		opacity: 0.6;
+	}
+</style>
