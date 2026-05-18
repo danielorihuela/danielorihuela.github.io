@@ -35,10 +35,7 @@ function formatDate(date: Date) {
 							<span>[rev:{hash(post.id)}]</span>
 						</div>
 
-						<div class="title-column">
-							<span class="title-symbol">&gt;</span>
-							<h2 class="title-text">{post.data.title}</h2>
-						</div>
+						<h2 class="title-text">{post.data.title}</h2>
 
 						<span class="indicator-text">READ_ENTRY</span>
 					</a>
@@ -95,22 +92,10 @@ function formatDate(date: Date) {
 		opacity: 0.7;
 	}
 
-	.title-column {
+	.title-text {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-	}
 
-	.title-symbol {
-		display: none;
-
-		@media (min-width: 640px) {
-			display: block;
-			transition: transform 300ms;
-		}
-	}
-
-	.title-text {
 		font-size: 0.875rem;
 		margin: 0;
 

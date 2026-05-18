@@ -9,7 +9,8 @@ interface OssProjectInfo {
 	url: string;
 	prs: {
 		id: number;
-		title?: string;
+		title: string;
+		date: string;
 	}[];
 	stack: string;
 }
@@ -23,17 +24,41 @@ const ossProjectsInfo: OssProjectInfo[] = [
 			"A SMPC library for PySyft to perform computations on encrypted data without decrypting it.",
 		stack: "PYTHON",
 		prs: [
-			{ id: 114, title: "test: parametrize reciprocal" },
-			{ id: 128, title: "feat/benchmark convolutional network" },
-			{ id: 130, title: "fix: benchmark output file path" },
-			{ id: 132, title: "Style/flake8 configuration" },
-			{ id: 162, title: "feat: move allowlist from syft to sympc" },
-			{ id: 170, title: "fix: add lacking methods" },
-			{ id: 174, title: "docs: contributing" },
-			{ id: 195, title: "docs: readme" },
-			{ id: 216, title: "Feat/duet in docker container" },
-			{ id: 253, title: "Feat/ci scheduled tests" },
-			{ id: 281, title: "docs: protocol table" },
+			{
+				id: 114,
+				title: "test: parametrize reciprocal",
+				date: "2021-04-15",
+			},
+			{
+				id: 128,
+				title: "feat/benchmark convolutional network",
+				date: "2021-04-28",
+			},
+			{
+				id: 130,
+				title: "fix: benchmark output file path",
+				date: "2021-04-28",
+			},
+			{
+				id: 132,
+				title: "Style/flake8 configuration",
+				date: "2021-05-01",
+			},
+			{
+				id: 162,
+				title: "feat: move allowlist from syft to sympc",
+				date: "2021-05-13",
+			},
+			{ id: 170, title: "fix: add lacking methods", date: "2021-05-13" },
+			{ id: 174, title: "docs: contributing", date: "2021-05-22" },
+			{ id: 195, title: "docs: readme", date: "2021-06-17" },
+			{
+				id: 216,
+				title: "Feat/duet in docker container",
+				date: "2021-06-05",
+			},
+			{ id: 253, title: "Feat/ci scheduled tests", date: "2021-06-26" },
+			{ id: 281, title: "docs: protocol table", date: "2021-09-19" },
 		],
 	},
 	{
@@ -44,10 +69,22 @@ const ossProjectsInfo: OssProjectInfo[] = [
 			"A Rust-based library for Function Secret Sharing, providing high performance for private computations.",
 		stack: "RUST",
 		prs: [
-			{ id: 17, title: "Chore/remove test warnings" },
-			{ id: 18, title: "feat: retrieve alpha from key" },
-			{ id: 25, title: "fix: python automated tests" },
-			{ id: 36, title: "Refactor/solve clippy warnings" },
+			{ id: 17, title: "Chore/remove test warnings", date: "2021-05-09" },
+			{
+				id: 18,
+				title: "feat: retrieve alpha from key",
+				date: "2021-05-16",
+			},
+			{
+				id: 25,
+				title: "fix: python automated tests",
+				date: "2021-07-31",
+			},
+			{
+				id: 36,
+				title: "Refactor/solve clippy warnings",
+				date: "2021-09-23",
+			},
 		],
 	},
 	{
@@ -57,7 +94,13 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		description:
 			"A library for secure and private Distributed AI. PySyft decouples private data from model training.",
 		stack: "PYTHON / TENSOR",
-		prs: [{ id: 5554, title: "feat: move allowlist from syft to sympc" }],
+		prs: [
+			{
+				id: 5554,
+				title: "feat: move allowlist from syft to sympc",
+				date: "2021-05-13",
+			},
+		],
 	},
 	{
 		name: "Gitleaks",
@@ -66,7 +109,9 @@ const ossProjectsInfo: OssProjectInfo[] = [
 		description:
 			"SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos.",
 		stack: "GO",
-		prs: [{ id: 661, title: "fix: csv report in excel" }],
+		prs: [
+			{ id: 661, title: "fix: csv report in excel", date: "2021-10-11" },
+		],
 	},
 	{
 		name: "Lynis",
@@ -79,10 +124,21 @@ const ossProjectsInfo: OssProjectInfo[] = [
 			{
 				id: 1009,
 				title: "[AUTH-9284] Feature: gather locked accounts info",
+				date: "2020-10-22",
 			},
 		],
 	},
 ];
+
+ossProjectsInfo.forEach((project) => {
+	project.prs.sort(
+		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+	);
+});
+ossProjectsInfo.sort(
+	(a, b) =>
+		new Date(b.prs[0].date).getTime() - new Date(a.prs[0].date).getTime(),
+);
 
 const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 	["ID_REF", `0x${(0x7f4c0000 + idx * 0x10).toString(16).toUpperCase()}`],
@@ -145,12 +201,17 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 											target="_blank"
 											rel="noopener noreferrer"
 										>
+											<span class="pr-date">
+												[{pr.date}]
+											</span>
 											<span class="pr-id">
 												PR #{pr.id}
 											</span>
 											<span class="pr-title">
-												{pr.title ||
-													"Unlogged contribution..."}
+												{pr.title}
+											</span>
+											<span class="indicator-text">
+												VIEW_PR
 											</span>
 										</a>
 									))}
@@ -189,11 +250,6 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 		@media (min-width: 640px) {
 			flex-direction: row;
 		}
-	}
-
-	.card:hover {
-		border-color: var(--accent-glow);
-		background-color: var(--accent-glow-dim);
 	}
 
 	.sidebar {
@@ -324,20 +380,16 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 
 	.pr-link {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: 0.75rem;
 		font-size: 0.875rem;
-		padding: 0.25rem 0.75rem;
+		padding: 0.125rem 0.5rem;
+		transition: all 0.2s ease;
 		border-left: 2px solid transparent;
-		transition: all 0.3s ease;
-
-		&::before {
-			content: ">";
-		}
 
 		&:hover {
 			border-left-color: var(--accent);
-			background: linear-gradient(
+			background-image: linear-gradient(
 				to right,
 				rgba(0, 212, 255, 0.1),
 				transparent
@@ -346,19 +398,44 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 		}
 	}
 
+	.pr-date {
+		font-family: "Share Tech Mono", monospace;
+		color: var(--text-dim);
+		flex-shrink: 0;
+
+		@media (max-width: 640px) {
+			display: none;
+		}
+	}
+
 	.pr-id {
 		font-family: "Share Tech Mono", monospace;
-		min-width: 64px;
-		color: var(--text-body);
-		transition: color 0.3s ease;
+		flex-shrink: 0;
 	}
 
 	.pr-title {
-		color: var(--text-body);
+		color: var(--text-bright);
 		transition: color 0.3s ease;
 	}
 
-	.pr-link:hover .pr-title {
-		text-shadow: none;
+	.indicator-text {
+		display: none;
+		opacity: 0;
+		margin-left: auto;
+		font-size: 0.65rem;
+		color: var(--text-body);
+		transition: all 300ms;
+		letter-spacing: 0.1em;
+
+		@media (min-width: 640px) {
+			display: block;
+			align-self: center;
+		}
+	}
+
+	@media (min-width: 640px) {
+		.pr-link:hover .indicator-text {
+			opacity: 0.6;
+		}
 	}
 </style>
