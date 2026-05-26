@@ -26,4 +26,5 @@ pnpm-debug.log*
 .vscode
 src/content/blog/**
 src/images/**
+!src/images/.gitignore
 org/markdown-mmd
