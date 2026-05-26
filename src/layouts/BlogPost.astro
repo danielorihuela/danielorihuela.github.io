@@ -12,12 +12,10 @@ interface Props {
 	description: string;
 	publishdate: Date;
 	cover: any;
-	slug: string;
 	contentLength: number;
 }
 
-const { title, description, publishdate, cover, slug, contentLength } =
-	Astro.props;
+const { title, description, publishdate, cover, contentLength } = Astro.props;
 
 const formattedDate = publishdate.toISOString().split("T")[0];
 const fileSize = (contentLength / 1024).toFixed(1) + " KB";

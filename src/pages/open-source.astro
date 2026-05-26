@@ -222,10 +222,7 @@ const projectsMetadata = ossProjectsInfo.map((project, idx) => [
 		<div class="list">
 			{
 				ossProjectsInfo.map(
-					(
-						{ name, image, url, description, prs, contributions },
-						idx,
-					) => (
+					({ name, image, url, description, prs }, idx) => (
 						<Panel class="card group">
 							<div class="sidebar">
 								{projectsMetadata[idx].map(([label, value]) => (
