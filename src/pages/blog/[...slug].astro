@@ -16,6 +16,6 @@ const { Content } = await render(post);
 const contentLength = post.body?.length || 0;
 ---
 
-<BlogPost {...post.data} slug={post.id} contentLength={contentLength}>
+<BlogPost {...post.data} contentLength={contentLength}>
 	<Content />
 </BlogPost>
