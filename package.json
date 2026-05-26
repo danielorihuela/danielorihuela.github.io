@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "fetch-prs": "tsx --env-file=.env scripts/github.ts",
     "predev": "cd org && ./populate-astro.sh",
     "dev": "astro dev",
     "start": "astro dev",
@@ -19,5 +20,8 @@
   },
   "overrides": {
     "vite": "^7"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.3"
   }
 }
