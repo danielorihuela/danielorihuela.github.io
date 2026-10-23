@@ -33,7 +33,7 @@ bytes are added when the plaintext doesn’t have a length that is a
 multiple of the block size, known as <code>padding</code>.</p>
 <p>Let <code>p</code> be the plaintext, <code>c</code> the ciphertext, <code>k</code> the key, and <code>cipher</code>
 any encryption algorithm. Assume that the ciphertext can be divided into
-blocks of length equal to <code>k</code>, without any leftover bytes. For each <code>i</code>
+blocks of length equal to <code>l</code>, without any leftover bytes. For each <code>i</code>
 from 0 to the number of blocks in the plaintext, we have that
 <code>c[i] = cipher(p[i], k)</code>.</p>
 <p>The main issue with this mode is that it reuses the same key for all
@@ -314,7 +314,7 @@ so that’s clear what’s going on.</p>
 <span class="line"><span style="color:#A6ACCD">{</span></span>
 <span class="line"><span style="color:#91B4D5">    let</span><span style="color:#A6ACCD"> (</span><span style="color:#E4F0FB">block_size</span><span style="color:#A6ACCD">, </span><span style="color:#E4F0FB">padding_length</span><span style="color:#A6ACCD">) </span><span style="color:#91B4D5">=</span><span style="color:#ADD7FF"> compute_block_size_and_padding_length</span><span style="color:#A6ACCD">(</span><span style="color:#91B4D5">&#x26;</span><span style="color:#E4F0FB">encrypt_fn</span><span style="color:#A6ACCD">);</span></span>
 <span class="line"><span style="color:#A6ACCD">    if </span><span style="color:#91B4D5">!</span><span style="color:#ADD7FF">is_ecb</span><span style="color:#A6ACCD">(</span><span style="color:#91B4D5">&#x26;</span><span style="color:#E4F0FB">encrypt_fn</span><span style="color:#A6ACCD">, </span><span style="color:#E4F0FB">block_size</span><span style="color:#A6ACCD">) {</span></span>
-<span class="line"><span style="color:#ADD7FF">        panic!</span><span style="color:#A6ACCD">(</span><span style="color:#A6ACCD">"</span><span style="color:#5DE4C7">Data not encryped with ECB</span><span style="color:#A6ACCD">"</span><span style="color:#A6ACCD">);</span></span>
+<span class="line"><span style="color:#ADD7FF">        panic!</span><span style="color:#A6ACCD">(</span><span style="color:#A6ACCD">"</span><span style="color:#5DE4C7">Data not encrypted with ECB</span><span style="color:#A6ACCD">"</span><span style="color:#A6ACCD">);</span></span>
 <span class="line"><span style="color:#A6ACCD">    }</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#91B4D5">    let</span><span style="color:#5DE4C7"> mut</span><span style="color:#E4F0FB"> plain</span><span style="color:#91B4D5"> =</span><span style="color:#ADD7FF"> vec!</span><span style="color:#A6ACCD">[</span><span style="color:#5DE4C7">0</span><span style="color:#A6ACCD">; </span><span style="color:#E4F0FB">block_size</span><span style="color:#91B4D5"> -</span><span style="color:#5DE4C7"> 1</span><span style="color:#A6ACCD">];</span></span>
