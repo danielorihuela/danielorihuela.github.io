@@ -982,9 +982,8 @@ ecb&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The plaintext blocks for no email as input are:&lt;/p&gt;
 &lt;pre class=&quot;astro-code poimandres&quot; style=&quot;background-color:#1b1e28;color:#a6accd; overflow-x: auto;&quot; tabindex=&quot;0&quot; data-language=&quot;plaintext&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span&gt;|                     block 1                     |                      block 2                    |&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;line&quot;&gt;&lt;span&gt;| 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 | 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 |&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;line&quot;&gt;&lt;span&gt;| e  m  a  i  l  =  &amp;#x26;  u  i  d  =  1  0  &amp;#x26;  r  o  | l  e  =  u  s  e  r  9  9  9  9  9  9  9  9  9  |&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;line&quot;&gt;&lt;span&gt;                                                                         ^&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;line&quot;&gt;&lt;span&gt;                                                                         pkcs#7 padding&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;line&quot;&gt;&lt;span&gt;| e  m  a  i  l  =  &amp;#x26;  u  i  d  =  1  0  &amp;#x26;  r  o  | l  e  =  u  s  e  r  9  9  9  9  9  9  9  9  9  |&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The nines that appear are because of the PKCS#7 padding.&lt;/p&gt;
 &lt;p&gt;The encoder function doesn’t allow &lt;code&gt;=&lt;/code&gt; nor &lt;code&gt;&amp;#x26;&lt;/code&gt; in the input. Otherwise,
 it would suffice to find the encrypted representation of the block
 below, and copy that into the second block of the original ciphertext.&lt;/p&gt;
