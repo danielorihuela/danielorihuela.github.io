@@ -10,7 +10,7 @@ Today, we will learn about the ECB block cipher mode, how it works, and how to b
 
 The Electronic Code Book (ECB) is a block cipher mode of operation. Data is encrypted in blocks of fixed size and with the same key. Also, some bytes are added when the plaintext doesn't have a length that is a multiple of the block size, known as ~padding~.
 
-Let ~p~ be the plaintext, ~c~ the ciphertext, ~k~ the key, and ~cipher~ any encryption algorithm. Assume that the ciphertext can be divided into blocks of length equal to ~k~, without any leftover bytes. For each ~i~ from 0 to the number of blocks in the plaintext, we have that ~c[i] = cipher(p[i], k)~.
+Let ~p~ be the plaintext, ~c~ the ciphertext, ~k~ the key, and ~cipher~ any encryption algorithm. Assume that the ciphertext can be divided into blocks of length equal to ~l~, without any leftover bytes. For each ~i~ from 0 to the number of blocks in the plaintext, we have that ~c[i] = cipher(p[i], k)~.
 
 The main issue with this mode is that it reuses the same key for all blocks. You might think that this shouldn't be a problem. However, identical plain blocks will return the same encrypted blocks. It becomes apparent when you see the following images.
 
@@ -296,7 +296,7 @@ where
 {
     let (block_size, padding_length) = compute_block_size_and_padding_length(&encrypt_fn);
     if !is_ecb(&encrypt_fn, block_size) {
-        panic!("Data not encryped with ECB");
+        panic!("Data not encrypted with ECB");
     }
 
     let mut plain = vec![0; block_size - 1];

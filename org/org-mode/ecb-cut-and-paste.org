@@ -1,0 +1,146 @@
+#+title: Cryptopals: ECB cut and paste
+#+description: Learn to modify data encrypted with ECB with the cut and paste technique.
+#+publishdate: 2026-10-21
+#+cover: ../../images/covers/cryptopals.jpg
+#+options: ^:nil
+
+In ECB, each block is independently encrypted. That means that we are free to replace whole blocks without consequences. Today, we will see how to take advantage of that feature. This post is related to https://cryptopals.com/sets/2/challenges/13.
+
+* Setup
+
+For this exercise, we need a couple of functions to encode and decode a user profile consisting of an email, uid and a role.
+
+The encoder recieves an email (e.g. ~example@mail.com~) and returns an encoded user profile (e.g. ~email=example@mail.com&uid=10&role=user~). The decoder can convert that into a map representation. It's important to make sure the encoder does not allow ~&~ and ~=~ characters in the email.
+
+#+begin_src rust
+  pub fn profile_for(email: &str) -> String {
+      let email = email
+          .chars()
+          .filter(|&x| x != '&' && x != '=')
+          .collect::<String>();
+      format!("email={email}&uid=10&role=user")
+  }
+
+  pub fn parse_query_string(query_string: &str) -> HashMap<String, String> {
+    let key_value_pairs = query_string.split('&');
+    key_value_pairs
+        .map(|key_value| key_value.split_once('=').expect("Correct query string"))
+        .map(|(k, v)| (k.to_string(), v.to_string()))
+        .collect()
+  }
+#+end_src
+
+We also need a couple of functions to encrypt and decrypt that data.
+
+#+begin_src rust
+  pub fn encrypt_profile(email: &str, key: &[u8]) -> Vec<u8> {
+      encrypt_aes_128_ecb(profile_for(email).as_bytes(), key)
+  }
+
+  pub fn decrypt_profile(ciphertext: &[u8], key: &[u8]) -> HashMap<String, String> {
+      let plain = decrypt_aes_128_ecb(ciphertext, key).expect("Valid profile");
+      parse_query_string(&plain)
+  }
+#+end_src
+
+Last but not least, we need an oracle that always uses the same key to encrypt the profiles. That's the function that we will exploit.
+
+#+begin_src rust
+  let key = random_bytes(16);
+
+  let encrypt_fn = |data: &[u8]| {
+      encrypt_profile(&data.iter().map(|&x| x as char).collect::<String>(), &key)
+  };
+#+end_src
+
+* ECB cut and paste
+
+The goal of the exercise is to replace the value of the role from ~user~ to ~admin~. We want to go from something like ~email=example@mail.com&uid=10&role=user~ to ~email=example@mail.com&uid=10&role=admin~.
+
+If you don't know how ECB works, this is a good moment to check it in https://danielorihuela.dev/blog/break-ecb/#ecb-block-cipher-mode. Simply put, in ECB all blocks are encrypted using the same key. Therefore, identical plain blocks return the same encrypted blocks. We can take advantage of that.
+
+** Detect cipher mode and metadata
+
+First things first, we need to [[https://danielorihuela.dev/blog/break-ecb/#find-the-block-size][get the block size and the padding]]. Besides, we need to double [[https://danielorihuela.dev/blog/break-ecb/#check-if-oracle-is-using-ecb-mode][check the oracle is using ecb]].
+
+#+begin_src rust
+  let (block_size, original_padding_length) = compute_block_size_and_padding_length(&encrypt_fn);
+  if !is_ecb(&encrypt_fn, block_size) {
+      panic!("Data not encrypted with ECB");
+  }
+#+end_src
+
+** Isolate role value
+
+The plaintext blocks for no email as input are:
+
+#+begin_src example
+  |                     block 1                     |                      block 2                    |
+  | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 | 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 |
+  | e  m  a  i  l  =  &  u  i  d  =  1  0  &  r  o  | l  e  =  u  s  e  r  9  9  9  9  9  9  9  9  9  |
+                                                                           ^
+  									       pkcs#7 padding
+#+end_src
+
+The encoder function doesn't allow ~=~ nor ~&~ in the input. Otherwise, it would suffice to find the encrypted representation of the block below, and copy that into the second block of the original ciphertext.
+
+#+begin_src example
+  |                 crafted block                   |
+  | l  e  =  a  d  m  i  n  8  8  8  8  8  8  8  8  |
+#+end_src
+
+In that situation, we need to isolate the role value into its own block. We can do that manipulating the email value.
+
+#+begin_src example
+  |                     block 1                     |                      block 2                    |                 block 3                 |
+  | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 | 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 | 32 33 34 35 36 37 38 39 40 41 42 43 ... |
+  | e  m  a  i  l  =  a  a  a  a  a  a  a  a  a  a  | a  a  a  &  u  i  d  =  1  0  &  r  o  l  e  =  | a  d  m  i  n  11 11 11 11 11 11 11 ... |
+#+end_src
+
+The length of the email is equal to the padding (when the input is empty) plus the length of the default role value (user). If we only used the length of the padding, the role value ~user~ would end up at the end of the second block. We want to push it further to the third block, so we need to add its length to the email.
+
+#+begin_src rust
+  let admin_block_padding = vec![(block_size - 5) as u8; block_size - 5];
+  let admin_block = ["admin".as_bytes(), &admin_block_padding].concat();
+#+end_src
+
+** Craft ciphertext block
+
+We know the final result, but we still need to know it's encrypted representation. For that, we will feed the oracle with an increasing number of random bytes followed by our target plain block twice. The idea is to encrypt these inputs until we find an occurrence where our first target plain block occupies one whole block, instead of partially filling two blocks. At that moment, we will obtain a ciphertext containing two consecutive encrypted blocks with the same values. These are our target plain blocks encrypted.
+
+#+begin_src rust
+  let mut i = 0;
+  loop {
+      let crafted_input = [vec![0; i], admin_block.clone(), admin_block.clone()].concat();
+      let ciphertext = encrypt_fn(&crafted_input);
+      let ciphertext_blocks = ciphertext.chunks(block_size).collect::<Vec<&[u8]>>();
+
+      for j in 1..ciphertext_blocks.len() {
+          if ciphertext_blocks[j - 1] == ciphertext_blocks[j] {
+              return ciphertext_blocks[j].to_vec();
+          }
+      }
+
+      i += 1;
+  }
+#+end_src
+
+** Replace ciphertext block
+
+Finally, we can call the oracle with our crafted input and replace the last block with our crafted encrypted block.
+
+#+begin_src rust
+  let crafted_input = vec![0; original_padding_length + "user".len()];
+  let ciphertext = encrypt_fn(&crafted_input);
+  let ciphertext_without_last_block = ciphertext[..ciphertext.len() - block_size].to_vec();
+
+  [ciphertext_without_last_block, crafted_ciphertext_block].concat()
+#+end_src
+
+** Code
+
+You can check the whole implementation https://github.com/danielorihuela/cryptopals/blob/main/src/set2/challenge13.rs. It includes tests. One of them simulating the attack.
+
+* Conclusion 
+
+The ECB cipher is simple but highly insecure due to its deterministic nature, which leaks patterns in the plaintext. This exercise demonstrates how easily it can be manipulated. Modern cryptographic systems should avoid ECB mode entirely and instead use secure modes of operation like Galois Counter Mode (GCM) or Counter Mode (CTR).
